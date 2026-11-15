@@ -378,6 +378,9 @@ T35
 **Depends on**: None
 **Reuses**: AD-002; índice (T2); regra de lint "`fetch` só em `src/dados/`" (T4)
 **Requirement**: FUN-34, FUN-36
+**Status**: rascunhada
+**Testes**: `src/dados/livros.test.ts` › "FUN-34: livro que já está no cache não chama fetch", "FUN-34: livro fora do cache chama fetch uma vez, só para o arquivo dele, e guarda a resposta", "FUN-34: o arquivo buscado é do próprio site (/livros/NN.<hash8>.json)" (FUN-34); "FUN-36: fetch que rejeita (sem rede) e cache vazio lançam LivroNaoBaixado", "FUN-36: resposta de erro do servidor e cache vazio lançam LivroNaoBaixado" (FUN-36); "cache.put que lança não impede a leitura pela rede", "Cache API ausente não impede a leitura pela rede", "caches.open que rejeita não impede a leitura pela rede"
+**Código**: `src/dados/livros.ts` (`carregarLivro`, `LivroNaoBaixado`, `CACHE_LIVROS`), `src/dados/dubleCache.ts` (dublê da Cache API, só para testes)
 
 **Done when**:
 
