@@ -139,6 +139,9 @@ describe('deploy.yml: a fumaça falha quando um cabeçalho do FUN-42 falta (A-13
     'if [ -n "${OMITIR:-}" ] && { [ -z "${OMITIR_EM:-}" ] || [ "${url#"$URL_PUBLICA"}" = "$OMITIR_EM" ]; }; then',
     '  tudo="$(grep -vi -- "$OMITIR" <<< "$tudo")"',
     'fi',
+    'if [ -n "${REMOVER_DIRETIVA:-}" ] && [ "${url#"$URL_PUBLICA"}" = "${OMITIR_EM:-}" ]; then',
+    '  tudo="${tudo/"$REMOVER_DIRETIVA"/}"',
+    'fi',
     'if [ -n "${CAIXA_TITULO:-}" ]; then',
     '  tudo="${tudo//content-security-policy:/Content-Security-Policy:}"; tudo="${tudo//x-content-type-options:/X-Content-Type-Options:}"; tudo="${tudo//referrer-policy:/Referrer-Policy:}"',
     'fi',
@@ -175,25 +178,28 @@ describe('deploy.yml: a fumaça falha quando um cabeçalho do FUN-42 falta (A-13
     expect(r.status).toBe(0);
   });
 
-  it.each([
-    ['content-security-policy: default-src', '/'],
-    ['content-security-policy: default-src', '/sw.js'],
-    ['content-security-policy: default-src', '/livros/01.json'],
-    ['object-src', '/sw.js'],
-    ['frame-ancestors', '/livros/01.json'],
-    ['x-content-type-options', '/'],
-    ['x-content-type-options', '/sw.js'],
-    ['x-content-type-options', '/livros/01.json'],
-    ['referrer-policy', '/'],
-    ['referrer-policy', '/livros/01.json'],
-  ])('A-13: FUN-42: sem %s em %s sai com erro e imprime ::error', (cabecalho, caminho) => {
-    // `object-src` e `frame-ancestors` vivem na mesma linha da CSP: o stub tira a linha inteira da CSP.
-    const omitir = /^(object-src|frame-ancestors)$/.test(cabecalho)
-      ? 'content-security-policy'
-      : cabecalho.split(':')[0]!;
-    const r = rodar({ OMITIR: omitir, OMITIR_EM: caminho });
+  const CAMINHOS = ['/', '/sw.js', '/livros/01.json'];
+  // Cabeçalho inteiro ausente: a mensagem cita o caminho e o padrão do primeiro cabeçalho que falta.
+  it.each(
+    CAMINHOS.flatMap((caminho) =>
+      ['content-security-policy', 'x-content-type-options', 'referrer-policy'].map((c) => [c, caminho]),
+    ),
+  )('A-13: FUN-42: sem o cabeçalho %s em %s sai com erro e o cita', (cabecalho, caminho) => {
+    const r = rodar({ OMITIR: cabecalho!, OMITIR_EM: caminho! });
     expect(r.status).not.toBe(0);
-    expect(r.stdout + r.stderr).toMatch(/::error title=Fumaça falhou::/);
+    expect(r.stdout).toContain(`::error title=Fumaça falhou::${caminho} não traz o cabeçalho esperado: ^${cabecalho}:`);
+  });
+
+  // A-15: uma diretiva por vez, só ela sai da linha da CSP; a mensagem cita o caminho e a diretiva.
+  it.each(
+    CAMINHOS.flatMap((caminho) =>
+      ["default-src 'self'", "object-src 'none'", "frame-ancestors 'none'"].map((diretiva) => [diretiva, caminho]),
+    ),
+  )('A-15: FUN-42: sem a diretiva %s da CSP em %s sai com erro e a cita', (diretiva, caminho) => {
+    const r = rodar({ REMOVER_DIRETIVA: diretiva!, OMITIR_EM: caminho! });
+    expect(r.status).not.toBe(0);
+    expect(r.stdout).toContain(`::error title=Fumaça falhou::${caminho} não traz o cabeçalho esperado: `);
+    expect(r.stdout).toContain(diretiva!);
   });
 
   it('A-13: FUN-42: resposta HTTP com erro (curl -f) derruba a fumaça', () => {
