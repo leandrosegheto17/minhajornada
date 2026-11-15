@@ -633,18 +633,18 @@ Gate: pnpm typecheck && pnpm vitest run src/estilo src/componentes/base --report
 **Depends on**: None
 **Reuses**: `seguinte`/`anterior` (T6), índice (T2)
 **Requirement**: FUN-09, FUN-20, FUN-21, FUN-23, FUN-24, FUN-25, FUN-26, FUN-27, FUN-49, FUN-50
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/estado/leitor.test.ts` › "FUN-20: com Ref válida, abre o leitor nela" (FUN-20); "FUN-21: sem Ref, abre a escolha de livro" (FUN-21); "FUN-22: Ref fora do índice (Judas 2) abre a escolha de livro" (FUN-22); "FUN-23: letra inválida na inicialização vira 3; a válida é mantida", "FUN-23: a letra começa em 3" (FUN-23); "o tema gravado é mantido; sem tema, segue o sistema (null)"; "FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade" (FUN-09); "FUN-07: escolher Salmos abre a grade de Salmos" (FUN-07); "FUN-08: escolher o 27 na grade abre Salmos 27" (FUN-08); "livro fora do índice (0 e 67) não muda o estado", "capítulo fora do intervalo (Salmos 151) não muda o estado"; "FUN-49: tocar no título em Salmos 27 abre a grade de Salmos", "FUN-49: \"Trocar livro\" na grade abre a escolha de livro" (FUN-49); "FUN-50: tocar no título em Filemom 1 (capítulo único) abre a escolha de livro" (FUN-50); "tocar no título sem capítulo aberto não muda o estado"; "FUN-10: seguinte em Salmos 26 abre Salmos 27", "FUN-13: anterior em Mateus 1 abre Malaquias 4", "FUN-15: seguinte em Apocalipse 22 não muda o estado", "FUN-14: anterior em Gênesis 1 não muda o estado" (FUN-10, FUN-13, FUN-14, FUN-15); "FUN-24/FUN-26: +1 vai até 5 e para" (FUN-24, FUN-26); "FUN-25/FUN-27: -1 vai até 1 e para" (FUN-25, FUN-27); "FUN-28: escolher sépia guarda o tema" (FUN-28); "abre o Sobre a partir do leitor e volta ao mesmo capítulo", "não abre o leitor sem capítulo"
 **Código**: `src/estado/leitor.ts` (`reduzirLeitor`, `ESTADO_INICIAL`, tipos `Tela`, `EstadoLeitor`, `AcaoLeitor`; limites da letra de `src/dados/preferencias.ts`)
 
 **Done when**:
 
-- [ ] Testes `FUN-20`/`FUN-21`: iniciar com `Ref` válida abre o leitor nela; sem `Ref` abre `livros`
-- [ ] Teste `FUN-09`: escolher Judas abre o leitor em Judas 1; escolher Salmos abre a grade de Salmos
-- [ ] Testes `FUN-49`/`FUN-50`: tocar no título em Salmos 27 abre a grade de Salmos; em Filemom 1 abre `livros`
-- [ ] Testes `FUN-23` a `FUN-27`: letra começa em 3; +1 até 5 e para; -1 até 1 e para
-- [ ] Teste: seguinte em Apocalipse 22 e anterior em Gênesis 1 não mudam o estado
-- [ ] Gate quick passa
+- [x] Testes `FUN-20`/`FUN-21`: iniciar com `Ref` válida abre o leitor nela; sem `Ref` abre `livros`
+- [x] Teste `FUN-09`: escolher Judas abre o leitor em Judas 1; escolher Salmos abre a grade de Salmos
+- [x] Testes `FUN-49`/`FUN-50`: tocar no título em Salmos 27 abre a grade de Salmos; em Filemom 1 abre `livros`
+- [x] Testes `FUN-23` a `FUN-27`: letra começa em 3; +1 até 5 e para; -1 até 1 e para
+- [x] Teste: seguinte em Apocalipse 22 e anterior em Gênesis 1 não mudam o estado
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -663,25 +663,27 @@ Gate: pnpm typecheck && pnpm vitest run src/estilo src/componentes/base --report
 **Depends on**: T19
 **Reuses**: reducer (T19), preferências (T9), livros (T10, T11, T12)
 **Requirement**: FUN-19, FUN-28, FUN-30, FUN-33
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/estado/useLeitor.test.ts` › "FUN-20: com leitura gravada, abre o leitor nela e carrega o livro" (FUN-20); "FUN-21: sem leitura gravada, abre a escolha de livro e não carrega nada" (FUN-21); "FUN-30: letra e tema gravados são reaplicados na abertura" (FUN-30); "FUN-29: sem tema escolhido, o <html> fica sem data-tema e nada é gravado" (FUN-29); "FUN-19: abrir Romanos 8 grava {livro: 45, capitulo: 8}", "FUN-19: ir ao capítulo seguinte grava o novo capítulo" (FUN-19); "FUN-28/FUN-30: escolher sépia põe data-tema=\"sepia\" no <html> e grava" (FUN-28, FUN-30); "FUN-24/FUN-30: aumentar a letra põe data-letra=\"4\" e grava 4", "FUN-25/FUN-30: diminuir a letra põe data-letra=\"2\" e grava 2" (FUN-24, FUN-25, FUN-30); "FUN-33: baixarFaltantes é chamado uma vez, só depois do primeiro capítulo pronto", "FUN-33: sem capítulo aberto (escolha de livro), não baixa nada", "FUN-33: livro não baixado não dispara o download" (FUN-33); "erro em limparAntigos não impede o download"; "trocar de livro antes do anterior carregar mostra só o último pedido", "a resposta atrasada do livro anterior não troca o estado do livro atual"; "FUN-36: sem rede e fora do cache, a carga fica naoBaixado" (FUN-36); "outro capítulo do mesmo livro não carrega o livro de novo", "depois de naoBaixado, abrir o mesmo livro de novo tenta outra vez"
 **Código**: `src/estado/useLeitor.ts` (`useLeitor`, tipo `CargaLivro`)
 **Lacunas**: resolvida em 2026-11-15 pelo dono: erro ao carregar o livro que não é `LivroNaoBaixado` (JSON ilegível, servidor com erro) é tratado como não baixado (mensagem do FUN-36 com a escolha de livro); teste em `src/estado/useLeitor.test.ts`.
 
 **Done when**:
 
-- [ ] Antes de codar: estados listados no commit (carregando, pronto, livro não baixado; troca rápida de capítulo com o carregamento anterior pendente; download já em curso); lacuna da spec vira pergunta
-- [ ] Teste `FUN-19`: abrir Romanos 8 grava `{livro: 45, capitulo: 8}`
-- [ ] Testes `FUN-28`/`FUN-30`: escolher sépia põe `data-tema="sepia"` no `<html>` e grava; mudar a letra põe `data-letra` e grava
-- [ ] Teste `FUN-33`: `baixarFaltantes` é chamado uma vez, só depois do primeiro capítulo pronto
-- [ ] Teste: trocar de capítulo antes do livro anterior carregar mostra só o último pedido
-- [ ] Gate quick passa
+- [x] Antes de codar: estados listados no commit (carregando, pronto, livro não baixado; troca rápida de capítulo com o carregamento anterior pendente; download já em curso); lacuna da spec vira pergunta
+- [x] Teste `FUN-19`: abrir Romanos 8 grava `{livro: 45, capitulo: 8}`
+- [x] Testes `FUN-28`/`FUN-30`: escolher sépia põe `data-tema="sepia"` no `<html>` e grava; mudar a letra põe `data-letra` e grava
+- [x] Teste `FUN-33`: `baixarFaltantes` é chamado uma vez, só depois do primeiro capítulo pronto
+- [x] Teste: trocar de capítulo antes do livro anterior carregar mostra só o último pedido
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(estado): liga leitura, preferências e download ao leitor`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb2449ab9c8a179d489bb217799d88 = verde
 
 ### T21: Versículo
 
