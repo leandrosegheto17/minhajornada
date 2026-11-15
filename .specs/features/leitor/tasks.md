@@ -322,6 +322,9 @@ T35
 **Depends on**: None
 **Reuses**: nada
 **Requirement**: FUN-16, FUN-17, FUN-18
+**Status**: rascunhada
+**Testes**: `src/navegacao/deslize.test.ts` › "FUN-16: -60/0 … é seguinte", "FUN-16: -80/79 … é seguinte" (FUN-16); "FUN-17: 60/0 … é anterior", "FUN-17: 80/-79 é anterior" (FUN-17); "FUN-18: %i/%i (menos de 60 px) mantém o capítulo (null)", "FUN-18: %i/%i (horizontal não maior que o vertical) mantém o capítulo (null)" (FUN-18)
+**Código**: `src/navegacao/deslize.ts`
 
 **Done when**:
 
