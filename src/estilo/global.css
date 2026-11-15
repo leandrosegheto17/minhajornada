@@ -1,0 +1,75 @@
+/* Base global do guia de estilo (.specs/mockup/guia.html, início do <style>).
+   Cores, fontes e medidas só por var(--...) de tokens.css; as regras dos componentes vivem nos CSS Modules.
+   Sem prefers-color-scheme aqui: o tema do sistema é do tokens.css (FUN-29). */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-ui);
+  font-size: var(--texto-m);
+  line-height: var(--altura-linha-ui);
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: var(--largura-foco) solid var(--cor-acento);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--cor-acento);
+}
+
+.icone {
+  width: var(--icone-m);
+  height: var(--icone-m);
+  flex: none;
+}
+
+.icone-p {
+  width: var(--icone-p);
+  height: var(--icone-p);
+  flex: none;
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -513,6 +513,10 @@ T35
 **Depends on**: None
 **Reuses**: `.specs/mockup/tokens.css` e `guia.html` (CSS dos componentes); molde `ControleEmCasa_LJS/frontend/web/src/estilo/` e `estilo.test.ts`
 **Requirement**: FUN-29, FUN-32, FUN-41
+**Status**: rascunhada
+**Testes**: `src/estilo/estilo.test.ts` › "é a cópia do mockup aprovado, byte a byte", "FUN-32: no tema %s, texto sobre o fundo tem pelo menos 4,5:1", "FUN-32: no tema %s, texto sobre a superfície tem pelo menos 4,5:1", "a conta de contraste reconhece um par ruim (cinza claro sobre branco)" (FUN-32); "FUN-29: o @media (prefers-color-scheme: dark) só vale para :root:not([data-tema])", "FUN-29: o bloco do sistema escuro troca a cor de fundo e o color-scheme", "FUN-29: só o tokens.css consulta prefers-color-scheme" (FUN-29); "FUN-41: nenhum CSS em src/ cita http:// ou https://", "FUN-41: nenhum CSS em src/ usa @import", "FUN-41: cada @font-face aponta para um .woff2 em src/estilo/fontes/ que existe", "declara Atkinson Hyperlegible 400, 400 itálico e 700 e Fraunces 600", "a licença OFL acompanha as fontes" (FUN-41); "traz a base do guia: foco visível, reset de botão e caixa", "não usa cor literal: só var(--...)"
+**Código**: `src/estilo/fontes.css`, `src/estilo/global.css`, `src/main.tsx` (importa `fontes.css` e `global.css`)
+**Pendência**: os arquivos `src/estilo/fontes/atkinson-hyperlegible-400.woff2`, `atkinson-hyperlegible-400-italico.woff2`, `atkinson-hyperlegible-700.woff2`, `fraunces-600.woff2` e `LICENSE-OFL.txt` não existem no disco nem no mockup (que usa Google Fonts); o rascunho não baixa nada. O `/executar` os obtém (fonte oficial, licença OFL, subconjunto latino) antes do gate; sem eles, os testes de existência ficam vermelhos de propósito.
 
 **Done when**:
 

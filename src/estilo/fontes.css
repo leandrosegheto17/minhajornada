@@ -1,0 +1,35 @@
+/* Fontes do próprio site (FUN-41): nenhuma requisição a outro domínio.
+   Atkinson Hyperlegible 400, 400 itálico e 700 (texto e interface); Fraunces 600 (títulos e marca).
+   Licença SIL Open Font License 1.1 (fontes/LICENSE-OFL.txt). */
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fontes/atkinson-hyperlegible-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fontes/atkinson-hyperlegible-400-italico.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fontes/atkinson-hyperlegible-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fontes/fraunces-600.woff2') format('woff2');
+}

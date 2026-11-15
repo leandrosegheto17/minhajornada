@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import './estilo/tokens.css';
+import './estilo/fontes.css';
+import './estilo/global.css';
 import { registrarSW } from './pwa/registrarSW';
 
 const raiz = document.getElementById('raiz');
