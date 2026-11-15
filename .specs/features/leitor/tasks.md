@@ -348,6 +348,9 @@ T35
 **Depends on**: T7
 **Reuses**: molde de chave única de `ControleEmCasa_LJS/frontend/web/src/dados/sessao.ts:13-23`; `refValida` (T7)
 **Requirement**: FUN-19, FUN-22, FUN-23, FUN-30, FUN-31, FUN-47
+**Status**: rascunhada
+**Testes**: `src/dados/preferencias.test.ts` › "FUN-19: grava e lê a leitura atual", "FUN-19: sem leitura gravada devolve null" (FUN-19); "FUN-22: leitura ilegível (JSON quebrado) é apagada e devolve null", "FUN-22: leitura inválida (%s) é apagada e devolve null" (FUN-22); "FUN-30: grava e lê o tamanho da letra", "FUN-30: gravarLetra fora de 1 a 5 não grava", "FUN-30: grava e lê o tema %s" (FUN-30); "FUN-23: sem letra gravada o padrão é 3" (FUN-23); "FUN-31: letra gravada %s devolve o padrão 3", "FUN-31: sem tema gravado devolve null", "FUN-31: tema %s devolve null" (FUN-31); "FUN-47: dispensar o convite fica gravado" (FUN-47); "localStorage que lança em getItem e setItem não quebra e devolve os padrões", "sem localStorage nenhum, devolve os padrões"
+**Código**: `src/dados/preferencias.ts`
 
 **Done when**:
 
