@@ -10,3 +10,4 @@ playwright-report
 src/estilo/tokens.css
 src/biblia/indice.gerado.json
 public/livros
+dist-e2e

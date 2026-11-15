@@ -16,3 +16,4 @@ playwright-report/
 *.tsbuildinfo
 public/livros/
 src/biblia/indice.gerado.json
+dist-e2e/

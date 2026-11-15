@@ -486,6 +486,9 @@ T35
 **Depends on**: T13
 **Reuses**: `skipWaiting`/`clients.claim` (T13)
 **Requirement**: FUN-37
+**Status**: rascunhada
+**Testes**: `e2e/atualizacao.spec.ts` › "FUN-37: com o build B publicado, a página aberta não recarrega e a abertura seguinte usa o B" (FUN-37)
+**Código**: `vite.config.ts` (`define: __VERSAO__`, meta `versao-app`, `VERSAO_APP`), `src/ambiente.d.ts`, `e2e/apoio/servidor.ts` (servidor estático do e2e que troca a pasta), `.gitignore`/`.prettierignore`/`eslint.config.mjs` (`dist-e2e/`)
 
 **Done when**:
 
