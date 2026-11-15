@@ -59,6 +59,40 @@ describe('carregarLivro sem rede (FUN-36)', () => {
   });
 });
 
+describe('carregarLivro só guarda livro válido (A-10)', () => {
+  it('FUN-34: resposta 200 text/html (fallback do site) não é guardada e lança LivroNaoBaixado', async () => {
+    fetchDuble.mockResolvedValue(
+      new Response('<!doctype html><title>MinhaJornada</title>', {
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+      }),
+    );
+    await expect(carregarLivro(45)).rejects.toBeInstanceOf(LivroNaoBaixado);
+    expect(duble.caminhos(CACHE_LIVROS)).toEqual([]);
+  });
+
+  it('FUN-34: JSON de outro livro não é guardado e lança LivroNaoBaixado', async () => {
+    fetchDuble.mockResolvedValue(respostaLivro(46));
+    await expect(carregarLivro(45)).rejects.toBeInstanceOf(LivroNaoBaixado);
+    expect(duble.caminhos(CACHE_LIVROS)).toEqual([]);
+  });
+
+  it('FUN-34: JSON sem capítulos não é guardado e lança LivroNaoBaixado', async () => {
+    fetchDuble.mockResolvedValue(new Response(JSON.stringify({ numero: 45 }), { status: 200 }));
+    await expect(carregarLivro(45)).rejects.toBeInstanceOf(LivroNaoBaixado);
+    expect(duble.caminhos(CACHE_LIVROS)).toEqual([]);
+  });
+
+  it('FUN-36: entrada ilegível já no cache é apagada e o livro vem da rede', async () => {
+    await duble.cache(CACHE_LIVROS).put(arquivo(45), new Response('<html>', { status: 200 }));
+    const livro = await carregarLivro(45);
+    expect(livro.numero).toBe(45);
+    expect(fetchDuble).toHaveBeenCalledTimes(1);
+    expect(duble.cache(CACHE_LIVROS).delete).toHaveBeenCalledTimes(1);
+    expect(duble.caminhos(CACHE_LIVROS)).toEqual([arquivo(45)]);
+  });
+});
+
 describe('carregarLivro com o cache falhando', () => {
   it('cache.put que lança não impede a leitura pela rede', async () => {
     duble.cache(CACHE_LIVROS).put.mockRejectedValue(new DOMException('cota', 'QuotaExceededError'));
