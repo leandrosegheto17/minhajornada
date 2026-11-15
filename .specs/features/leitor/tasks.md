@@ -595,6 +595,9 @@ T35
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Estados)
 **Requirement**: FUN-21, FUN-36
+**Status**: rascunhada
+**Testes**: `src/componentes/base/Estado.test.tsx` › "a variante %s mostra o título e o texto recebidos", "FUN-21: no vazio, a ação aparece como botão primário e dispara o callback" (FUN-21), "FUN-36: no erro, a ação aparece como botão secundário e dispara o callback" (FUN-36), "sem ação, não há botão", "carregando tem aria-busy=\"true\" e um rótulo para o leitor de tela", "carregando usa o rótulo recebido", "vazio e erro não ficam ocupados", "título e texto são texto, nunca HTML"
+**Código**: `src/componentes/base/Estado.tsx`, `src/componentes/base/Estado.module.css`
 
 **Done when**:
 

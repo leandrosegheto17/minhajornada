@@ -1,0 +1,64 @@
+/* Estados do guia de estilo (.specs/mockup/guia.html, seção Estados). */
+
+.estado {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: var(--esp-3);
+  padding: var(--esp-8) var(--esp-5);
+  max-width: var(--largura-estado);
+  margin: 0 auto;
+}
+
+.estado :global(.icone) {
+  width: var(--icone-gg);
+  height: var(--icone-gg);
+  color: var(--cor-acento);
+}
+
+.estado h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-g);
+  margin: 0;
+}
+
+.estado p {
+  margin: 0;
+  color: var(--cor-suave);
+}
+
+.esqueleto {
+  display: grid;
+  gap: var(--esp-3);
+  max-width: var(--largura-leitura);
+  width: 100%;
+}
+
+.esqueleto span {
+  display: block;
+  height: 1em;
+  border-radius: var(--raio-p);
+  background: var(--cor-realce);
+  animation: pulso 1.4s ease-in-out infinite;
+}
+
+.esqueleto span:nth-child(3n) {
+  width: 70%;
+}
+
+.esqueleto span:nth-child(3n + 1) {
+  width: 92%;
+}
+
+@keyframes pulso {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto span {
+    animation: none;
+  }
+}
