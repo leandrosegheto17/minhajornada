@@ -187,14 +187,17 @@ describe('deslize lateral (FUN-16 a FUN-18)', () => {
     expect(props.aoAnterior).not.toHaveBeenCalled();
   });
 
-  it.each(['mouse', 'pen'])('FUN-16/FUN-17: arrastar com %s 100/0 e -100/0 não troca de capítulo (só o dedo desliza)', (tipo) => {
-    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
-    render(<TelaLeitor {...props} />);
-    deslizar(100, 0, tipo);
-    deslizar(-100, 0, tipo);
-    expect(props.aoSeguinte).not.toHaveBeenCalled();
-    expect(props.aoAnterior).not.toHaveBeenCalled();
-  });
+  it.each(['mouse', 'pen'])(
+    'FUN-16/FUN-17: arrastar com %s 100/0 e -100/0 não troca de capítulo (só o dedo desliza)',
+    (tipo) => {
+      const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+      render(<TelaLeitor {...props} />);
+      deslizar(100, 0, tipo);
+      deslizar(-100, 0, tipo);
+      expect(props.aoSeguinte).not.toHaveBeenCalled();
+      expect(props.aoAnterior).not.toHaveBeenCalled();
+    },
+  );
 
   it('FUN-17: deslizar 100/10 (esquerda para a direita) chama anterior', () => {
     const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
