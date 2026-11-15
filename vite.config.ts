@@ -19,11 +19,16 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src/pwa',
       filename: 'sw.ts',
+      // O registro é nosso (`src/pwa/registrarSW.ts`), sem recarregar a página (FUN-37).
       registerType: 'autoUpdate',
       injectRegister: false,
       scope: '/',
       manifest: false,
-      injectManifest: { globPatterns: ['**/*.{js,css,html,woff2,svg,png,webmanifest}'] },
+      // Só o app (o shell): os livros (`livros/*.json`) ficam no cache `mj-livros`, gerido pelo app (AD-002).
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,woff2,svg,png,webmanifest}'],
+        globIgnores: ['livros/**'],
+      },
       devOptions: { enabled: false },
     }),
   ],

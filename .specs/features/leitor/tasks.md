@@ -459,6 +459,9 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/src/pwa/sw.ts:13-14, 20-25, 31-32` (sem push e sem rota de API), `src/pwa/registrarSW.ts:4-6`, `vite.config.ts:34-58`
 **Requirement**: FUN-35
+**Status**: rascunhada
+**Testes**: `e2e/sw.spec.ts` › "FUN-35: depois da primeira visita, o app abre sem rede", "FUN-35: sem rede, outro endereço do app também abre (fallback de navegação)", "FUN-35: o precache tem o app e não tem nenhum livro (livros/)" (FUN-35)
+**Código**: `src/pwa/sw.ts`, `src/pwa/registrarSW.ts` (registro próprio no `load`, só no build, sem `virtual:pwa-register`), `vite.config.ts` (`globIgnores: livros/**`)
 
 **Done when**:
 
