@@ -1014,6 +1014,9 @@ T35
 **Depends on**: None
 **Reuses**: J-01 e J-02 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-01, FUN-02, FUN-06, FUN-07, FUN-09, FUN-11, FUN-14, FUN-15, FUN-16, FUN-20, FUN-49
+**Status**: rascunhada
+**Testes**: `e2e/leitura.spec.ts` › "FUN-21/FUN-09/FUN-01/FUN-02: a primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto, com 25 versículos e \"que está\" em itálico" (FUN-01, FUN-02, FUN-06, FUN-09, FUN-21); "FUN-11/FUN-49/FUN-06/FUN-07: Malaquias 4 → seguinte → Mateus 1; o título mostra a grade de Mateus; \"Trocar livro\" → Salmos → 1 a 150 → 119 com 176 versículos" (FUN-06, FUN-07, FUN-08, FUN-11, FUN-49); "FUN-14/FUN-15: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte" (FUN-14, FUN-15); "FUN-16: um deslize de 100 px da direita para a esquerda em Salmos 27 abre Salmos 28 (toque emulado)" (FUN-16); "FUN-17/FUN-18: deslize para a direita volta um capítulo; deslize curto não troca" (FUN-17, FUN-18); "FUN-19/FUN-20: abrir Romanos 8, recarregar e ver Romanos 8" (FUN-19, FUN-20); "FUN-05: o capítulo novo abre no início" (FUN-05)
+**Código**: `e2e/apoio/navegar.ts` (apoio dos e2e: abrir pela escolha, gravar leitura e letra, deslize de toque, SW ativo, livros guardados)
 
 **Done when**:
 
