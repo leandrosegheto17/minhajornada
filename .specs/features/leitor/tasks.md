@@ -682,6 +682,9 @@ T35
 **Depends on**: None
 **Reuses**: `segmentar` (T5); `.specs/mockup/guia.html` (seção Versículo)
 **Requirement**: FUN-01, FUN-02, FUN-04
+**Status**: rascunhada
+**Testes**: `src/componentes/Versiculo.test.tsx` › "FUN-01: mostra o número e o texto no mesmo item da lista" (FUN-01); "FUN-02: \"[que está]\" de Filemom 1:2 aparece em <em>, sem colchetes", "FUN-02: dois acréscimos no mesmo versículo viram dois <em>", "FUN-02: versículo sem colchete não tem <em>" (FUN-02); "FUN-04: um texto com <img src=x onerror=alert(1)> aparece literal, sem criar elemento img", "FUN-04: HTML dentro do acréscimo também fica literal" (FUN-04)
+**Código**: `src/componentes/Versiculo.tsx`, `src/componentes/Versiculo.module.css`
 
 **Done when**:
 

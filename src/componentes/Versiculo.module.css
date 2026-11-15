@@ -1,0 +1,25 @@
+/* Versículo do guia de estilo (.specs/mockup/guia.html, seção Versículo). */
+
+.versiculo {
+  display: grid;
+  grid-template-columns: var(--coluna-numero) 1fr;
+  align-items: baseline;
+  margin: 0 0 0.7em;
+}
+
+.versiculo-numero {
+  justify-self: start;
+  font-size: 0.68em;
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  background: var(--cor-realce);
+  border-radius: var(--raio-total);
+  min-width: 1.9em;
+  text-align: center;
+  padding: 0.1em 0.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+.versiculo-texto em {
+  font-style: italic;
+}
