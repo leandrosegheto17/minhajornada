@@ -766,6 +766,9 @@ T35
 **Depends on**: T22
 **Reuses**: `.specs/mockup/guia.html` (Painel de aparência); botões (T16)
 **Requirement**: FUN-24, FUN-25, FUN-26, FUN-27, FUN-28
+**Status**: rascunhada
+**Testes**: `src/componentes/PainelAparencia.test.tsx` › "FUN-24: + dispara aumentar a letra" (FUN-24); "FUN-25: − dispara diminuir a letra" (FUN-25); "FUN-24/FUN-25: o texto mostra \"Letra %i de 5\"" (FUN-24, FUN-25); "FUN-26: no 5, o + fica desativado e não dispara; o − continua ativo" (FUN-26); "FUN-27: no 1, o − fica desativado e não dispara; o + continua ativo" (FUN-27); "nos níveis do meio, os dois ficam ativos"; "FUN-28: escolher Sépia dispara a ação com \"sepia\"", "FUN-28: com sépia escolhido, aria-pressed=\"true\" só nele" (FUN-28); "FUN-29: sem tema escolhido (o do sistema), nenhuma opção fica marcada" (FUN-29); "fechado, o painel fica escondido", "aberto, o painel aparece com o nome \"Aparência\""; `src/telas/TelaLeitor.test.tsx` › "o \"Aa\" alterna aria-expanded e mostra ou esconde o painel", "FUN-24/FUN-28: o painel aberto repassa a letra e o tema ao leitor" (FUN-24, FUN-28)
+**Código**: `src/componentes/PainelAparencia.tsx`, `src/componentes/PainelAparencia.module.css`, `src/telas/TelaLeitor.tsx` (painel no "Aa"; props `letra`, `tema`, `aoMudarLetra`, `aoEscolherTema`)
 
 **Done when**:
 

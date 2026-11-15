@@ -1,0 +1,81 @@
+/* Painel de aparência (.specs/mockup/guia.html, "painel de aparência"). */
+
+.painel-aparencia {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  box-shadow: var(--sombra-2);
+  padding: var(--esp-4);
+  display: grid;
+  gap: var(--esp-4);
+  width: min(var(--largura-painel), calc(100vw - 2 * var(--esp-3)));
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--esp-2));
+  z-index: 2;
+}
+
+.painel-aparencia[hidden] {
+  display: none;
+}
+
+.painel-aparencia h2 {
+  font-size: var(--texto-m);
+  margin: 0;
+}
+
+.painel-linha {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.painel-rotulo {
+  font-size: var(--texto-p);
+  color: var(--cor-suave);
+  font-weight: var(--peso-forte);
+}
+
+.controle-letra {
+  display: grid;
+  grid-template-columns: var(--alvo-toque) 1fr var(--alvo-toque);
+  align-items: center;
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--raio-total);
+  padding: 2px;
+}
+
+.controle-letra button {
+  border-radius: var(--raio-total);
+  color: var(--cor-texto);
+}
+
+.controle-letra output {
+  text-align: center;
+  font-weight: var(--peso-forte);
+}
+
+.seletor-tema {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--esp-1);
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--raio-total);
+  padding: 3px;
+}
+
+.opcao-tema {
+  min-height: calc(var(--alvo-toque) - 4px);
+  border-radius: var(--raio-total);
+  font-weight: var(--peso-forte);
+  color: var(--cor-suave);
+}
+
+.opcao-tema[aria-pressed='true'] {
+  background: var(--cor-acento);
+  color: var(--cor-acento-texto);
+}
+
+.opcao-tema:not([aria-pressed='true']):hover {
+  background: var(--cor-realce);
+  color: var(--cor-texto);
+}

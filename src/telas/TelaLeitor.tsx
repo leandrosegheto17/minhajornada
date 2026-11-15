@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { indice } from '../biblia/indice';
-import type { Ref } from '../biblia/tipos';
+import type { Ref, Tema } from '../biblia/tipos';
 import { BotaoIcone } from '../componentes/base/Botoes';
 import { Estado } from '../componentes/base/Estado';
 import { IconeAbaixo, IconeAparencia, IconeSobre } from '../componentes/icones';
+import { ID_PAINEL_APARENCIA, PainelAparencia } from '../componentes/PainelAparencia';
 import { Versiculo } from '../componentes/Versiculo';
 import type { CargaLivro } from '../estado/useLeitor';
 import { classificarDeslize } from '../navegacao/deslize';
@@ -19,6 +20,10 @@ interface Props {
   aoAnterior: () => void;
   aoSeguinte: () => void;
   aoAbrirSobre: () => void;
+  letra: number;
+  tema: Tema | null;
+  aoMudarLetra: (delta: 1 | -1) => void;
+  aoEscolherTema: (tema: Tema) => void;
 }
 
 function nomeDoLivro(livro: number): string {
@@ -33,7 +38,18 @@ function rotulo(ref: Ref): string {
  * Leitura de um capítulo (.specs/mockup/telas/leitor.html): barra com a marca, "Aa" e Sobre; o título como botão
  * (FUN-49, FUN-50); os versículos (FUN-01); os cartões anterior e seguinte, desativados nos limites (FUN-10 a FUN-15).
  */
-export function TelaLeitor({ referencia, carga, aoTocarTitulo, aoAnterior, aoSeguinte, aoAbrirSobre }: Props) {
+export function TelaLeitor({
+  referencia,
+  carga,
+  aoTocarTitulo,
+  aoAnterior,
+  aoSeguinte,
+  aoAbrirSobre,
+  letra,
+  tema,
+  aoMudarLetra,
+  aoEscolherTema,
+}: Props) {
   const [painelAberto, setPainelAberto] = useState(false);
   const { livro, capitulo } = referencia;
 
@@ -75,11 +91,18 @@ export function TelaLeitor({ referencia, carga, aoTocarTitulo, aoAnterior, aoSeg
             <BotaoIcone
               rotulo="Aparência: letra e tema"
               aria-expanded={painelAberto}
-              aria-controls="painel-aparencia"
+              aria-controls={ID_PAINEL_APARENCIA}
               onClick={() => setPainelAberto((aberto) => !aberto)}
             >
               <IconeAparencia />
             </BotaoIcone>
+            <PainelAparencia
+              aberto={painelAberto}
+              letra={letra}
+              tema={tema}
+              aoMudarLetra={aoMudarLetra}
+              aoEscolherTema={aoEscolherTema}
+            />
           </div>
           <BotaoIcone rotulo="Sobre o MinhaJornada" onClick={aoAbrirSobre}>
             <IconeSobre />
