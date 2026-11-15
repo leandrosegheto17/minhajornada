@@ -621,6 +621,9 @@ T35
 **Depends on**: None
 **Reuses**: `seguinte`/`anterior` (T6), índice (T2)
 **Requirement**: FUN-09, FUN-20, FUN-21, FUN-23, FUN-24, FUN-25, FUN-26, FUN-27, FUN-49, FUN-50
+**Status**: rascunhada
+**Testes**: `src/estado/leitor.test.ts` › "FUN-20: com Ref válida, abre o leitor nela" (FUN-20); "FUN-21: sem Ref, abre a escolha de livro" (FUN-21); "FUN-22: Ref fora do índice (Judas 2) abre a escolha de livro" (FUN-22); "FUN-23: letra inválida na inicialização vira 3; a válida é mantida", "FUN-23: a letra começa em 3" (FUN-23); "o tema gravado é mantido; sem tema, segue o sistema (null)"; "FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade" (FUN-09); "FUN-07: escolher Salmos abre a grade de Salmos" (FUN-07); "FUN-08: escolher o 27 na grade abre Salmos 27" (FUN-08); "livro fora do índice (0 e 67) não muda o estado", "capítulo fora do intervalo (Salmos 151) não muda o estado"; "FUN-49: tocar no título em Salmos 27 abre a grade de Salmos", "FUN-49: \"Trocar livro\" na grade abre a escolha de livro" (FUN-49); "FUN-50: tocar no título em Filemom 1 (capítulo único) abre a escolha de livro" (FUN-50); "tocar no título sem capítulo aberto não muda o estado"; "FUN-10: seguinte em Salmos 26 abre Salmos 27", "FUN-13: anterior em Mateus 1 abre Malaquias 4", "FUN-15: seguinte em Apocalipse 22 não muda o estado", "FUN-14: anterior em Gênesis 1 não muda o estado" (FUN-10, FUN-13, FUN-14, FUN-15); "FUN-24/FUN-26: +1 vai até 5 e para" (FUN-24, FUN-26); "FUN-25/FUN-27: -1 vai até 1 e para" (FUN-25, FUN-27); "FUN-28: escolher sépia guarda o tema" (FUN-28); "abre o Sobre a partir do leitor e volta ao mesmo capítulo", "não abre o leitor sem capítulo"
+**Código**: `src/estado/leitor.ts` (`reduzirLeitor`, `ESTADO_INICIAL`, tipos `Tela`, `EstadoLeitor`, `AcaoLeitor`; limites da letra de `src/dados/preferencias.ts`)
 
 **Done when**:
 
