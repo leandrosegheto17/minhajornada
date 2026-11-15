@@ -1,6 +1,8 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { spawnSync } from 'node:child_process';
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { delimiter, join } from 'node:path';
+import { afterAll, describe, expect, it } from 'vitest';
 
 /**
  * Workflow de deploy (A-05 e A-08 da rodada 1): o token da Cloudflare só chega ao que publica, e a fumaça confere os
@@ -104,5 +106,89 @@ describe('deploy.yml: a fumaça confere os cabeçalhos do FUN-42 (A-05)', () => 
   ])('A-05: exige %s com %s', (cabecalho, valor) => {
     expect(fumaca.toLowerCase()).toContain(cabecalho);
     expect(fumaca).toContain(valor);
+  });
+});
+
+/**
+ * A-13 (FUN-42): o caminho de falha da fumaça é provado por execução. O bloco `run` do passo é rodado em `bash -e` (o
+ * shell padrão do Actions) com um `curl` simulado no PATH, que devolve os cabeçalhos do FUN-42 menos o que o caso omite.
+ */
+describe('deploy.yml: a fumaça falha quando um cabeçalho do FUN-42 falta (A-13)', () => {
+  const fumaca = passos(job('publicar')).find((p) => /Fumaça/.test(p)) ?? '';
+  const bloco = (/\n {8}run: \|\n((?: {10}.*\n?)+)/.exec(fumaca)?.[1] ?? '').replace(/^ {10}/gm, '');
+  const raiz = mkdtempSync(join(tmpdir(), 'fumaca-'));
+  const bin = join(raiz, 'bin');
+  const trabalho = join(raiz, 'trabalho');
+  mkdirSync(bin, { recursive: true });
+  mkdirSync(join(trabalho, 'dist', 'livros'), { recursive: true });
+  writeFileSync(join(trabalho, 'dist', 'livros', '01.json'), '{}');
+  // `curl` simulado: sem `-D` não imprime nada; com `-D -` imprime os cabeçalhos, tirando o da variável OMITIR (casada
+  // sem diferenciar caixa). Em SEM_CABECALHO_EM (um caminho) responde HTTP 500: com `-f` sai 22, sem `-f` sai 0.
+  const stub = [
+    '#!/bin/bash',
+    'url="${@: -1}"; cabecalhos=0; falha=0',
+    'for a in "$@"; do',
+    '  [ "$a" = "-D" ] && cabecalhos=1',
+    '  [[ "$a" =~ ^-[a-zA-Z]*f ]] && falha=1',
+    'done',
+    '[ "$cabecalhos" = 1 ] || exit 0',
+    'if [ -n "${HTTP_500_EM:-}" ] && [ "${url#"$URL_PUBLICA"}" = "$HTTP_500_EM" ] && [ "$falha" = 1 ]; then exit 22; fi',
+    "tudo=\"content-security-policy: default-src 'self'; object-src 'none'; frame-ancestors 'none'",
+    'x-content-type-options: nosniff',
+    'referrer-policy: same-origin"',
+    'if [ -n "${OMITIR:-}" ] && { [ -z "${OMITIR_EM:-}" ] || [ "${url#"$URL_PUBLICA"}" = "$OMITIR_EM" ]; }; then',
+    '  tudo="$(grep -vi -- "$OMITIR" <<< "$tudo")"',
+    'fi',
+    'printf "HTTP/2 200\r\n%s\r\n\r\n" "$tudo"',
+  ].join('\n');
+  writeFileSync(join(bin, 'curl'), stub);
+  chmodSync(join(bin, 'curl'), 0o755);
+
+  afterAll(() => rmSync(raiz, { recursive: true, force: true }));
+
+  function rodar(extra: Record<string, string>) {
+    return spawnSync('bash', ['-e', '-c', bloco], {
+      cwd: trabalho,
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        ...extra,
+        URL_PUBLICA: 'https://exemplo.test',
+        PATH: `${bin}${delimiter}${process.env.PATH ?? ''}`,
+      },
+    });
+  }
+
+  it('A-13: FUN-42: o bloco extraído existe e, com todos os cabeçalhos, sai com 0', () => {
+    expect(bloco).toMatch(/for caminho in/);
+    const r = rodar({});
+    expect(r.stdout + r.stderr).not.toMatch(/::error/);
+    expect(r.status).toBe(0);
+  });
+
+  it.each([
+    ['content-security-policy: default-src', '/'],
+    ['content-security-policy: default-src', '/sw.js'],
+    ['content-security-policy: default-src', '/livros/01.json'],
+    ['object-src', '/sw.js'],
+    ['frame-ancestors', '/livros/01.json'],
+    ['x-content-type-options', '/'],
+    ['x-content-type-options', '/sw.js'],
+    ['x-content-type-options', '/livros/01.json'],
+    ['referrer-policy', '/'],
+    ['referrer-policy', '/livros/01.json'],
+  ])('A-13: FUN-42: sem %s em %s sai com erro e imprime ::error', (cabecalho, caminho) => {
+    // `object-src` e `frame-ancestors` vivem na mesma linha da CSP: o stub tira a linha inteira da CSP.
+    const omitir = /^(object-src|frame-ancestors)$/.test(cabecalho)
+      ? 'content-security-policy'
+      : cabecalho.split(':')[0]!;
+    const r = rodar({ OMITIR: omitir, OMITIR_EM: caminho });
+    expect(r.status).not.toBe(0);
+    expect(r.stdout + r.stderr).toMatch(/::error title=Fumaça falhou::/);
+  });
+
+  it('A-13: FUN-42: resposta HTTP com erro (curl -f) derruba a fumaça', () => {
+    const r = rodar({ HTTP_500_EM: '/sw.js' });
+    expect(r.status).not.toBe(0);
   });
 });
