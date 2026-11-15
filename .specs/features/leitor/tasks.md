@@ -1336,9 +1336,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 **Tests**: teste "A-12: FUN-42: a fumaça confere os cabeçalhos em exatamente /, /sw.js e um livro", que falha ao tirar qualquer caminho do laço
 **Gate**: `pnpm typecheck && pnpm vitest run test/arquivos/deploy.test.ts --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = verde
 
 
 ## Requirement Coverage
