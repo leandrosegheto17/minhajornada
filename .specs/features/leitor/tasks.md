@@ -1141,7 +1141,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: `TelaLeitor.test.tsx`: "FUN-16: arrastar o mouse 100/0 não troca de capítulo" (falha antes da correção); os de toque seguem verdes
 **Gate**: `pnpm typecheck && pnpm vitest run src/telas/TelaLeitor.test.tsx --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1158,7 +1158,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: `e2e/leitura.spec.ts`: "FUN-01: cada versículo em linha própria, número à esquerda" e "FUN-02: o acréscimo aparece em itálico" (rodada vermelha com o CSS do `em` ou da pílula removido)
 **Gate**: `pnpm build && pnpm exec playwright test e2e/leitura.spec.ts --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1175,7 +1175,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: sem teste (artefato); conferido pelo verificador na checagem (c)
 **Gate**: —
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1192,7 +1192,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: o teste existente de FUN-36 segue verde
 **Gate**: `pnpm typecheck && pnpm vitest run src/estado --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1209,7 +1209,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: teste em `test/arquivos/` que lê o `deploy.yml` e exige os três caminhos e `frame-ancestors` na fumaça (vermelho antes)
 **Gate**: `pnpm typecheck && pnpm vitest run --project arquivos --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1226,7 +1226,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: depois do `afterEach`, `Object.hasOwn(navigator, 'maxTouchPoints')` é falso
 **Gate**: `pnpm vitest run src/componentes/ConviteInstalacao.test.tsx --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1243,7 +1243,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: `expect(page.getByRole('region', { name: 'Aparência' })).toBeHidden()`
 **Gate**: `pnpm build && pnpm exec playwright test e2e/aparencia.spec.ts --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1260,7 +1260,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: teste em `test/arquivos/` que lê o `deploy.yml`: nenhum `env` de job com o token, token só em passos `wrangler`, job com segredo sem `cache: pnpm` e sem `pnpm install` (vermelho antes)
 **Gate**: `pnpm typecheck && pnpm vitest run --project arquivos --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1277,7 +1277,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: manual: confirmação do dono gravada em `preparacao.md`
 **Gate**: —
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1294,7 +1294,7 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: `livros.test.ts`: "FUN-34: resposta 200 text/html não é guardada e lança LivroNaoBaixado" e "FUN-34: JSON de outro livro não é guardado" (vermelhos antes)
 **Gate**: `pnpm typecheck && pnpm vitest run src/dados --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1311,9 +1311,11 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 **Tests**: `pnpm audit --audit-level high` sai 0; suíte e build verdes
 **Gate**: `pnpm audit --audit-level high && pnpm typecheck && pnpm test && pnpm build`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exec playwright test --reporter=dot @ 4d15aef2e0a55a4266adf1e2dcd54b903be1356f = verde
 
 ## Requirement Coverage
 
