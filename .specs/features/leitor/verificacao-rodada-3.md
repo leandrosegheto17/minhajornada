@@ -1,43 +1,45 @@
-# Verificação do leitor, rodada 3 (retrabalho R2, só a T47)
+# Verificação do leitor, rodada 3 (retrabalho R2, T47 / A-12)
 
-Veredito: **PASS**. A-12 fechado, nenhum achado novo. HEAD 8409d60, árvore 1c90fb1. Diff de código `c0755e9..HEAD`: só `test/arquivos/deploy.test.ts` (+9, 0 linhas removidas).
+- **Branch**: `feature/leitor` @ `8409d60` (árvore `1c90fb1c…`; o HEAD atual `8dfb166` só acrescenta `.specs`). **Diff**: `c0755e9..8409d60`: só `test/arquivos/deploy.test.ts` (+9, 0 removidas).
+- **Veredito**: **FAIL** por 1 achado crítico novo (A-13, mutantes vivos no mesmo trecho da fumaça). **A-12 fechado**.
+- Esta versão substitui a de `8dfb166` (PASS, de uma verificação paralela). Concordo com ela no A-12, no gate e nas 3 mutações; divirjo por ter mutado também o caminho de falha da fumaça.
 
-## A-12 (FUN-42: laço da fumaça) — fechado
+## A-12 (FUN-42, laço da fumaça): fechado
 
-| Critério | Evidência | Resultado |
-|---|---|---|
-| FUN-42: o laço confere `/`, `/sw.js` e o livro | `test/arquivos/deploy.test.ts:89-96`: `expect(laco?.[1]?.trim().split(/\s+/)).toEqual(['"/"', '"/sw.js"', '"${livro}"'])` (linha 92); mais `toMatch(/livro="\/livros\/\$\(ls dist\/livros/)` (94) e `toMatch(/-D - -o \/dev\/null "\$\{URL_PUBLICA\}\$\{caminho\}"/)` (95). Laço real em `.github/workflows/deploy.yml:124`. | OK |
+`test/arquivos/deploy.test.ts:92` `expect(laco?.[1]?.trim().split(/\s+/)).toEqual(['"/"', '"/sw.js"', '"${livro}"'])`; `:94` `toMatch(/livro="\/livros\/\$\(ls dist\/livros/)`; `:95` `toMatch(/-D - -o \/dev\/null "\$\{URL_PUBLICA\}\$\{caminho\}"/)`. Laço real em `deploy.yml:124`, curl em `:125`.
 
-## Sensor (3 mutações em deploy.yml, cópia isolada com junção, só `deploy.test.ts`)
+## Sensor (cópia isolada, `node_modules` por junção, só `deploy.test.ts`; limpa = 13/13)
 
-| Mutante | Resultado |
+| Mutante em `deploy.yml` | Resultado |
 |---|---|
-| M1: tirar `"${livro}"` do laço (as duas sobreviventes da rodada 2) | morto, falha em `deploy.test.ts:92` (falta `"${livro}"`) |
-| M2: tirar `"/"` do laço (a outra sobrevivente da rodada 2) | morto, falha em `deploy.test.ts:92` (falta `"/"`) |
-| M3: tirar `"/sw.js"` | morto, 2 testes falham (a asserção nova e o teste de `/sw.js` já existente) |
+| M13 tirar `"${livro}"` do laço (viva na rodada 2) | morta (1 falha) |
+| M15 tirar `"/"` do laço (viva na rodada 2) | morta (1 falha) |
+| M8 tirar `"/sw.js"` | morta (2 falhas) |
+| M17 curl lê `${URL_PUBLICA}/` em vez de `${caminho}` | morta (1 falha) |
+| M18 `livro="/"` | morta (2 falhas) |
+| M20 trocar a ordem do laço | morta (1 falha, igualdade exata; aceitável) |
+| M24 tirar `nosniff` da lista de exigidos | morta (1 falha) |
+| **M19** `exit 1` -> `true` (`deploy.yml:129`) | **viva** (13/13) |
+| **M22** `exit 1` -> `:` | **viva** (igual à M19) |
+| **M21** `if ! grep -qi` -> `if grep -qi` (`:127`) | **viva** (13/13) |
+| **M23** `curl -fsS` -> `curl -sS` no curl do laço (`:125`) | **viva** (13/13) |
 
-3 mortas, 0 vivas. A cópia limpa passou 13/13 em `deploy.test.ts`. Cópia descartada (worktree `_mut` removida; `git status --porcelain` da árvore real vazio, antes e depois). Obs.: `pnpm test --project arquivos` na cópia tentou `pnpm install` por causa da junção (recusou apagar o `node_modules` real), então os mutantes rodaram com `node node_modules/vitest/vitest.mjs run --project arquivos --reporter=dot test/arquivos/deploy.test.ts`.
+11 mutações: 7 mortas, 4 vivas (3 efeitos distintos). Nenhuma é equivalente. Cópia removida (junção e `git worktree remove`); `git status --porcelain` da árvore real vazio.
 
-## Gate (árvore atual, rodado agora)
+## Gate (árvore `1c90fb1c…`, rodado agora)
 
-| Comando | Resultado |
-|---|---|
-| `pnpm lint` | verde (eslint e prettier) |
-| `pnpm typecheck` | verde |
-| `pnpm test` | 27 arquivos, 345 testes, 0 falhas |
-| `pnpm build` | verde |
-| `pnpm e2e` (uma vez, segundo plano) | 27 passaram, 0 falharam |
+`pnpm lint && pnpm typecheck && pnpm test --reporter=dot && pnpm build && pnpm e2e --reporter=dot` = **verde**: 27 arquivos e **345** testes, **27** e2e. Sem regressão em relação à rodada 2 (344 + o teste novo).
 
 ## Checagens de processo
 
-- Teste existente alterado ou enfraquecido: não. O diff de `test/` só acrescenta (9 linhas adicionadas, 0 removidas).
-- Commit da T47 (`c22939a`, só o teste; o único commit de código da rodada) fecha verde: o `typecheck` e a suíte da árvore atual passam; o commit não importa nada novo.
-- IDs: o teste novo cita `A-12` e `FUN-42`, e `FUN-42` é o requisito de cabeçalhos da spec. O molde (`deploy.test.ts:82-98`) foi registrado no commit.
-- `Gate:` da T47 registrado no `tasks.md` (`pnpm typecheck && pnpm test @ 2e8708d… = verde`); a árvore atual difere só por arquivos de `.specs`, e o gate completo foi repetido acima.
-- Cluster: esta rodada não toca banco e não criou banco, role ou dado `teste_*`.
+(a) `testes.json` (`pnpm typecheck && pnpm test`) cobre o único pacote; e2e rodou à parte. OK. (b) `typecheck` verde no HEAD (gate); o único commit de código do R2 (`c22939a`) só acrescenta teste. OK. (c) Teste existente enfraquecido: nenhum (0 linhas removidas em `test/`). (d) `A-12` e `FUN-42` batem com a spec (`spec.md:188`). (e) Banco `teste_*`: não se aplica. (f) RLS/papéis: não se aplica. (g) Sem divergência spec × design nova. Nota: o nome do teste na T47 (`tasks.md:1336`) difere do nome real (`deploy.test.ts:89`); sem efeito.
 
-## Achados novos
+## Achados
 
-Nenhum.
+| ID | `arquivo:linha` | Achado e evidência | Correção sugerida | Criticidade |
+|---|---|---|---|---|
+| A-13 | `test/arquivos/deploy.test.ts:82-98` (fumaça em `.github/workflows/deploy.yml:125-129`) | O caminho de **falha** da fumaça de cabeçalhos (FUN-42) não é provado: trocar `exit 1` por `true`/`:` (M19, M22), inverter `if ! grep` (M21) e tirar `-f` do curl do laço (M23) passam 13/13. A conferência pode virar inócua (nunca falhar, ou falhar em deploy bom e disparar o rollback) sem teste vermelho. Os testes só casam texto de nomes de cabeçalho e caminhos | Teste que extrai o bloco `run` da fumaça, executa em `bash` com `curl` substituído por stub (um com todos os cabeçalhos: sai 0; outro sem `nosniff`/CSP: sai não zero e imprime `::error`), para cada caminho; ou, no mínimo, asserções textuais em `if ! grep -qi`, `exit 1` dentro do laço e `curl -fsS` | crítica (mutante vivo em segurança, na dúvida crítica) |
 
-Observação de processo (não é achado): existe a worktree `.worktree/_mut_r3` (detached em 8409d60) que não é desta verificação. Parece sobra de outra sessão; convém removê-la ao fim.
+## Não validado
+
+Execução real do workflow na Actions (`DEPLOY_ATIVO` inativo), cabeçalhos em resposta real da Cloudflare, Node 24 (roda em Node 26).

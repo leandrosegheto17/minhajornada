@@ -142,6 +142,12 @@ T46
 T47
 ```
 
+### Phase 13: Retrabalho R3
+
+```
+T48
+```
+
 ---
 
 ## Task Breakdown
@@ -1340,6 +1346,22 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 
 ---
 
+### T48: Fumaça do deploy com o caminho de falha provado por execução (A-13)
+
+**What**: Em `test/arquivos/deploy.test.ts`, extrair o bloco `run` do passo "2. Fumaça do site publicado" do `deploy.yml` e executá-lo em `bash` com um `curl` simulado no `PATH`, provando que ele sai com 0 quando todos os caminhos trazem os cabeçalhos do FUN-42 e sai com código diferente de zero (imprimindo `::error`) quando falta a CSP ou o `nosniff` em qualquer caminho ou quando o `curl` falha.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `test/arquivos/deploy.test.ts:82-98` (funções `job` e `passos`, teste do A-12); `.github/workflows/deploy.yml:120-133`
+**Requirement**: FUN-42 · Achado: A-13 (validation.md)
+**Tests**: testes "A-13: FUN-42: ..." que executam a fumaça com stub de `curl` (verde, cabeçalho ausente por caminho, `curl` com falha) e falham se o `exit 1`, o `!` do `grep` ou o `-f` do `curl` forem removidos
+**Gate**: `pnpm typecheck && pnpm vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+---
+
+
 Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = verde
 
 
@@ -1375,7 +1397,7 @@ Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = v
 | FUN-37 | T12, T14 |
 | FUN-38 a FUN-40 | T27 |
 | FUN-41 | T4, T15, T34 |
-| FUN-42 | T3 |
+| FUN-42 | T3, T47, T48 |
 | FUN-43 | T35 |
 | FUN-44 | T16, T35 |
 | FUN-45 | T32 |
