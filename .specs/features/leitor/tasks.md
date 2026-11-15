@@ -133,15 +133,15 @@ T35
 **Depends on**: None
 **Reuses**: formato conferido em `design.md` (Components, Conversor); tipos `Livro` de `design.md` (Data Models)
 **Requirement**: FUN-03
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/biblia/conversor.test.ts` › "FUN-03: converte Filemom 1 com os 25 versículos, colchetes preservados e sem o espaço do fim", "FUN-03: converte Salmos com 150 capítulos, Salmos 119 com 176 versículos e Salmos 27:13 igual à fonte", "FUN-03: aceita nome com número e acento", "FUN-03: aceita fim de linha CRLF e LF e ignora o rodapé depois de ---", "FUN-03: capítulo pulado…", "FUN-03: versículo pulado…", "FUN-03: linha fora do formato…", "FUN-03: capítulo que não começa no versículo 1…", "FUN-03: capítulo de outro livro…", "FUN-03: livro sem capítulos…" (FUN-03)
 **Código**: `src/biblia/conversor.ts`, `src/biblia/tipos.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-03` com trechos reais de `.biblia/` (Filemom 1, Salmos 119): nomes com número ("1 Samuel"), acento, colchetes preservados, espaço final removido
-- [ ] Teste de erro: capítulo pulado, versículo pulado e linha fora do formato lançam erro com o livro e o capítulo na mensagem
-- [ ] Gate quick passa
+- [x] Testes `FUN-03` com trechos reais de `.biblia/` (Filemom 1, Salmos 119): nomes com número ("1 Samuel"), acento, colchetes preservados, espaço final removido
+- [x] Teste de erro: capítulo pulado, versículo pulado e linha fora do formato lançam erro com o livro e o capítulo na mensagem
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -160,23 +160,25 @@ T35
 **Depends on**: T1
 **Reuses**: `converterLivro` (T1); Node 24 roda `.ts` direto (`node:fs`, `node:crypto`)
 **Requirement**: FUN-03, FUN-06
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `test/arquivos/converter-biblia.test.ts` › "FUN-03: os 31.102 versículos gravados são iguais aos de .biblia/, um a um, nos 66 livros", "FUN-03: cada arquivo gravado tem o nome NN.<hash8>.json" (FUN-03); "FUN-06: 66 livros na ordem canônica, 39 do AT e 27 do NT", "FUN-06: Salmos tem 150 capítulos e Judas tem 1" (FUN-06); "o mesmo texto dá o mesmo nome e um texto diferente muda o hash" (AD-002)
 **Código**: `scripts/converter-biblia.ts`, `package.json` (`predev`, `prebuild`, `pretest`, `pretypecheck`), `pnpm-workspace.yaml` (`enablePrePostScripts`), `tsconfig.json` (`allowImportingTsExtensions`, `resolveJsonModule`), `.gitignore`
 
 **Done when**:
 
-- [ ] Teste `FUN-03` (projeto `arquivos`): os 31.102 versículos gerados são iguais aos de `.biblia/`, um a um, nos 66 livros
-- [ ] Teste `FUN-06`: índice com 66 livros na ordem canônica, 39 AT e 27 NT, Salmos com 150 capítulos e Judas com 1
-- [ ] Teste: mudar o texto muda o hash do nome do arquivo; o mesmo texto dá o mesmo nome
-- [ ] `package.json` com `predev`/`prebuild`; `public/livros/` e `indice.gerado.json` no `.gitignore`
-- [ ] Gate quick passa
+- [x] Teste `FUN-03` (projeto `arquivos`): os 31.102 versículos gerados são iguais aos de `.biblia/`, um a um, nos 66 livros
+- [x] Teste `FUN-06`: índice com 66 livros na ordem canônica, 39 AT e 27 NT, Salmos com 150 capítulos e Judas com 1
+- [x] Teste: mudar o texto muda o hash do nome do arquivo; o mesmo texto dá o mesmo nome
+- [x] `package.json` com `predev`/`prebuild`; `public/livros/` e `indice.gerado.json` no `.gitignore`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(biblia): gera os livros com hash e o índice no build`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot src/biblia/conversor.test.ts test/arquivos/converter-biblia.test.ts @ 607795c4d5bc7e2b68095630bb4454a9ef173cc2 = verde
 
 ### T3: Cabeçalhos de segurança
 
