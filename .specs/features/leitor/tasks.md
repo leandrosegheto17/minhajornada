@@ -903,6 +903,9 @@ T35
 **Depends on**: None
 **Reuses**: molde `ControleEmCasa_LJS/frontend/web/src/pwa/instalacao.ts:44, 98`
 **Requirement**: FUN-46, FUN-48
+**Status**: rascunhada
+**Testes**: `src/pwa/instalacao.test.ts` › "FUN-46: %s = sim" (Safari do iPhone, do iPad e do iPad como MacIntel com toque), "FUN-46: %s = não" (CriOS, FxiOS, EdgiOS, Android, Mac sem toque, Mac com um toque, Chrome do Mac com toque) (FUN-46); "navegador embutido sem \"Safari/\" no agente não conta"; "FUN-48: display-mode standalone por matchMedia = instalado", "FUN-48: navigator.standalone (iOS) = instalado", "FUN-48: no navegador, sem standalone = não instalado", "FUN-48: sem matchMedia e sem navigator.standalone = não instalado" (FUN-48)
+**Código**: `src/pwa/instalacao.ts` (`ehSafariIOS`, `estaInstalado`)
 
 **Done when**:
 
