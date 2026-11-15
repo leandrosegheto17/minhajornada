@@ -696,16 +696,16 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: None
 **Reuses**: `segmentar` (T5); `.specs/mockup/guia.html` (seção Versículo)
 **Requirement**: FUN-01, FUN-02, FUN-04
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/Versiculo.test.tsx` › "FUN-01: mostra o número e o texto no mesmo item da lista" (FUN-01); "FUN-02: \"[que está]\" de Filemom 1:2 aparece em <em>, sem colchetes", "FUN-02: dois acréscimos no mesmo versículo viram dois <em>", "FUN-02: versículo sem colchete não tem <em>" (FUN-02); "FUN-04: um texto com <img src=x onerror=alert(1)> aparece literal, sem criar elemento img", "FUN-04: HTML dentro do acréscimo também fica literal" (FUN-04)
 **Código**: `src/componentes/Versiculo.tsx`, `src/componentes/Versiculo.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-01`: mostra o número e o texto na mesma linha da lista
-- [ ] Teste `FUN-02`: "[que está]" aparece em `<em>` sem colchetes
-- [ ] Teste `FUN-04`: um texto com `<img src=x onerror=alert(1)>` aparece literal, sem criar elemento `img`
-- [ ] Gate quick passa
+- [x] Teste `FUN-01`: mostra o número e o texto na mesma linha da lista
+- [x] Teste `FUN-02`: "[que está]" aparece em `<em>` sem colchetes
+- [x] Teste `FUN-04`: um texto com `<img src=x onerror=alert(1)>` aparece literal, sem criar elemento `img`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -724,18 +724,18 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: T21
 **Reuses**: `.specs/mockup/telas/leitor.html`; botões (T16)
 **Requirement**: FUN-01, FUN-05, FUN-10, FUN-11, FUN-12, FUN-13, FUN-14, FUN-15, FUN-49, FUN-50
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-01: mostra o título \"Salmos 27\" e os 14 versículos, cada um com o número" (FUN-01); "enquanto o livro carrega, mostra o estado carregando"; "FUN-05: abrir e trocar de capítulo rola ao topo", "FUN-05: renderizar de novo o mesmo capítulo não rola" (FUN-05); "FUN-10/FUN-12: em Salmos 27, os cartões mostram Salmos 26 e Salmos 28 e disparam anterior e seguinte" (FUN-10, FUN-12); "FUN-11: em Malaquias 4, o seguinte mostra Mateus 1" (FUN-11); "FUN-13: em Mateus 1, o anterior mostra Malaquias 4" (FUN-13); "FUN-14: em Gênesis 1, o anterior fica desativado e não dispara" (FUN-14); "FUN-15: em Apocalipse 22, o seguinte fica desativado e não dispara" (FUN-15); "FUN-49: tocar no título dispara a ação do título" (FUN-49); "FUN-50: em livro de capítulo único, o título oferece outro livro" (FUN-50); "FUN-44: os botões de ícone da barra têm rótulo em português" (FUN-44)
 **Código**: `src/telas/TelaLeitor.tsx`, `src/telas/TelaLeitor.module.css`, `src/telas/comum.module.css` (barra do topo), `src/componentes/icones.tsx` (ícones do mockup)
 
 **Done when**:
 
-- [ ] Teste `FUN-01`: título "Salmos 27" e os 14 versículos, cada um com o número
-- [ ] Teste `FUN-05`: trocar de capítulo chama a rolagem ao topo
-- [ ] Testes `FUN-10` a `FUN-13`: os cartões mostram "Salmos 26" e "Salmos 28" e disparam anterior e seguinte; em Malaquias 4 o seguinte mostra "Mateus 1"
-- [ ] Testes `FUN-14`/`FUN-15`: em Gênesis 1 o anterior fica desativado; em Apocalipse 22, o seguinte
-- [ ] Teste `FUN-49`: tocar no título dispara a ação do título
-- [ ] Gate quick passa
+- [x] Teste `FUN-01`: título "Salmos 27" e os 14 versículos, cada um com o número
+- [x] Teste `FUN-05`: trocar de capítulo chama a rolagem ao topo
+- [x] Testes `FUN-10` a `FUN-13`: os cartões mostram "Salmos 26" e "Salmos 28" e disparam anterior e seguinte; em Malaquias 4 o seguinte mostra "Mateus 1"
+- [x] Testes `FUN-14`/`FUN-15`: em Gênesis 1 o anterior fica desativado; em Apocalipse 22, o seguinte
+- [x] Teste `FUN-49`: tocar no título dispara a ação do título
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -754,14 +754,14 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: T22
 **Reuses**: `classificarDeslize` (T8)
 **Requirement**: FUN-16, FUN-17, FUN-18
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-16: deslizar -100/10 (direita para a esquerda) chama seguinte" (FUN-16); "FUN-17: deslizar 100/10 (esquerda para a direita) chama anterior" (FUN-17); "FUN-18: deslize %i/%i não troca de capítulo" (FUN-18); "FUN-15/FUN-16: em Apocalipse 22, o deslize para seguinte não faz nada" (FUN-15, FUN-16); "FUN-14/FUN-17: em Gênesis 1, o deslize para anterior não faz nada" (FUN-14, FUN-17); "gesto cancelado pelo navegador não troca de capítulo", "pointerUp de outro ponteiro não conta como deslize"
 **Código**: `src/telas/TelaLeitor.tsx` (Pointer Events na área do texto)
 
 **Done when**:
 
-- [ ] Testes `FUN-16` a `FUN-18` (eventos de ponteiro simulados): -100/10 chama seguinte; 100/10 chama anterior; 40/0 e -100/120 não chamam nada; em Apocalipse 22 o deslize para seguinte não faz nada
-- [ ] Gate quick passa
+- [x] Testes `FUN-16` a `FUN-18` (eventos de ponteiro simulados): -100/10 chama seguinte; 100/10 chama anterior; 40/0 e -100/120 não chamam nada; em Apocalipse 22 o deslize para seguinte não faz nada
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -780,17 +780,17 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: T22
 **Reuses**: `.specs/mockup/guia.html` (Painel de aparência); botões (T16)
 **Requirement**: FUN-24, FUN-25, FUN-26, FUN-27, FUN-28
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/PainelAparencia.test.tsx` › "FUN-24: + dispara aumentar a letra" (FUN-24); "FUN-25: − dispara diminuir a letra" (FUN-25); "FUN-24/FUN-25: o texto mostra \"Letra %i de 5\"" (FUN-24, FUN-25); "FUN-26: no 5, o + fica desativado e não dispara; o − continua ativo" (FUN-26); "FUN-27: no 1, o − fica desativado e não dispara; o + continua ativo" (FUN-27); "nos níveis do meio, os dois ficam ativos"; "FUN-28: escolher Sépia dispara a ação com \"sepia\"", "FUN-28: com sépia escolhido, aria-pressed=\"true\" só nele" (FUN-28); "FUN-29: sem tema escolhido (o do sistema), nenhuma opção fica marcada" (FUN-29); "fechado, o painel fica escondido", "aberto, o painel aparece com o nome \"Aparência\""; `src/telas/TelaLeitor.test.tsx` › "o \"Aa\" alterna aria-expanded e mostra ou esconde o painel", "FUN-24/FUN-28: o painel aberto repassa a letra e o tema ao leitor" (FUN-24, FUN-28)
 **Código**: `src/componentes/PainelAparencia.tsx`, `src/componentes/PainelAparencia.module.css`, `src/telas/TelaLeitor.tsx` (painel no "Aa"; props `letra`, `tema`, `aoMudarLetra`, `aoEscolherTema`)
 
 **Done when**:
 
-- [ ] Testes `FUN-24`/`FUN-25`: + e − disparam as ações e o texto mostra o nível
-- [ ] Testes `FUN-26`/`FUN-27`: no 5 o + fica desativado; no 1, o −
-- [ ] Teste `FUN-28`: escolher Sépia dispara a ação e marca `aria-pressed="true"` só nele
-- [ ] Teste: o "Aa" alterna `aria-expanded` e mostra ou esconde o painel
-- [ ] Gate quick passa
+- [x] Testes `FUN-24`/`FUN-25`: + e − disparam as ações e o texto mostra o nível
+- [x] Testes `FUN-26`/`FUN-27`: no 5 o + fica desativado; no 1, o −
+- [x] Teste `FUN-28`: escolher Sépia dispara a ação e marca `aria-pressed="true"` só nele
+- [x] Teste: o "Aa" alterna `aria-expanded` e mostra ou esconde o painel
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -809,14 +809,14 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: None
 **Reuses**: `.specs/mockup/telas/livros.html`; índice (T2)
 **Requirement**: FUN-06
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLivros.test.tsx` › "FUN-06: duas seções, com 39 livros no Antigo e 27 no Novo Testamento", "FUN-06: os livros seguem a ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT)", "FUN-06: tocar num livro dispara a escolha com o número dele" (FUN-06); "cada livro mostra o número de capítulos", "o livro do capítulo aberto fica marcado; os outros não", "com capítulo aberto, a barra volta à leitura; sem ele, mostra a marca", "na primeira visita (FUN-21), a barra mostra a marca e o Sobre" (FUN-21)
 **Código**: `src/telas/TelaLivros.tsx`, `src/telas/Escolha.module.css`
 
 **Done when**:
 
-- [ ] Testes `FUN-06`: duas seções com 39 e 27 botões, na ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT); tocar num livro dispara a escolha com o número dele
-- [ ] Gate quick passa
+- [x] Testes `FUN-06`: duas seções com 39 e 27 botões, na ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT); tocar num livro dispara a escolha com o número dele
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -835,16 +835,16 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: None
 **Reuses**: `.specs/mockup/telas/capitulos.html`; botões (T16)
 **Requirement**: FUN-07, FUN-08, FUN-09, FUN-49
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaCapitulos.test.tsx` › "FUN-07: Salmos mostra 150 botões, de 1 a 150, na ordem", "FUN-07: Romanos mostra 16 botões" (FUN-07); "FUN-08: tocar no 27 dispara abrir Salmos 27" (FUN-08); "FUN-49: \"Trocar livro\" dispara a ação de trocar livro" (FUN-49); "o capítulo aberto fica marcado quando é deste livro", "capítulo aberto de outro livro não marca nada na grade", "\"Voltar à leitura\" dispara a volta quando há capítulo aberto", "sem capítulo aberto, não há \"Voltar à leitura\"". FUN-09 (capítulo único sem grade) fica no reducer: `src/estado/leitor.test.ts` › "FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade"
 **Código**: `src/telas/TelaCapitulos.tsx`, `src/telas/TelaCapitulos.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-07`: Salmos mostra 150 botões, de 1 a 150
-- [ ] Teste `FUN-08`: tocar no 27 dispara abrir Salmos 27
-- [ ] Teste `FUN-49`: "Trocar livro" dispara a ação de trocar livro
-- [ ] Gate quick passa
+- [x] Teste `FUN-07`: Salmos mostra 150 botões, de 1 a 150
+- [x] Teste `FUN-08`: tocar no 27 dispara abrir Salmos 27
+- [x] Teste `FUN-49`: "Trocar livro" dispara a ação de trocar livro
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -863,16 +863,16 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: None
 **Reuses**: `.biblia/README.md` (créditos); classe `texto-sobre` do guia
 **Requirement**: FUN-38, FUN-39, FUN-40
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaSobre.test.tsx` › "FUN-38: nome e sigla, autores e data da versão", "FUN-38: link da licença Creative Commons Atribuição 4.0 Brasil", "FUN-38: link da fonte", "FUN-38: diz que só o formato foi convertido e que os autores não endossam o app" (FUN-38); "FUN-41: os links abrem sem passar a página de origem" (FUN-41); "FUN-39: explica que o itálico marca palavras acrescentadas pelos tradutores" (FUN-39); "FUN-40: diz que não há conta e que tudo fica no aparelho" (FUN-40); "FUN-37: mostra a versão do app" (FUN-37); "o botão de voltar mostra o destino e dispara a volta"
 **Código**: `src/telas/TelaSobre.tsx`, `src/telas/TelaSobre.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-38`: Bíblia Livre (BLIVRE), Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, conversão só de formato e não endosso
-- [ ] Teste `FUN-39`: explica que o itálico marca palavras acrescentadas pelos tradutores
-- [ ] Teste `FUN-40`: diz que não há conta e que tudo fica no aparelho
-- [ ] Gate quick passa
+- [x] Teste `FUN-38`: Bíblia Livre (BLIVRE), Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, conversão só de formato e não endosso
+- [x] Teste `FUN-39`: explica que o itálico marca palavras acrescentadas pelos tradutores
+- [x] Teste `FUN-40`: diz que não há conta e que tudo fica no aparelho
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -891,20 +891,22 @@ Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb
 **Depends on**: T22
 **Reuses**: `Estado` (T18), `LivroNaoBaixado` (T10)
 **Requirement**: FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-36: com o estado \"não baixado\", a mensagem exata aparece e a ação abre a escolha de livro", "FUN-36: no estado \"não baixado\", não há versículos nem carregando", "FUN-36: o título e os cartões continuam disponíveis" (FUN-36)
 **Código**: `src/telas/TelaLeitor.tsx` (estado de erro com `MENSAGEM_NAO_BAIXADO` e a prop `aoEscolherOutroLivro`)
 
 **Done when**:
 
-- [ ] Teste `FUN-36`: com o estado "não baixado", a mensagem exata aparece e a ação abre a escolha de livro
-- [ ] Gate quick passa
+- [x] Teste `FUN-36`: com o estado "não baixado", a mensagem exata aparece e a ação abre a escolha de livro
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(leitor): avisa quando o livro ainda não foi baixado`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/telas src/componentes/Versiculo.test.tsx src/componentes/PainelAparencia.test.tsx --reporter=dot @ 4009c1c9a4ff0f57692c38e8efa98a67d049c424 = verde
 
 ### T29: Detecção de Safari do iPhone e do modo instalado
 
