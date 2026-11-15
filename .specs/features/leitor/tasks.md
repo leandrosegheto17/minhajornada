@@ -133,6 +133,9 @@ T35
 **Depends on**: None
 **Reuses**: formato conferido em `design.md` (Components, Conversor); tipos `Livro` de `design.md` (Data Models)
 **Requirement**: FUN-03
+**Status**: rascunhada
+**Testes**: `src/biblia/conversor.test.ts` › "FUN-03: converte Filemom 1 com os 25 versículos, colchetes preservados e sem o espaço do fim", "FUN-03: converte Salmos com 150 capítulos, Salmos 119 com 176 versículos e Salmos 27:13 igual à fonte", "FUN-03: aceita nome com número e acento", "FUN-03: aceita fim de linha CRLF e LF e ignora o rodapé depois de ---", "FUN-03: capítulo pulado…", "FUN-03: versículo pulado…", "FUN-03: linha fora do formato…", "FUN-03: capítulo que não começa no versículo 1…", "FUN-03: capítulo de outro livro…", "FUN-03: livro sem capítulos…" (FUN-03)
+**Código**: `src/biblia/conversor.ts`, `src/biblia/tipos.ts`
 
 **Done when**:
 
