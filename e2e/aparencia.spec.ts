@@ -113,6 +113,7 @@ for (const largura of [320, 1920]) {
 
       // O painel é um popover que cobre o título em telas estreitas: o leitor o fecha tocando em "Aa" de novo.
       await page.getByRole('button', { name: 'Aparência: letra e tema' }).click();
+      await expect(page.getByRole('region', { name: 'Aparência' })).toBeHidden();
       await page.getByRole('button', { name: 'Salmos 119. Escolher outro capítulo' }).click();
       await expect(page.getByRole('list', { name: 'Capítulos de Salmos' })).toBeVisible();
       await semRolagemLateral(page, 'grade de Salmos');

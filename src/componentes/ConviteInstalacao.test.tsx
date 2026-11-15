@@ -39,6 +39,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  Reflect.deleteProperty(navigator, 'maxTouchPoints');
   window.matchMedia = matchMediaOriginal;
   localStorage.clear();
 });
@@ -85,5 +86,16 @@ describe('ConviteInstalacao', () => {
     } finally {
       Reflect.deleteProperty(navigator, 'standalone');
     }
+  });
+});
+
+describe('isolamento da simulação (A-06)', () => {
+  it('FUN-46: simular o iPad num teste não deixa maxTouchPoints para o teste seguinte', () => {
+    simularNavegador(SAFARI_IPHONE, 'iPhone', 5);
+    expect(Object.hasOwn(navigator, 'maxTouchPoints')).toBe(true);
+  });
+
+  it('FUN-46: o teste seguinte começa sem a propriedade definida pelo anterior', () => {
+    expect(Object.hasOwn(navigator, 'maxTouchPoints')).toBe(false);
   });
 });
