@@ -433,6 +433,9 @@ T35
 **Depends on**: T10
 **Reuses**: nomes com hash (T2)
 **Requirement**: FUN-33, FUN-37
+**Status**: rascunhada
+**Testes**: `src/dados/limparAntigos.test.ts` › "FUN-37: entradas com hash antigo são apagadas e as do índice atual ficam", "FUN-37: erro de cache.delete numa entrada não interrompe as outras" (FUN-37); "FUN-33: cache vazio não falha", "FUN-33: sem Cache API não falha" (FUN-33)
+**Código**: `src/dados/livros.ts` (`limparAntigos`)
 
 **Done when**:
 

@@ -110,3 +110,29 @@ async function pedirPersistencia(): Promise<void> {
     // Sem persistência, o navegador pode apagar o cache; o texto se baixa de novo com rede.
   }
 }
+
+/**
+ * Apaga do `mj-livros` toda URL que não está no índice atual (FUN-33, FUN-37): um texto novo gera um nome novo, e os
+ * arquivos de versões antigas não ficam ocupando espaço. Cache vazio ou ausente não falha; erro ao apagar uma entrada
+ * não impede as outras.
+ */
+export async function limparAntigos(indice: Indice = indiceGerado): Promise<void> {
+  const cache = await abrirCache();
+  if (!cache) return;
+  const atuais = new Set(indice.livros.map((l) => l.arquivo));
+  let pedidos: readonly Request[];
+  try {
+    pedidos = await cache.keys();
+  } catch {
+    return;
+  }
+  for (const pedido of pedidos) {
+    const caminho = new URL(pedido.url, 'http://localhost').pathname;
+    if (atuais.has(caminho)) continue;
+    try {
+      await cache.delete(pedido);
+    } catch {
+      // Fica para a próxima abertura.
+    }
+  }
+}
