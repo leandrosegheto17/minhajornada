@@ -958,6 +958,10 @@ T35
 **Depends on**: T30
 **Reuses**: telas (T22 a T28), gancho (T20)
 **Requirement**: FUN-20, FUN-21
+**Status**: rascunhada
+**Testes**: `src/App.test.tsx` › "abre no app e mostra o nome" (teste do esqueleto ajustado), "FUN-21: sem leitura gravada, abre a escolha de livro" (FUN-21), "FUN-20: com Romanos 8 gravado e o livro no dublê de cache, abre \"Romanos 8\"" (FUN-20), "do leitor, \"Sobre\" abre a tela Sobre e voltar retorna ao capítulo", "FUN-36: livro fora do cache e sem rede mostra o aviso e \"Escolher outro livro\" volta à escolha" (FUN-36), "FUN-49: do leitor, o título abre a grade e \"Trocar livro\" abre a escolha de livro" (FUN-49); `e2e/esqueleto.spec.ts` › "o app abre no build e mostra o nome" (teste do esqueleto ajustado)
+**Código**: `src/App.tsx`
+**Testes alterados**: `src/App.test.tsx` e `e2e/esqueleto.spec.ts` esperavam o título "MinhaJornada" do esqueleto; passam a conferir a marca "MinhaJornada" visível e o título "Escolha o livro". Aprovado pelo usuário em 2026-11-15.
 
 **Done when**:
 
