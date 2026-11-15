@@ -165,3 +165,75 @@ describe('título e barra (FUN-49, FUN-50, FUN-44)', () => {
     expect(props.aoAbrirSobre).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('deslize lateral (FUN-16 a FUN-18)', () => {
+  /** Simula um gesto de ponteiro na área do texto: começa em (200, 300) e anda (dx, dy). */
+  function deslizar(dx: number, dy: number, pointerId = 1) {
+    const area = screen.getByRole('main');
+    fireEvent.pointerDown(area, { pointerId, isPrimary: true, clientX: 200, clientY: 300 });
+    fireEvent.pointerUp(area, { pointerId, isPrimary: true, clientX: 200 + dx, clientY: 300 + dy });
+  }
+
+  it('FUN-16: deslizar -100/10 (direita para a esquerda) chama seguinte', () => {
+    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+    render(<TelaLeitor {...props} />);
+    deslizar(-100, 10);
+    expect(props.aoSeguinte).toHaveBeenCalledTimes(1);
+    expect(props.aoAnterior).not.toHaveBeenCalled();
+  });
+
+  it('FUN-17: deslizar 100/10 (esquerda para a direita) chama anterior', () => {
+    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+    render(<TelaLeitor {...props} />);
+    deslizar(100, 10);
+    expect(props.aoAnterior).toHaveBeenCalledTimes(1);
+    expect(props.aoSeguinte).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    [40, 0],
+    [-40, 0],
+    [-100, 120],
+    [100, -120],
+    [-80, 80],
+  ])('FUN-18: deslize %i/%i não troca de capítulo', (dx, dy) => {
+    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+    render(<TelaLeitor {...props} />);
+    deslizar(dx, dy);
+    expect(props.aoSeguinte).not.toHaveBeenCalled();
+    expect(props.aoAnterior).not.toHaveBeenCalled();
+  });
+
+  it('FUN-15/FUN-16: em Apocalipse 22, o deslize para seguinte não faz nada', () => {
+    const props = propsPara({ livro: n('Apocalipse'), capitulo: 22 });
+    render(<TelaLeitor {...props} />);
+    deslizar(-100, 10);
+    expect(props.aoSeguinte).not.toHaveBeenCalled();
+  });
+
+  it('FUN-14/FUN-17: em Gênesis 1, o deslize para anterior não faz nada', () => {
+    const props = propsPara({ livro: n('Gênesis'), capitulo: 1 });
+    render(<TelaLeitor {...props} />);
+    deslizar(100, 10);
+    expect(props.aoAnterior).not.toHaveBeenCalled();
+  });
+
+  it('gesto cancelado pelo navegador não troca de capítulo', () => {
+    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+    render(<TelaLeitor {...props} />);
+    const area = screen.getByRole('main');
+    fireEvent.pointerDown(area, { pointerId: 1, isPrimary: true, clientX: 200, clientY: 300 });
+    fireEvent.pointerCancel(area, { pointerId: 1, isPrimary: true });
+    fireEvent.pointerUp(area, { pointerId: 1, isPrimary: true, clientX: 50, clientY: 300 });
+    expect(props.aoSeguinte).not.toHaveBeenCalled();
+  });
+
+  it('pointerUp de outro ponteiro não conta como deslize', () => {
+    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+    render(<TelaLeitor {...props} />);
+    const area = screen.getByRole('main');
+    fireEvent.pointerDown(area, { pointerId: 1, isPrimary: true, clientX: 200, clientY: 300 });
+    fireEvent.pointerUp(area, { pointerId: 2, isPrimary: true, clientX: 50, clientY: 300 });
+    expect(props.aoSeguinte).not.toHaveBeenCalled();
+  });
+});

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { indice } from '../biblia/indice';
 import type { Ref } from '../biblia/tipos';
 import { BotaoIcone } from '../componentes/base/Botoes';
@@ -6,6 +6,7 @@ import { Estado } from '../componentes/base/Estado';
 import { IconeAbaixo, IconeAparencia, IconeSobre } from '../componentes/icones';
 import { Versiculo } from '../componentes/Versiculo';
 import type { CargaLivro } from '../estado/useLeitor';
+import { classificarDeslize } from '../navegacao/deslize';
 import { anterior, seguinte } from '../navegacao/navegacao';
 import comum from './comum.module.css';
 import estilo from './TelaLeitor.module.css';
@@ -47,6 +48,24 @@ export function TelaLeitor({ referencia, carga, aoTocarTitulo, aoAnterior, aoSeg
   const destinoSeguinte = seguinte(referencia, indice);
   const versiculos = carga.situacao === 'pronto' ? (carga.livro.capitulos[capitulo - 1] ?? []) : null;
 
+  // FUN-16 a FUN-18: deslize lateral na área do texto (Pointer Events; `touch-action: pan-y` deixa a rolagem
+  // vertical com o navegador). Nos limites (Gênesis 1, Apocalipse 22) o deslize não faz nada.
+  const inicioDeslize = useRef<{ id: number; x: number; y: number } | null>(null);
+
+  function aoComecarDeslize(evento: PointerEvent<HTMLElement>) {
+    if (!evento.isPrimary) return;
+    inicioDeslize.current = { id: evento.pointerId, x: evento.clientX, y: evento.clientY };
+  }
+
+  function aoTerminarDeslize(evento: PointerEvent<HTMLElement>) {
+    const inicio = inicioDeslize.current;
+    inicioDeslize.current = null;
+    if (!inicio || inicio.id !== evento.pointerId) return;
+    const direcao = classificarDeslize(evento.clientX - inicio.x, evento.clientY - inicio.y);
+    if (direcao === 'seguinte' && destinoSeguinte) aoSeguinte();
+    if (direcao === 'anterior' && destinoAnterior) aoAnterior();
+  }
+
   return (
     <>
       <header className={comum['barra-topo']}>
@@ -81,7 +100,14 @@ export function TelaLeitor({ referencia, carga, aoTocarTitulo, aoAnterior, aoSeg
         </h1>
       </div>
 
-      <main className={estilo['texto-capitulo']}>
+      <main
+        className={estilo['texto-capitulo']}
+        onPointerDown={aoComecarDeslize}
+        onPointerUp={aoTerminarDeslize}
+        onPointerCancel={() => {
+          inicioDeslize.current = null;
+        }}
+      >
         {versiculos ? (
           <ol className={estilo.versiculos}>
             {versiculos.map((texto, i) => (

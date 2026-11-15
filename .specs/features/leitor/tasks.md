@@ -740,6 +740,9 @@ T35
 **Depends on**: T22
 **Reuses**: `classificarDeslize` (T8)
 **Requirement**: FUN-16, FUN-17, FUN-18
+**Status**: rascunhada
+**Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-16: deslizar -100/10 (direita para a esquerda) chama seguinte" (FUN-16); "FUN-17: deslizar 100/10 (esquerda para a direita) chama anterior" (FUN-17); "FUN-18: deslize %i/%i não troca de capítulo" (FUN-18); "FUN-15/FUN-16: em Apocalipse 22, o deslize para seguinte não faz nada" (FUN-15, FUN-16); "FUN-14/FUN-17: em Gênesis 1, o deslize para anterior não faz nada" (FUN-14, FUN-17); "gesto cancelado pelo navegador não troca de capítulo", "pointerUp de outro ponteiro não conta como deslize"
+**Código**: `src/telas/TelaLeitor.tsx` (Pointer Events na área do texto)
 
 **Done when**:
 
