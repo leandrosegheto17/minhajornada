@@ -1,0 +1,24 @@
+/* Aviso do guia de estilo (.specs/mockup/guia.html, seção Avisos). */
+
+.aviso {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: flex-start;
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--raio-m);
+  background: var(--cor-aviso-fundo);
+  color: var(--cor-texto);
+}
+
+.aviso p {
+  margin: 0;
+}
+
+.aviso--erro {
+  background: var(--cor-erro-fundo);
+  color: var(--cor-erro);
+}
+
+.aviso :global(.icone) {
+  margin-top: 1px;
+}

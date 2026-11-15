@@ -569,6 +569,9 @@ T35
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Avisos)
 **Requirement**: FUN-36
+**Status**: rascunhada
+**Testes**: `src/componentes/base/Aviso.test.tsx` › "a variante %s mostra a mensagem", "FUN-36: a variante erro tem role=\"alert\" com a mensagem" (FUN-36), "a variante neutra não tem role=\"alert\"", "a variante erro tem a classe de erro do guia; a neutra não", "a mensagem é texto, nunca HTML", "mostra o ícone recebido"
+**Código**: `src/componentes/base/Aviso.tsx`, `src/componentes/base/Aviso.module.css`
 
 **Done when**:
 
