@@ -1,11 +1,11 @@
-# Validação: leitor — FAIL ❌ (rodada 3)
+# Validação: leitor — FAIL ❌ (rodada 4)
 
-- **Data**: 2026-11-15 · **Branch**: feature/leitor @ 8409d60 · **Árvore**: 1c90fb1c6dba57ebc3a0783595bcc96af62ee0e8
-- **Escopo**: diff do retrabalho R2 (`c0755e9..8409d60`, só a T47) e regressão pela suíte inteira (detalhe em `verificacao-rodada-3.md`, que substitui uma verificação paralela aprovada só com 3 mutações; o merge local feito com ela foi desfeito; anteriores em `verificacao-rodada-1.md` e `verificacao-rodada-2.md`)
-- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 345 unitários (27 arquivos) e 27 e2e passaram, 0 falharam (rodado de novo: árvore diferente da do `Gate:` da T47)
-- **Sensor**: 11 mutações na fumaça (`deploy.yml:122-129`), 7 mortas, 4 sobreviveram (equivalentes: 0; todas no A-13); as 2 sobreviventes da rodada 2 agora morrem
-- **Revisão de código**: modo curto sobre o diff do R2 (9 linhas de teste, nenhuma removida): 0 bloqueios, 0 sugestões; rodada 2: 0 bloqueios
-- **Segurança**: não reaberta na rodada 3 (o R2 só acrescenta teste); vale o reteste da rodada 2 em `seguranca.md`: SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
+- **Data**: 2026-11-15 · **Branch**: feature/leitor @ 9d6b374 · **Árvore**: c58e6068fd112b3a364e818bc5259a324d30ddda
+- **Escopo**: diff do retrabalho R3 (`d465c00..9d6b374`, só a T48) e regressão pela suíte inteira (detalhe em `verificacao-rodada-4.md`; anteriores em `verificacao-rodada-1.md` a `-3.md`; um merge local feito na rodada 3 com uma verificação parcial foi desfeito)
+- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 357 unitários (27 arquivos) e 27 e2e passaram, 0 falharam (árvore diferente da do `Gate:` da T48)
+- **Sensor**: 24 mutações na fumaça (`deploy.yml:120-133`), 20 mortas, 4 sobreviveram (equivalentes ou quase: 3, M33, M42 e M48; real: M32, no A-14); M19, M21, M22 e M23 da rodada 3 agora morrem
+- **Revisão de código**: diff do R3 avaliado pelo verificador (stub, extração do bloco, Linux em container `node:24` 25/25, sem flakiness em 6 execuções); nenhum teste enfraquecido (só os imports reescritos)
+- **Segurança**: não reaberta nas rodadas 3 e 4 (R2 e R3 só acrescentam teste); vale o reteste da rodada 2 em `seguranca.md`: SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
 - **Modelo**: /validar pedido em Sonnet; o dono escolheu seguir em Opus
 
 ## Achados
@@ -24,7 +24,9 @@
 | A-10 | `src/dados/livros.ts:37-45, 59-62, 77-82` | JSON validado (número e capítulos) antes do `cache.put`; entrada ilegível apagada; testes em `livros.test.ts:62-93` | — | crítica | fechado |
 | A-11 | `package.json` (wrangler 4.162.0) | `pnpm audit --audit-level high` sem altas | — | crítica | fechado |
 | A-12 | `test/arquivos/deploy.test.ts:82-87` | O teste não fixa os caminhos que a fumaça confere (FUN-42): os `toMatch` de `/`, `/sw.js` e `/livros/` casam com outras linhas do passo (a atribuição `livro=` e o `curl` da linha 122, que não olha cabeçalho); duas mutações no laço `for caminho in` (`deploy.yml:124`) sobrevivem com 12/12 testes passando | Teste `test/arquivos/deploy.test.ts:89-96` extrai a lista do laço e exige `['"/"', '"/sw.js"', '"${livro}"']` (linha 92); as 2 mutações e a remoção de `/sw.js` morrem | crítica | fechado |
-| A-13 | `test/arquivos/deploy.test.ts:82-98` (fumaça em `.github/workflows/deploy.yml:125-129`) | O caminho de falha da fumaça de cabeçalhos (FUN-42) não tem prova: 4 mutantes vivos com 13/13 passando (`exit 1` → `true` ou `:`, `if ! grep -qi` → `if grep -qi`, `curl -fsS` sem `-f`); os testes só casam texto | Executar o bloco `run` da fumaça em `bash` com `curl` simulado: todos os cabeçalhos → sai 0; faltando CSP ou `nosniff` em qualquer caminho → sai ≠ 0 e imprime `::error`; `curl` com falha HTTP → sai ≠ 0 | crítica | aberto |
+| A-13 | `test/arquivos/deploy.test.ts:82-98` (fumaça em `.github/workflows/deploy.yml:125-129`) | O caminho de falha da fumaça de cabeçalhos (FUN-42) não tem prova: 4 mutantes vivos com 13/13 passando (`exit 1` → `true` ou `:`, `if ! grep -qi` → `if grep -qi`, `curl -fsS` sem `-f`); os testes só casam texto | Executar o bloco `run` da fumaça em `bash` com `curl` simulado: todos os cabeçalhos → sai 0; faltando CSP ou `nosniff` em qualquer caminho → sai ≠ 0 e imprime `::error`; `curl` com falha HTTP → sai ≠ 0 | crítica | fechado |
+| A-14 | `test/arquivos/deploy.test.ts:136-138` (fumaça em `.github/workflows/deploy.yml:127`) | O stub só emite cabeçalhos em minúsculas; o `-i` do `grep -qi` não é provado: M32 (`grep -qi` → `grep -q`) passa 25/25. Resposta com `Content-Security-Policy` capitalizado (HTTP/1.1) faria a fumaça recusar um deploy bom e disparar o rollback sem teste vermelho | Caso em que o stub devolve os cabeçalhos com caixa de título e a fumaça sai com 0 | crítica | aberto |
+| A-15 | `test/arquivos/deploy.test.ts:170-174, 181-184` | Os casos de `object-src`, `frame-ancestors` e `default-src` tiram a linha inteira da CSP (mesmo comportamento); M26 e M27 (tirar a diretiva dos exigidos) só morrem pelos testes textuais (`:100-109`); a mensagem `::error` não é conferida quanto ao caminho e ao cabeçalho | Stub remove só a diretiva da linha da CSP; cada caso exige a diretiva e o caminho na mensagem `::error` | comum | aberto |
 
 ## Lacunas e o que não foi validado
 

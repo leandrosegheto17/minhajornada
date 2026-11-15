@@ -148,6 +148,12 @@ T47
 T48
 ```
 
+### Phase 14: Retrabalho R4
+
+```
+T49 -> T50
+```
+
 ---
 
 ## Task Breakdown
@@ -1363,6 +1369,41 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 
 ---
 
+### T49: Fumaça aceita cabeçalhos com qualquer caixa, provado por execução (A-14)
+
+**What**: Em `test/arquivos/deploy.test.ts`, acrescentar ao `curl` simulado do describe A-13 um modo em que os nomes dos cabeçalhos vêm em caixa de título (`Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`) e um caso que exige a fumaça saindo com 0 nesse modo, de modo que tirar o `-i` do `grep -qi` (`deploy.yml:127`) faça o teste falhar.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: stub e função `rodar` do describe A-13 em `test/arquivos/deploy.test.ts:113-160`
+**Requirement**: FUN-42 · Achado: A-14 (validation.md)
+**Tests**: teste "A-14: FUN-42: cabeçalhos com caixa de título passam na fumaça", que falha com `grep -q` no lugar de `grep -qi`
+**Gate**: `pnpm typecheck && pnpm test`
+
+- [ ] Concluída
+
+---
+
+### T50: Fumaça com um teste por diretiva da CSP e mensagem conferida (A-15)
+
+**What**: No mesmo describe, o `curl` simulado passa a remover só a diretiva pedida da linha da CSP (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`), mantendo as outras; cada caso de omissão exige status diferente de zero e que a mensagem `::error` cite o caminho e o padrão do cabeçalho ausente, de modo que tirar uma diretiva da lista `for exigido` (`deploy.yml:126`) derrube o caso nomeado com ela.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T49
+**Reuses**: stub e casos `it.each` do describe A-13 em `test/arquivos/deploy.test.ts:113-193`
+**Requirement**: FUN-42 · Achado: A-15 (validation.md)
+**Tests**: casos "A-13: FUN-42: sem <diretiva> em <caminho> ..." reescritos com a diretiva isolada e a mensagem conferida; mudança de teste existente com motivo A-15 no commit (fortalece, não enfraquece)
+**Gate**: `pnpm typecheck && pnpm test`
+
+- [ ] Concluída
+
+---
+
+
 
 Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = verde
 
@@ -1403,7 +1444,7 @@ Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ c40ba
 | FUN-37 | T12, T14 |
 | FUN-38 a FUN-40 | T27 |
 | FUN-41 | T4, T15, T34 |
-| FUN-42 | T3, T47, T48 |
+| FUN-42 | T3, T47, T48, T49, T50 |
 | FUN-43 | T35 |
 | FUN-44 | T16, T35 |
 | FUN-45 | T32 |
