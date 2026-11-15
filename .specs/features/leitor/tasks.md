@@ -189,6 +189,9 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/public/_headers:4-9` e `src/cabecalhos.test.ts:12-36`, trocando `no-referrer` por `same-origin` (AD-003)
 **Requirement**: FUN-42
+**Status**: rascunhada
+**Testes**: `test/arquivos/cabecalhos.test.ts` › "FUN-42: os cabeçalhos valem para todo o site (bloco /*)", "FUN-42: a CSP traz %s com o valor exato %s" (11 diretivas), "FUN-42: a CSP não libera unsafe-inline, unsafe-eval, curinga, data:, blob: nem domínio externo", "FUN-42: X-Content-Type-Options é nosniff", "FUN-42: Referrer-Policy é same-origin e não no-referrer" (FUN-42)
+**Código**: `public/_headers` (a fumaça dos cabeçalhos servidos já está no `.github/workflows/deploy.yml`, passo 3)
 
 **Done when**:
 
@@ -214,6 +217,9 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/eslint.config.mjs:90, 168, 175-176` e `test/lint/regras.test.ts`
 **Requirement**: FUN-04, FUN-41
+**Status**: rascunhada
+**Testes**: `test/lint/regras.test.ts` › "FUN-04: %s é recusado em src/" (dangerouslySetInnerHTML, innerHTML, outerHTML, insertAdjacentHTML, document.write, eval, new Function, setTimeout com texto), "FUN-04: texto comum em JSX passa" (FUN-04); "FUN-41: fetch em %s é recusado", "FUN-41: XMLHttpRequest fora de src/dados/ é recusado", "FUN-41: fetch em src/dados/ passa" (FUN-41)
+**Código**: `eslint.config.mjs`
 
 **Done when**:
 
