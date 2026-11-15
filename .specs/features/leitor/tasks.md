@@ -523,18 +523,18 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/sw.spec.ts e
 **Depends on**: None
 **Reuses**: `.specs/mockup/tokens.css` e `guia.html` (CSS dos componentes); molde `ControleEmCasa_LJS/frontend/web/src/estilo/` e `estilo.test.ts`
 **Requirement**: FUN-29, FUN-32, FUN-41
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/estilo/estilo.test.ts` › "é a cópia do mockup aprovado, byte a byte", "FUN-32: no tema %s, texto sobre o fundo tem pelo menos 4,5:1", "FUN-32: no tema %s, texto sobre a superfície tem pelo menos 4,5:1", "a conta de contraste reconhece um par ruim (cinza claro sobre branco)" (FUN-32); "FUN-29: o @media (prefers-color-scheme: dark) só vale para :root:not([data-tema])", "FUN-29: o bloco do sistema escuro troca a cor de fundo e o color-scheme", "FUN-29: só o tokens.css consulta prefers-color-scheme" (FUN-29); "FUN-41: nenhum CSS em src/ cita http:// ou https://", "FUN-41: nenhum CSS em src/ usa @import", "FUN-41: cada @font-face aponta para um .woff2 em src/estilo/fontes/ que existe", "declara Atkinson Hyperlegible 400, 400 itálico e 700 e Fraunces 600", "a licença OFL acompanha as fontes" (FUN-41); "traz a base do guia: foco visível, reset de botão e caixa", "não usa cor literal: só var(--...)"
 **Código**: `src/estilo/fontes.css`, `src/estilo/global.css`, `src/main.tsx` (importa `fontes.css` e `global.css`)
 **Pendência**: os arquivos `src/estilo/fontes/atkinson-hyperlegible-400.woff2`, `atkinson-hyperlegible-400-italico.woff2`, `atkinson-hyperlegible-700.woff2`, `fraunces-600.woff2` e `LICENSE-OFL.txt` não existem no disco nem no mockup (que usa Google Fonts); o rascunho não baixa nada. O `/executar` os obtém (fonte oficial, licença OFL, subconjunto latino) antes do gate; sem eles, os testes de existência ficam vermelhos de propósito.
 
 **Done when**:
 
-- [ ] Teste: `src/estilo/tokens.css` idêntico, byte a byte, a `.specs/mockup/tokens.css`
-- [ ] Teste `FUN-32`: lê as cores de `tokens.css` e confirma texto/fundo ≥ 4,5:1 nos três temas e no tema escuro do sistema
-- [ ] Teste `FUN-29`: o bloco `@media (prefers-color-scheme: dark)` vale só para `:root:not([data-tema])`
-- [ ] Teste `FUN-41`: nenhum CSS em `src/` cita `http://` ou `https://`; as fontes vêm de `src/estilo/fontes/`
-- [ ] Gate quick passa
+- [x] Teste: `src/estilo/tokens.css` idêntico, byte a byte, a `.specs/mockup/tokens.css`
+- [x] Teste `FUN-32`: lê as cores de `tokens.css` e confirma texto/fundo ≥ 4,5:1 nos três temas e no tema escuro do sistema
+- [x] Teste `FUN-29`: o bloco `@media (prefers-color-scheme: dark)` vale só para `:root:not([data-tema])`
+- [x] Teste `FUN-41`: nenhum CSS em `src/` cita `http://` ou `https://`; as fontes vêm de `src/estilo/fontes/`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -553,14 +553,14 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/sw.spec.ts e
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Botões)
 **Requirement**: FUN-44
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/base/Botoes.test.tsx` › "FUN-44: expõe o rótulo recebido como nome acessível", "FUN-44: o ícone é decorativo e não entra no nome", "FUN-44: o rótulo é obrigatório no tipo", "FUN-44: desativado fica disabled e não dispara o clique" (FUN-44); "ativo dispara o clique uma vez", "%s tem a classe do guia e type=\"button\"", "as variantes não compartilham a classe", "BotaoSecundario mostra o ícone antes do texto", "BotaoPrimario desativado não dispara o clique", "BotaoVoltar dispara o clique e a seta é decorativa"
 **Código**: `src/componentes/base/Botoes.tsx`, `src/componentes/base/Botoes.module.css`
 
 **Done when**:
 
-- [ ] Testes `FUN-44`: `BotaoIcone` expõe o `aria-label` recebido; desativado fica `disabled` e não dispara o clique; cada variante tem a classe do guia
-- [ ] Gate quick passa
+- [x] Testes `FUN-44`: `BotaoIcone` expõe o `aria-label` recebido; desativado fica `disabled` e não dispara o clique; cada variante tem a classe do guia
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -579,14 +579,14 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/sw.spec.ts e
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Avisos)
 **Requirement**: FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/base/Aviso.test.tsx` › "a variante %s mostra a mensagem", "FUN-36: a variante erro tem role=\"alert\" com a mensagem" (FUN-36), "a variante neutra não tem role=\"alert\"", "a variante erro tem a classe de erro do guia; a neutra não", "a mensagem é texto, nunca HTML", "mostra o ícone recebido"
 **Código**: `src/componentes/base/Aviso.tsx`, `src/componentes/base/Aviso.module.css`
 
 **Done when**:
 
-- [ ] Testes: a mensagem aparece; a variante erro tem `role="alert"`; a neutra não
-- [ ] Gate quick passa
+- [x] Testes: a mensagem aparece; a variante erro tem `role="alert"`; a neutra não
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -605,20 +605,22 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/sw.spec.ts e
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Estados)
 **Requirement**: FUN-21, FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/base/Estado.test.tsx` › "a variante %s mostra o título e o texto recebidos", "FUN-21: no vazio, a ação aparece como botão primário e dispara o callback" (FUN-21), "FUN-36: no erro, a ação aparece como botão secundário e dispara o callback" (FUN-36), "sem ação, não há botão", "carregando tem aria-busy=\"true\" e um rótulo para o leitor de tela", "carregando usa o rótulo recebido", "vazio e erro não ficam ocupados", "título e texto são texto, nunca HTML"
 **Código**: `src/componentes/base/Estado.tsx`, `src/componentes/base/Estado.module.css`
 
 **Done when**:
 
-- [ ] Testes: cada variante mostra o título e o texto recebidos; a ação dispara o callback; carregando tem `aria-busy="true"`
-- [ ] Gate quick passa
+- [x] Testes: cada variante mostra o título e o texto recebidos; a ação dispara o callback; carregando tem `aria-busy="true"`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(componentes): adiciona os estados vazio, carregando e erro`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/estilo src/componentes/base --reporter=dot @ b784c62d7c19862d8c4ef5b4075f6ba2ef1d6585 = verde
 
 ### T19: Reducer do leitor
 
