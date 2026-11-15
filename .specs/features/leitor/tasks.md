@@ -1359,7 +1359,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 **Tests**: testes "A-13: FUN-42: ..." que executam a fumaça com stub de `curl` (verde, cabeçalho ausente por caminho, `curl` com falha) e falham se o `exit 1`, o `!` do `grep` ou o `-f` do `curl` forem removidos
 **Gate**: `pnpm typecheck && pnpm vitest run test/arquivos/deploy.test.ts --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1367,6 +1367,8 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = verde
 
 Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 480ab09cbede90f7a1f25d138967be90508059c2 = verde
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ c40ba9b7bcf1aaa1352bec7b741eb8c4ab5ba024 = verde
 
 
 ## Requirement Coverage
