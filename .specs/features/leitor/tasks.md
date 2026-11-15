@@ -467,15 +467,15 @@ Gate: pnpm typecheck && pnpm vitest run src/dados --reporter=dot && pnpm exec pl
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/src/pwa/sw.ts:13-14, 20-25, 31-32` (sem push e sem rota de API), `src/pwa/registrarSW.ts:4-6`, `vite.config.ts:34-58`
 **Requirement**: FUN-35
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/sw.spec.ts` › "FUN-35: depois da primeira visita, o app abre sem rede", "FUN-35: sem rede, outro endereço do app também abre (fallback de navegação)", "FUN-35: o precache tem o app e não tem nenhum livro (livros/)" (FUN-35)
 **Código**: `src/pwa/sw.ts`, `src/pwa/registrarSW.ts` (registro próprio no `load`, só no build, sem `virtual:pwa-register`), `vite.config.ts` (`globIgnores: livros/**`)
 
 **Done when**:
 
-- [ ] E2E `FUN-35` (`e2e/sw.spec.ts`, no build): abrir `/` com rede, esperar o SW ativo, ficar sem rede (`context.setOffline`), recarregar e ver o app abrir
-- [ ] E2E: a lista do precache não contém `livros/`
-- [ ] Gate full passa
+- [x] E2E `FUN-35` (`e2e/sw.spec.ts`, no build): abrir `/` com rede, esperar o SW ativo, ficar sem rede (`context.setOffline`), recarregar e ver o app abrir
+- [x] E2E: a lista do precache não contém `livros/`
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -494,21 +494,23 @@ Gate: pnpm typecheck && pnpm vitest run src/dados --reporter=dot && pnpm exec pl
 **Depends on**: T13
 **Reuses**: `skipWaiting`/`clients.claim` (T13)
 **Requirement**: FUN-37
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/atualizacao.spec.ts` › "FUN-37: com o build B publicado, a página aberta não recarrega e a abertura seguinte usa o B" (FUN-37)
 **Código**: `vite.config.ts` (`define: __VERSAO__`, meta `versao-app`, `VERSAO_APP`), `src/ambiente.d.ts`, `e2e/apoio/servidor.ts` (servidor estático do e2e que troca a pasta), `.gitignore`/`.prettierignore`/`eslint.config.mjs` (`dist-e2e/`)
 
 **Done when**:
 
-- [ ] Antes de codar: estados listados no commit (SW antigo ativo e página aberta; SW novo instalado; página recarregada; duas abas); lacuna da spec vira pergunta
-- [ ] E2E `FUN-37`: com o build A servido e o app aberto, servir o build B no mesmo endereço; a página aberta não recarrega sozinha; na abertura seguinte, `__VERSAO__` é a do B
-- [ ] Gate full passa
+- [x] Antes de codar: estados listados no commit (SW antigo ativo e página aberta; SW novo instalado; página recarregada; duas abas); lacuna da spec vira pergunta
+- [x] E2E `FUN-37`: com o build A servido e o app aberto, servir o build B no mesmo endereço; a página aberta não recarrega sozinha; na abertura seguinte, `__VERSAO__` é a do B
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `feat(pwa): ativa a versão nova na abertura seguinte`
 
 ---
+
+Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/sw.spec.ts e2e/atualizacao.spec.ts --reporter=dot @ 342c0b2a8380838e2d220a875ca8c62f6b36ab07 = verde
 
 ### T15: Tokens, fontes e estilo global
 
