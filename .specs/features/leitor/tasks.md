@@ -919,15 +919,15 @@ Gate: pnpm typecheck && pnpm vitest run src/telas src/componentes/Versiculo.test
 **Depends on**: None
 **Reuses**: molde `ControleEmCasa_LJS/frontend/web/src/pwa/instalacao.ts:44, 98`
 **Requirement**: FUN-46, FUN-48
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/pwa/instalacao.test.ts` › "FUN-46: %s = sim" (Safari do iPhone, do iPad e do iPad como MacIntel com toque), "FUN-46: %s = não" (CriOS, FxiOS, EdgiOS, Android, Mac sem toque, Mac com um toque, Chrome do Mac com toque) (FUN-46); "navegador embutido sem \"Safari/\" no agente não conta"; "FUN-48: display-mode standalone por matchMedia = instalado", "FUN-48: navigator.standalone (iOS) = instalado", "FUN-48: no navegador, sem standalone = não instalado", "FUN-48: sem matchMedia e sem navigator.standalone = não instalado" (FUN-48)
 **Código**: `src/pwa/instalacao.ts` (`ehSafariIOS`, `estaInstalado`)
 
 **Done when**:
 
-- [ ] Testes `FUN-46`: Safari do iPhone e do iPad (incluindo `MacIntel` com toque) = sim; Chrome do iPhone (`CriOS`), Firefox do iPhone (`FxiOS`), Android e Mac sem toque = não
-- [ ] Testes `FUN-48`: `standalone` por `matchMedia` ou por `navigator.standalone` = instalado
-- [ ] Gate quick passa
+- [x] Testes `FUN-46`: Safari do iPhone e do iPad (incluindo `MacIntel` com toque) = sim; Chrome do iPhone (`CriOS`), Firefox do iPhone (`FxiOS`), Android e Mac sem toque = não
+- [x] Testes `FUN-48`: `standalone` por `matchMedia` ou por `navigator.standalone` = instalado
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -946,16 +946,16 @@ Gate: pnpm typecheck && pnpm vitest run src/telas src/componentes/Versiculo.test
 **Depends on**: T29
 **Reuses**: `.specs/mockup/guia.html` (Avisos); preferências (T9)
 **Requirement**: FUN-46, FUN-47, FUN-48
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/ConviteInstalacao.test.tsx` › "FUN-46: no Safari do iPhone, sem dispensa, mostra a instrução e o botão de dispensar", "FUN-46: fora do Safari do iPhone e do iPad (Chrome do Android), não aparece" (FUN-46); "FUN-47: dispensar esconde o convite e grava; montado de novo, não aparece" (FUN-47); "FUN-48: instalado (standalone), não aparece", "FUN-48: instalado pelo navigator.standalone do iOS, não aparece" (FUN-48)
 **Código**: `src/componentes/ConviteInstalacao.tsx`, `src/componentes/ConviteInstalacao.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-46`: no Safari do iPhone, sem dispensa, mostra "Toque em Compartilhar e depois em Adicionar à Tela de Início"
-- [ ] Teste `FUN-47`: dispensar esconde o convite e grava; montado de novo, não aparece
-- [ ] Teste `FUN-48`: instalado, não aparece
-- [ ] Gate quick passa
+- [x] Teste `FUN-46`: no Safari do iPhone, sem dispensa, mostra "Toque em Compartilhar e depois em Adicionar à Tela de Início"
+- [x] Teste `FUN-47`: dispensar esconde o convite e grava; montado de novo, não aparece
+- [x] Teste `FUN-48`: instalado, não aparece
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -974,17 +974,17 @@ Gate: pnpm typecheck && pnpm vitest run src/telas src/componentes/Versiculo.test
 **Depends on**: T30
 **Reuses**: telas (T22 a T28), gancho (T20)
 **Requirement**: FUN-20, FUN-21
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/App.test.tsx` › "abre no app e mostra o nome" (teste do esqueleto ajustado), "FUN-21: sem leitura gravada, abre a escolha de livro" (FUN-21), "FUN-20: com Romanos 8 gravado e o livro no dublê de cache, abre \"Romanos 8\"" (FUN-20), "do leitor, \"Sobre\" abre a tela Sobre e voltar retorna ao capítulo", "FUN-36: livro fora do cache e sem rede mostra o aviso e \"Escolher outro livro\" volta à escolha" (FUN-36), "FUN-49: do leitor, o título abre a grade e \"Trocar livro\" abre a escolha de livro" (FUN-49); `e2e/esqueleto.spec.ts` › "o app abre no build e mostra o nome" (teste do esqueleto ajustado)
 **Código**: `src/App.tsx`
 **Testes alterados**: `src/App.test.tsx` e `e2e/esqueleto.spec.ts` esperavam o título "MinhaJornada" do esqueleto; passam a conferir a marca "MinhaJornada" visível e o título "Escolha o livro". Aprovado pelo usuário em 2026-11-15.
 
 **Done when**:
 
-- [ ] Teste `FUN-21`: sem leitura gravada, abre a escolha de livro
-- [ ] Teste `FUN-20`: com Romanos 8 gravado e o livro no dublê de cache, abre "Romanos 8"
-- [ ] Teste: do leitor, "Sobre" abre a tela Sobre e voltar retorna ao capítulo
-- [ ] Gate quick passa
+- [x] Teste `FUN-21`: sem leitura gravada, abre a escolha de livro
+- [x] Teste `FUN-20`: com Romanos 8 gravado e o livro no dublê de cache, abre "Romanos 8"
+- [x] Teste: do leitor, "Sobre" abre a tela Sobre e voltar retorna ao capítulo
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -1003,21 +1003,23 @@ Gate: pnpm typecheck && pnpm vitest run src/telas src/componentes/Versiculo.test
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/vite.config.ts:41-55` (manifesto e `lerToken`)
 **Requirement**: FUN-45
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/manifesto.spec.ts` › "FUN-45: o manifesto servido tem o nome, standalone e os ícones 192 e 512, cada um com o tamanho declarado", "FUN-45: o manifesto e os ícones vêm do próprio site" (FUN-45)
 **Código**: `public/icones/icone.svg`, `vite.config.ts` (`manifest` do `VitePWA`), `index.html` (favicon e `apple-touch-icon`)
 **Pendência**: `public/icones/icone-192.png`, `icone-512.png` e `icone-maskable-512.png` precisam ser gerados de `icone.svg` (o maskable com o fundo cheio, sem o canto arredondado); o rascunho não roda ferramenta. O `/executar` os gera antes do gate; sem eles, o e2e fica vermelho de propósito.
 
 **Done when**:
 
-- [ ] E2E `FUN-45` (no build): o `manifest.webmanifest` servido tem o nome, `standalone` e os ícones 192 e 512, e cada ícone responde 200 com o tamanho declarado
-- [ ] Gate full passa
+- [x] E2E `FUN-45` (no build): o `manifest.webmanifest` servido tem o nome, `standalone` e os ícones 192 e 512, e cada ícone responde 200 com o tamanho declarado
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `feat(pwa): adiciona manifesto e ícones do app`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/App.test.tsx src/componentes/ConviteInstalacao.test.tsx src/pwa --reporter=dot && pnpm build && pnpm exec playwright test e2e/manifesto.spec.ts --reporter=dot @ ce34976e26c68d081077a0568fd88a44332b0e3a = verde
 
 ### T33: Jornada de leitura e navegação
 
