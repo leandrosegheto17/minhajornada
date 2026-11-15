@@ -821,6 +821,9 @@ T35
 **Depends on**: None
 **Reuses**: `.specs/mockup/telas/capitulos.html`; botões (T16)
 **Requirement**: FUN-07, FUN-08, FUN-09, FUN-49
+**Status**: rascunhada
+**Testes**: `src/telas/TelaCapitulos.test.tsx` › "FUN-07: Salmos mostra 150 botões, de 1 a 150, na ordem", "FUN-07: Romanos mostra 16 botões" (FUN-07); "FUN-08: tocar no 27 dispara abrir Salmos 27" (FUN-08); "FUN-49: \"Trocar livro\" dispara a ação de trocar livro" (FUN-49); "o capítulo aberto fica marcado quando é deste livro", "capítulo aberto de outro livro não marca nada na grade", "\"Voltar à leitura\" dispara a volta quando há capítulo aberto", "sem capítulo aberto, não há \"Voltar à leitura\"". FUN-09 (capítulo único sem grade) fica no reducer: `src/estado/leitor.test.ts` › "FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade"
+**Código**: `src/telas/TelaCapitulos.tsx`, `src/telas/TelaCapitulos.module.css`
 
 **Done when**:
 

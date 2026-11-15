@@ -1,0 +1,47 @@
+/* Grade de capítulos (.specs/mockup/telas/capitulos.html; guia.html, "grade de capítulos"). */
+
+.cabeca-grade {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  margin: var(--esp-2) 0 var(--esp-4);
+}
+
+.cabeca-grade h1 {
+  margin: 0;
+}
+
+.grade-capitulos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--celula-capitulo), 1fr));
+  gap: var(--esp-2);
+}
+
+.botao-capitulo {
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: var(--alvo-toque);
+  display: grid;
+  place-items: center;
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  font-weight: var(--peso-forte);
+  font-variant-numeric: tabular-nums;
+}
+
+.botao-capitulo:hover {
+  border-color: var(--cor-acento);
+  color: var(--cor-acento);
+}
+
+.botao-capitulo[aria-current='true'] {
+  background: var(--cor-acento);
+  color: var(--cor-acento-texto);
+  border-color: var(--cor-acento);
+}
