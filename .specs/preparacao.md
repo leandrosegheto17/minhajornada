@@ -19,6 +19,7 @@
 - [ ] Produção — Cloudflare Workers, `minhajornada.ljssoftware.com.br`, a partir de `main`
 - [ ] Segredos dos ambientes — token da Cloudflare nos secrets do GitHub; nunca no repositório
 - [ ] Pipeline de deploy — workflow com smoke de cabeçalhos (CSP, nosniff, Referrer-Policy); reversão testada
+  - Andamento (2026-11-14): `.github/workflows/deploy.yml` escrito (manual; `desenvolvimento` → tst, `main` → produção; confere CI verde, build, `wrangler deploy`, fumaça de cabeçalhos e `wrangler rollback` se a fumaça falhar) e `wrangler.jsonc` com `env.tst`; `wrangler deploy --dry-run` ok nos dois ambientes. Inerte até `DEPLOY_ATIVO=true`. Falta: secrets/variáveis, primeiro deploy e reversão testada. A fumaça de cabeçalhos só passa depois da T3 (`public/_headers`)
 - [ ] Observabilidade — logs e métricas do Workers na Cloudflare
 
 ## Fora do escopo deste projeto

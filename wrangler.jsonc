@@ -1,9 +1,17 @@
-// Worker só com assets (AD-001): sem `main`, sem banco, sem segredo aqui. O deploy só sai do CI (Nível 2 do /preparar).
+// Worker só com assets (AD-001): sem `main`, sem banco, sem segredo aqui. O deploy só sai do
+// .github/workflows/deploy.yml. Topo = produção (`main`); `env.tst` = staging (`desenvolvimento`).
 {
   "name": "minhajornada",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "dist",
     "not_found_handling": "single-page-application",
+  },
+  "routes": [{ "pattern": "minhajornada.ljssoftware.com.br", "custom_domain": true }],
+  "env": {
+    "tst": {
+      "name": "minhajornada-tst",
+      "routes": [{ "pattern": "minhajornada-tst.ljssoftware.com.br", "custom_domain": true }],
+    },
   },
 }
