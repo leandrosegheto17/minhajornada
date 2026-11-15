@@ -795,6 +795,9 @@ T35
 **Depends on**: None
 **Reuses**: `.specs/mockup/telas/livros.html`; índice (T2)
 **Requirement**: FUN-06
+**Status**: rascunhada
+**Testes**: `src/telas/TelaLivros.test.tsx` › "FUN-06: duas seções, com 39 livros no Antigo e 27 no Novo Testamento", "FUN-06: os livros seguem a ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT)", "FUN-06: tocar num livro dispara a escolha com o número dele" (FUN-06); "cada livro mostra o número de capítulos", "o livro do capítulo aberto fica marcado; os outros não", "com capítulo aberto, a barra volta à leitura; sem ele, mostra a marca", "na primeira visita (FUN-21), a barra mostra a marca e o Sobre" (FUN-21)
+**Código**: `src/telas/TelaLivros.tsx`, `src/telas/Escolha.module.css`
 
 **Done when**:
 

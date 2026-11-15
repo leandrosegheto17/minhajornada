@@ -1,0 +1,76 @@
+/* Telas de escolha (.specs/mockup/telas/livros.html e capitulos.html; guia.html, "escolha de livro"). */
+
+.tela-escolha {
+  max-width: var(--largura-tela);
+  margin: 0 auto;
+  padding: var(--esp-2) var(--esp-5) var(--esp-12);
+}
+
+.titulo-tela {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-titulo-tela);
+  margin: var(--esp-2) 0 var(--esp-4);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.grupo-livros {
+  margin: 0 0 var(--esp-8);
+}
+
+.grupo-livros h2 {
+  font-size: var(--texto-p);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cor-suave);
+  margin: 0 0 var(--esp-3);
+  display: flex;
+  gap: var(--esp-2);
+  align-items: baseline;
+}
+
+.grupo-livros h2 span {
+  font-weight: var(--peso-normal);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.lista-livros {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--coluna-livro), 1fr));
+  gap: var(--esp-2);
+}
+
+.item-livro {
+  width: 100%;
+  min-height: var(--alvo-toque);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  padding: var(--esp-2) var(--esp-3);
+  border-radius: var(--raio-p);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  text-align: left;
+  font-size: var(--texto-m);
+}
+
+.item-livro small {
+  color: var(--cor-suave);
+  font-size: var(--texto-p);
+  font-variant-numeric: tabular-nums;
+}
+
+.item-livro:hover {
+  border-color: var(--cor-acento);
+}
+
+.item-livro[aria-current='true'] {
+  border-color: var(--cor-acento);
+  box-shadow: inset 0 0 0 1px var(--cor-acento);
+}
