@@ -1,0 +1,9 @@
+# Cabeçalhos de todo o site (FUN-42; AD-003), servidos pela Cloudflare a partir deste arquivo.
+# CSP só da própria origem, sem unsafe-inline nem unsafe-eval; o tema e a letra vão por atributo data-* e CSS.
+# Referrer-Policy same-origin (não no-referrer, que faz o Chromium enviar Origin: null).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
