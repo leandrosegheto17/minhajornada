@@ -930,6 +930,9 @@ T35
 **Depends on**: T29
 **Reuses**: `.specs/mockup/guia.html` (Avisos); preferências (T9)
 **Requirement**: FUN-46, FUN-47, FUN-48
+**Status**: rascunhada
+**Testes**: `src/componentes/ConviteInstalacao.test.tsx` › "FUN-46: no Safari do iPhone, sem dispensa, mostra a instrução e o botão de dispensar", "FUN-46: fora do Safari do iPhone e do iPad (Chrome do Android), não aparece" (FUN-46); "FUN-47: dispensar esconde o convite e grava; montado de novo, não aparece" (FUN-47); "FUN-48: instalado (standalone), não aparece", "FUN-48: instalado pelo navigator.standalone do iOS, não aparece" (FUN-48)
+**Código**: `src/componentes/ConviteInstalacao.tsx`, `src/componentes/ConviteInstalacao.module.css`
 
 **Done when**:
 

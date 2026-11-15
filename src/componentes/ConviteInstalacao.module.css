@@ -1,0 +1,23 @@
+/* Convite de instalação (.specs/mockup/guia.html, seção Avisos, "convite-instalacao"). */
+
+.convite-instalacao {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(var(--esp-3), env(safe-area-inset-bottom));
+  width: min(var(--largura-aviso), calc(100% - 2 * var(--esp-3)));
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  box-shadow: var(--sombra-2);
+  padding: var(--esp-3) var(--esp-2) var(--esp-3) var(--esp-4);
+}
+
+.convite-instalacao p {
+  margin: 0;
+  flex: 1;
+  font-size: var(--texto-m);
+}
