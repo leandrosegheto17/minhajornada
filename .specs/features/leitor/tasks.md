@@ -384,16 +384,16 @@ Gate: pnpm typecheck && pnpm vitest run src/biblia/segmentos.test.ts src/navegac
 **Depends on**: None
 **Reuses**: AD-002; índice (T2); regra de lint "`fetch` só em `src/dados/`" (T4)
 **Requirement**: FUN-34, FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/livros.test.ts` › "FUN-34: livro que já está no cache não chama fetch", "FUN-34: livro fora do cache chama fetch uma vez, só para o arquivo dele, e guarda a resposta", "FUN-34: o arquivo buscado é do próprio site (/livros/NN.<hash8>.json)" (FUN-34); "FUN-36: fetch que rejeita (sem rede) e cache vazio lançam LivroNaoBaixado", "FUN-36: resposta de erro do servidor e cache vazio lançam LivroNaoBaixado" (FUN-36); "cache.put que lança não impede a leitura pela rede", "Cache API ausente não impede a leitura pela rede", "caches.open que rejeita não impede a leitura pela rede"
 **Código**: `src/dados/livros.ts` (`carregarLivro`, `LivroNaoBaixado`, `CACHE_LIVROS`), `src/dados/dubleCache.ts` (dublê da Cache API, só para testes)
 
 **Done when**:
 
-- [ ] Testes `FUN-34` com dublê de `caches` e `fetch`: livro no cache não chama `fetch`; livro fora do cache chama `fetch` uma vez, só para o arquivo dele, e guarda a resposta
-- [ ] Teste `FUN-36`: `fetch` que rejeita (sem rede) e cache vazio lançam `LivroNaoBaixado`
-- [ ] Teste de erro: `cache.put` que lança não impede a leitura pela rede
-- [ ] Gate quick passa
+- [x] Testes `FUN-34` com dublê de `caches` e `fetch`: livro no cache não chama `fetch`; livro fora do cache chama `fetch` uma vez, só para o arquivo dele, e guarda a resposta
+- [x] Teste `FUN-36`: `fetch` que rejeita (sem rede) e cache vazio lançam `LivroNaoBaixado`
+- [x] Teste de erro: `cache.put` que lança não impede a leitura pela rede
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -412,15 +412,15 @@ Gate: pnpm typecheck && pnpm vitest run src/biblia/segmentos.test.ts src/navegac
 **Depends on**: T10
 **Reuses**: `carregarLivro` (T10)
 **Requirement**: FUN-33
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/baixarFaltantes.test.ts` › "FUN-33: com o cache vazio, baixa os 66 livros em sequência, na ordem do índice", "FUN-33: um por vez: o próximo fetch só começa depois que o anterior foi guardado", "FUN-33: com 10 livros guardados, baixa só os 56 que faltam", "FUN-33: com o cache completo, nenhuma requisição", "FUN-33: falha no 30º mantém os 29 guardados e a próxima chamada começa no 30º", "FUN-33: chamada dupla ao mesmo tempo não baixa o mesmo livro duas vezes", "FUN-33: ao terminar, pede navigator.storage.persist()", "FUN-33: persist ausente ou que rejeita não quebra o download", "FUN-33: sem Cache API, não faz requisição nenhuma" (FUN-33)
 **Código**: `src/dados/livros.ts` (`baixarFaltantes`)
 
 **Done when**:
 
-- [ ] Antes de codar: casos limite listados no commit (cache vazio, cache completo, falha no livro 30, chamada dupla ao mesmo tempo, `persist` ausente ou negado); lacuna da spec vira pergunta
-- [ ] Testes `FUN-33`: cache vazio baixa os 66 em sequência; com 10 guardados baixa só os 56; falha no 30º mantém os 29 e a próxima chamada começa no 30º; chamada dupla não baixa o mesmo livro duas vezes
-- [ ] Gate quick passa
+- [x] Antes de codar: casos limite listados no commit (cache vazio, cache completo, falha no livro 30, chamada dupla ao mesmo tempo, `persist` ausente ou negado); lacuna da spec vira pergunta
+- [x] Testes `FUN-33`: cache vazio baixa os 66 em sequência; com 10 guardados baixa só os 56; falha no 30º mantém os 29 e a próxima chamada começa no 30º; chamada dupla não baixa o mesmo livro duas vezes
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -439,20 +439,22 @@ Gate: pnpm typecheck && pnpm vitest run src/biblia/segmentos.test.ts src/navegac
 **Depends on**: T10
 **Reuses**: nomes com hash (T2)
 **Requirement**: FUN-33, FUN-37
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/limparAntigos.test.ts` › "FUN-37: entradas com hash antigo são apagadas e as do índice atual ficam", "FUN-37: erro de cache.delete numa entrada não interrompe as outras" (FUN-37); "FUN-33: cache vazio não falha", "FUN-33: sem Cache API não falha" (FUN-33)
 **Código**: `src/dados/livros.ts` (`limparAntigos`)
 
 **Done when**:
 
-- [ ] Testes: entradas com hash antigo são apagadas; as do índice atual ficam; cache vazio não falha; erro de `cache.delete` não interrompe as outras
-- [ ] Gate quick passa
+- [x] Testes: entradas com hash antigo são apagadas; as do índice atual ficam; cache vazio não falha; erro de `cache.delete` não interrompe as outras
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(dados): apaga livros de versões antigas do cache`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/dados --reporter=dot && pnpm exec playwright test e2e/sw.spec.ts e2e/atualizacao.spec.ts --reporter=dot @ f77e36a80ed72633266e3c98a969144d49ca1075 = verde
 
 ### T13: Service worker do app
 
