@@ -69,8 +69,8 @@ export function useLeitor(): Leitor {
         if (valido) setCarga({ situacao: 'pronto', numero, livro });
       },
       () => {
-        // [LACUNA] a spec só define "sem rede e fora do cache" (LivroNaoBaixado, FUN-36). Outro erro (JSON
-        // ilegível, servidor com erro) é tratado do mesmo jeito: a mensagem de não baixado com a escolha de livro.
+        // Decisão do dono (2026-11-15): qualquer falha ao carregar o livro (sem rede, JSON ilegível, servidor com
+        // erro) mostra a mensagem de não baixado do FUN-36, com a escolha de livro.
         if (valido) setCarga({ situacao: 'naoBaixado', numero });
       },
     );
