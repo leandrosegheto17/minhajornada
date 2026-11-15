@@ -1,0 +1,76 @@
+/* Botões do guia de estilo (.specs/mockup/guia.html, seção Botões). Alvo de toque mínimo: --alvo-toque. */
+
+.botao-icone {
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--raio-p);
+  color: var(--cor-suave);
+}
+
+.botao-icone:hover {
+  color: var(--cor-texto);
+  background: var(--cor-realce);
+}
+
+.botao-icone:disabled {
+  opacity: 0.4;
+  cursor: default;
+  background: none;
+  color: var(--cor-suave);
+}
+
+.botao-primario,
+.botao-secundario {
+  min-height: var(--alvo-toque);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  padding: 0 var(--esp-5);
+  border-radius: var(--raio-total);
+  font-weight: var(--peso-forte);
+}
+
+.botao-primario {
+  background: var(--cor-acento);
+  color: var(--cor-acento-texto);
+}
+
+.botao-primario:hover {
+  filter: brightness(1.08);
+}
+
+.botao-secundario {
+  border: 1px solid var(--cor-contorno);
+  color: var(--cor-texto);
+}
+
+.botao-secundario:hover {
+  background: var(--cor-realce);
+}
+
+.botao-primario:disabled,
+.botao-secundario:disabled {
+  opacity: 0.4;
+  cursor: default;
+  filter: none;
+  background-clip: padding-box;
+}
+
+.botao-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  min-height: var(--alvo-toque);
+  padding: 0 var(--esp-3) 0 var(--esp-1);
+  border-radius: var(--raio-p);
+  color: var(--cor-suave);
+  font-weight: var(--peso-forte);
+}
+
+.botao-voltar:hover {
+  background: var(--cor-realce);
+  color: var(--cor-texto);
+}

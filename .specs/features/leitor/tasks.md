@@ -543,6 +543,9 @@ T35
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Botões)
 **Requirement**: FUN-44
+**Status**: rascunhada
+**Testes**: `src/componentes/base/Botoes.test.tsx` › "FUN-44: expõe o rótulo recebido como nome acessível", "FUN-44: o ícone é decorativo e não entra no nome", "FUN-44: o rótulo é obrigatório no tipo", "FUN-44: desativado fica disabled e não dispara o clique" (FUN-44); "ativo dispara o clique uma vez", "%s tem a classe do guia e type=\"button\"", "as variantes não compartilham a classe", "BotaoSecundario mostra o ícone antes do texto", "BotaoPrimario desativado não dispara o clique", "BotaoVoltar dispara o clique e a seta é decorativa"
+**Código**: `src/componentes/base/Botoes.tsx`, `src/componentes/base/Botoes.module.css`
 
 **Done when**:
 
