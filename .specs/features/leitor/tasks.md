@@ -160,6 +160,9 @@ T35
 **Depends on**: T1
 **Reuses**: `converterLivro` (T1); Node 24 roda `.ts` direto (`node:fs`, `node:crypto`)
 **Requirement**: FUN-03, FUN-06
+**Status**: rascunhada
+**Testes**: `test/arquivos/converter-biblia.test.ts` › "FUN-03: os 31.102 versículos gravados são iguais aos de .biblia/, um a um, nos 66 livros", "FUN-03: cada arquivo gravado tem o nome NN.<hash8>.json" (FUN-03); "FUN-06: 66 livros na ordem canônica, 39 do AT e 27 do NT", "FUN-06: Salmos tem 150 capítulos e Judas tem 1" (FUN-06); "o mesmo texto dá o mesmo nome e um texto diferente muda o hash" (AD-002)
+**Código**: `scripts/converter-biblia.ts`, `package.json` (`predev`, `prebuild`, `pretest`, `pretypecheck`), `pnpm-workspace.yaml` (`enablePrePostScripts`), `tsconfig.json` (`allowImportingTsExtensions`, `resolveJsonModule`), `.gitignore`
 
 **Done when**:
 

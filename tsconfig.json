@@ -13,7 +13,9 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "types": ["node", "vite/client", "vite-plugin-pwa/client", "@testing-library/jest-dom/vitest"],
-    "noEmit": true
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true
   },
   "include": ["src", "test", "e2e", "scripts", "vite.config.ts", "playwright.config.ts", "eslint.config.mjs"],
   "exclude": ["src/pwa/sw.ts"]

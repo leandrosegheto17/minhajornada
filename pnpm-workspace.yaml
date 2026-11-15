@@ -7,3 +7,5 @@ allowBuilds:
 blockExoticSubdeps: true
 minimumReleaseAge: 1440
 dedupePeers: true
+# predev, prebuild, pretest e pretypecheck geram os livros e o índice (T2).
+enablePrePostScripts: true

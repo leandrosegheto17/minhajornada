@@ -8,11 +8,16 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "converter-biblia": "node scripts/converter-biblia.ts",
+    "predev": "node scripts/converter-biblia.ts",
     "dev": "vite",
+    "prebuild": "node scripts/converter-biblia.ts",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . && prettier --check .",
+    "pretypecheck": "node scripts/converter-biblia.ts",
     "typecheck": "tsc --noEmit -p . && tsc --noEmit -p tsconfig.sw.json",
+    "pretest": "node scripts/converter-biblia.ts",
     "test": "vitest run --reporter=dot",
     "e2e": "playwright test --reporter=dot"
   },
