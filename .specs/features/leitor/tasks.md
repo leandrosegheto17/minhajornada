@@ -191,16 +191,16 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot src/biblia/conversor
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/public/_headers:4-9` e `src/cabecalhos.test.ts:12-36`, trocando `no-referrer` por `same-origin` (AD-003)
 **Requirement**: FUN-42
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `test/arquivos/cabecalhos.test.ts` › "FUN-42: os cabeçalhos valem para todo o site (bloco /*)", "FUN-42: a CSP traz %s com o valor exato %s" (11 diretivas), "FUN-42: a CSP não libera unsafe-inline, unsafe-eval, curinga, data:, blob: nem domínio externo", "FUN-42: X-Content-Type-Options é nosniff", "FUN-42: Referrer-Policy é same-origin e não no-referrer" (FUN-42)
 **Código**: `public/_headers` (a fumaça dos cabeçalhos servidos já está no `.github/workflows/deploy.yml`, passo 3)
 
 **Done when**:
 
-- [ ] Testes `FUN-42` (projeto `arquivos`), um por diretiva: cada diretiva exigida presente com o valor exato; falha se `unsafe-inline`, `unsafe-eval`, `*` ou domínio externo aparecer; o bloco vale para `/*`
-- [ ] Teste: `Referrer-Policy` é `same-origin` e não `no-referrer`
-- [ ] A conferência dos cabeçalhos servidos pela Cloudflare fica no smoke de deploy do `/preparar` (Nível 2), anotado em `## Retomada` se ainda não existir
-- [ ] Gate quick passa
+- [x] Testes `FUN-42` (projeto `arquivos`), um por diretiva: cada diretiva exigida presente com o valor exato; falha se `unsafe-inline`, `unsafe-eval`, `*` ou domínio externo aparecer; o bloco vale para `/*`
+- [x] Teste: `Referrer-Policy` é `same-origin` e não `no-referrer`
+- [x] A conferência dos cabeçalhos servidos pela Cloudflare fica no smoke de deploy do `/preparar` (Nível 2), anotado em `## Retomada` se ainda não existir
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -219,21 +219,23 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot src/biblia/conversor
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/eslint.config.mjs:90, 168, 175-176` e `test/lint/regras.test.ts`
 **Requirement**: FUN-04, FUN-41
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `test/lint/regras.test.ts` › "FUN-04: %s é recusado em src/" (dangerouslySetInnerHTML, innerHTML, outerHTML, insertAdjacentHTML, document.write, eval, new Function, setTimeout com texto), "FUN-04: texto comum em JSX passa" (FUN-04); "FUN-41: fetch em %s é recusado", "FUN-41: XMLHttpRequest fora de src/dados/ é recusado", "FUN-41: fetch em src/dados/ passa" (FUN-41)
 **Código**: `eslint.config.mjs`
 
 **Done when**:
 
-- [ ] Testes `FUN-04` e `FUN-41` (`test/lint/regras.test.ts`): um trecho de código que viola cada regra é recusado pelo ESLint, e um trecho permitido (`fetch` em `src/dados/`) passa
-- [ ] `pnpm lint` passa no código atual
-- [ ] Gate quick passa
+- [x] Testes `FUN-04` e `FUN-41` (`test/lint/regras.test.ts`): um trecho de código que viola cada regra é recusado pelo ESLint, e um trecho permitido (`fetch` em `src/dados/`) passa
+- [x] `pnpm lint` passa no código atual
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(seguranca): bloqueia html interpretado e fetch fora da camada de dados`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecalhos.test.ts test/lint/regras.test.ts --reporter=dot @ 6cd200c7205fb215524c4ff1ed366a283efe3404 = verde
 
 ### T5: Segmentos do versículo
 
