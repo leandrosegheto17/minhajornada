@@ -244,6 +244,9 @@ T35
 **Depends on**: None
 **Reuses**: tipo `Segmento` de `design.md`
 **Requirement**: FUN-02
+**Status**: rascunhada
+**Testes**: `src/biblia/segmentos.test.ts` › "FUN-02: \"[que está]\" de Filemom 1:2 vira itálico sem colchetes", "FUN-02: dois trechos no mesmo versículo", "FUN-02: trecho no início e no fim do versículo", "FUN-02: versículo sem colchete fica num trecho só, sem itálico", "FUN-02: Salmos 27:13 … mantém o espaço e o ponto", "FUN-02: nenhum trecho devolvido contém colchete" (FUN-02)
+**Código**: `src/biblia/segmentos.ts`
 
 **Done when**:
 
