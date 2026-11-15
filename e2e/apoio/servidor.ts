@@ -34,7 +34,10 @@ export function servirPasta(pastaInicial: string, porta: number) {
       arquivo = join(estado.pasta, 'index.html');
       corpo = await readFile(arquivo);
     }
-    res.writeHead(200, { 'content-type': TIPOS[extname(arquivo)] ?? 'application/octet-stream', 'cache-control': 'no-cache' });
+    res.writeHead(200, {
+      'content-type': TIPOS[extname(arquivo)] ?? 'application/octet-stream',
+      'cache-control': 'no-cache',
+    });
     res.end(corpo);
   });
   return {

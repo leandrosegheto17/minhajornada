@@ -120,6 +120,42 @@ T35
 
 ---
 
+### Phase 11: Retrabalho R1
+
+```
+T36
+T37
+T38
+T39
+T40
+T41
+T42
+T43
+T44
+T45
+T46
+```
+
+### Phase 12: Retrabalho R2
+
+```
+T47
+```
+
+### Phase 13: Retrabalho R3
+
+```
+T48
+```
+
+### Phase 14: Retrabalho R4
+
+```
+T49 -> T50
+```
+
+---
+
 ## Task Breakdown
 
 ### T1: Conversor de um livro
@@ -133,15 +169,15 @@ T35
 **Depends on**: None
 **Reuses**: formato conferido em `design.md` (Components, Conversor); tipos `Livro` de `design.md` (Data Models)
 **Requirement**: FUN-03
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/biblia/conversor.test.ts` › "FUN-03: converte Filemom 1 com os 25 versículos, colchetes preservados e sem o espaço do fim", "FUN-03: converte Salmos com 150 capítulos, Salmos 119 com 176 versículos e Salmos 27:13 igual à fonte", "FUN-03: aceita nome com número e acento", "FUN-03: aceita fim de linha CRLF e LF e ignora o rodapé depois de ---", "FUN-03: capítulo pulado…", "FUN-03: versículo pulado…", "FUN-03: linha fora do formato…", "FUN-03: capítulo que não começa no versículo 1…", "FUN-03: capítulo de outro livro…", "FUN-03: livro sem capítulos…" (FUN-03)
 **Código**: `src/biblia/conversor.ts`, `src/biblia/tipos.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-03` com trechos reais de `.biblia/` (Filemom 1, Salmos 119): nomes com número ("1 Samuel"), acento, colchetes preservados, espaço final removido
-- [ ] Teste de erro: capítulo pulado, versículo pulado e linha fora do formato lançam erro com o livro e o capítulo na mensagem
-- [ ] Gate quick passa
+- [x] Testes `FUN-03` com trechos reais de `.biblia/` (Filemom 1, Salmos 119): nomes com número ("1 Samuel"), acento, colchetes preservados, espaço final removido
+- [x] Teste de erro: capítulo pulado, versículo pulado e linha fora do formato lançam erro com o livro e o capítulo na mensagem
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -160,23 +196,25 @@ T35
 **Depends on**: T1
 **Reuses**: `converterLivro` (T1); Node 24 roda `.ts` direto (`node:fs`, `node:crypto`)
 **Requirement**: FUN-03, FUN-06
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `test/arquivos/converter-biblia.test.ts` › "FUN-03: os 31.102 versículos gravados são iguais aos de .biblia/, um a um, nos 66 livros", "FUN-03: cada arquivo gravado tem o nome NN.<hash8>.json" (FUN-03); "FUN-06: 66 livros na ordem canônica, 39 do AT e 27 do NT", "FUN-06: Salmos tem 150 capítulos e Judas tem 1" (FUN-06); "o mesmo texto dá o mesmo nome e um texto diferente muda o hash" (AD-002)
 **Código**: `scripts/converter-biblia.ts`, `package.json` (`predev`, `prebuild`, `pretest`, `pretypecheck`), `pnpm-workspace.yaml` (`enablePrePostScripts`), `tsconfig.json` (`allowImportingTsExtensions`, `resolveJsonModule`), `.gitignore`
 
 **Done when**:
 
-- [ ] Teste `FUN-03` (projeto `arquivos`): os 31.102 versículos gerados são iguais aos de `.biblia/`, um a um, nos 66 livros
-- [ ] Teste `FUN-06`: índice com 66 livros na ordem canônica, 39 AT e 27 NT, Salmos com 150 capítulos e Judas com 1
-- [ ] Teste: mudar o texto muda o hash do nome do arquivo; o mesmo texto dá o mesmo nome
-- [ ] `package.json` com `predev`/`prebuild`; `public/livros/` e `indice.gerado.json` no `.gitignore`
-- [ ] Gate quick passa
+- [x] Teste `FUN-03` (projeto `arquivos`): os 31.102 versículos gerados são iguais aos de `.biblia/`, um a um, nos 66 livros
+- [x] Teste `FUN-06`: índice com 66 livros na ordem canônica, 39 AT e 27 NT, Salmos com 150 capítulos e Judas com 1
+- [x] Teste: mudar o texto muda o hash do nome do arquivo; o mesmo texto dá o mesmo nome
+- [x] `package.json` com `predev`/`prebuild`; `public/livros/` e `indice.gerado.json` no `.gitignore`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(biblia): gera os livros com hash e o índice no build`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot src/biblia/conversor.test.ts test/arquivos/converter-biblia.test.ts @ 607795c4d5bc7e2b68095630bb4454a9ef173cc2 = verde
 
 ### T3: Cabeçalhos de segurança
 
@@ -189,16 +227,16 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/public/_headers:4-9` e `src/cabecalhos.test.ts:12-36`, trocando `no-referrer` por `same-origin` (AD-003)
 **Requirement**: FUN-42
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `test/arquivos/cabecalhos.test.ts` › "FUN-42: os cabeçalhos valem para todo o site (bloco /*)", "FUN-42: a CSP traz %s com o valor exato %s" (11 diretivas), "FUN-42: a CSP não libera unsafe-inline, unsafe-eval, curinga, data:, blob: nem domínio externo", "FUN-42: X-Content-Type-Options é nosniff", "FUN-42: Referrer-Policy é same-origin e não no-referrer" (FUN-42)
 **Código**: `public/_headers` (a fumaça dos cabeçalhos servidos já está no `.github/workflows/deploy.yml`, passo 3)
 
 **Done when**:
 
-- [ ] Testes `FUN-42` (projeto `arquivos`), um por diretiva: cada diretiva exigida presente com o valor exato; falha se `unsafe-inline`, `unsafe-eval`, `*` ou domínio externo aparecer; o bloco vale para `/*`
-- [ ] Teste: `Referrer-Policy` é `same-origin` e não `no-referrer`
-- [ ] A conferência dos cabeçalhos servidos pela Cloudflare fica no smoke de deploy do `/preparar` (Nível 2), anotado em `## Retomada` se ainda não existir
-- [ ] Gate quick passa
+- [x] Testes `FUN-42` (projeto `arquivos`), um por diretiva: cada diretiva exigida presente com o valor exato; falha se `unsafe-inline`, `unsafe-eval`, `*` ou domínio externo aparecer; o bloco vale para `/*`
+- [x] Teste: `Referrer-Policy` é `same-origin` e não `no-referrer`
+- [x] A conferência dos cabeçalhos servidos pela Cloudflare fica no smoke de deploy do `/preparar` (Nível 2), anotado em `## Retomada` se ainda não existir
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -217,21 +255,23 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/eslint.config.mjs:90, 168, 175-176` e `test/lint/regras.test.ts`
 **Requirement**: FUN-04, FUN-41
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `test/lint/regras.test.ts` › "FUN-04: %s é recusado em src/" (dangerouslySetInnerHTML, innerHTML, outerHTML, insertAdjacentHTML, document.write, eval, new Function, setTimeout com texto), "FUN-04: texto comum em JSX passa" (FUN-04); "FUN-41: fetch em %s é recusado", "FUN-41: XMLHttpRequest fora de src/dados/ é recusado", "FUN-41: fetch em src/dados/ passa" (FUN-41)
 **Código**: `eslint.config.mjs`
 
 **Done when**:
 
-- [ ] Testes `FUN-04` e `FUN-41` (`test/lint/regras.test.ts`): um trecho de código que viola cada regra é recusado pelo ESLint, e um trecho permitido (`fetch` em `src/dados/`) passa
-- [ ] `pnpm lint` passa no código atual
-- [ ] Gate quick passa
+- [x] Testes `FUN-04` e `FUN-41` (`test/lint/regras.test.ts`): um trecho de código que viola cada regra é recusado pelo ESLint, e um trecho permitido (`fetch` em `src/dados/`) passa
+- [x] `pnpm lint` passa no código atual
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(seguranca): bloqueia html interpretado e fetch fora da camada de dados`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecalhos.test.ts test/lint/regras.test.ts --reporter=dot @ 6cd200c7205fb215524c4ff1ed366a283efe3404 = verde
 
 ### T5: Segmentos do versículo
 
@@ -244,14 +284,14 @@ T35
 **Depends on**: None
 **Reuses**: tipo `Segmento` de `design.md`
 **Requirement**: FUN-02
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/biblia/segmentos.test.ts` › "FUN-02: \"[que está]\" de Filemom 1:2 vira itálico sem colchetes", "FUN-02: dois trechos no mesmo versículo", "FUN-02: trecho no início e no fim do versículo", "FUN-02: versículo sem colchete fica num trecho só, sem itálico", "FUN-02: Salmos 27:13 … mantém o espaço e o ponto", "FUN-02: nenhum trecho devolvido contém colchete" (FUN-02)
 **Código**: `src/biblia/segmentos.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-02`: "[que está]" de Filemom 1:2 vira itálico sem colchetes; dois trechos no mesmo versículo; trecho no início e no fim; versículo sem colchete; Salmos 27:13 "[certamente já teria perecido] ." mantém o espaço e o ponto
-- [ ] Gate quick passa
+- [x] Testes `FUN-02`: "[que está]" de Filemom 1:2 vira itálico sem colchetes; dois trechos no mesmo versículo; trecho no início e no fim; versículo sem colchete; Salmos 27:13 "[certamente já teria perecido] ." mantém o espaço e o ponto
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -270,14 +310,14 @@ T35
 **Depends on**: None
 **Reuses**: `indice.gerado.json` (T2) como dado real nos testes
 **Requirement**: FUN-10, FUN-11, FUN-12, FUN-13, FUN-14, FUN-15
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/navegacao/navegacao.test.ts` › "FUN-10: Salmos 26 → Salmos 27", "FUN-11: Malaquias 4 → Mateus 1", "FUN-11: Obadias 1 → Jonas 1 (capítulo único)", "FUN-15: Apocalipse 22 não tem seguinte (null)", "FUN-12: Salmos 27 → Salmos 26", "FUN-13: Mateus 1 → Malaquias 4", "FUN-13: Jonas 1 → Obadias 1 (capítulo único)", "FUN-14: Gênesis 1 não tem anterior (null)" (FUN-10 a FUN-15)
 **Código**: `src/navegacao/navegacao.ts`, `src/biblia/indice.ts` (índice tipado lido de `indice.gerado.json`)
 
 **Done when**:
 
-- [ ] Testes `FUN-10` a `FUN-15`: Salmos 26 → 27; Malaquias 4 → Mateus 1; Salmos 27 → 26; Mateus 1 → Malaquias 4; Gênesis 1 anterior = `null`; Apocalipse 22 seguinte = `null`; Obadias 1 → Jonas 1 e Jonas 1 → Obadias 1 (capítulo único)
-- [ ] Gate quick passa
+- [x] Testes `FUN-10` a `FUN-15`: Salmos 26 → 27; Malaquias 4 → Mateus 1; Salmos 27 → 26; Mateus 1 → Malaquias 4; Gênesis 1 anterior = `null`; Apocalipse 22 seguinte = `null`; Obadias 1 → Jonas 1 e Jonas 1 → Obadias 1 (capítulo único)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -296,14 +336,14 @@ T35
 **Depends on**: T6
 **Reuses**: índice (T2)
 **Requirement**: FUN-22
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/navegacao/navegacao.test.ts` › "FUN-22: Romanos 8 é válido", "FUN-22: %s é inválido (null)" (livro 0 e 67, capítulo 0 e 151 em Salmos, capítulo 2 em Judas, fracionários, texto, nulo, objeto sem campos, número), "FUN-22: devolve só livro e capítulo, sem campos a mais" (FUN-22)
 **Código**: `src/navegacao/navegacao.ts` (`refValida`)
 
 **Done when**:
 
-- [ ] Testes `FUN-22`: Romanos 8 válido; livro 0 e 67; capítulo 0 e 151 em Salmos; capítulo 2 em Judas; tipos errados (texto, nulo, objeto sem campos, número fracionário)
-- [ ] Gate quick passa
+- [x] Testes `FUN-22`: Romanos 8 válido; livro 0 e 67; capítulo 0 e 151 em Salmos; capítulo 2 em Judas; tipos errados (texto, nulo, objeto sem campos, número fracionário)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -322,14 +362,14 @@ T35
 **Depends on**: None
 **Reuses**: nada
 **Requirement**: FUN-16, FUN-17, FUN-18
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/navegacao/deslize.test.ts` › "FUN-16: -60/0 … é seguinte", "FUN-16: -80/79 … é seguinte" (FUN-16); "FUN-17: 60/0 … é anterior", "FUN-17: 80/-79 é anterior" (FUN-17); "FUN-18: %i/%i (menos de 60 px) mantém o capítulo (null)", "FUN-18: %i/%i (horizontal não maior que o vertical) mantém o capítulo (null)" (FUN-18)
 **Código**: `src/navegacao/deslize.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-16` a `FUN-18`: -60/0 seguinte; 60/0 anterior; -59/0 e 59/0 nulo; -80/80 e -80/90 nulo (não maior que o vertical); -80/79 seguinte
-- [ ] Gate quick passa
+- [x] Testes `FUN-16` a `FUN-18`: -60/0 seguinte; 60/0 anterior; -59/0 e 59/0 nulo; -80/80 e -80/90 nulo (não maior que o vertical); -80/79 seguinte
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -348,24 +388,26 @@ T35
 **Depends on**: T7
 **Reuses**: molde de chave única de `ControleEmCasa_LJS/frontend/web/src/dados/sessao.ts:13-23`; `refValida` (T7)
 **Requirement**: FUN-19, FUN-22, FUN-23, FUN-30, FUN-31, FUN-47
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/preferencias.test.ts` › "FUN-19: grava e lê a leitura atual", "FUN-19: sem leitura gravada devolve null" (FUN-19); "FUN-22: leitura ilegível (JSON quebrado) é apagada e devolve null", "FUN-22: leitura inválida (%s) é apagada e devolve null" (FUN-22); "FUN-30: grava e lê o tamanho da letra", "FUN-30: gravarLetra fora de 1 a 5 não grava", "FUN-30: grava e lê o tema %s" (FUN-30); "FUN-23: sem letra gravada o padrão é 3" (FUN-23); "FUN-31: letra gravada %s devolve o padrão 3", "FUN-31: sem tema gravado devolve null", "FUN-31: tema %s devolve null" (FUN-31); "FUN-47: dispensar o convite fica gravado" (FUN-47); "localStorage que lança em getItem e setItem não quebra e devolve os padrões", "sem localStorage nenhum, devolve os padrões"
 **Código**: `src/dados/preferencias.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-19`/`FUN-30`: gravar e ler leitura, letra e tema
-- [ ] Testes `FUN-22`: leitura ilegível (JSON quebrado) ou inválida é apagada e devolve `null`
-- [ ] Testes `FUN-23`/`FUN-31`: letra ausente, 0, 6, "3" texto ou lixo devolve 3; tema desconhecido devolve `null` (tema do sistema)
-- [ ] Teste `FUN-47`: dispensar o convite fica gravado
-- [ ] Teste de erro: `localStorage` que lança em `getItem` e `setItem` (dublê) não quebra; devolve os padrões
-- [ ] Gate quick passa
+- [x] Testes `FUN-19`/`FUN-30`: gravar e ler leitura, letra e tema
+- [x] Testes `FUN-22`: leitura ilegível (JSON quebrado) ou inválida é apagada e devolve `null`
+- [x] Testes `FUN-23`/`FUN-31`: letra ausente, 0, 6, "3" texto ou lixo devolve 3; tema desconhecido devolve `null` (tema do sistema)
+- [x] Teste `FUN-47`: dispensar o convite fica gravado
+- [x] Teste de erro: `localStorage` que lança em `getItem` e `setItem` (dublê) não quebra; devolve os padrões
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(dados): grava leitura e preferências no aparelho`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/biblia/segmentos.test.ts src/navegacao src/dados/preferencias.test.ts --reporter=dot @ 3ef3f7bf137c0ddc6b2fe9f796ad57ba9028fb5d = verde
 
 ### T10: Carregar um livro pelo cache ou pela rede
 
@@ -378,16 +420,16 @@ T35
 **Depends on**: None
 **Reuses**: AD-002; índice (T2); regra de lint "`fetch` só em `src/dados/`" (T4)
 **Requirement**: FUN-34, FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/livros.test.ts` › "FUN-34: livro que já está no cache não chama fetch", "FUN-34: livro fora do cache chama fetch uma vez, só para o arquivo dele, e guarda a resposta", "FUN-34: o arquivo buscado é do próprio site (/livros/NN.<hash8>.json)" (FUN-34); "FUN-36: fetch que rejeita (sem rede) e cache vazio lançam LivroNaoBaixado", "FUN-36: resposta de erro do servidor e cache vazio lançam LivroNaoBaixado" (FUN-36); "cache.put que lança não impede a leitura pela rede", "Cache API ausente não impede a leitura pela rede", "caches.open que rejeita não impede a leitura pela rede"
 **Código**: `src/dados/livros.ts` (`carregarLivro`, `LivroNaoBaixado`, `CACHE_LIVROS`), `src/dados/dubleCache.ts` (dublê da Cache API, só para testes)
 
 **Done when**:
 
-- [ ] Testes `FUN-34` com dublê de `caches` e `fetch`: livro no cache não chama `fetch`; livro fora do cache chama `fetch` uma vez, só para o arquivo dele, e guarda a resposta
-- [ ] Teste `FUN-36`: `fetch` que rejeita (sem rede) e cache vazio lançam `LivroNaoBaixado`
-- [ ] Teste de erro: `cache.put` que lança não impede a leitura pela rede
-- [ ] Gate quick passa
+- [x] Testes `FUN-34` com dublê de `caches` e `fetch`: livro no cache não chama `fetch`; livro fora do cache chama `fetch` uma vez, só para o arquivo dele, e guarda a resposta
+- [x] Teste `FUN-36`: `fetch` que rejeita (sem rede) e cache vazio lançam `LivroNaoBaixado`
+- [x] Teste de erro: `cache.put` que lança não impede a leitura pela rede
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -406,15 +448,15 @@ T35
 **Depends on**: T10
 **Reuses**: `carregarLivro` (T10)
 **Requirement**: FUN-33
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/baixarFaltantes.test.ts` › "FUN-33: com o cache vazio, baixa os 66 livros em sequência, na ordem do índice", "FUN-33: um por vez: o próximo fetch só começa depois que o anterior foi guardado", "FUN-33: com 10 livros guardados, baixa só os 56 que faltam", "FUN-33: com o cache completo, nenhuma requisição", "FUN-33: falha no 30º mantém os 29 guardados e a próxima chamada começa no 30º", "FUN-33: chamada dupla ao mesmo tempo não baixa o mesmo livro duas vezes", "FUN-33: ao terminar, pede navigator.storage.persist()", "FUN-33: persist ausente ou que rejeita não quebra o download", "FUN-33: sem Cache API, não faz requisição nenhuma" (FUN-33)
 **Código**: `src/dados/livros.ts` (`baixarFaltantes`)
 
 **Done when**:
 
-- [ ] Antes de codar: casos limite listados no commit (cache vazio, cache completo, falha no livro 30, chamada dupla ao mesmo tempo, `persist` ausente ou negado); lacuna da spec vira pergunta
-- [ ] Testes `FUN-33`: cache vazio baixa os 66 em sequência; com 10 guardados baixa só os 56; falha no 30º mantém os 29 e a próxima chamada começa no 30º; chamada dupla não baixa o mesmo livro duas vezes
-- [ ] Gate quick passa
+- [x] Antes de codar: casos limite listados no commit (cache vazio, cache completo, falha no livro 30, chamada dupla ao mesmo tempo, `persist` ausente ou negado); lacuna da spec vira pergunta
+- [x] Testes `FUN-33`: cache vazio baixa os 66 em sequência; com 10 guardados baixa só os 56; falha no 30º mantém os 29 e a próxima chamada começa no 30º; chamada dupla não baixa o mesmo livro duas vezes
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -433,20 +475,22 @@ T35
 **Depends on**: T10
 **Reuses**: nomes com hash (T2)
 **Requirement**: FUN-33, FUN-37
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/limparAntigos.test.ts` › "FUN-37: entradas com hash antigo são apagadas e as do índice atual ficam", "FUN-37: erro de cache.delete numa entrada não interrompe as outras" (FUN-37); "FUN-33: cache vazio não falha", "FUN-33: sem Cache API não falha" (FUN-33)
 **Código**: `src/dados/livros.ts` (`limparAntigos`)
 
 **Done when**:
 
-- [ ] Testes: entradas com hash antigo são apagadas; as do índice atual ficam; cache vazio não falha; erro de `cache.delete` não interrompe as outras
-- [ ] Gate quick passa
+- [x] Testes: entradas com hash antigo são apagadas; as do índice atual ficam; cache vazio não falha; erro de `cache.delete` não interrompe as outras
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(dados): apaga livros de versões antigas do cache`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/dados --reporter=dot && pnpm exec playwright test e2e/sw.spec.ts e2e/atualizacao.spec.ts --reporter=dot @ f77e36a80ed72633266e3c98a969144d49ca1075 = verde
 
 ### T13: Service worker do app
 
@@ -459,15 +503,15 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/src/pwa/sw.ts:13-14, 20-25, 31-32` (sem push e sem rota de API), `src/pwa/registrarSW.ts:4-6`, `vite.config.ts:34-58`
 **Requirement**: FUN-35
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/sw.spec.ts` › "FUN-35: depois da primeira visita, o app abre sem rede", "FUN-35: sem rede, outro endereço do app também abre (fallback de navegação)", "FUN-35: o precache tem o app e não tem nenhum livro (livros/)" (FUN-35)
 **Código**: `src/pwa/sw.ts`, `src/pwa/registrarSW.ts` (registro próprio no `load`, só no build, sem `virtual:pwa-register`), `vite.config.ts` (`globIgnores: livros/**`)
 
 **Done when**:
 
-- [ ] E2E `FUN-35` (`e2e/sw.spec.ts`, no build): abrir `/` com rede, esperar o SW ativo, ficar sem rede (`context.setOffline`), recarregar e ver o app abrir
-- [ ] E2E: a lista do precache não contém `livros/`
-- [ ] Gate full passa
+- [x] E2E `FUN-35` (`e2e/sw.spec.ts`, no build): abrir `/` com rede, esperar o SW ativo, ficar sem rede (`context.setOffline`), recarregar e ver o app abrir
+- [x] E2E: a lista do precache não contém `livros/`
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -486,21 +530,23 @@ T35
 **Depends on**: T13
 **Reuses**: `skipWaiting`/`clients.claim` (T13)
 **Requirement**: FUN-37
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/atualizacao.spec.ts` › "FUN-37: com o build B publicado, a página aberta não recarrega e a abertura seguinte usa o B" (FUN-37)
 **Código**: `vite.config.ts` (`define: __VERSAO__`, meta `versao-app`, `VERSAO_APP`), `src/ambiente.d.ts`, `e2e/apoio/servidor.ts` (servidor estático do e2e que troca a pasta), `.gitignore`/`.prettierignore`/`eslint.config.mjs` (`dist-e2e/`)
 
 **Done when**:
 
-- [ ] Antes de codar: estados listados no commit (SW antigo ativo e página aberta; SW novo instalado; página recarregada; duas abas); lacuna da spec vira pergunta
-- [ ] E2E `FUN-37`: com o build A servido e o app aberto, servir o build B no mesmo endereço; a página aberta não recarrega sozinha; na abertura seguinte, `__VERSAO__` é a do B
-- [ ] Gate full passa
+- [x] Antes de codar: estados listados no commit (SW antigo ativo e página aberta; SW novo instalado; página recarregada; duas abas); lacuna da spec vira pergunta
+- [x] E2E `FUN-37`: com o build A servido e o app aberto, servir o build B no mesmo endereço; a página aberta não recarrega sozinha; na abertura seguinte, `__VERSAO__` é a do B
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `feat(pwa): ativa a versão nova na abertura seguinte`
 
 ---
+
+Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/sw.spec.ts e2e/atualizacao.spec.ts --reporter=dot @ 342c0b2a8380838e2d220a875ca8c62f6b36ab07 = verde
 
 ### T15: Tokens, fontes e estilo global
 
@@ -513,18 +559,18 @@ T35
 **Depends on**: None
 **Reuses**: `.specs/mockup/tokens.css` e `guia.html` (CSS dos componentes); molde `ControleEmCasa_LJS/frontend/web/src/estilo/` e `estilo.test.ts`
 **Requirement**: FUN-29, FUN-32, FUN-41
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/estilo/estilo.test.ts` › "é a cópia do mockup aprovado, byte a byte", "FUN-32: no tema %s, texto sobre o fundo tem pelo menos 4,5:1", "FUN-32: no tema %s, texto sobre a superfície tem pelo menos 4,5:1", "a conta de contraste reconhece um par ruim (cinza claro sobre branco)" (FUN-32); "FUN-29: o @media (prefers-color-scheme: dark) só vale para :root:not([data-tema])", "FUN-29: o bloco do sistema escuro troca a cor de fundo e o color-scheme", "FUN-29: só o tokens.css consulta prefers-color-scheme" (FUN-29); "FUN-41: nenhum CSS em src/ cita http:// ou https://", "FUN-41: nenhum CSS em src/ usa @import", "FUN-41: cada @font-face aponta para um .woff2 em src/estilo/fontes/ que existe", "declara Atkinson Hyperlegible 400, 400 itálico e 700 e Fraunces 600", "a licença OFL acompanha as fontes" (FUN-41); "traz a base do guia: foco visível, reset de botão e caixa", "não usa cor literal: só var(--...)"
 **Código**: `src/estilo/fontes.css`, `src/estilo/global.css`, `src/main.tsx` (importa `fontes.css` e `global.css`)
 **Pendência**: os arquivos `src/estilo/fontes/atkinson-hyperlegible-400.woff2`, `atkinson-hyperlegible-400-italico.woff2`, `atkinson-hyperlegible-700.woff2`, `fraunces-600.woff2` e `LICENSE-OFL.txt` não existem no disco nem no mockup (que usa Google Fonts); o rascunho não baixa nada. O `/executar` os obtém (fonte oficial, licença OFL, subconjunto latino) antes do gate; sem eles, os testes de existência ficam vermelhos de propósito.
 
 **Done when**:
 
-- [ ] Teste: `src/estilo/tokens.css` idêntico, byte a byte, a `.specs/mockup/tokens.css`
-- [ ] Teste `FUN-32`: lê as cores de `tokens.css` e confirma texto/fundo ≥ 4,5:1 nos três temas e no tema escuro do sistema
-- [ ] Teste `FUN-29`: o bloco `@media (prefers-color-scheme: dark)` vale só para `:root:not([data-tema])`
-- [ ] Teste `FUN-41`: nenhum CSS em `src/` cita `http://` ou `https://`; as fontes vêm de `src/estilo/fontes/`
-- [ ] Gate quick passa
+- [x] Teste: `src/estilo/tokens.css` idêntico, byte a byte, a `.specs/mockup/tokens.css`
+- [x] Teste `FUN-32`: lê as cores de `tokens.css` e confirma texto/fundo ≥ 4,5:1 nos três temas e no tema escuro do sistema
+- [x] Teste `FUN-29`: o bloco `@media (prefers-color-scheme: dark)` vale só para `:root:not([data-tema])`
+- [x] Teste `FUN-41`: nenhum CSS em `src/` cita `http://` ou `https://`; as fontes vêm de `src/estilo/fontes/`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -543,14 +589,14 @@ T35
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Botões)
 **Requirement**: FUN-44
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/base/Botoes.test.tsx` › "FUN-44: expõe o rótulo recebido como nome acessível", "FUN-44: o ícone é decorativo e não entra no nome", "FUN-44: o rótulo é obrigatório no tipo", "FUN-44: desativado fica disabled e não dispara o clique" (FUN-44); "ativo dispara o clique uma vez", "%s tem a classe do guia e type=\"button\"", "as variantes não compartilham a classe", "BotaoSecundario mostra o ícone antes do texto", "BotaoPrimario desativado não dispara o clique", "BotaoVoltar dispara o clique e a seta é decorativa"
 **Código**: `src/componentes/base/Botoes.tsx`, `src/componentes/base/Botoes.module.css`
 
 **Done when**:
 
-- [ ] Testes `FUN-44`: `BotaoIcone` expõe o `aria-label` recebido; desativado fica `disabled` e não dispara o clique; cada variante tem a classe do guia
-- [ ] Gate quick passa
+- [x] Testes `FUN-44`: `BotaoIcone` expõe o `aria-label` recebido; desativado fica `disabled` e não dispara o clique; cada variante tem a classe do guia
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -569,14 +615,14 @@ T35
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Avisos)
 **Requirement**: FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/base/Aviso.test.tsx` › "a variante %s mostra a mensagem", "FUN-36: a variante erro tem role=\"alert\" com a mensagem" (FUN-36), "a variante neutra não tem role=\"alert\"", "a variante erro tem a classe de erro do guia; a neutra não", "a mensagem é texto, nunca HTML", "mostra o ícone recebido"
 **Código**: `src/componentes/base/Aviso.tsx`, `src/componentes/base/Aviso.module.css`
 
 **Done when**:
 
-- [ ] Testes: a mensagem aparece; a variante erro tem `role="alert"`; a neutra não
-- [ ] Gate quick passa
+- [x] Testes: a mensagem aparece; a variante erro tem `role="alert"`; a neutra não
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -595,20 +641,22 @@ T35
 **Depends on**: T15
 **Reuses**: `.specs/mockup/guia.html` (seção Estados)
 **Requirement**: FUN-21, FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/base/Estado.test.tsx` › "a variante %s mostra o título e o texto recebidos", "FUN-21: no vazio, a ação aparece como botão primário e dispara o callback" (FUN-21), "FUN-36: no erro, a ação aparece como botão secundário e dispara o callback" (FUN-36), "sem ação, não há botão", "carregando tem aria-busy=\"true\" e um rótulo para o leitor de tela", "carregando usa o rótulo recebido", "vazio e erro não ficam ocupados", "título e texto são texto, nunca HTML"
 **Código**: `src/componentes/base/Estado.tsx`, `src/componentes/base/Estado.module.css`
 
 **Done when**:
 
-- [ ] Testes: cada variante mostra o título e o texto recebidos; a ação dispara o callback; carregando tem `aria-busy="true"`
-- [ ] Gate quick passa
+- [x] Testes: cada variante mostra o título e o texto recebidos; a ação dispara o callback; carregando tem `aria-busy="true"`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(componentes): adiciona os estados vazio, carregando e erro`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/estilo src/componentes/base --reporter=dot @ b784c62d7c19862d8c4ef5b4075f6ba2ef1d6585 = verde
 
 ### T19: Reducer do leitor
 
@@ -621,18 +669,18 @@ T35
 **Depends on**: None
 **Reuses**: `seguinte`/`anterior` (T6), índice (T2)
 **Requirement**: FUN-09, FUN-20, FUN-21, FUN-23, FUN-24, FUN-25, FUN-26, FUN-27, FUN-49, FUN-50
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/estado/leitor.test.ts` › "FUN-20: com Ref válida, abre o leitor nela" (FUN-20); "FUN-21: sem Ref, abre a escolha de livro" (FUN-21); "FUN-22: Ref fora do índice (Judas 2) abre a escolha de livro" (FUN-22); "FUN-23: letra inválida na inicialização vira 3; a válida é mantida", "FUN-23: a letra começa em 3" (FUN-23); "o tema gravado é mantido; sem tema, segue o sistema (null)"; "FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade" (FUN-09); "FUN-07: escolher Salmos abre a grade de Salmos" (FUN-07); "FUN-08: escolher o 27 na grade abre Salmos 27" (FUN-08); "livro fora do índice (0 e 67) não muda o estado", "capítulo fora do intervalo (Salmos 151) não muda o estado"; "FUN-49: tocar no título em Salmos 27 abre a grade de Salmos", "FUN-49: \"Trocar livro\" na grade abre a escolha de livro" (FUN-49); "FUN-50: tocar no título em Filemom 1 (capítulo único) abre a escolha de livro" (FUN-50); "tocar no título sem capítulo aberto não muda o estado"; "FUN-10: seguinte em Salmos 26 abre Salmos 27", "FUN-13: anterior em Mateus 1 abre Malaquias 4", "FUN-15: seguinte em Apocalipse 22 não muda o estado", "FUN-14: anterior em Gênesis 1 não muda o estado" (FUN-10, FUN-13, FUN-14, FUN-15); "FUN-24/FUN-26: +1 vai até 5 e para" (FUN-24, FUN-26); "FUN-25/FUN-27: -1 vai até 1 e para" (FUN-25, FUN-27); "FUN-28: escolher sépia guarda o tema" (FUN-28); "abre o Sobre a partir do leitor e volta ao mesmo capítulo", "não abre o leitor sem capítulo"
 **Código**: `src/estado/leitor.ts` (`reduzirLeitor`, `ESTADO_INICIAL`, tipos `Tela`, `EstadoLeitor`, `AcaoLeitor`; limites da letra de `src/dados/preferencias.ts`)
 
 **Done when**:
 
-- [ ] Testes `FUN-20`/`FUN-21`: iniciar com `Ref` válida abre o leitor nela; sem `Ref` abre `livros`
-- [ ] Teste `FUN-09`: escolher Judas abre o leitor em Judas 1; escolher Salmos abre a grade de Salmos
-- [ ] Testes `FUN-49`/`FUN-50`: tocar no título em Salmos 27 abre a grade de Salmos; em Filemom 1 abre `livros`
-- [ ] Testes `FUN-23` a `FUN-27`: letra começa em 3; +1 até 5 e para; -1 até 1 e para
-- [ ] Teste: seguinte em Apocalipse 22 e anterior em Gênesis 1 não mudam o estado
-- [ ] Gate quick passa
+- [x] Testes `FUN-20`/`FUN-21`: iniciar com `Ref` válida abre o leitor nela; sem `Ref` abre `livros`
+- [x] Teste `FUN-09`: escolher Judas abre o leitor em Judas 1; escolher Salmos abre a grade de Salmos
+- [x] Testes `FUN-49`/`FUN-50`: tocar no título em Salmos 27 abre a grade de Salmos; em Filemom 1 abre `livros`
+- [x] Testes `FUN-23` a `FUN-27`: letra começa em 3; +1 até 5 e para; -1 até 1 e para
+- [x] Teste: seguinte em Apocalipse 22 e anterior em Gênesis 1 não mudam o estado
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -651,25 +699,27 @@ T35
 **Depends on**: T19
 **Reuses**: reducer (T19), preferências (T9), livros (T10, T11, T12)
 **Requirement**: FUN-19, FUN-28, FUN-30, FUN-33
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/estado/useLeitor.test.ts` › "FUN-20: com leitura gravada, abre o leitor nela e carrega o livro" (FUN-20); "FUN-21: sem leitura gravada, abre a escolha de livro e não carrega nada" (FUN-21); "FUN-30: letra e tema gravados são reaplicados na abertura" (FUN-30); "FUN-29: sem tema escolhido, o <html> fica sem data-tema e nada é gravado" (FUN-29); "FUN-19: abrir Romanos 8 grava {livro: 45, capitulo: 8}", "FUN-19: ir ao capítulo seguinte grava o novo capítulo" (FUN-19); "FUN-28/FUN-30: escolher sépia põe data-tema=\"sepia\" no <html> e grava" (FUN-28, FUN-30); "FUN-24/FUN-30: aumentar a letra põe data-letra=\"4\" e grava 4", "FUN-25/FUN-30: diminuir a letra põe data-letra=\"2\" e grava 2" (FUN-24, FUN-25, FUN-30); "FUN-33: baixarFaltantes é chamado uma vez, só depois do primeiro capítulo pronto", "FUN-33: sem capítulo aberto (escolha de livro), não baixa nada", "FUN-33: livro não baixado não dispara o download" (FUN-33); "erro em limparAntigos não impede o download"; "trocar de livro antes do anterior carregar mostra só o último pedido", "a resposta atrasada do livro anterior não troca o estado do livro atual"; "FUN-36: sem rede e fora do cache, a carga fica naoBaixado" (FUN-36); "outro capítulo do mesmo livro não carrega o livro de novo", "depois de naoBaixado, abrir o mesmo livro de novo tenta outra vez"
 **Código**: `src/estado/useLeitor.ts` (`useLeitor`, tipo `CargaLivro`)
-**Lacunas**: erro ao carregar o livro que não é `LivroNaoBaixado` (JSON ilegível, servidor com erro) não tem resultado na spec; o rascunho o trata como não baixado (mensagem do FUN-36 com a escolha de livro). Confirmar antes do verde.
+**Lacunas**: resolvida em 2026-11-15 pelo dono: erro ao carregar o livro que não é `LivroNaoBaixado` (JSON ilegível, servidor com erro) é tratado como não baixado (mensagem do FUN-36 com a escolha de livro); teste em `src/estado/useLeitor.test.ts`.
 
 **Done when**:
 
-- [ ] Antes de codar: estados listados no commit (carregando, pronto, livro não baixado; troca rápida de capítulo com o carregamento anterior pendente; download já em curso); lacuna da spec vira pergunta
-- [ ] Teste `FUN-19`: abrir Romanos 8 grava `{livro: 45, capitulo: 8}`
-- [ ] Testes `FUN-28`/`FUN-30`: escolher sépia põe `data-tema="sepia"` no `<html>` e grava; mudar a letra põe `data-letra` e grava
-- [ ] Teste `FUN-33`: `baixarFaltantes` é chamado uma vez, só depois do primeiro capítulo pronto
-- [ ] Teste: trocar de capítulo antes do livro anterior carregar mostra só o último pedido
-- [ ] Gate quick passa
+- [x] Antes de codar: estados listados no commit (carregando, pronto, livro não baixado; troca rápida de capítulo com o carregamento anterior pendente; download já em curso); lacuna da spec vira pergunta
+- [x] Teste `FUN-19`: abrir Romanos 8 grava `{livro: 45, capitulo: 8}`
+- [x] Testes `FUN-28`/`FUN-30`: escolher sépia põe `data-tema="sepia"` no `<html>` e grava; mudar a letra põe `data-letra` e grava
+- [x] Teste `FUN-33`: `baixarFaltantes` é chamado uma vez, só depois do primeiro capítulo pronto
+- [x] Teste: trocar de capítulo antes do livro anterior carregar mostra só o último pedido
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(estado): liga leitura, preferências e download ao leitor`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/estado --reporter=dot @ e748f31d68eb2449ab9c8a179d489bb217799d88 = verde
 
 ### T21: Versículo
 
@@ -682,16 +732,16 @@ T35
 **Depends on**: None
 **Reuses**: `segmentar` (T5); `.specs/mockup/guia.html` (seção Versículo)
 **Requirement**: FUN-01, FUN-02, FUN-04
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/Versiculo.test.tsx` › "FUN-01: mostra o número e o texto no mesmo item da lista" (FUN-01); "FUN-02: \"[que está]\" de Filemom 1:2 aparece em <em>, sem colchetes", "FUN-02: dois acréscimos no mesmo versículo viram dois <em>", "FUN-02: versículo sem colchete não tem <em>" (FUN-02); "FUN-04: um texto com <img src=x onerror=alert(1)> aparece literal, sem criar elemento img", "FUN-04: HTML dentro do acréscimo também fica literal" (FUN-04)
 **Código**: `src/componentes/Versiculo.tsx`, `src/componentes/Versiculo.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-01`: mostra o número e o texto na mesma linha da lista
-- [ ] Teste `FUN-02`: "[que está]" aparece em `<em>` sem colchetes
-- [ ] Teste `FUN-04`: um texto com `<img src=x onerror=alert(1)>` aparece literal, sem criar elemento `img`
-- [ ] Gate quick passa
+- [x] Teste `FUN-01`: mostra o número e o texto na mesma linha da lista
+- [x] Teste `FUN-02`: "[que está]" aparece em `<em>` sem colchetes
+- [x] Teste `FUN-04`: um texto com `<img src=x onerror=alert(1)>` aparece literal, sem criar elemento `img`
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -710,18 +760,18 @@ T35
 **Depends on**: T21
 **Reuses**: `.specs/mockup/telas/leitor.html`; botões (T16)
 **Requirement**: FUN-01, FUN-05, FUN-10, FUN-11, FUN-12, FUN-13, FUN-14, FUN-15, FUN-49, FUN-50
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-01: mostra o título \"Salmos 27\" e os 14 versículos, cada um com o número" (FUN-01); "enquanto o livro carrega, mostra o estado carregando"; "FUN-05: abrir e trocar de capítulo rola ao topo", "FUN-05: renderizar de novo o mesmo capítulo não rola" (FUN-05); "FUN-10/FUN-12: em Salmos 27, os cartões mostram Salmos 26 e Salmos 28 e disparam anterior e seguinte" (FUN-10, FUN-12); "FUN-11: em Malaquias 4, o seguinte mostra Mateus 1" (FUN-11); "FUN-13: em Mateus 1, o anterior mostra Malaquias 4" (FUN-13); "FUN-14: em Gênesis 1, o anterior fica desativado e não dispara" (FUN-14); "FUN-15: em Apocalipse 22, o seguinte fica desativado e não dispara" (FUN-15); "FUN-49: tocar no título dispara a ação do título" (FUN-49); "FUN-50: em livro de capítulo único, o título oferece outro livro" (FUN-50); "FUN-44: os botões de ícone da barra têm rótulo em português" (FUN-44)
 **Código**: `src/telas/TelaLeitor.tsx`, `src/telas/TelaLeitor.module.css`, `src/telas/comum.module.css` (barra do topo), `src/componentes/icones.tsx` (ícones do mockup)
 
 **Done when**:
 
-- [ ] Teste `FUN-01`: título "Salmos 27" e os 14 versículos, cada um com o número
-- [ ] Teste `FUN-05`: trocar de capítulo chama a rolagem ao topo
-- [ ] Testes `FUN-10` a `FUN-13`: os cartões mostram "Salmos 26" e "Salmos 28" e disparam anterior e seguinte; em Malaquias 4 o seguinte mostra "Mateus 1"
-- [ ] Testes `FUN-14`/`FUN-15`: em Gênesis 1 o anterior fica desativado; em Apocalipse 22, o seguinte
-- [ ] Teste `FUN-49`: tocar no título dispara a ação do título
-- [ ] Gate quick passa
+- [x] Teste `FUN-01`: título "Salmos 27" e os 14 versículos, cada um com o número
+- [x] Teste `FUN-05`: trocar de capítulo chama a rolagem ao topo
+- [x] Testes `FUN-10` a `FUN-13`: os cartões mostram "Salmos 26" e "Salmos 28" e disparam anterior e seguinte; em Malaquias 4 o seguinte mostra "Mateus 1"
+- [x] Testes `FUN-14`/`FUN-15`: em Gênesis 1 o anterior fica desativado; em Apocalipse 22, o seguinte
+- [x] Teste `FUN-49`: tocar no título dispara a ação do título
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -740,14 +790,14 @@ T35
 **Depends on**: T22
 **Reuses**: `classificarDeslize` (T8)
 **Requirement**: FUN-16, FUN-17, FUN-18
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-16: deslizar -100/10 (direita para a esquerda) chama seguinte" (FUN-16); "FUN-17: deslizar 100/10 (esquerda para a direita) chama anterior" (FUN-17); "FUN-18: deslize %i/%i não troca de capítulo" (FUN-18); "FUN-15/FUN-16: em Apocalipse 22, o deslize para seguinte não faz nada" (FUN-15, FUN-16); "FUN-14/FUN-17: em Gênesis 1, o deslize para anterior não faz nada" (FUN-14, FUN-17); "gesto cancelado pelo navegador não troca de capítulo", "pointerUp de outro ponteiro não conta como deslize"
 **Código**: `src/telas/TelaLeitor.tsx` (Pointer Events na área do texto)
 
 **Done when**:
 
-- [ ] Testes `FUN-16` a `FUN-18` (eventos de ponteiro simulados): -100/10 chama seguinte; 100/10 chama anterior; 40/0 e -100/120 não chamam nada; em Apocalipse 22 o deslize para seguinte não faz nada
-- [ ] Gate quick passa
+- [x] Testes `FUN-16` a `FUN-18` (eventos de ponteiro simulados): -100/10 chama seguinte; 100/10 chama anterior; 40/0 e -100/120 não chamam nada; em Apocalipse 22 o deslize para seguinte não faz nada
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -766,17 +816,17 @@ T35
 **Depends on**: T22
 **Reuses**: `.specs/mockup/guia.html` (Painel de aparência); botões (T16)
 **Requirement**: FUN-24, FUN-25, FUN-26, FUN-27, FUN-28
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/PainelAparencia.test.tsx` › "FUN-24: + dispara aumentar a letra" (FUN-24); "FUN-25: − dispara diminuir a letra" (FUN-25); "FUN-24/FUN-25: o texto mostra \"Letra %i de 5\"" (FUN-24, FUN-25); "FUN-26: no 5, o + fica desativado e não dispara; o − continua ativo" (FUN-26); "FUN-27: no 1, o − fica desativado e não dispara; o + continua ativo" (FUN-27); "nos níveis do meio, os dois ficam ativos"; "FUN-28: escolher Sépia dispara a ação com \"sepia\"", "FUN-28: com sépia escolhido, aria-pressed=\"true\" só nele" (FUN-28); "FUN-29: sem tema escolhido (o do sistema), nenhuma opção fica marcada" (FUN-29); "fechado, o painel fica escondido", "aberto, o painel aparece com o nome \"Aparência\""; `src/telas/TelaLeitor.test.tsx` › "o \"Aa\" alterna aria-expanded e mostra ou esconde o painel", "FUN-24/FUN-28: o painel aberto repassa a letra e o tema ao leitor" (FUN-24, FUN-28)
 **Código**: `src/componentes/PainelAparencia.tsx`, `src/componentes/PainelAparencia.module.css`, `src/telas/TelaLeitor.tsx` (painel no "Aa"; props `letra`, `tema`, `aoMudarLetra`, `aoEscolherTema`)
 
 **Done when**:
 
-- [ ] Testes `FUN-24`/`FUN-25`: + e − disparam as ações e o texto mostra o nível
-- [ ] Testes `FUN-26`/`FUN-27`: no 5 o + fica desativado; no 1, o −
-- [ ] Teste `FUN-28`: escolher Sépia dispara a ação e marca `aria-pressed="true"` só nele
-- [ ] Teste: o "Aa" alterna `aria-expanded` e mostra ou esconde o painel
-- [ ] Gate quick passa
+- [x] Testes `FUN-24`/`FUN-25`: + e − disparam as ações e o texto mostra o nível
+- [x] Testes `FUN-26`/`FUN-27`: no 5 o + fica desativado; no 1, o −
+- [x] Teste `FUN-28`: escolher Sépia dispara a ação e marca `aria-pressed="true"` só nele
+- [x] Teste: o "Aa" alterna `aria-expanded` e mostra ou esconde o painel
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -795,14 +845,14 @@ T35
 **Depends on**: None
 **Reuses**: `.specs/mockup/telas/livros.html`; índice (T2)
 **Requirement**: FUN-06
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLivros.test.tsx` › "FUN-06: duas seções, com 39 livros no Antigo e 27 no Novo Testamento", "FUN-06: os livros seguem a ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT)", "FUN-06: tocar num livro dispara a escolha com o número dele" (FUN-06); "cada livro mostra o número de capítulos", "o livro do capítulo aberto fica marcado; os outros não", "com capítulo aberto, a barra volta à leitura; sem ele, mostra a marca", "na primeira visita (FUN-21), a barra mostra a marca e o Sobre" (FUN-21)
 **Código**: `src/telas/TelaLivros.tsx`, `src/telas/Escolha.module.css`
 
 **Done when**:
 
-- [ ] Testes `FUN-06`: duas seções com 39 e 27 botões, na ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT); tocar num livro dispara a escolha com o número dele
-- [ ] Gate quick passa
+- [x] Testes `FUN-06`: duas seções com 39 e 27 botões, na ordem do índice (Gênesis primeiro, Malaquias último do AT, Apocalipse último do NT); tocar num livro dispara a escolha com o número dele
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -821,16 +871,16 @@ T35
 **Depends on**: None
 **Reuses**: `.specs/mockup/telas/capitulos.html`; botões (T16)
 **Requirement**: FUN-07, FUN-08, FUN-09, FUN-49
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaCapitulos.test.tsx` › "FUN-07: Salmos mostra 150 botões, de 1 a 150, na ordem", "FUN-07: Romanos mostra 16 botões" (FUN-07); "FUN-08: tocar no 27 dispara abrir Salmos 27" (FUN-08); "FUN-49: \"Trocar livro\" dispara a ação de trocar livro" (FUN-49); "o capítulo aberto fica marcado quando é deste livro", "capítulo aberto de outro livro não marca nada na grade", "\"Voltar à leitura\" dispara a volta quando há capítulo aberto", "sem capítulo aberto, não há \"Voltar à leitura\"". FUN-09 (capítulo único sem grade) fica no reducer: `src/estado/leitor.test.ts` › "FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade"
 **Código**: `src/telas/TelaCapitulos.tsx`, `src/telas/TelaCapitulos.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-07`: Salmos mostra 150 botões, de 1 a 150
-- [ ] Teste `FUN-08`: tocar no 27 dispara abrir Salmos 27
-- [ ] Teste `FUN-49`: "Trocar livro" dispara a ação de trocar livro
-- [ ] Gate quick passa
+- [x] Teste `FUN-07`: Salmos mostra 150 botões, de 1 a 150
+- [x] Teste `FUN-08`: tocar no 27 dispara abrir Salmos 27
+- [x] Teste `FUN-49`: "Trocar livro" dispara a ação de trocar livro
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -849,16 +899,16 @@ T35
 **Depends on**: None
 **Reuses**: `.biblia/README.md` (créditos); classe `texto-sobre` do guia
 **Requirement**: FUN-38, FUN-39, FUN-40
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaSobre.test.tsx` › "FUN-38: nome e sigla, autores e data da versão", "FUN-38: link da licença Creative Commons Atribuição 4.0 Brasil", "FUN-38: link da fonte", "FUN-38: diz que só o formato foi convertido e que os autores não endossam o app" (FUN-38); "FUN-41: os links abrem sem passar a página de origem" (FUN-41); "FUN-39: explica que o itálico marca palavras acrescentadas pelos tradutores" (FUN-39); "FUN-40: diz que não há conta e que tudo fica no aparelho" (FUN-40); "FUN-37: mostra a versão do app" (FUN-37); "o botão de voltar mostra o destino e dispara a volta"
 **Código**: `src/telas/TelaSobre.tsx`, `src/telas/TelaSobre.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-38`: Bíblia Livre (BLIVRE), Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, conversão só de formato e não endosso
-- [ ] Teste `FUN-39`: explica que o itálico marca palavras acrescentadas pelos tradutores
-- [ ] Teste `FUN-40`: diz que não há conta e que tudo fica no aparelho
-- [ ] Gate quick passa
+- [x] Teste `FUN-38`: Bíblia Livre (BLIVRE), Diego Santos, Mario Sérgio e Marco Teles, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, conversão só de formato e não endosso
+- [x] Teste `FUN-39`: explica que o itálico marca palavras acrescentadas pelos tradutores
+- [x] Teste `FUN-40`: diz que não há conta e que tudo fica no aparelho
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -877,20 +927,22 @@ T35
 **Depends on**: T22
 **Reuses**: `Estado` (T18), `LivroNaoBaixado` (T10)
 **Requirement**: FUN-36
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-36: com o estado \"não baixado\", a mensagem exata aparece e a ação abre a escolha de livro", "FUN-36: no estado \"não baixado\", não há versículos nem carregando", "FUN-36: o título e os cartões continuam disponíveis" (FUN-36)
 **Código**: `src/telas/TelaLeitor.tsx` (estado de erro com `MENSAGEM_NAO_BAIXADO` e a prop `aoEscolherOutroLivro`)
 
 **Done when**:
 
-- [ ] Teste `FUN-36`: com o estado "não baixado", a mensagem exata aparece e a ação abre a escolha de livro
-- [ ] Gate quick passa
+- [x] Teste `FUN-36`: com o estado "não baixado", a mensagem exata aparece e a ação abre a escolha de livro
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(leitor): avisa quando o livro ainda não foi baixado`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/telas src/componentes/Versiculo.test.tsx src/componentes/PainelAparencia.test.tsx --reporter=dot @ 4009c1c9a4ff0f57692c38e8efa98a67d049c424 = verde
 
 ### T29: Detecção de Safari do iPhone e do modo instalado
 
@@ -903,15 +955,15 @@ T35
 **Depends on**: None
 **Reuses**: molde `ControleEmCasa_LJS/frontend/web/src/pwa/instalacao.ts:44, 98`
 **Requirement**: FUN-46, FUN-48
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/pwa/instalacao.test.ts` › "FUN-46: %s = sim" (Safari do iPhone, do iPad e do iPad como MacIntel com toque), "FUN-46: %s = não" (CriOS, FxiOS, EdgiOS, Android, Mac sem toque, Mac com um toque, Chrome do Mac com toque) (FUN-46); "navegador embutido sem \"Safari/\" no agente não conta"; "FUN-48: display-mode standalone por matchMedia = instalado", "FUN-48: navigator.standalone (iOS) = instalado", "FUN-48: no navegador, sem standalone = não instalado", "FUN-48: sem matchMedia e sem navigator.standalone = não instalado" (FUN-48)
 **Código**: `src/pwa/instalacao.ts` (`ehSafariIOS`, `estaInstalado`)
 
 **Done when**:
 
-- [ ] Testes `FUN-46`: Safari do iPhone e do iPad (incluindo `MacIntel` com toque) = sim; Chrome do iPhone (`CriOS`), Firefox do iPhone (`FxiOS`), Android e Mac sem toque = não
-- [ ] Testes `FUN-48`: `standalone` por `matchMedia` ou por `navigator.standalone` = instalado
-- [ ] Gate quick passa
+- [x] Testes `FUN-46`: Safari do iPhone e do iPad (incluindo `MacIntel` com toque) = sim; Chrome do iPhone (`CriOS`), Firefox do iPhone (`FxiOS`), Android e Mac sem toque = não
+- [x] Testes `FUN-48`: `standalone` por `matchMedia` ou por `navigator.standalone` = instalado
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -930,16 +982,16 @@ T35
 **Depends on**: T29
 **Reuses**: `.specs/mockup/guia.html` (Avisos); preferências (T9)
 **Requirement**: FUN-46, FUN-47, FUN-48
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/componentes/ConviteInstalacao.test.tsx` › "FUN-46: no Safari do iPhone, sem dispensa, mostra a instrução e o botão de dispensar", "FUN-46: fora do Safari do iPhone e do iPad (Chrome do Android), não aparece" (FUN-46); "FUN-47: dispensar esconde o convite e grava; montado de novo, não aparece" (FUN-47); "FUN-48: instalado (standalone), não aparece", "FUN-48: instalado pelo navigator.standalone do iOS, não aparece" (FUN-48)
 **Código**: `src/componentes/ConviteInstalacao.tsx`, `src/componentes/ConviteInstalacao.module.css`
 
 **Done when**:
 
-- [ ] Teste `FUN-46`: no Safari do iPhone, sem dispensa, mostra "Toque em Compartilhar e depois em Adicionar à Tela de Início"
-- [ ] Teste `FUN-47`: dispensar esconde o convite e grava; montado de novo, não aparece
-- [ ] Teste `FUN-48`: instalado, não aparece
-- [ ] Gate quick passa
+- [x] Teste `FUN-46`: no Safari do iPhone, sem dispensa, mostra "Toque em Compartilhar e depois em Adicionar à Tela de Início"
+- [x] Teste `FUN-47`: dispensar esconde o convite e grava; montado de novo, não aparece
+- [x] Teste `FUN-48`: instalado, não aparece
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -958,17 +1010,17 @@ T35
 **Depends on**: T30
 **Reuses**: telas (T22 a T28), gancho (T20)
 **Requirement**: FUN-20, FUN-21
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/App.test.tsx` › "abre no app e mostra o nome" (teste do esqueleto ajustado), "FUN-21: sem leitura gravada, abre a escolha de livro" (FUN-21), "FUN-20: com Romanos 8 gravado e o livro no dublê de cache, abre \"Romanos 8\"" (FUN-20), "do leitor, \"Sobre\" abre a tela Sobre e voltar retorna ao capítulo", "FUN-36: livro fora do cache e sem rede mostra o aviso e \"Escolher outro livro\" volta à escolha" (FUN-36), "FUN-49: do leitor, o título abre a grade e \"Trocar livro\" abre a escolha de livro" (FUN-49); `e2e/esqueleto.spec.ts` › "o app abre no build e mostra o nome" (teste do esqueleto ajustado)
 **Código**: `src/App.tsx`
 **Testes alterados**: `src/App.test.tsx` e `e2e/esqueleto.spec.ts` esperavam o título "MinhaJornada" do esqueleto; passam a conferir a marca "MinhaJornada" visível e o título "Escolha o livro". Aprovado pelo usuário em 2026-11-15.
 
 **Done when**:
 
-- [ ] Teste `FUN-21`: sem leitura gravada, abre a escolha de livro
-- [ ] Teste `FUN-20`: com Romanos 8 gravado e o livro no dublê de cache, abre "Romanos 8"
-- [ ] Teste: do leitor, "Sobre" abre a tela Sobre e voltar retorna ao capítulo
-- [ ] Gate quick passa
+- [x] Teste `FUN-21`: sem leitura gravada, abre a escolha de livro
+- [x] Teste `FUN-20`: com Romanos 8 gravado e o livro no dublê de cache, abre "Romanos 8"
+- [x] Teste: do leitor, "Sobre" abre a tela Sobre e voltar retorna ao capítulo
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -987,21 +1039,23 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/vite.config.ts:41-55` (manifesto e `lerToken`)
 **Requirement**: FUN-45
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/manifesto.spec.ts` › "FUN-45: o manifesto servido tem o nome, standalone e os ícones 192 e 512, cada um com o tamanho declarado", "FUN-45: o manifesto e os ícones vêm do próprio site" (FUN-45)
 **Código**: `public/icones/icone.svg`, `vite.config.ts` (`manifest` do `VitePWA`), `index.html` (favicon e `apple-touch-icon`)
 **Pendência**: `public/icones/icone-192.png`, `icone-512.png` e `icone-maskable-512.png` precisam ser gerados de `icone.svg` (o maskable com o fundo cheio, sem o canto arredondado); o rascunho não roda ferramenta. O `/executar` os gera antes do gate; sem eles, o e2e fica vermelho de propósito.
 
 **Done when**:
 
-- [ ] E2E `FUN-45` (no build): o `manifest.webmanifest` servido tem o nome, `standalone` e os ícones 192 e 512, e cada ícone responde 200 com o tamanho declarado
-- [ ] Gate full passa
+- [x] E2E `FUN-45` (no build): o `manifest.webmanifest` servido tem o nome, `standalone` e os ícones 192 e 512, e cada ícone responde 200 com o tamanho declarado
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `feat(pwa): adiciona manifesto e ícones do app`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/App.test.tsx src/componentes/ConviteInstalacao.test.tsx src/pwa --reporter=dot && pnpm build && pnpm exec playwright test e2e/manifesto.spec.ts --reporter=dot @ ce34976e26c68d081077a0568fd88a44332b0e3a = verde
 
 ### T33: Jornada de leitura e navegação
 
@@ -1014,17 +1068,17 @@ T35
 **Depends on**: None
 **Reuses**: J-01 e J-02 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-01, FUN-02, FUN-06, FUN-07, FUN-09, FUN-11, FUN-14, FUN-15, FUN-16, FUN-20, FUN-49
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/leitura.spec.ts` › "FUN-21/FUN-09/FUN-01/FUN-02: a primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto, com 25 versículos e \"que está\" em itálico" (FUN-01, FUN-02, FUN-06, FUN-09, FUN-21); "FUN-11/FUN-49/FUN-06/FUN-07: Malaquias 4 → seguinte → Mateus 1; o título mostra a grade de Mateus; \"Trocar livro\" → Salmos → 1 a 150 → 119 com 176 versículos" (FUN-06, FUN-07, FUN-08, FUN-11, FUN-49); "FUN-14/FUN-15: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte" (FUN-14, FUN-15); "FUN-16: um deslize de 100 px da direita para a esquerda em Salmos 27 abre Salmos 28 (toque emulado)" (FUN-16); "FUN-17/FUN-18: deslize para a direita volta um capítulo; deslize curto não troca" (FUN-17, FUN-18); "FUN-19/FUN-20: abrir Romanos 8, recarregar e ver Romanos 8" (FUN-19, FUN-20); "FUN-05: o capítulo novo abre no início" (FUN-05)
 **Código**: `e2e/apoio/navegar.ts` (apoio dos e2e: abrir pela escolha, gravar leitura e letra, deslize de toque, SW ativo, livros guardados)
 
 **Done when**:
 
-- [ ] E2E: primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto com 25 versículos e "que está" em itálico
-- [ ] E2E: Malaquias 4 → seguinte → Mateus 1; tocar no título mostra a grade de Mateus; "Trocar livro" → Salmos → grade de 1 a 150 → 119 mostra 176 versículos
-- [ ] E2E: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte; deslize de 100 px em Salmos 27 abre Salmos 28 (toque emulado)
-- [ ] E2E `FUN-20`: abrir Romanos 8, recarregar e ver Romanos 8
-- [ ] Gate full passa
+- [x] E2E: primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto com 25 versículos e "que está" em itálico
+- [x] E2E: Malaquias 4 → seguinte → Mateus 1; tocar no título mostra a grade de Mateus; "Trocar livro" → Salmos → grade de 1 a 150 → 119 mostra 176 versículos
+- [x] E2E: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte; deslize de 100 px em Salmos 27 abre Salmos 28 (toque emulado)
+- [x] E2E `FUN-20`: abrir Romanos 8, recarregar e ver Romanos 8
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -1043,17 +1097,17 @@ T35
 **Depends on**: None
 **Reuses**: J-03 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-33, FUN-34, FUN-35, FUN-36, FUN-41
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/offline.spec.ts` › "FUN-34: com Romanos 8 gravado, até o primeiro capítulo aparecer só livros/45.*.json foi pedido entre os livros" (FUN-34); "FUN-33/FUN-35: com os 66 livros guardados, sem rede, o app reabre e mostra Apocalipse 22" (FUN-33, FUN-35); "FUN-36: sem o livro guardado e sem rede, escolher Apocalipse mostra a mensagem exata e o seletor continua disponível" (FUN-36); "FUN-41: navegando por 5 capítulos, nenhuma requisição sai de 127.0.0.1 e não há cookies" (FUN-41)
 **Código**: nenhum (só teste; usa `e2e/apoio/navegar.ts`, T33)
 
 **Done when**:
 
-- [ ] E2E `FUN-34`: com Romanos 8 gravado, até o primeiro capítulo aparecer só `livros/45.*.json` foi pedido entre os livros
-- [ ] E2E `FUN-33`/`FUN-35`: esperar o `mj-livros` ter 66 entradas, ficar sem rede, recarregar e ler Apocalipse 22
-- [ ] E2E `FUN-36`: com a rede bloqueada para `livros/66.*` antes do download, escolher Apocalipse sem rede mostra a mensagem exata e o seletor continua disponível
-- [ ] E2E `FUN-41`: navegando por 5 capítulos, nenhuma requisição sai de `127.0.0.1` e `context.cookies()` é vazio
-- [ ] Gate full passa
+- [x] E2E `FUN-34`: com Romanos 8 gravado, até o primeiro capítulo aparecer só `livros/45.*.json` foi pedido entre os livros
+- [x] E2E `FUN-33`/`FUN-35`: esperar o `mj-livros` ter 66 entradas, ficar sem rede, recarregar e ler Apocalipse 22
+- [x] E2E `FUN-36`: com a rede bloqueada para `livros/66.*` antes do download, escolher Apocalipse sem rede mostra a mensagem exata e o seletor continua disponível
+- [x] E2E `FUN-41`: navegando por 5 capítulos, nenhuma requisição sai de `127.0.0.1` e `context.cookies()` é vazio
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -1072,23 +1126,293 @@ T35
 **Depends on**: None
 **Reuses**: J-04 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-29, FUN-30, FUN-43, FUN-44
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/aparencia.spec.ts` › "FUN-29: com o sistema escuro e nada gravado, o fundo é o escuro; com o claro, o claro" (FUN-29); "FUN-28: o tema escolhido vale mesmo com o sistema escuro" (FUN-28); "FUN-30: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e \"Aumentar letra\" desativado" (FUN-30); "FUN-24: a letra 5 deixa o texto maior que a letra 3" (FUN-24); "FUN-43/FUN-44: em ${largura} px, nada transborda na lateral e todo botão de ícone tem rótulo" (320 e 1920 px; escolha de livro, leitor em Salmos 119 com letra 5, painel aberto, grade e Sobre) (FUN-43, FUN-44)
 **Código**: nenhum (só teste; usa `e2e/apoio/navegar.ts`, T33)
 
 **Done when**:
 
-- [ ] E2E `FUN-29`: com `colorScheme: 'dark'` e nada gravado, o fundo é o `--cor-fundo` escuro; com `light`, o claro
-- [ ] E2E `FUN-30`: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e "Aumentar letra" desativado
-- [ ] E2E `FUN-43`: em 320 px e 1920 px de largura, no leitor (Salmos 119, letra 5), nas grades e no Sobre, `scrollWidth <= clientWidth`
-- [ ] E2E `FUN-44`: todo `button` sem texto visível tem `aria-label` não vazio em todas as telas
-- [ ] Gate full passa
+- [x] E2E `FUN-29`: com `colorScheme: 'dark'` e nada gravado, o fundo é o `--cor-fundo` escuro; com `light`, o claro
+- [x] E2E `FUN-30`: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e "Aumentar letra" desativado
+- [x] E2E `FUN-43`: em 320 px e 1920 px de largura, no leitor (Salmos 119, letra 5), nas grades e no Sobre, `scrollWidth <= clientWidth`
+- [x] E2E `FUN-44`: todo `button` sem texto visível tem `aria-label` não vazio em todas as telas
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): cobre aparência, larguras de tela e rótulos`
 
 ---
+
+Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec.ts e2e/offline.spec.ts e2e/aparencia.spec.ts --reporter=dot @ b05d0aa51e95acd3eb06c683636a489677b7ee21 = verde
+
+### T36: Deslize só com o dedo (A-01)
+
+**What**: O deslize do leitor troca de capítulo só com `pointerType === 'touch'`; mouse e caneta não trocam.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/telas/TelaLeitor.tsx:73-85`; testes de deslize em `src/telas/TelaLeitor.test.tsx:182-225`
+**Requirement**: FUN-16, FUN-17, FUN-18 · Achado: A-01 (validation.md)
+**Tests**: `TelaLeitor.test.tsx`: "FUN-16: arrastar o mouse 100/0 não troca de capítulo" (falha antes da correção); os de toque seguem verdes
+**Gate**: `pnpm typecheck && pnpm vitest run src/telas/TelaLeitor.test.tsx --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T37: Prova visual do versículo e do itálico (A-02)
+
+**What**: No e2e de Filemom 1, afirmar que cada versículo começa em linha própria com o número à esquerda do texto (`boundingBox`) e que o acréscimo tem `font-style: italic` computado.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `e2e/leitura.spec.ts:25-30`
+**Requirement**: FUN-01, FUN-02 · Achado: A-02 (validation.md)
+**Tests**: `e2e/leitura.spec.ts`: "FUN-01: cada versículo em linha própria, número à esquerda" e "FUN-02: o acréscimo aparece em itálico" (rodada vermelha com o CSS do `em` ou da pílula removido)
+**Gate**: `pnpm build && pnpm exec playwright test e2e/leitura.spec.ts --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T38: Registrar as autorizações de teste (A-03)
+
+**What**: Criar `## Autorizações` em `.specs/STATE.md` com a aprovação do dono de 2026-11-15: troca da simulação de `maxTouchPoints` em `ConviteInstalacao.test.tsx` e o passo de fechar o painel em `e2e/aparencia.spec.ts` (asserções iguais).
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: regra de Testes do `CLAUDE.md` (Autorizações)
+**Requirement**: Achado: A-03 (validation.md)
+**Tests**: sem teste (artefato); conferido pelo verificador na checagem (c)
+**Gate**: —
+
+- [x] Concluída
+
+---
+
+### T39: AD do erro de livro além da falta de rede (A-04)
+
+**What**: Gravar AD-004 em `.specs/STATE.md`: a spec (FUN-36) fala em sem rede; o código trata também JSON ilegível e erro do servidor como não baixado; vale a mensagem do FUN-36, decisão do dono em 2026-11-15. Citar a AD no comentário de `src/estado/useLeitor.ts:62-66`.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/estado/useLeitor.ts:62-66`; teste `src/estado/useLeitor.test.ts` (FUN-36, erro que não é falta de rede)
+**Requirement**: FUN-36 · Achado: A-04 (validation.md)
+**Tests**: o teste existente de FUN-36 segue verde
+**Gate**: `pnpm typecheck && pnpm vitest run src/estado --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T40: Fumaça dos cabeçalhos servidos (A-05)
+
+**What**: A fumaça do `deploy.yml` confere a CSP completa (com `frame-ancestors 'none'`), `X-Content-Type-Options` e `Referrer-Policy` em `/`, `/sw.js` e num `/livros/*.json` do índice.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `.github/workflows/deploy.yml:93-94`; `test/arquivos/cabecalhos.test.ts`
+**Requirement**: FUN-42 · Achado: A-05 (validation.md)
+**Tests**: teste em `test/arquivos/` que lê o `deploy.yml` e exige os três caminhos e `frame-ancestors` na fumaça (vermelho antes)
+**Gate**: `pnpm typecheck && pnpm vitest run --project arquivos --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T41: Desfazer maxTouchPoints entre testes (A-06)
+
+**What**: No `afterEach` de `ConviteInstalacao.test.tsx`, apagar a propriedade `maxTouchPoints` definida pelo teste.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/componentes/ConviteInstalacao.test.tsx:17, 40-44` (autorização de T38)
+**Requirement**: FUN-46 · Achado: A-06 (validation.md)
+**Tests**: depois do `afterEach`, `Object.hasOwn(navigator, 'maxTouchPoints')` é falso
+**Gate**: `pnpm vitest run src/componentes/ConviteInstalacao.test.tsx --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T42: Afirmar o painel fechado no e2e de 320 px (A-07)
+
+**What**: Depois de tocar em "Aparência" de novo, afirmar que a região "Aparência" está oculta antes de tocar no título.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `e2e/aparencia.spec.ts:114-115` (autorização de T38)
+**Requirement**: FUN-43 · Achado: A-07 (validation.md)
+**Tests**: `expect(page.getByRole('region', { name: 'Aparência' })).toBeHidden()`
+**Gate**: `pnpm build && pnpm exec playwright test e2e/aparencia.spec.ts --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T43: Separar build e publicação no deploy (A-08)
+
+**What**: Dividir o `deploy.yml` em job de build sem segredo (gera `dist/` e o envia como artefato, com cache do pnpm) e job de publicar (baixa o artefato, sem `pnpm install` nem cache, com `CLOUDFLARE_API_TOKEN` só nos passos `wrangler deploy` e `wrangler rollback`).
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `.github/workflows/deploy.yml:59-94`; decisão do dono em 2026-11-15 (separar jobs)
+**Requirement**: Achado: A-08 (validation.md; SEC-001 e SEC-004 de `seguranca.md`)
+**Tests**: teste em `test/arquivos/` que lê o `deploy.yml`: nenhum `env` de job com o token, token só em passos `wrangler`, job com segredo sem `cache: pnpm` e sem `pnpm install` (vermelho antes)
+**Gate**: `pnpm typecheck && pnpm vitest run --project arquivos --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T44: Regra de branch dos environments no GitHub (A-09, manual do dono)
+
+**What**: O dono configura em Settings > Environments: `producao` só a partir de `main`, `tst` só a partir de `desenvolvimento`, segredos só nos environments; o `/executar` registra a data em `.specs/preparacao.md` (Nível 2) depois da confirmação via `AskUserQuestion`.
+**Estimativa**: 15 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `seguranca.md` (SEC-002)
+**Requirement**: Achado: A-09 (validation.md)
+**Tests**: manual: confirmação do dono gravada em `preparacao.md`
+**Gate**: —
+
+- [x] Concluída
+
+---
+
+### T45: Só guardar livro que é JSON válido (A-10)
+
+**What**: `carregarLivro` lê e valida a resposta (JSON com o `numero` pedido) antes do `cache.put`; resposta inválida (ex.: 200 `text/html` do fallback) não vai ao cache e lança `LivroNaoBaixado`.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `src/dados/livros.ts:59-68`; dublê `src/dados/dubleCache.ts`
+**Requirement**: FUN-34, FUN-36 · Achado: A-10 (validation.md)
+**Tests**: `livros.test.ts`: "FUN-34: resposta 200 text/html não é guardada e lança LivroNaoBaixado" e "FUN-34: JSON de outro livro não é guardado" (vermelhos antes)
+**Gate**: `pnpm typecheck && pnpm vitest run src/dados --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T46: Dependências de desenvolvimento sem vulnerabilidade alta (A-11)
+
+**What**: Atualizar o `wrangler` (ou `pnpm.overrides` do `undici` >= 7.30.1, e dos pacotes do `workbox-build` se preciso) até `pnpm audit` não ter alta.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `package.json`; `seguranca.md` (SEC-005)
+**Requirement**: Achado: A-11 (validation.md)
+**Tests**: `pnpm audit --audit-level high` sai 0; suíte e build verdes
+**Gate**: `pnpm audit --audit-level high && pnpm typecheck && pnpm test && pnpm build`
+
+- [x] Concluída
+
+---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exec playwright test --reporter=dot @ 4d15aef2e0a55a4266adf1e2dcd54b903be1356f = verde
+
+### T47: Fumaça do deploy com a lista exata de caminhos provada por teste (A-12)
+
+**What**: Em `test/arquivos/deploy.test.ts`, extrair a lista do laço `for caminho in ...` do passo de fumaça do `deploy.yml` e exigir que seja exatamente `/`, `/sw.js` e o livro (`${livro}`), de modo que tirar qualquer um dos três faça o teste falhar.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `test/arquivos/deploy.test.ts:80-98` (funções `job` e `passos`); `.github/workflows/deploy.yml:122-133`
+**Requirement**: FUN-42 · Achado: A-12 (validation.md)
+**Tests**: teste "A-12: FUN-42: a fumaça confere os cabeçalhos em exatamente /, /sw.js e um livro", que falha ao tirar qualquer caminho do laço
+**Gate**: `pnpm typecheck && pnpm vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T48: Fumaça do deploy com o caminho de falha provado por execução (A-13)
+
+**What**: Em `test/arquivos/deploy.test.ts`, extrair o bloco `run` do passo "2. Fumaça do site publicado" do `deploy.yml` e executá-lo em `bash` com um `curl` simulado no `PATH`, provando que ele sai com 0 quando todos os caminhos trazem os cabeçalhos do FUN-42 e sai com código diferente de zero (imprimindo `::error`) quando falta a CSP ou o `nosniff` em qualquer caminho ou quando o `curl` falha.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `test/arquivos/deploy.test.ts:82-98` (funções `job` e `passos`, teste do A-12); `.github/workflows/deploy.yml:120-133`
+**Requirement**: FUN-42 · Achado: A-13 (validation.md)
+**Tests**: testes "A-13: FUN-42: ..." que executam a fumaça com stub de `curl` (verde, cabeçalho ausente por caminho, `curl` com falha) e falham se o `exit 1`, o `!` do `grep` ou o `-f` do `curl` forem removidos
+**Gate**: `pnpm typecheck && pnpm vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+- [x] Concluída
+
+---
+
+### T49: Fumaça aceita cabeçalhos com qualquer caixa, provado por execução (A-14)
+
+**What**: Em `test/arquivos/deploy.test.ts`, acrescentar ao `curl` simulado do describe A-13 um modo em que os nomes dos cabeçalhos vêm em caixa de título (`Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`) e um caso que exige a fumaça saindo com 0 nesse modo, de modo que tirar o `-i` do `grep -qi` (`deploy.yml:127`) faça o teste falhar.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: stub e função `rodar` do describe A-13 em `test/arquivos/deploy.test.ts:113-160`
+**Requirement**: FUN-42 · Achado: A-14 (validation.md)
+**Tests**: teste "A-14: FUN-42: cabeçalhos com caixa de título passam na fumaça", que falha com `grep -q` no lugar de `grep -qi`
+**Gate**: `pnpm typecheck && pnpm test`
+
+- [x] Concluída
+
+---
+
+### T50: Fumaça com um teste por diretiva da CSP e mensagem conferida (A-15)
+
+**What**: No mesmo describe, o `curl` simulado passa a remover só a diretiva pedida da linha da CSP (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`), mantendo as outras; cada caso de omissão exige status diferente de zero e que a mensagem `::error` cite o caminho e o padrão do cabeçalho ausente, de modo que tirar uma diretiva da lista `for exigido` (`deploy.yml:126`) derrube o caso nomeado com ela.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T49
+**Reuses**: stub e casos `it.each` do describe A-13 em `test/arquivos/deploy.test.ts:113-193`
+**Requirement**: FUN-42 · Achado: A-15 (validation.md)
+**Tests**: casos "A-13: FUN-42: sem <diretiva> em <caminho> ..." reescritos com a diretiva isolada e a mensagem conferida; mudança de teste existente com motivo A-15 no commit (fortalece, não enfraquece)
+**Gate**: `pnpm typecheck && pnpm test`
+
+- [x] Concluída
+
+---
+
+
+
+Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = verde
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 480ab09cbede90f7a1f25d138967be90508059c2 = verde
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ c40ba9b7bcf1aaa1352bec7b741eb8c4ab5ba024 = verde
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ b68bc6f5d63a17705d5fcf82d1d49f3c0b1c7748 = verde
+
 
 ## Requirement Coverage
 
@@ -1122,7 +1446,7 @@ T35
 | FUN-37 | T12, T14 |
 | FUN-38 a FUN-40 | T27 |
 | FUN-41 | T4, T15, T34 |
-| FUN-42 | T3 |
+| FUN-42 | T3, T47, T48, T49, T50 |
 | FUN-43 | T35 |
 | FUN-44 | T16, T35 |
 | FUN-45 | T32 |

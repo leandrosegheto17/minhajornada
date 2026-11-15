@@ -21,7 +21,14 @@ interface Props {
  * Grade de capítulos (FUN-07, FUN-08, FUN-49; .specs/mockup/telas/capitulos.html): o nome do livro, "Trocar livro",
  * "Voltar à leitura" e os números de 1 até o último capítulo, com o atual marcado.
  */
-export function TelaCapitulos({ livro, referencia, aoAbrirCapitulo, aoTrocarLivro, aoVoltarALeitura, aoAbrirSobre }: Props) {
+export function TelaCapitulos({
+  livro,
+  referencia,
+  aoAbrirCapitulo,
+  aoTrocarLivro,
+  aoVoltarALeitura,
+  aoAbrirSobre,
+}: Props) {
   const entrada = indice.livros[livro - 1];
   if (!entrada) return null;
   const atual = referencia?.livro === livro ? referencia.capitulo : null;

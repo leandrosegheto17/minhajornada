@@ -222,6 +222,14 @@ describe('carregamento do livro', () => {
     await waitFor(() => expect(result.current.carga).toEqual({ situacao: 'naoBaixado', numero: n('Romanos') }));
   });
 
+  it('FUN-36: erro que não é falta de rede (JSON ilegível, servidor com erro) também fica naoBaixado', async () => {
+    dubles.carregarLivro.mockRejectedValue(new SyntaxError('Unexpected token < in JSON'));
+    localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Romanos'), capitulo: 8 }));
+    const { result } = renderHook(() => useLeitor());
+    await waitFor(() => expect(result.current.carga).toEqual({ situacao: 'naoBaixado', numero: n('Romanos') }));
+    expect(dubles.baixarFaltantes).not.toHaveBeenCalled();
+  });
+
   it('outro capítulo do mesmo livro não carrega o livro de novo', async () => {
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());

@@ -33,10 +33,22 @@ function arquivoDo(numero: number, indice: Indice): string {
   return entrada.arquivo;
 }
 
+/** Lê o corpo como livro `numero`: JSON com esse número e a lista de capítulos; qualquer outra coisa dá `null`. */
+async function lerLivro(resposta: Response, numero: number): Promise<Livro | null> {
+  try {
+    const livro = (await resposta.json()) as Partial<Livro> | null;
+    if (livro?.numero !== numero || !Array.isArray(livro.capitulos)) return null;
+    return livro as Livro;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Livro pelo cache ou pela rede (FUN-34, FUN-36): no cache, não toca a rede; fora dele, busca só o arquivo desse
- * livro e o guarda. Cache indisponível ou `put` que falha não impedem a leitura pela rede. Sem rede e sem cache,
- * lança `LivroNaoBaixado`.
+ * livro, confere que é mesmo esse livro e só então o guarda (o fallback do site devolve 200 `text/html` para qualquer
+ * caminho, e isso nunca vai ao cache, A-10). Entrada ilegível já guardada é apagada e o livro vem da rede. Cache
+ * indisponível ou `put` que falha não impedem a leitura pela rede. Sem rede e sem cache, lança `LivroNaoBaixado`.
  */
 export async function carregarLivro(numero: number, indice: Indice = indiceGerado): Promise<Livro> {
   const url = arquivoDo(numero, indice);
@@ -44,7 +56,11 @@ export async function carregarLivro(numero: number, indice: Indice = indiceGerad
   if (cache) {
     try {
       const guardada = await cache.match(url);
-      if (guardada) return (await guardada.json()) as Livro;
+      if (guardada) {
+        const livro = await lerLivro(guardada, numero);
+        if (livro) return livro;
+        await cache.delete(url);
+      }
     } catch {
       // Cache ilegível: segue pela rede.
     }
@@ -58,14 +74,17 @@ export async function carregarLivro(numero: number, indice: Indice = indiceGerad
   }
   if (!resposta.ok) throw new LivroNaoBaixado(numero);
 
+  const livro = await lerLivro(resposta.clone(), numero);
+  if (!livro) throw new LivroNaoBaixado(numero);
+
   if (cache) {
     try {
-      await cache.put(url, resposta.clone());
+      await cache.put(url, resposta);
     } catch {
       // Cota cheia ou Cache API recusada: lê pela rede mesmo assim.
     }
   }
-  return (await resposta.json()) as Livro;
+  return livro;
 }
 
 let downloadEmAndamento: Promise<void> | null = null;

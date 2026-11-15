@@ -2,10 +2,10 @@ import { expect, type Page } from '@playwright/test';
 
 /** Grava a leitura no aparelho e reabre o app nela (FUN-20). A página precisa já estar no app. */
 export async function abrirGravado(page: Page, livro: number, capitulo: number): Promise<void> {
-  await page.evaluate(
-    ([l, c]) => localStorage.setItem('mj:leitura', JSON.stringify({ livro: l, capitulo: c })),
-    [livro, capitulo] as const,
-  );
+  await page.evaluate(([l, c]) => localStorage.setItem('mj:leitura', JSON.stringify({ livro: l, capitulo: c })), [
+    livro,
+    capitulo,
+  ] as const);
   await page.reload();
 }
 

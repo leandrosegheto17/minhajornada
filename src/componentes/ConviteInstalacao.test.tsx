@@ -13,7 +13,8 @@ const matchMediaOriginal = window.matchMedia;
 function simularNavegador(ua: string, plataforma: string, toques: number) {
   vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(ua);
   vi.spyOn(navigator, 'platform', 'get').mockReturnValue(plataforma);
-  vi.spyOn(navigator, 'maxTouchPoints', 'get').mockReturnValue(toques);
+  // O jsdom não define maxTouchPoints: vi.spyOn não alcança a propriedade ausente.
+  Object.defineProperty(navigator, 'maxTouchPoints', { value: toques, configurable: true });
 }
 
 function simularInstalado(instalado: boolean) {
@@ -38,6 +39,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  Reflect.deleteProperty(navigator, 'maxTouchPoints');
   window.matchMedia = matchMediaOriginal;
   localStorage.clear();
 });
@@ -84,5 +86,16 @@ describe('ConviteInstalacao', () => {
     } finally {
       Reflect.deleteProperty(navigator, 'standalone');
     }
+  });
+});
+
+describe('isolamento da simulação (A-06)', () => {
+  it('FUN-46: simular o iPad num teste não deixa maxTouchPoints para o teste seguinte', () => {
+    simularNavegador(SAFARI_IPHONE, 'iPhone', 5);
+    expect(Object.hasOwn(navigator, 'maxTouchPoints')).toBe(true);
+  });
+
+  it('FUN-46: o teste seguinte começa sem a propriedade definida pelo anterior', () => {
+    expect(Object.hasOwn(navigator, 'maxTouchPoints')).toBe(false);
   });
 });

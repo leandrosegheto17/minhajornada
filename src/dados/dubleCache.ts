@@ -16,7 +16,9 @@ export function criarDubleCaches() {
     return {
       match: vi.fn(async (pedido: RequestInfo | URL) => {
         const corpo = mapa.get(caminho(pedido));
-        return corpo === undefined ? undefined : new Response(corpo, { headers: { 'content-type': 'application/json' } });
+        return corpo === undefined
+          ? undefined
+          : new Response(corpo, { headers: { 'content-type': 'application/json' } });
       }),
       put: vi.fn(async (pedido: RequestInfo | URL, resposta: Response) => {
         mapa.set(caminho(pedido), await resposta.text());

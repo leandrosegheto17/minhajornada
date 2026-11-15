@@ -1,6 +1,6 @@
 /* Base global do guia de estilo (.specs/mockup/guia.html, início do <style>).
    Cores, fontes e medidas só por var(--...) de tokens.css; as regras dos componentes vivem nos CSS Modules.
-   Sem prefers-color-scheme aqui: o tema do sistema é do tokens.css (FUN-29). */
+   A consulta ao tema do sistema é só do tokens.css (FUN-29). */
 
 *,
 *::before,
