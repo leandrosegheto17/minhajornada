@@ -1,0 +1,22 @@
+/* Sobre (.specs/mockup/guia.html, "sobre"). */
+
+.texto-sobre {
+  max-width: var(--largura-leitura);
+  margin: 0 auto;
+  padding: var(--esp-2) var(--esp-5) var(--esp-12);
+}
+
+.texto-sobre h2 {
+  font-size: var(--texto-g);
+  margin: var(--esp-6) 0 var(--esp-2);
+}
+
+.texto-sobre p {
+  margin: 0 0 var(--esp-3);
+  line-height: var(--altura-linha-texto);
+}
+
+.versao {
+  color: var(--cor-suave);
+  font-size: var(--texto-p);
+}

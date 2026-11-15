@@ -849,6 +849,9 @@ T35
 **Depends on**: None
 **Reuses**: `.biblia/README.md` (créditos); classe `texto-sobre` do guia
 **Requirement**: FUN-38, FUN-39, FUN-40
+**Status**: rascunhada
+**Testes**: `src/telas/TelaSobre.test.tsx` › "FUN-38: nome e sigla, autores e data da versão", "FUN-38: link da licença Creative Commons Atribuição 4.0 Brasil", "FUN-38: link da fonte", "FUN-38: diz que só o formato foi convertido e que os autores não endossam o app" (FUN-38); "FUN-41: os links abrem sem passar a página de origem" (FUN-41); "FUN-39: explica que o itálico marca palavras acrescentadas pelos tradutores" (FUN-39); "FUN-40: diz que não há conta e que tudo fica no aparelho" (FUN-40); "FUN-37: mostra a versão do app" (FUN-37); "o botão de voltar mostra o destino e dispara a volta"
+**Código**: `src/telas/TelaSobre.tsx`, `src/telas/TelaSobre.module.css`
 
 **Done when**:
 
