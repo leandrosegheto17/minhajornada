@@ -279,9 +279,7 @@ describe('livro não baixado (FUN-36)', () => {
   it('FUN-36: com o estado "não baixado", a mensagem exata aparece e a ação abre a escolha de livro', () => {
     const props = propsPara({ livro: n('Romanos'), capitulo: 8 }, { carga: naoBaixado(n('Romanos')) });
     render(<TelaLeitor {...props} />);
-    expect(
-      screen.getByText('Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Escolher outro livro' }));
     expect(props.aoEscolherOutroLivro).toHaveBeenCalledTimes(1);
   });

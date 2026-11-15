@@ -39,7 +39,8 @@ export function converterLivro(md: string, numero: number): Livro {
       if (nome === null) falhar('capítulo antes do título do livro', n);
       if (capitulo[1] !== nome) falhar(`capítulo de outro livro: "${capitulo[1]}"`, n);
       const esperado = capitulos.length + 1;
-      if (Number(capitulo[2]) !== esperado) falhar(`capítulo ${capitulo[2]} fora da sequência (esperado ${esperado})`, n);
+      if (Number(capitulo[2]) !== esperado)
+        falhar(`capítulo ${capitulo[2]} fora da sequência (esperado ${esperado})`, n);
       capitulos.push([]);
       continue;
     }

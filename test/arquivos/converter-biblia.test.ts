@@ -56,15 +56,18 @@ describe('converter-biblia (FUN-03)', () => {
     for (const livro of livrosGravados.values()) for (const capitulo of livro.capitulos) gravados += capitulo.length;
     expect(gravados).toBe(31102);
     for (const [livro, capitulo, versiculo, texto] of fonte) {
-      expect(livrosGravados.get(livro)?.capitulos[capitulo - 1]?.[versiculo - 1], `${livro} ${capitulo}:${versiculo}`).toBe(
-        texto,
-      );
+      expect(
+        livrosGravados.get(livro)?.capitulos[capitulo - 1]?.[versiculo - 1],
+        `${livro} ${capitulo}:${versiculo}`,
+      ).toBe(texto);
     }
   });
 
   it('FUN-03: cada arquivo gravado tem o nome NN.<hash8>.json', () => {
     for (const entrada of indice.livros) {
-      expect(entrada.arquivo).toMatch(new RegExp(`^/livros/${String(entrada.numero).padStart(2, '0')}\\.[0-9a-f]{8}\\.json$`));
+      expect(entrada.arquivo).toMatch(
+        new RegExp(`^/livros/${String(entrada.numero).padStart(2, '0')}\\.[0-9a-f]{8}\\.json$`),
+      );
     }
     expect(readdirSync(join(pasta, 'livros'))).toHaveLength(66);
   });

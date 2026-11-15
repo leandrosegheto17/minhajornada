@@ -20,7 +20,10 @@ describe('Versiculo', () => {
   });
 
   it('FUN-02: "[que está]" de Filemom 1:2 aparece em <em>, sem colchetes', () => {
-    const { container } = renderizar(2, 'E à amada Ápia, e a Arquipo nosso companheiro de batalha, e à igreja [que está] em tua casa;');
+    const { container } = renderizar(
+      2,
+      'E à amada Ápia, e a Arquipo nosso companheiro de batalha, e à igreja [que está] em tua casa;',
+    );
     const em = container.querySelector('em');
     expect(em).toHaveTextContent(/^que está$/);
     expect(container.textContent).not.toMatch(/[[\]]/);
