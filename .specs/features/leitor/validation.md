@@ -1,11 +1,12 @@
-# Validação: leitor — FAIL ❌ (rodada 4)
+# Validação: leitor — PASS ✅ com ressalva (rodada 5)
 
-- **Data**: 2026-11-15 · **Branch**: feature/leitor @ 9d6b374 · **Árvore**: c58e6068fd112b3a364e818bc5259a324d30ddda
-- **Escopo**: diff do retrabalho R3 (`d465c00..9d6b374`, só a T48) e regressão pela suíte inteira (detalhe em `verificacao-rodada-4.md`; anteriores em `verificacao-rodada-1.md` a `-3.md`; um merge local feito na rodada 3 com uma verificação parcial foi desfeito)
-- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 357 unitários (27 arquivos) e 27 e2e passaram, 0 falharam (árvore diferente da do `Gate:` da T48)
-- **Sensor**: 24 mutações na fumaça (`deploy.yml:120-133`), 20 mortas, 4 sobreviveram (equivalentes ou quase: 3, M33, M42 e M48; real: M32, no A-14); M19, M21, M22 e M23 da rodada 3 agora morrem
-- **Revisão de código**: diff do R3 avaliado pelo verificador (stub, extração do bloco, Linux em container `node:24` 25/25, sem flakiness em 6 execuções); nenhum teste enfraquecido (só os imports reescritos)
-- **Segurança**: não reaberta nas rodadas 3 e 4 (R2 e R3 só acrescentam teste); vale o reteste da rodada 2 em `seguranca.md`: SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
+- **Data**: 2026-11-15 · **Branch**: feature/leitor @ bac3c35 · **Árvore**: f6000402f43fa9c52f3bb48c4b7da6d7d495afb3
+- **Escopo**: diff do retrabalho R4 (`241d77c..bac3c35`, T49 e T50) e regressão pela suíte inteira (detalhe em `verificacao-rodada-5.md`; anteriores em `verificacao-rodada-1.md` a `-4.md`; um merge local feito na rodada 3 com uma verificação parcial foi desfeito)
+- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 366 unitários (27 arquivos) e 27 e2e passaram, 0 falharam (árvore diferente da do `Gate:` do R4)
+- **Sensor**: 23 mutações na fumaça (`deploy.yml:120-133`), 20 mortas, 3 vivas equivalentes (N4, N13, N19) e 2 vivas reais (N20, N21, no A-16); M32, M25, M26 e M27 da rodada 4 agora morrem
+- **Revisão de código**: diff do R4 avaliado pelo verificador (stub `CAIXA_TITULO` e `REMOVER_DIRETIVA`, Linux em container `node:24` 34/34); a reescrita dos casos A-13, aprovada pelo dono no R4, cobre todos os ramos antigos e acrescenta `referrer-policy` em `/sw.js`
+- **Segurança**: não reaberta nas rodadas 3 a 5 (R2 a R4 só acrescentam teste); vale o reteste da rodada 2 em `seguranca.md`: SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
+- **Decisão do dono (rodada 5)**: A-16 aceito como lacuna, sem retrabalho; feature segue para a integração
 - **Modelo**: /validar pedido em Sonnet; o dono escolheu seguir em Opus
 
 ## Achados
@@ -25,10 +26,13 @@
 | A-11 | `package.json` (wrangler 4.162.0) | `pnpm audit --audit-level high` sem altas | — | crítica | fechado |
 | A-12 | `test/arquivos/deploy.test.ts:82-87` | O teste não fixa os caminhos que a fumaça confere (FUN-42): os `toMatch` de `/`, `/sw.js` e `/livros/` casam com outras linhas do passo (a atribuição `livro=` e o `curl` da linha 122, que não olha cabeçalho); duas mutações no laço `for caminho in` (`deploy.yml:124`) sobrevivem com 12/12 testes passando | Teste `test/arquivos/deploy.test.ts:89-96` extrai a lista do laço e exige `['"/"', '"/sw.js"', '"${livro}"']` (linha 92); as 2 mutações e a remoção de `/sw.js` morrem | crítica | fechado |
 | A-13 | `test/arquivos/deploy.test.ts:82-98` (fumaça em `.github/workflows/deploy.yml:125-129`) | O caminho de falha da fumaça de cabeçalhos (FUN-42) não tem prova: 4 mutantes vivos com 13/13 passando (`exit 1` → `true` ou `:`, `if ! grep -qi` → `if grep -qi`, `curl -fsS` sem `-f`); os testes só casam texto | Executar o bloco `run` da fumaça em `bash` com `curl` simulado: todos os cabeçalhos → sai 0; faltando CSP ou `nosniff` em qualquer caminho → sai ≠ 0 e imprime `::error`; `curl` com falha HTTP → sai ≠ 0 | crítica | fechado |
-| A-14 | `test/arquivos/deploy.test.ts:136-138` (fumaça em `.github/workflows/deploy.yml:127`) | O stub só emite cabeçalhos em minúsculas; o `-i` do `grep -qi` não é provado: M32 (`grep -qi` → `grep -q`) passa 25/25. Resposta com `Content-Security-Policy` capitalizado (HTTP/1.1) faria a fumaça recusar um deploy bom e disparar o rollback sem teste vermelho | Caso em que o stub devolve os cabeçalhos com caixa de título e a fumaça sai com 0 | crítica | aberto |
-| A-15 | `test/arquivos/deploy.test.ts:170-174, 181-184` | Os casos de `object-src`, `frame-ancestors` e `default-src` tiram a linha inteira da CSP (mesmo comportamento); M26 e M27 (tirar a diretiva dos exigidos) só morrem pelos testes textuais (`:100-109`); a mensagem `::error` não é conferida quanto ao caminho e ao cabeçalho | Stub remove só a diretiva da linha da CSP; cada caso exige a diretiva e o caminho na mensagem `::error` | comum | aberto |
+| A-14 | `test/arquivos/deploy.test.ts:136-138` (fumaça em `.github/workflows/deploy.yml:127`) | O stub só emite cabeçalhos em minúsculas; o `-i` do `grep -qi` não é provado: M32 (`grep -qi` → `grep -q`) passa 25/25. Resposta com `Content-Security-Policy` capitalizado (HTTP/1.1) faria a fumaça recusar um deploy bom e disparar o rollback sem teste vermelho | Caso em que o stub devolve os cabeçalhos com caixa de título e a fumaça sai com 0 | crítica | fechado |
+| A-15 | `test/arquivos/deploy.test.ts:170-174, 181-184` | Os casos de `object-src`, `frame-ancestors` e `default-src` tiram a linha inteira da CSP (mesmo comportamento); M26 e M27 (tirar a diretiva dos exigidos) só morrem pelos testes textuais (`:100-109`); a mensagem `::error` não é conferida quanto ao caminho e ao cabeçalho | Stub remove só a diretiva da linha da CSP; cada caso exige a diretiva e o caminho na mensagem `::error` | comum | fechado |
+| A-16 | `test/arquivos/deploy.test.ts:128-146` (fumaça em `.github/workflows/deploy.yml:128`) | Nenhum caso devolve cabeçalho de segurança com valor errado (`referrer-policy: no-referrer`, `x-content-type-options: sniff`); os regex de `nosniff` e `same-origin` só são provados por texto (`:105-112`); N20 e N21 vivem com 34/34 | Modo `VALOR_ERRADO` no stub, com casos que exigem saída ≠ 0 e a mensagem do cabeçalho | comum | aceito pelo dono como lacuna |
 
 ## Lacunas e o que não foi validado
+
+- A-16 (comum), aceito pelo dono em 2026-11-15: valor errado de `referrer-policy` e `x-content-type-options` não é provado por execução, só por texto.
 
 - O workflow de deploy nunca rodou (`DEPLOY_ATIVO` inativo): `pnpm install --ignore-scripts` + `wrangler deploy`, o artefato entre jobs e a regra de branch dos environments só se provam no primeiro deploy real (Nível 2 do `/preparar`).
 - Cabeçalhos em resposta real da Cloudflare; instalação em Chrome e Safari reais; Node 24 (rodou em 26).
