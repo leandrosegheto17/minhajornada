@@ -67,3 +67,46 @@ export async function carregarLivro(numero: number, indice: Indice = indiceGerad
   }
   return (await resposta.json()) as Livro;
 }
+
+let downloadEmAndamento: Promise<void> | null = null;
+
+/**
+ * Guarda em segundo plano os livros que faltam (FUN-33), um por vez, na ordem do índice, pulando os que já estão no
+ * `mj-livros`. Casos limite:
+ * - cache vazio: baixa os 66, em sequência; cache completo: nenhuma requisição;
+ * - falha no meio (sem rede, erro do servidor): o laço para, o que já foi guardado fica, e a próxima chamada começa no
+ *   livro que falhou; o erro é só registrado no console (nada visível para o leitor);
+ * - chamada dupla ao mesmo tempo: a segunda recebe a mesma promessa, e nenhum livro é baixado duas vezes;
+ * - sem Cache API: não faz nada (a leitura segue pela rede);
+ * - ao terminar sem falha, pede `navigator.storage.persist()` se existir; ausente, negado ou com erro, segue igual.
+ */
+export function baixarFaltantes(indice: Indice = indiceGerado): Promise<void> {
+  if (downloadEmAndamento) return downloadEmAndamento;
+  downloadEmAndamento = baixar(indice).finally(() => {
+    downloadEmAndamento = null;
+  });
+  return downloadEmAndamento;
+}
+
+async function baixar(indice: Indice): Promise<void> {
+  const cache = await abrirCache();
+  if (!cache) return;
+  try {
+    for (const entrada of indice.livros) {
+      if (await cache.match(entrada.arquivo)) continue;
+      await carregarLivro(entrada.numero, indice);
+    }
+  } catch (erro) {
+    console.warn('Download dos livros interrompido; continua na próxima abertura com rede.', erro);
+    return;
+  }
+  await pedirPersistencia();
+}
+
+async function pedirPersistencia(): Promise<void> {
+  try {
+    await globalThis.navigator?.storage?.persist?.();
+  } catch {
+    // Sem persistência, o navegador pode apagar o cache; o texto se baixa de novo com rede.
+  }
+}

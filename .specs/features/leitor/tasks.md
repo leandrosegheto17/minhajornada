@@ -406,6 +406,9 @@ T35
 **Depends on**: T10
 **Reuses**: `carregarLivro` (T10)
 **Requirement**: FUN-33
+**Status**: rascunhada
+**Testes**: `src/dados/baixarFaltantes.test.ts` › "FUN-33: com o cache vazio, baixa os 66 livros em sequência, na ordem do índice", "FUN-33: um por vez: o próximo fetch só começa depois que o anterior foi guardado", "FUN-33: com 10 livros guardados, baixa só os 56 que faltam", "FUN-33: com o cache completo, nenhuma requisição", "FUN-33: falha no 30º mantém os 29 guardados e a próxima chamada começa no 30º", "FUN-33: chamada dupla ao mesmo tempo não baixa o mesmo livro duas vezes", "FUN-33: ao terminar, pede navigator.storage.persist()", "FUN-33: persist ausente ou que rejeita não quebra o download", "FUN-33: sem Cache API, não faz requisição nenhuma" (FUN-33)
+**Código**: `src/dados/livros.ts` (`baixarFaltantes`)
 
 **Done when**:
 
