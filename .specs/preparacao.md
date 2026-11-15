@@ -9,7 +9,7 @@
 - [x] Ambiente local — `pnpm install` e `pnpm dev` sobem o app em `127.0.0.1`, sem Docker; evidência: `pnpm dev` → `http://127.0.0.1:5173/` respondeu 200 (2026-11-14)
 - [x] Esqueleto ponta a ponta — React 19 + Vite 8 + vite-plugin-pwa (`injectManifest`), Vitest (`componentes` e `arquivos`), Playwright sobre `vite preview`, ESLint e Prettier, `tokens.css`; evidência: `pnpm lint`, `pnpm typecheck`, `pnpm test` (3 testes), `pnpm build` e `pnpm e2e` (2 testes) verdes. `public/_headers`, manifesto e ícones são das tarefas T3 e T32, não do esqueleto
 - [x] Comando de teste — `.specs/projeto/testes.json`: `pnpm typecheck && pnpm test` (reporter `dot`); o e2e roda no CI e ao fim do lote de interface
-- [ ] CI — GitHub Actions rodando lint, typecheck e testes em push e PR; uma execução verde
+- [x] CI — GitHub Actions (`.github/workflows/ci.yml`: jobs `base` com lint, typecheck e testes, e `e2e` sobre o build) em push e PR; execução verde: https://github.com/leandrosegheto17/minhajornada/actions/runs/43660551409
 - [x] Pré-voo — `preparar-ambiente.py`: "Ambiente pronto". Aviso restante: Node local v26.13.0 fora de `engines` (>=24 <25); o CI usa o `.nvmrc` (24)
 - [x] Hook de commit — `.git/hooks/commit-msg` instalado (marca `# fluxos: commit-msg`)
 
