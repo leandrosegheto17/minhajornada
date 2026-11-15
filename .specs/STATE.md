@@ -6,9 +6,9 @@
 - **Item**: `.specs/features/leitor/` (avaliação em `.specs/produto/`)
 - **Fase aprovada**: 8, Quebra em tarefas e lotes, concluída em 2026-11-14 (sem aprovação, regra do fluxo): `features/leitor/tasks.md` (35 tarefas, 10 lotes, `**Passada**: rascunho`) e `.specs/projeto/jornadas.md` (J-01 a J-05). Fase 7 aprovada antes: `design.md` (AD-001 a AD-003) e mockup `.specs/mockup/` (direção C)
 - **Próxima fase**: planejamento concluído; seguem os comandos `/preparar` (Nível 1 antes de tudo), `/rascunho` (Opus), `/executar` e `/validar` (Sonnet)
-- **Execução**: não iniciada
+- **Execução**: feature `leitor` executada, validada (rodada 5, com ressalva A-16) e integrada em `desenvolvimento` por merge local em 2026-11-15 (`features/leitor/integracao.md`); push pendente
 - **Serviços no ar**: nenhum
-- **Progresso**: faltam 35 de 35 tarefas (0%), ~49h15 estimadas, conferida em 2026-11-14
+- **Progresso**: 50 de 50 tarefas concluídas (100%), conferida em 2026-11-15
 - **Combinado na conversa e não registrado em artefato**:
   - Branches: `desenvolvimento` faz o papel da main e é a branch padrão no GitHub (repositório privado `minhajornada`). Toda feature nasce de `desenvolvimento` e volta para ela, então a **Branch pai** dos `tasks.md` é `desenvolvimento`. A `main` só recebe a integração de `desenvolvimento` quando o usuário pedir.
   - Publicação: Cloudflare. `desenvolvimento` → `minhajornada-tst.ljssoftware.com.br`; `main` → `minhajornada.ljssoftware.com.br`. O leitor free não usa Neon (`solucao.md`).
