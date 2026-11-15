@@ -74,7 +74,8 @@ export function TelaLeitor({
   const inicioDeslize = useRef<{ id: number; x: number; y: number } | null>(null);
 
   function aoComecarDeslize(evento: PointerEvent<HTMLElement>) {
-    if (!evento.isPrimary) return;
+    // Só o dedo desliza: arrastar o mouse (selecionar texto) não troca de capítulo (A-01).
+    if (!evento.isPrimary || evento.pointerType !== 'touch') return;
     inicioDeslize.current = { id: evento.pointerId, x: evento.clientX, y: evento.clientY };
   }
 

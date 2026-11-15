@@ -173,10 +173,10 @@ describe('título e barra (FUN-49, FUN-50, FUN-44)', () => {
 
 describe('deslize lateral (FUN-16 a FUN-18)', () => {
   /** Simula um gesto de ponteiro na área do texto: começa em (200, 300) e anda (dx, dy). */
-  function deslizar(dx: number, dy: number, pointerId = 1) {
+  function deslizar(dx: number, dy: number, pointerType = 'touch', pointerId = 1) {
     const area = screen.getByRole('main');
-    fireEvent.pointerDown(area, { pointerId, isPrimary: true, clientX: 200, clientY: 300 });
-    fireEvent.pointerUp(area, { pointerId, isPrimary: true, clientX: 200 + dx, clientY: 300 + dy });
+    fireEvent.pointerDown(area, { pointerId, pointerType, isPrimary: true, clientX: 200, clientY: 300 });
+    fireEvent.pointerUp(area, { pointerId, pointerType, isPrimary: true, clientX: 200 + dx, clientY: 300 + dy });
   }
 
   it('FUN-16: deslizar -100/10 (direita para a esquerda) chama seguinte', () => {
@@ -184,6 +184,15 @@ describe('deslize lateral (FUN-16 a FUN-18)', () => {
     render(<TelaLeitor {...props} />);
     deslizar(-100, 10);
     expect(props.aoSeguinte).toHaveBeenCalledTimes(1);
+    expect(props.aoAnterior).not.toHaveBeenCalled();
+  });
+
+  it.each(['mouse', 'pen'])('FUN-16/FUN-17: arrastar com %s 100/0 e -100/0 não troca de capítulo (só o dedo desliza)', (tipo) => {
+    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
+    render(<TelaLeitor {...props} />);
+    deslizar(100, 0, tipo);
+    deslizar(-100, 0, tipo);
+    expect(props.aoSeguinte).not.toHaveBeenCalled();
     expect(props.aoAnterior).not.toHaveBeenCalled();
   });
 
