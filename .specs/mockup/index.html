@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MinhaJornada: guia e telas</title>
+<style>
+:root{--fundo:#F2F3F5;--superficie:#FFFFFF;--texto:#1A1D23;--suave:#5B616E;--acento:#9A3B5B;--borda:#DADDE3;--fonte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#E39AB5;--borda:#2C313A;color-scheme:dark}}
+:root[data-theme="dark"]{--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#E39AB5;--borda:#2C313A;color-scheme:dark}
+*{box-sizing:border-box} body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--fonte);line-height:1.5}
+header{max-width:1240px;margin:0 auto;padding:32px 20px 8px} h1{font-size:28px;margin:0 0 8px} header p{margin:0 0 6px;color:var(--suave);max-width:72ch}
+header a,.temas a{color:var(--acento)}
+section{max-width:1240px;margin:24px auto;padding:20px;background:var(--superficie);border:1px solid var(--borda);border-radius:14px}
+h2{font-size:20px;margin:0 0 4px} .intencao{margin:0 0 6px;color:var(--suave)}
+.temas{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px} .temas a{font-size:14px;text-decoration:none;border:1px solid var(--borda);border-radius:999px;padding:6px 12px}
+.vistas{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap} .vista{display:flex;flex-direction:column;gap:6px} .vista span{font-size:13px;color:var(--suave)}
+.pc{width:720px;height:450px;overflow:hidden;border:1px solid var(--borda);border-radius:10px;max-width:100%} .pc iframe{width:1440px;height:900px;border:0;transform:scale(.5);transform-origin:0 0}
+.cel{width:390px;height:720px;border:1px solid var(--borda);border-radius:28px;overflow:hidden;max-width:100%} .cel iframe{width:390px;height:720px;border:0}
+.guia-frame{width:100%;height:900px;border:1px solid var(--borda);border-radius:10px}
+</style>
+</head>
+<body>
+<header>
+<h1>MinhaJornada: guia de estilo e telas-chave</h1>
+<p>Direção C · Leve e legível. As três telas usam só <code>tokens.css</code> e os componentes do guia; as demais telas (Sobre, convite de instalação, estados) saem dos mesmos componentes.</p>
+<p>No PC as telas aparecem no tema claro e no celular, no escuro. Os botões abaixo de cada título abrem a tela em tela cheia, no tema escolhido. <a href="guia.html">Abrir o guia em tela cheia</a>.</p>
+</header>
+<section><h2>Leitor</h2><p class="intencao">Tela-chave da direção: Salmos 27. O “Aa” abre o painel de letra e tema; tocar no título abre a grade de capítulos (FUN-49).</p><div class="temas"><a href="telas/leitor.html#claro">Claro</a> <a href="telas/leitor.html#escuro">Escuro</a> <a href="telas/leitor.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="telas/leitor.html" title="Leitor no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="telas/leitor.html#escuro" title="Leitor no celular, tema escuro" loading="lazy"></iframe></div></div>
+</div></section><section><h2>Grade de capítulos</h2><p class="intencao">Salmos, 150 capítulos, com o 27 marcado e “Trocar livro” (FUN-07, FUN-49).</p><div class="temas"><a href="telas/capitulos.html#claro">Claro</a> <a href="telas/capitulos.html#escuro">Escuro</a> <a href="telas/capitulos.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="telas/capitulos.html" title="Grade de capítulos no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="telas/capitulos.html#escuro" title="Grade de capítulos no celular, tema escuro" loading="lazy"></iframe></div></div>
+</div></section><section><h2>Escolha de livro</h2><p class="intencao">66 livros em Antigo e Novo Testamento, com o número de capítulos (FUN-06).</p><div class="temas"><a href="telas/livros.html#claro">Claro</a> <a href="telas/livros.html#escuro">Escuro</a> <a href="telas/livros.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="telas/livros.html" title="Escolha de livro no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="telas/livros.html#escuro" title="Escolha de livro no celular, tema escuro" loading="lazy"></iframe></div></div>
+</div></section>
+<section><h2>Guia de estilo</h2><p class="intencao">Cores, tipografia, botões, painel de aparência, avisos, estados e tabela de contraste.</p>
+<iframe class="guia-frame" src="guia.html" title="Guia de estilo" loading="lazy"></iframe></section>
+</body>
+</html>

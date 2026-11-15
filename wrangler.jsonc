@@ -1,0 +1,9 @@
+// Worker só com assets (AD-001): sem `main`, sem banco, sem segredo aqui. O deploy só sai do CI (Nível 2 do /preparar).
+{
+  "name": "minhajornada",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "dist",
+    "not_found_handling": "single-page-application",
+  },
+}

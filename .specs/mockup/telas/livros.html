@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escolha o livro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cor-fundo);color:var(--cor-texto);font-family:var(--fonte-ui);font-size:var(--texto-m);line-height:var(--altura-linha-ui);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:var(--largura-foco) solid var(--cor-acento);outline-offset:2px}
+a{color:var(--cor-acento)}
+.icone{width:var(--icone-m);height:var(--icone-m);flex:none}
+.icone-p{width:var(--icone-p);height:var(--icone-p);flex:none}
+
+/* barra do topo */
+.barra-topo{display:flex;justify-content:space-between;align-items:center;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);max-width:var(--largura-leitura);margin:0 auto}
+.barra-topo--larga{max-width:var(--largura-tela)}
+.marca{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);color:var(--cor-acento);padding-left:var(--esp-2)}
+.grupo-acoes{display:flex;gap:var(--esp-1)}
+
+/* botões */
+.botao-icone{width:var(--alvo-toque);height:var(--alvo-toque);display:inline-grid;place-items:center;border-radius:var(--raio-p);color:var(--cor-suave)}
+.botao-icone:hover{color:var(--cor-texto);background:var(--cor-realce)}
+.botao-icone:disabled{opacity:.4;cursor:default;background:none;color:var(--cor-suave)}
+.botao-primario,.botao-secundario{min-height:var(--alvo-toque);display:inline-flex;align-items:center;justify-content:center;gap:var(--esp-2);padding:0 var(--esp-5);border-radius:var(--raio-total);font-weight:var(--peso-forte)}
+.botao-primario{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.botao-primario:hover{filter:brightness(1.08)}
+.botao-secundario{border:1px solid var(--cor-contorno);color:var(--cor-texto)}
+.botao-secundario:hover{background:var(--cor-realce)}
+.botao-primario:disabled,.botao-secundario:disabled{opacity:.4;cursor:default;filter:none;background-clip:padding-box}
+.botao-voltar{display:inline-flex;align-items:center;gap:var(--esp-1);min-height:var(--alvo-toque);padding:0 var(--esp-3) 0 var(--esp-1);border-radius:var(--raio-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.botao-voltar:hover{background:var(--cor-realce);color:var(--cor-texto)}
+
+/* leitor */
+.cabeca-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-4) var(--esp-5) var(--esp-2)}
+.titulo-capitulo{font-family:var(--fonte-titulo);font-size:var(--texto-gg);font-weight:var(--peso-titulo);line-height:1.1;display:inline-flex;align-items:center;gap:var(--esp-2);padding:var(--esp-1) var(--esp-2) var(--esp-1) 0;border-radius:var(--raio-m);text-align:left;margin:0}
+.titulo-capitulo:hover{color:var(--cor-acento)}
+.titulo-capitulo .icone{width:var(--icone-g);height:var(--icone-g);color:var(--cor-suave)}
+.texto-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-6);font-family:var(--fonte-texto);font-size:var(--letra);line-height:var(--altura-linha-texto);touch-action:pan-y}
+.versiculos{list-style:none;margin:0;padding:0}
+.versiculo{display:grid;grid-template-columns:var(--coluna-numero) 1fr;align-items:baseline;margin:0 0 .7em}
+.versiculo-numero{justify-self:start;font-size:.68em;font-weight:var(--peso-forte);color:var(--cor-acento);background:var(--cor-realce);border-radius:var(--raio-total);min-width:1.9em;text-align:center;padding:.1em .4em;font-variant-numeric:tabular-nums}
+.versiculo-texto em{font-style:italic}
+.navegacao-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-12);display:grid;grid-template-columns:1fr 1fr;gap:var(--esp-3)}
+.cartao-nav{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);padding:var(--esp-3) var(--esp-4);min-height:var(--altura-cartao-nav);display:flex;flex-direction:column;justify-content:center;gap:2px;text-align:left}
+.cartao-nav--seguinte{text-align:right;align-items:flex-end}
+.cartao-nav:hover{border-color:var(--cor-acento)}
+.cartao-nav small{color:var(--cor-suave);font-size:var(--texto-p)}
+.cartao-nav strong{font-size:var(--texto-g)}
+.cartao-nav:disabled{opacity:.45;cursor:default;border-color:var(--cor-borda)}
+
+/* painel de aparência */
+.painel-aparencia{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-4);display:grid;gap:var(--esp-4);width:min(var(--largura-painel),calc(100vw - 2 * var(--esp-3)))}
+.painel-aparencia h2{font-size:var(--texto-m);margin:0}
+.painel-linha{display:grid;gap:var(--esp-2)}
+.painel-rotulo{font-size:var(--texto-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.controle-letra{display:grid;grid-template-columns:var(--alvo-toque) 1fr var(--alvo-toque);align-items:center;border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:2px}
+.controle-letra .botao-icone{border-radius:var(--raio-total);color:var(--cor-texto)}
+.controle-letra output{text-align:center;font-weight:var(--peso-forte)}
+.seletor-tema{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--esp-1);border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:3px}
+.opcao-tema{min-height:calc(var(--alvo-toque) - 4px);border-radius:var(--raio-total);font-weight:var(--peso-forte);color:var(--cor-suave)}
+.opcao-tema[aria-pressed="true"]{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.opcao-tema:not([aria-pressed="true"]):hover{background:var(--cor-realce);color:var(--cor-texto)}
+.ancora-painel{position:relative}
+.ancora-painel .painel-aparencia{position:absolute;right:0;top:calc(100% + var(--esp-2));z-index:2}
+
+/* escolha de livro */
+.tela-escolha{max-width:var(--largura-tela);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
+.titulo-tela{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);margin:var(--esp-2) 0 var(--esp-4);line-height:1.15;text-wrap:balance}
+.grupo-livros{margin:0 0 var(--esp-8)}
+.grupo-livros h2{font-size:var(--texto-p);text-transform:uppercase;letter-spacing:.08em;color:var(--cor-suave);margin:0 0 var(--esp-3);display:flex;gap:var(--esp-2);align-items:baseline}
+.grupo-livros h2 span{font-weight:var(--peso-normal);letter-spacing:0;text-transform:none}
+.lista-livros{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--coluna-livro),1fr));gap:var(--esp-2)}
+.item-livro{width:100%;min-height:var(--alvo-toque);display:flex;align-items:center;justify-content:space-between;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);text-align:left;font-size:var(--texto-m)}
+.item-livro small{color:var(--cor-suave);font-size:var(--texto-p);font-variant-numeric:tabular-nums}
+.item-livro:hover{border-color:var(--cor-acento)}
+.item-livro[aria-current="true"]{border-color:var(--cor-acento);box-shadow:inset 0 0 0 1px var(--cor-acento)}
+
+/* grade de capítulos */
+.cabeca-grade{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--esp-3);margin:var(--esp-2) 0 var(--esp-4)}
+.cabeca-grade .titulo-tela{margin:0}
+.grade-capitulos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--celula-capitulo),1fr));gap:var(--esp-2)}
+.botao-capitulo{width:100%;aspect-ratio:1;min-height:var(--alvo-toque);display:grid;place-items:center;border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);font-weight:var(--peso-forte);font-variant-numeric:tabular-nums}
+.botao-capitulo:hover{border-color:var(--cor-acento);color:var(--cor-acento)}
+.botao-capitulo[aria-current="true"]{background:var(--cor-acento);color:var(--cor-acento-texto);border-color:var(--cor-acento)}
+
+/* avisos */
+.aviso{display:flex;gap:var(--esp-3);align-items:flex-start;padding:var(--esp-3) var(--esp-4);border-radius:var(--raio-m);background:var(--cor-aviso-fundo);color:var(--cor-texto)}
+.aviso p{margin:0}
+.aviso--erro{background:var(--cor-erro-fundo);color:var(--cor-erro)}
+.aviso .icone{margin-top:1px}
+.convite-instalacao{position:fixed;left:50%;transform:translateX(-50%);bottom:max(var(--esp-3),env(safe-area-inset-bottom));width:min(var(--largura-aviso),calc(100% - 2 * var(--esp-3)));display:flex;align-items:center;gap:var(--esp-3);background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-3) var(--esp-2) var(--esp-3) var(--esp-4)}
+.convite-instalacao p{margin:0;flex:1;font-size:var(--texto-m)}
+.convite-instalacao--estatico{position:static;transform:none;width:100%;max-width:var(--largura-aviso)}
+
+/* estados */
+.estado{display:grid;justify-items:center;text-align:center;gap:var(--esp-3);padding:var(--esp-8) var(--esp-5);max-width:var(--largura-estado);margin:0 auto}
+.estado .icone{width:var(--icone-gg);height:var(--icone-gg);color:var(--cor-acento)}
+.estado h2{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);margin:0}
+.estado p{margin:0;color:var(--cor-suave)}
+.esqueleto{display:grid;gap:var(--esp-3);max-width:var(--largura-leitura);width:100%}
+.esqueleto span{display:block;height:1em;border-radius:var(--raio-p);background:var(--cor-realce);animation:pulso 1.4s ease-in-out infinite}
+.esqueleto span:nth-child(3n){width:70%} .esqueleto span:nth-child(3n+1){width:92%}
+@keyframes pulso{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.esqueleto span{animation:none}}
+
+/* sobre */
+.texto-sobre{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
+.texto-sobre h2{font-size:var(--texto-g);margin:var(--esp-6) 0 var(--esp-2)}
+.texto-sobre p{margin:0 0 var(--esp-3);line-height:var(--altura-linha-texto)}
+</style>
+</head>
+<body>
+<header class="barra-topo barra-topo--larga">
+  <button class="botao-voltar"><svg class="icone-p" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Salmos 27</button>
+  <button class="botao-icone" aria-label="Sobre o MinhaJornada"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+</header>
+<main class="tela-escolha">
+<h1 class="titulo-tela">Escolha o livro</h1>
+<section class="grupo-livros" aria-labelledby="at"><h2 id="at">Antigo Testamento <span>39 livros</span></h2>
+<ul class="lista-livros">
+<li><button class="item-livro">Gênesis <small>50</small></button></li>
+<li><button class="item-livro">Êxodo <small>40</small></button></li>
+<li><button class="item-livro">Levítico <small>27</small></button></li>
+<li><button class="item-livro">Números <small>36</small></button></li>
+<li><button class="item-livro">Deuteronômio <small>34</small></button></li>
+<li><button class="item-livro">Josué <small>24</small></button></li>
+<li><button class="item-livro">Juízes <small>21</small></button></li>
+<li><button class="item-livro">Rute <small>4</small></button></li>
+<li><button class="item-livro">1 Samuel <small>31</small></button></li>
+<li><button class="item-livro">2 Samuel <small>24</small></button></li>
+<li><button class="item-livro">1 Reis <small>22</small></button></li>
+<li><button class="item-livro">2 Reis <small>25</small></button></li>
+<li><button class="item-livro">1 Crônicas <small>29</small></button></li>
+<li><button class="item-livro">2 Crônicas <small>36</small></button></li>
+<li><button class="item-livro">Esdras <small>10</small></button></li>
+<li><button class="item-livro">Neemias <small>13</small></button></li>
+<li><button class="item-livro">Ester <small>10</small></button></li>
+<li><button class="item-livro">Jó <small>42</small></button></li>
+<li><button class="item-livro" aria-current="true">Salmos <small>150</small></button></li>
+<li><button class="item-livro">Provérbios <small>31</small></button></li>
+<li><button class="item-livro">Eclesiastes <small>12</small></button></li>
+<li><button class="item-livro">Cânticos <small>8</small></button></li>
+<li><button class="item-livro">Isaías <small>66</small></button></li>
+<li><button class="item-livro">Jeremias <small>52</small></button></li>
+<li><button class="item-livro">Lamentações <small>5</small></button></li>
+<li><button class="item-livro">Ezequiel <small>48</small></button></li>
+<li><button class="item-livro">Daniel <small>12</small></button></li>
+<li><button class="item-livro">Oseias <small>14</small></button></li>
+<li><button class="item-livro">Joel <small>3</small></button></li>
+<li><button class="item-livro">Amós <small>9</small></button></li>
+<li><button class="item-livro">Obadias <small>1</small></button></li>
+<li><button class="item-livro">Jonas <small>4</small></button></li>
+<li><button class="item-livro">Miqueias <small>7</small></button></li>
+<li><button class="item-livro">Naum <small>3</small></button></li>
+<li><button class="item-livro">Habacuque <small>3</small></button></li>
+<li><button class="item-livro">Sofonias <small>3</small></button></li>
+<li><button class="item-livro">Ageu <small>2</small></button></li>
+<li><button class="item-livro">Zacarias <small>14</small></button></li>
+<li><button class="item-livro">Malaquias <small>4</small></button></li>
+</ul></section>
+<section class="grupo-livros" aria-labelledby="nt"><h2 id="nt">Novo Testamento <span>27 livros</span></h2>
+<ul class="lista-livros">
+<li><button class="item-livro">Mateus <small>28</small></button></li>
+<li><button class="item-livro">Marcos <small>16</small></button></li>
+<li><button class="item-livro">Lucas <small>24</small></button></li>
+<li><button class="item-livro">João <small>21</small></button></li>
+<li><button class="item-livro">Atos <small>28</small></button></li>
+<li><button class="item-livro">Romanos <small>16</small></button></li>
+<li><button class="item-livro">1 Coríntios <small>16</small></button></li>
+<li><button class="item-livro">2 Coríntios <small>13</small></button></li>
+<li><button class="item-livro">Gálatas <small>6</small></button></li>
+<li><button class="item-livro">Efésios <small>6</small></button></li>
+<li><button class="item-livro">Filipenses <small>4</small></button></li>
+<li><button class="item-livro">Colossenses <small>4</small></button></li>
+<li><button class="item-livro">1 Tessalonicenses <small>5</small></button></li>
+<li><button class="item-livro">2 Tessalonicenses <small>3</small></button></li>
+<li><button class="item-livro">1 Timóteo <small>6</small></button></li>
+<li><button class="item-livro">2 Timóteo <small>4</small></button></li>
+<li><button class="item-livro">Tito <small>3</small></button></li>
+<li><button class="item-livro">Filemom <small>1</small></button></li>
+<li><button class="item-livro">Hebreus <small>13</small></button></li>
+<li><button class="item-livro">Tiago <small>5</small></button></li>
+<li><button class="item-livro">1 Pedro <small>5</small></button></li>
+<li><button class="item-livro">2 Pedro <small>3</small></button></li>
+<li><button class="item-livro">1 João <small>5</small></button></li>
+<li><button class="item-livro">2 João <small>1</small></button></li>
+<li><button class="item-livro">3 João <small>1</small></button></li>
+<li><button class="item-livro">Judas <small>1</small></button></li>
+<li><button class="item-livro">Apocalipse <small>22</small></button></li>
+</ul></section>
+</main>
+<script>
+(function () {
+  var r = document.documentElement, temas = ['claro', 'escuro', 'sepia'];
+  var h = location.hash.replace('#', '');
+  if (temas.indexOf(h) >= 0) r.setAttribute('data-tema', h);
+  document.querySelectorAll('.opcao-tema').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.dataset.tema === (r.getAttribute('data-tema') || 'claro')));
+    b.addEventListener('click', function () {
+      r.setAttribute('data-tema', b.dataset.tema);
+      document.querySelectorAll('.opcao-tema').forEach(function (o) { o.setAttribute('aria-pressed', String(o.dataset.tema === b.dataset.tema)); });
+    });
+  });
+  var menos = document.querySelector('[data-acao=menos]'), mais = document.querySelector('[data-acao=mais]'), saida = document.querySelector('.controle-letra output');
+  function letra(d) {
+    var n = Math.min(5, Math.max(1, (+r.getAttribute('data-letra') || 3) + d));
+    r.setAttribute('data-letra', n);
+    if (menos) menos.disabled = n === 1;
+    if (mais) mais.disabled = n === 5;
+    if (saida) saida.textContent = 'Letra ' + n + ' de 5';
+  }
+  if (menos) { menos.onclick = function () { letra(-1); }; mais.onclick = function () { letra(1); }; letra(0); }
+  var abre = document.querySelector('[data-acao=aparencia]'), painel = document.getElementById('painel-aparencia');
+  if (abre && painel) abre.onclick = function () { var v = painel.hidden; painel.hidden = !v; abre.setAttribute('aria-expanded', String(v)); };
+})();
+</script>
+</body>
+</html>

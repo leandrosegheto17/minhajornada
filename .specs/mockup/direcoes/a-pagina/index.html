@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direção A: Página impressa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Página impressa: coluna estreita como livro, serifa no texto, cromo mínimo */
+:root{--fonte-texto:"Literata",Georgia,serif;--fonte-ui:"Source Sans 3",system-ui,sans-serif;
+ --letra-1:16px;--letra-2:18px;--letra-3:20px;--letra-4:23px;--letra-5:26px;--col-num:2.2em;--raio:8px}
+html[data-tema=claro]{--fundo:#FBFBF8;--texto:#1D2430;--suave:#5A6372;--acento:#1F4E79;--borda:#E2E3DE;--realce:#EEF0EC;color-scheme:light}
+html[data-tema=escuro]{--fundo:#14181F;--texto:#E3E6EA;--suave:#9AA3AF;--acento:#8DB8E8;--borda:#2A303A;--realce:#1E242D;color-scheme:dark}
+html[data-tema=sepia]{--fundo:#F3EAD8;--texto:#3A2E22;--suave:#6B5A47;--acento:#6A3F1D;--borda:#E0D3BA;--realce:#EADFC8;color-scheme:light}
+.barra-leitor{position:sticky;top:0;background:var(--fundo);border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:space-between;padding:4px 12px;gap:8px}
+.titulo-capitulo{font-family:var(--fonte-texto);font-size:20px;font-weight:600;display:flex;align-items:center;gap:4px;min-height:44px;padding:0 8px;border-radius:var(--raio)}
+.titulo-capitulo:hover{background:var(--realce)}
+.titulo-capitulo svg{color:var(--suave)}
+.texto-capitulo{max-width:36em;margin:0 auto;padding:40px 20px 24px;font-family:var(--fonte-texto);line-height:1.7}
+.versiculo{margin:0 0 .55em}
+.versiculo-numero{font-family:var(--fonte-ui);font-size:.62em;color:var(--suave);text-align:right;padding-right:.9em;font-variant-numeric:tabular-nums;font-weight:600}
+.navegacao-capitulo{max-width:720px;margin:0 auto;padding:8px 20px 48px;display:flex;justify-content:space-between;border-top:1px solid var(--borda)}
+.botao-nav{display:flex;align-items:center;gap:6px;min-height:48px;padding:0 12px;border-radius:var(--raio);color:var(--acento);font-weight:600;font-size:17px}
+.botao-nav:hover{background:var(--realce)} .botao-nav svg{width:22px;height:22px}
+@media (min-width:900px){.barra-leitor{padding:8px 32px}.texto-capitulo{padding-top:64px}}
+
+*{box-sizing:border-box} html,body{margin:0}
+body{background:var(--fundo);color:var(--texto);font-family:var(--fonte-ui);-webkit-text-size-adjust:100%;min-height:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:3px solid var(--acento);outline-offset:2px}
+.acoes-leitor{display:flex;gap:2px}
+.botao-icone{width:44px;height:44px;display:inline-grid;place-items:center;border-radius:var(--raio);color:var(--suave)}
+.botao-icone:hover{color:var(--texto);background:var(--realce)}
+.botao-icone:disabled{opacity:.35;cursor:default;background:none}
+.botao-icone svg{width:24px;height:24px}
+.icone-p{width:20px;height:20px}
+.versiculos{list-style:none;margin:0;padding:0}
+.versiculo{display:grid;grid-template-columns:var(--col-num) 1fr;align-items:baseline}
+.versiculo-texto em{font-style:italic}
+html[data-letra="1"]{--letra:var(--letra-1)} html[data-letra="2"]{--letra:var(--letra-2)} html[data-letra="3"]{--letra:var(--letra-3)}
+html[data-letra="4"]{--letra:var(--letra-4)} html[data-letra="5"]{--letra:var(--letra-5)}
+.texto-capitulo{font-size:var(--letra)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="barra-leitor">
+  <button class="titulo-capitulo" aria-label="Salmos 27, escolher capítulo">Salmos 27 <svg viewBox="0 0 24 24" aria-hidden="true" class="icone-p"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <div class="acoes-leitor">
+  <button class="botao-icone" data-acao="menos" aria-label="Diminuir letra"><svg viewBox="0 0 24 24" aria-hidden="true"><text x="2" y="17" font-size="13" font-weight="700" fill="currentColor">A</text><path d="M14 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  <button class="botao-icone" data-acao="mais" aria-label="Aumentar letra"><svg viewBox="0 0 24 24" aria-hidden="true"><text x="0" y="18" font-size="17" font-weight="700" fill="currentColor">A</text><path d="M14 12h8M18 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  <button class="botao-icone" data-acao="tema" aria-label="Trocar tema"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg></button>
+  <button class="botao-icone" aria-label="Sobre o MinhaJornada"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+</div>
+</header>
+<main class="texto-capitulo"><ol class="versiculos">
+<li class="versiculo"><span class="versiculo-numero">1</span><span class="versiculo-texto">Salmo de Davi: O SENHOR é minha luz e minha salvação; a quem temerei? O SENHOR é a força da minha vida; de quem terei medo?</span></li>
+<li class="versiculo"><span class="versiculo-numero">2</span><span class="versiculo-texto">Quando os maus chegaram perto de mim, meus adversários e meus inimigos contra mim, para devorarem minha carne; eles mesmos tropeçaram e caíram.</span></li>
+<li class="versiculo"><span class="versiculo-numero">3</span><span class="versiculo-texto">Ainda que um exército me cercasse, eu não temeria; ainda que uma guerra se levantasse contra mim, nisto mantenho confiança.</span></li>
+<li class="versiculo"><span class="versiculo-numero">4</span><span class="versiculo-texto">Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei: que eu possa morar na casa do SENHOR todos os dias de minha vida, para ver a beleza do SENHOR, e consultá-lo em seu Templo.</span></li>
+<li class="versiculo"><span class="versiculo-numero">5</span><span class="versiculo-texto">Porque no dia mal ele me esconderá em seu abrigo; ele me encobrirá no oculto de sua tenda; <em>e</em> me porá sobre as rochas.</span></li>
+<li class="versiculo"><span class="versiculo-numero">6</span><span class="versiculo-texto">E minha cabeça será exaltada acima de meus inimigos, que estão ao redor de mim; e eu sacrificarei na tenda dele sacrifícios com alta voz; cantarei e louvarei ao SENHOR.</span></li>
+<li class="versiculo"><span class="versiculo-numero">7</span><span class="versiculo-texto">Ouve, SENHOR, minha voz, <em>quando</em> eu clamo; tem piedade de mim, e responde-me.</span></li>
+<li class="versiculo"><span class="versiculo-numero">8</span><span class="versiculo-texto">Ele diz a ti, meu coração: Buscai a minha face.Eu busco a tua face, SENHOR.</span></li>
+<li class="versiculo"><span class="versiculo-numero">9</span><span class="versiculo-texto">Não escondas de mim a tua face, nem rejeites a teu servo com ira; tu tens sido meu socorro; não me deixes, nem me desampares, ó Deus de minha salvação.</span></li>
+<li class="versiculo"><span class="versiculo-numero">10</span><span class="versiculo-texto">Porque meu pai e minha mãe me abandonaram, mas o SENHOR me recolherá.</span></li>
+<li class="versiculo"><span class="versiculo-numero">11</span><span class="versiculo-texto">Ensina-me, SENHOR, o teu caminho; e guia-me pela via correta, por causa dos meus inimigos.</span></li>
+<li class="versiculo"><span class="versiculo-numero">12</span><span class="versiculo-texto">Não me entregues à vontade dos meus adversários, porque se levantaram contra mim falsas testemunhas, e também ao que sopra violência.</span></li>
+<li class="versiculo"><span class="versiculo-numero">13</span><span class="versiculo-texto">Se eu não tivesse crido que veria a bondade do SENHOR na terra dos viventes, <em>certamente já teria perecido</em> .</span></li>
+<li class="versiculo"><span class="versiculo-numero">14</span><span class="versiculo-texto">Espera no SENHOR, esforça-te, e ele fortalecerá o teu coração; espera pois ao SENHOR.</span></li>
+</ol></main>
+<nav class="navegacao-capitulo" aria-label="Capítulos">
+  <button class="botao-nav" aria-label="Capítulo anterior, Salmos 26"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Salmos 26</button>
+  <button class="botao-nav" aria-label="Capítulo seguinte, Salmos 28">Salmos 28 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</nav>
+<script>
+(function () {
+  var r = document.documentElement, temas = ['claro', 'escuro', 'sepia'];
+  var menos = document.querySelector('[data-acao=menos]'), mais = document.querySelector('[data-acao=mais]');
+  function letra(d) {
+    var n = Math.min(5, Math.max(1, (+r.dataset.letra || 3) + d));
+    r.dataset.letra = n; menos.disabled = n === 1; mais.disabled = n === 5;
+  }
+  menos.onclick = function () { letra(-1); };
+  mais.onclick = function () { letra(1); };
+  document.querySelector('[data-acao=tema]').onclick = function () {
+    r.dataset.tema = temas[(temas.indexOf(r.dataset.tema) + 1) % 3];
+  };
+  var h = location.hash.replace('#', '');
+  if (temas.indexOf(h) >= 0) r.dataset.tema = h;
+  letra(0);
+})();
+</script>
+</body>
+</html>

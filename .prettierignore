@@ -1,0 +1,12 @@
+.specs/
+.claude/
+.biblia/
+pnpm-lock.yaml
+dist
+coverage
+.wrangler
+test-results
+playwright-report
+src/estilo/tokens.css
+src/biblia/indice.gerado.json
+public/livros

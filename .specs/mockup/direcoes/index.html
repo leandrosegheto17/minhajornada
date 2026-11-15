@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MinhaJornada: direções do leitor</title>
+<style>
+:root{--fundo:#F2F3F5;--superficie:#FFFFFF;--texto:#1A1D23;--suave:#5B616E;--acento:#1F4E79;--borda:#DADDE3;
+ --fonte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; /* galeria: cada direção numa faixa, PC à esquerda e celular à direita */}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#8DB8E8;--borda:#2C313A;color-scheme:dark}}
+:root[data-theme="dark"]{--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#8DB8E8;--borda:#2C313A;color-scheme:dark}
+*{box-sizing:border-box} body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--fonte);line-height:1.5}
+header{max-width:1240px;margin:0 auto;padding:32px 20px 8px}
+h1{font-size:28px;margin:0 0 8px;text-wrap:balance} header p{margin:0 0 4px;color:var(--suave);max-width:70ch}
+section{max-width:1240px;margin:24px auto;padding:20px;background:var(--superficie);border:1px solid var(--borda);border-radius:14px}
+h2{font-size:20px;margin:0 0 4px} .intencao{margin:0 0 6px;color:var(--suave)}
+.temas{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+.temas a{font-size:14px;color:var(--acento);text-decoration:none;border:1px solid var(--borda);border-radius:999px;padding:6px 12px}
+.temas a:hover{border-color:var(--acento)}
+.vistas{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.vista{display:flex;flex-direction:column;gap:6px} .vista span{font-size:13px;color:var(--suave)}
+.pc{width:720px;height:450px;overflow:hidden;border:1px solid var(--borda);border-radius:10px;max-width:100%}
+.pc iframe{width:1440px;height:900px;border:0;transform:scale(.5);transform-origin:0 0}
+.cel{width:390px;height:720px;border:1px solid var(--borda);border-radius:28px;overflow:hidden;max-width:100%}
+.cel iframe{width:390px;height:720px;border:0}
+footer{max-width:1240px;margin:0 auto;padding:8px 20px 40px;color:var(--suave);font-size:14px}
+</style>
+</head>
+<body>
+<header>
+<h1>Leitor: três direções visuais</h1>
+<p>A mesma tela (Salmos 27, com os acréscimos do tradutor em itálico) em três aparências. Os botões de letra e de tema funcionam dentro de cada vista; os botões abaixo de cada título abrem a direção num tema específico, em tela cheia.</p>
+<p>Todas passam no contraste mínimo de 4,5:1 nos três temas. Dá para misturar, por exemplo: cores da A com a barra inferior da B.</p>
+</header>
+<section>
+<h2>A · Página impressa</h2>
+<p class="intencao">Sóbria e de livro: coluna estreita, serifa Literata no texto, título e ajustes numa barra fina no topo, anterior e seguinte ao fim do capítulo.</p>
+<div class="temas"><a href="a-pagina/index.html#claro">Claro</a> <a href="a-pagina/index.html#escuro">Escuro</a> <a href="a-pagina/index.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="a-pagina/index.html" title="A · Página impressa no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="a-pagina/index.html" title="A · Página impressa no celular" loading="lazy"></iframe></div></div>
+</div>
+</section>
+<section>
+<h2>B · Noite focada</h2>
+<p class="intencao">Só o texto na tela: serifa Source Serif, números no tom de destaque, navegação numa barra flutuante embaixo, ao alcance do polegar.</p>
+<div class="temas"><a href="b-noite/index.html#claro">Claro</a> <a href="b-noite/index.html#escuro">Escuro</a> <a href="b-noite/index.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="b-noite/index.html" title="B · Noite focada no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="b-noite/index.html" title="B · Noite focada no celular" loading="lazy"></iframe></div></div>
+</div>
+</section>
+<section>
+<h2>C · Leve e legível</h2>
+<p class="intencao">Contemporânea e arejada: Atkinson Hyperlegible no texto (feita para baixa visão), título grande em Fraunces, números em pílulas e cartões de navegação.</p>
+<div class="temas"><a href="c-leve/index.html#claro">Claro</a> <a href="c-leve/index.html#escuro">Escuro</a> <a href="c-leve/index.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="c-leve/index.html" title="C · Leve e legível no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="c-leve/index.html" title="C · Leve e legível no celular" loading="lazy"></iframe></div></div>
+</div>
+</section>
+<footer>Fontes do mockup vêm do Google Fonts; no app, os mesmos arquivos ficam no próprio site (nenhuma requisição a outro domínio, FUN-41).</footer>
+</body>
+</html>

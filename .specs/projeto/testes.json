@@ -1,4 +1,4 @@
 {
-  "dispensado": true,
-  "motivo": "projeto ainda sem código; trocar pelo comando da suíte quando a stack for escolhida (aprovado pelo usuário em 2026-11-14)"
+  "comando": "pnpm typecheck && pnpm test",
+  "observacao": "Suíte unitária (Vitest: projetos componentes e arquivos), reporter dot. O e2e (pnpm build && pnpm e2e) roda no CI e ao fim do lote de interface."
 }

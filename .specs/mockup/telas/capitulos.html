@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salmos · capítulos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cor-fundo);color:var(--cor-texto);font-family:var(--fonte-ui);font-size:var(--texto-m);line-height:var(--altura-linha-ui);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:var(--largura-foco) solid var(--cor-acento);outline-offset:2px}
+a{color:var(--cor-acento)}
+.icone{width:var(--icone-m);height:var(--icone-m);flex:none}
+.icone-p{width:var(--icone-p);height:var(--icone-p);flex:none}
+
+/* barra do topo */
+.barra-topo{display:flex;justify-content:space-between;align-items:center;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);max-width:var(--largura-leitura);margin:0 auto}
+.barra-topo--larga{max-width:var(--largura-tela)}
+.marca{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);color:var(--cor-acento);padding-left:var(--esp-2)}
+.grupo-acoes{display:flex;gap:var(--esp-1)}
+
+/* botões */
+.botao-icone{width:var(--alvo-toque);height:var(--alvo-toque);display:inline-grid;place-items:center;border-radius:var(--raio-p);color:var(--cor-suave)}
+.botao-icone:hover{color:var(--cor-texto);background:var(--cor-realce)}
+.botao-icone:disabled{opacity:.4;cursor:default;background:none;color:var(--cor-suave)}
+.botao-primario,.botao-secundario{min-height:var(--alvo-toque);display:inline-flex;align-items:center;justify-content:center;gap:var(--esp-2);padding:0 var(--esp-5);border-radius:var(--raio-total);font-weight:var(--peso-forte)}
+.botao-primario{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.botao-primario:hover{filter:brightness(1.08)}
+.botao-secundario{border:1px solid var(--cor-contorno);color:var(--cor-texto)}
+.botao-secundario:hover{background:var(--cor-realce)}
+.botao-primario:disabled,.botao-secundario:disabled{opacity:.4;cursor:default;filter:none;background-clip:padding-box}
+.botao-voltar{display:inline-flex;align-items:center;gap:var(--esp-1);min-height:var(--alvo-toque);padding:0 var(--esp-3) 0 var(--esp-1);border-radius:var(--raio-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.botao-voltar:hover{background:var(--cor-realce);color:var(--cor-texto)}
+
+/* leitor */
+.cabeca-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-4) var(--esp-5) var(--esp-2)}
+.titulo-capitulo{font-family:var(--fonte-titulo);font-size:var(--texto-gg);font-weight:var(--peso-titulo);line-height:1.1;display:inline-flex;align-items:center;gap:var(--esp-2);padding:var(--esp-1) var(--esp-2) var(--esp-1) 0;border-radius:var(--raio-m);text-align:left;margin:0}
+.titulo-capitulo:hover{color:var(--cor-acento)}
+.titulo-capitulo .icone{width:var(--icone-g);height:var(--icone-g);color:var(--cor-suave)}
+.texto-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-6);font-family:var(--fonte-texto);font-size:var(--letra);line-height:var(--altura-linha-texto);touch-action:pan-y}
+.versiculos{list-style:none;margin:0;padding:0}
+.versiculo{display:grid;grid-template-columns:var(--coluna-numero) 1fr;align-items:baseline;margin:0 0 .7em}
+.versiculo-numero{justify-self:start;font-size:.68em;font-weight:var(--peso-forte);color:var(--cor-acento);background:var(--cor-realce);border-radius:var(--raio-total);min-width:1.9em;text-align:center;padding:.1em .4em;font-variant-numeric:tabular-nums}
+.versiculo-texto em{font-style:italic}
+.navegacao-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-12);display:grid;grid-template-columns:1fr 1fr;gap:var(--esp-3)}
+.cartao-nav{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);padding:var(--esp-3) var(--esp-4);min-height:var(--altura-cartao-nav);display:flex;flex-direction:column;justify-content:center;gap:2px;text-align:left}
+.cartao-nav--seguinte{text-align:right;align-items:flex-end}
+.cartao-nav:hover{border-color:var(--cor-acento)}
+.cartao-nav small{color:var(--cor-suave);font-size:var(--texto-p)}
+.cartao-nav strong{font-size:var(--texto-g)}
+.cartao-nav:disabled{opacity:.45;cursor:default;border-color:var(--cor-borda)}
+
+/* painel de aparência */
+.painel-aparencia{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-4);display:grid;gap:var(--esp-4);width:min(var(--largura-painel),calc(100vw - 2 * var(--esp-3)))}
+.painel-aparencia h2{font-size:var(--texto-m);margin:0}
+.painel-linha{display:grid;gap:var(--esp-2)}
+.painel-rotulo{font-size:var(--texto-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.controle-letra{display:grid;grid-template-columns:var(--alvo-toque) 1fr var(--alvo-toque);align-items:center;border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:2px}
+.controle-letra .botao-icone{border-radius:var(--raio-total);color:var(--cor-texto)}
+.controle-letra output{text-align:center;font-weight:var(--peso-forte)}
+.seletor-tema{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--esp-1);border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:3px}
+.opcao-tema{min-height:calc(var(--alvo-toque) - 4px);border-radius:var(--raio-total);font-weight:var(--peso-forte);color:var(--cor-suave)}
+.opcao-tema[aria-pressed="true"]{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.opcao-tema:not([aria-pressed="true"]):hover{background:var(--cor-realce);color:var(--cor-texto)}
+.ancora-painel{position:relative}
+.ancora-painel .painel-aparencia{position:absolute;right:0;top:calc(100% + var(--esp-2));z-index:2}
+
+/* escolha de livro */
+.tela-escolha{max-width:var(--largura-tela);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
+.titulo-tela{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);margin:var(--esp-2) 0 var(--esp-4);line-height:1.15;text-wrap:balance}
+.grupo-livros{margin:0 0 var(--esp-8)}
+.grupo-livros h2{font-size:var(--texto-p);text-transform:uppercase;letter-spacing:.08em;color:var(--cor-suave);margin:0 0 var(--esp-3);display:flex;gap:var(--esp-2);align-items:baseline}
+.grupo-livros h2 span{font-weight:var(--peso-normal);letter-spacing:0;text-transform:none}
+.lista-livros{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--coluna-livro),1fr));gap:var(--esp-2)}
+.item-livro{width:100%;min-height:var(--alvo-toque);display:flex;align-items:center;justify-content:space-between;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);text-align:left;font-size:var(--texto-m)}
+.item-livro small{color:var(--cor-suave);font-size:var(--texto-p);font-variant-numeric:tabular-nums}
+.item-livro:hover{border-color:var(--cor-acento)}
+.item-livro[aria-current="true"]{border-color:var(--cor-acento);box-shadow:inset 0 0 0 1px var(--cor-acento)}
+
+/* grade de capítulos */
+.cabeca-grade{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--esp-3);margin:var(--esp-2) 0 var(--esp-4)}
+.cabeca-grade .titulo-tela{margin:0}
+.grade-capitulos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--celula-capitulo),1fr));gap:var(--esp-2)}
+.botao-capitulo{width:100%;aspect-ratio:1;min-height:var(--alvo-toque);display:grid;place-items:center;border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);font-weight:var(--peso-forte);font-variant-numeric:tabular-nums}
+.botao-capitulo:hover{border-color:var(--cor-acento);color:var(--cor-acento)}
+.botao-capitulo[aria-current="true"]{background:var(--cor-acento);color:var(--cor-acento-texto);border-color:var(--cor-acento)}
+
+/* avisos */
+.aviso{display:flex;gap:var(--esp-3);align-items:flex-start;padding:var(--esp-3) var(--esp-4);border-radius:var(--raio-m);background:var(--cor-aviso-fundo);color:var(--cor-texto)}
+.aviso p{margin:0}
+.aviso--erro{background:var(--cor-erro-fundo);color:var(--cor-erro)}
+.aviso .icone{margin-top:1px}
+.convite-instalacao{position:fixed;left:50%;transform:translateX(-50%);bottom:max(var(--esp-3),env(safe-area-inset-bottom));width:min(var(--largura-aviso),calc(100% - 2 * var(--esp-3)));display:flex;align-items:center;gap:var(--esp-3);background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-3) var(--esp-2) var(--esp-3) var(--esp-4)}
+.convite-instalacao p{margin:0;flex:1;font-size:var(--texto-m)}
+.convite-instalacao--estatico{position:static;transform:none;width:100%;max-width:var(--largura-aviso)}
+
+/* estados */
+.estado{display:grid;justify-items:center;text-align:center;gap:var(--esp-3);padding:var(--esp-8) var(--esp-5);max-width:var(--largura-estado);margin:0 auto}
+.estado .icone{width:var(--icone-gg);height:var(--icone-gg);color:var(--cor-acento)}
+.estado h2{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);margin:0}
+.estado p{margin:0;color:var(--cor-suave)}
+.esqueleto{display:grid;gap:var(--esp-3);max-width:var(--largura-leitura);width:100%}
+.esqueleto span{display:block;height:1em;border-radius:var(--raio-p);background:var(--cor-realce);animation:pulso 1.4s ease-in-out infinite}
+.esqueleto span:nth-child(3n){width:70%} .esqueleto span:nth-child(3n+1){width:92%}
+@keyframes pulso{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.esqueleto span{animation:none}}
+
+/* sobre */
+.texto-sobre{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
+.texto-sobre h2{font-size:var(--texto-g);margin:var(--esp-6) 0 var(--esp-2)}
+.texto-sobre p{margin:0 0 var(--esp-3);line-height:var(--altura-linha-texto)}
+</style>
+</head>
+<body>
+<header class="barra-topo barra-topo--larga">
+  <button class="botao-voltar"><svg class="icone-p" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Voltar à leitura</button>
+  <button class="botao-icone" aria-label="Sobre o MinhaJornada"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+</header>
+<main class="tela-escolha">
+<div class="cabeca-grade">
+  <h1 class="titulo-tela">Salmos</h1>
+  <button class="botao-secundario"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Trocar livro</button>
+</div>
+<ol class="grade-capitulos" aria-label="Capítulos de Salmos">
+<li><button class="botao-capitulo" aria-label="Capítulo 1">1</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 2">2</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 3">3</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 4">4</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 5">5</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 6">6</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 7">7</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 8">8</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 9">9</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 10">10</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 11">11</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 12">12</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 13">13</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 14">14</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 15">15</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 16">16</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 17">17</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 18">18</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 19">19</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 20">20</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 21">21</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 22">22</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 23">23</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 24">24</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 25">25</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 26">26</button></li>
+<li><button class="botao-capitulo" aria-current="true" aria-label="Capítulo 27">27</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 28">28</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 29">29</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 30">30</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 31">31</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 32">32</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 33">33</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 34">34</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 35">35</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 36">36</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 37">37</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 38">38</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 39">39</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 40">40</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 41">41</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 42">42</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 43">43</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 44">44</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 45">45</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 46">46</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 47">47</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 48">48</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 49">49</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 50">50</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 51">51</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 52">52</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 53">53</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 54">54</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 55">55</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 56">56</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 57">57</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 58">58</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 59">59</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 60">60</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 61">61</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 62">62</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 63">63</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 64">64</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 65">65</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 66">66</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 67">67</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 68">68</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 69">69</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 70">70</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 71">71</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 72">72</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 73">73</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 74">74</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 75">75</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 76">76</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 77">77</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 78">78</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 79">79</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 80">80</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 81">81</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 82">82</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 83">83</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 84">84</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 85">85</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 86">86</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 87">87</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 88">88</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 89">89</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 90">90</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 91">91</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 92">92</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 93">93</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 94">94</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 95">95</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 96">96</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 97">97</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 98">98</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 99">99</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 100">100</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 101">101</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 102">102</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 103">103</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 104">104</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 105">105</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 106">106</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 107">107</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 108">108</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 109">109</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 110">110</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 111">111</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 112">112</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 113">113</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 114">114</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 115">115</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 116">116</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 117">117</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 118">118</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 119">119</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 120">120</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 121">121</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 122">122</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 123">123</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 124">124</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 125">125</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 126">126</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 127">127</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 128">128</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 129">129</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 130">130</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 131">131</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 132">132</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 133">133</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 134">134</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 135">135</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 136">136</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 137">137</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 138">138</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 139">139</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 140">140</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 141">141</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 142">142</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 143">143</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 144">144</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 145">145</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 146">146</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 147">147</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 148">148</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 149">149</button></li>
+<li><button class="botao-capitulo" aria-label="Capítulo 150">150</button></li>
+</ol>
+</main>
+<script>
+(function () {
+  var r = document.documentElement, temas = ['claro', 'escuro', 'sepia'];
+  var h = location.hash.replace('#', '');
+  if (temas.indexOf(h) >= 0) r.setAttribute('data-tema', h);
+  document.querySelectorAll('.opcao-tema').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.dataset.tema === (r.getAttribute('data-tema') || 'claro')));
+    b.addEventListener('click', function () {
+      r.setAttribute('data-tema', b.dataset.tema);
+      document.querySelectorAll('.opcao-tema').forEach(function (o) { o.setAttribute('aria-pressed', String(o.dataset.tema === b.dataset.tema)); });
+    });
+  });
+  var menos = document.querySelector('[data-acao=menos]'), mais = document.querySelector('[data-acao=mais]'), saida = document.querySelector('.controle-letra output');
+  function letra(d) {
+    var n = Math.min(5, Math.max(1, (+r.getAttribute('data-letra') || 3) + d));
+    r.setAttribute('data-letra', n);
+    if (menos) menos.disabled = n === 1;
+    if (mais) mais.disabled = n === 5;
+    if (saida) saida.textContent = 'Letra ' + n + ' de 5';
+  }
+  if (menos) { menos.onclick = function () { letra(-1); }; mais.onclick = function () { letra(1); }; letra(0); }
+  var abre = document.querySelector('[data-acao=aparencia]'), painel = document.getElementById('painel-aparencia');
+  if (abre && painel) abre.onclick = function () { var v = painel.hidden; painel.hidden = !v; abre.setAttribute('aria-expanded', String(v)); };
+})();
+</script>
+</body>
+</html>

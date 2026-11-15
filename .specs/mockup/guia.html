@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de estilo · MinhaJornada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cor-fundo);color:var(--cor-texto);font-family:var(--fonte-ui);font-size:var(--texto-m);line-height:var(--altura-linha-ui);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:var(--largura-foco) solid var(--cor-acento);outline-offset:2px}
+a{color:var(--cor-acento)}
+.icone{width:var(--icone-m);height:var(--icone-m);flex:none}
+.icone-p{width:var(--icone-p);height:var(--icone-p);flex:none}
+
+/* barra do topo */
+.barra-topo{display:flex;justify-content:space-between;align-items:center;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);max-width:var(--largura-leitura);margin:0 auto}
+.barra-topo--larga{max-width:var(--largura-tela)}
+.marca{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);color:var(--cor-acento);padding-left:var(--esp-2)}
+.grupo-acoes{display:flex;gap:var(--esp-1)}
+
+/* botões */
+.botao-icone{width:var(--alvo-toque);height:var(--alvo-toque);display:inline-grid;place-items:center;border-radius:var(--raio-p);color:var(--cor-suave)}
+.botao-icone:hover{color:var(--cor-texto);background:var(--cor-realce)}
+.botao-icone:disabled{opacity:.4;cursor:default;background:none;color:var(--cor-suave)}
+.botao-primario,.botao-secundario{min-height:var(--alvo-toque);display:inline-flex;align-items:center;justify-content:center;gap:var(--esp-2);padding:0 var(--esp-5);border-radius:var(--raio-total);font-weight:var(--peso-forte)}
+.botao-primario{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.botao-primario:hover{filter:brightness(1.08)}
+.botao-secundario{border:1px solid var(--cor-contorno);color:var(--cor-texto)}
+.botao-secundario:hover{background:var(--cor-realce)}
+.botao-primario:disabled,.botao-secundario:disabled{opacity:.4;cursor:default;filter:none;background-clip:padding-box}
+.botao-voltar{display:inline-flex;align-items:center;gap:var(--esp-1);min-height:var(--alvo-toque);padding:0 var(--esp-3) 0 var(--esp-1);border-radius:var(--raio-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.botao-voltar:hover{background:var(--cor-realce);color:var(--cor-texto)}
+
+/* leitor */
+.cabeca-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-4) var(--esp-5) var(--esp-2)}
+.titulo-capitulo{font-family:var(--fonte-titulo);font-size:var(--texto-gg);font-weight:var(--peso-titulo);line-height:1.1;display:inline-flex;align-items:center;gap:var(--esp-2);padding:var(--esp-1) var(--esp-2) var(--esp-1) 0;border-radius:var(--raio-m);text-align:left;margin:0}
+.titulo-capitulo:hover{color:var(--cor-acento)}
+.titulo-capitulo .icone{width:var(--icone-g);height:var(--icone-g);color:var(--cor-suave)}
+.texto-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-6);font-family:var(--fonte-texto);font-size:var(--letra);line-height:var(--altura-linha-texto);touch-action:pan-y}
+.versiculos{list-style:none;margin:0;padding:0}
+.versiculo{display:grid;grid-template-columns:var(--coluna-numero) 1fr;align-items:baseline;margin:0 0 .7em}
+.versiculo-numero{justify-self:start;font-size:.68em;font-weight:var(--peso-forte);color:var(--cor-acento);background:var(--cor-realce);border-radius:var(--raio-total);min-width:1.9em;text-align:center;padding:.1em .4em;font-variant-numeric:tabular-nums}
+.versiculo-texto em{font-style:italic}
+.navegacao-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-12);display:grid;grid-template-columns:1fr 1fr;gap:var(--esp-3)}
+.cartao-nav{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);padding:var(--esp-3) var(--esp-4);min-height:var(--altura-cartao-nav);display:flex;flex-direction:column;justify-content:center;gap:2px;text-align:left}
+.cartao-nav--seguinte{text-align:right;align-items:flex-end}
+.cartao-nav:hover{border-color:var(--cor-acento)}
+.cartao-nav small{color:var(--cor-suave);font-size:var(--texto-p)}
+.cartao-nav strong{font-size:var(--texto-g)}
+.cartao-nav:disabled{opacity:.45;cursor:default;border-color:var(--cor-borda)}
+
+/* painel de aparência */
+.painel-aparencia{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-4);display:grid;gap:var(--esp-4);width:min(var(--largura-painel),calc(100vw - 2 * var(--esp-3)))}
+.painel-aparencia h2{font-size:var(--texto-m);margin:0}
+.painel-linha{display:grid;gap:var(--esp-2)}
+.painel-rotulo{font-size:var(--texto-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.controle-letra{display:grid;grid-template-columns:var(--alvo-toque) 1fr var(--alvo-toque);align-items:center;border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:2px}
+.controle-letra .botao-icone{border-radius:var(--raio-total);color:var(--cor-texto)}
+.controle-letra output{text-align:center;font-weight:var(--peso-forte)}
+.seletor-tema{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--esp-1);border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:3px}
+.opcao-tema{min-height:calc(var(--alvo-toque) - 4px);border-radius:var(--raio-total);font-weight:var(--peso-forte);color:var(--cor-suave)}
+.opcao-tema[aria-pressed="true"]{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.opcao-tema:not([aria-pressed="true"]):hover{background:var(--cor-realce);color:var(--cor-texto)}
+.ancora-painel{position:relative}
+.ancora-painel .painel-aparencia{position:absolute;right:0;top:calc(100% + var(--esp-2));z-index:2}
+
+/* escolha de livro */
+.tela-escolha{max-width:var(--largura-tela);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
+.titulo-tela{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);margin:var(--esp-2) 0 var(--esp-4);line-height:1.15;text-wrap:balance}
+.grupo-livros{margin:0 0 var(--esp-8)}
+.grupo-livros h2{font-size:var(--texto-p);text-transform:uppercase;letter-spacing:.08em;color:var(--cor-suave);margin:0 0 var(--esp-3);display:flex;gap:var(--esp-2);align-items:baseline}
+.grupo-livros h2 span{font-weight:var(--peso-normal);letter-spacing:0;text-transform:none}
+.lista-livros{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--coluna-livro),1fr));gap:var(--esp-2)}
+.item-livro{width:100%;min-height:var(--alvo-toque);display:flex;align-items:center;justify-content:space-between;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);text-align:left;font-size:var(--texto-m)}
+.item-livro small{color:var(--cor-suave);font-size:var(--texto-p);font-variant-numeric:tabular-nums}
+.item-livro:hover{border-color:var(--cor-acento)}
+.item-livro[aria-current="true"]{border-color:var(--cor-acento);box-shadow:inset 0 0 0 1px var(--cor-acento)}
+
+/* grade de capítulos */
+.cabeca-grade{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--esp-3);margin:var(--esp-2) 0 var(--esp-4)}
+.cabeca-grade .titulo-tela{margin:0}
+.grade-capitulos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--celula-capitulo),1fr));gap:var(--esp-2)}
+.botao-capitulo{width:100%;aspect-ratio:1;min-height:var(--alvo-toque);display:grid;place-items:center;border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);font-weight:var(--peso-forte);font-variant-numeric:tabular-nums}
+.botao-capitulo:hover{border-color:var(--cor-acento);color:var(--cor-acento)}
+.botao-capitulo[aria-current="true"]{background:var(--cor-acento);color:var(--cor-acento-texto);border-color:var(--cor-acento)}
+
+/* avisos */
+.aviso{display:flex;gap:var(--esp-3);align-items:flex-start;padding:var(--esp-3) var(--esp-4);border-radius:var(--raio-m);background:var(--cor-aviso-fundo);color:var(--cor-texto)}
+.aviso p{margin:0}
+.aviso--erro{background:var(--cor-erro-fundo);color:var(--cor-erro)}
+.aviso .icone{margin-top:1px}
+.convite-instalacao{position:fixed;left:50%;transform:translateX(-50%);bottom:max(var(--esp-3),env(safe-area-inset-bottom));width:min(var(--largura-aviso),calc(100% - 2 * var(--esp-3)));display:flex;align-items:center;gap:var(--esp-3);background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-3) var(--esp-2) var(--esp-3) var(--esp-4)}
+.convite-instalacao p{margin:0;flex:1;font-size:var(--texto-m)}
+.convite-instalacao--estatico{position:static;transform:none;width:100%;max-width:var(--largura-aviso)}
+
+/* estados */
+.estado{display:grid;justify-items:center;text-align:center;gap:var(--esp-3);padding:var(--esp-8) var(--esp-5);max-width:var(--largura-estado);margin:0 auto}
+.estado .icone{width:var(--icone-gg);height:var(--icone-gg);color:var(--cor-acento)}
+.estado h2{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);margin:0}
+.estado p{margin:0;color:var(--cor-suave)}
+.esqueleto{display:grid;gap:var(--esp-3);max-width:var(--largura-leitura);width:100%}
+.esqueleto span{display:block;height:1em;border-radius:var(--raio-p);background:var(--cor-realce);animation:pulso 1.4s ease-in-out infinite}
+.esqueleto span:nth-child(3n){width:70%} .esqueleto span:nth-child(3n+1){width:92%}
+@keyframes pulso{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.esqueleto span{animation:none}}
+
+/* sobre */
+.texto-sobre{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
+.texto-sobre h2{font-size:var(--texto-g);margin:var(--esp-6) 0 var(--esp-2)}
+.texto-sobre p{margin:0 0 var(--esp-3);line-height:var(--altura-linha-texto)}
+
+.guia{max-width:1100px;margin:0 auto;padding:var(--esp-6) var(--esp-5) var(--esp-12)}
+.guia > h1{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);margin:0 0 var(--esp-2)}
+.guia > p{color:var(--cor-suave);max-width:70ch;margin:0 0 var(--esp-4)}
+.guia section{border-top:1px solid var(--cor-borda);padding:var(--esp-6) 0}
+.guia section > h2{font-size:var(--texto-g);margin:0 0 var(--esp-1)}
+.guia section > p{color:var(--cor-suave);margin:0 0 var(--esp-4);max-width:70ch}
+.vitrine{display:flex;flex-wrap:wrap;gap:var(--esp-3);align-items:center}
+.vitrine--coluna{flex-direction:column;align-items:stretch;max-width:var(--largura-aviso)}
+.rotulo-amostra{font-size:var(--texto-p);color:var(--cor-suave);display:block;margin-bottom:var(--esp-1)}
+.caixa{border:1px dashed var(--cor-borda);border-radius:var(--raio-m);padding:var(--esp-4)}
+.paleta{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:var(--esp-2)}
+.paleta div{border:1px solid var(--cor-borda);border-radius:var(--raio-p);overflow:hidden;font-size:var(--texto-p)}
+.paleta i{display:block;height:44px}
+.paleta span{display:block;padding:var(--esp-1) var(--esp-2)}
+.escala-letra{display:grid;gap:var(--esp-2)}
+.escala-letra p{margin:0;font-family:var(--fonte-texto);line-height:var(--altura-linha-texto)}
+.escala-letra b{font-family:var(--fonte-ui);font-size:var(--texto-p);color:var(--cor-suave);display:inline-block;width:5.5em}
+table.contraste{border-collapse:collapse;width:100%;font-size:var(--texto-p)}
+.contraste th,.contraste td{border-bottom:1px solid var(--cor-borda);padding:var(--esp-2);text-align:left;vertical-align:middle}
+.contraste td{font-variant-numeric:tabular-nums;white-space:nowrap}
+.amostra-cor{display:inline-block;width:20px;height:20px;border-radius:4px;vertical-align:middle;margin-right:var(--esp-2);border:1px solid var(--cor-borda)}
+.tabela-rolagem{overflow-x:auto}
+.foco-demo{outline:var(--largura-foco) solid var(--cor-acento);outline-offset:2px}
+.amostra-cor[data-cor="texto-fundo-claro"]{background:#FFFFFF;box-shadow:inset 0 0 0 6px #FFFFFF,inset 0 0 0 20px #202124}
+.amostra-cor[data-cor="texto-fundo-escuro"]{background:#1B1A1F;box-shadow:inset 0 0 0 6px #1B1A1F,inset 0 0 0 20px #ECEAF0}
+.amostra-cor[data-cor="texto-fundo-sepia"]{background:#F6EEDC;box-shadow:inset 0 0 0 6px #F6EEDC,inset 0 0 0 20px #3B3024}
+.amostra-cor[data-cor="texto-superficie-claro"]{background:#F8F6F9;box-shadow:inset 0 0 0 6px #F8F6F9,inset 0 0 0 20px #202124}
+.amostra-cor[data-cor="texto-superficie-escuro"]{background:#232128;box-shadow:inset 0 0 0 6px #232128,inset 0 0 0 20px #ECEAF0}
+.amostra-cor[data-cor="texto-superficie-sepia"]{background:#F0E6CF;box-shadow:inset 0 0 0 6px #F0E6CF,inset 0 0 0 20px #3B3024}
+.amostra-cor[data-cor="suave-fundo-claro"]{background:#FFFFFF;box-shadow:inset 0 0 0 6px #FFFFFF,inset 0 0 0 20px #5F6368}
+.amostra-cor[data-cor="suave-fundo-escuro"]{background:#1B1A1F;box-shadow:inset 0 0 0 6px #1B1A1F,inset 0 0 0 20px #A7A3B0}
+.amostra-cor[data-cor="suave-fundo-sepia"]{background:#F6EEDC;box-shadow:inset 0 0 0 6px #F6EEDC,inset 0 0 0 20px #6E5E49}
+.amostra-cor[data-cor="suave-superficie-claro"]{background:#F8F6F9;box-shadow:inset 0 0 0 6px #F8F6F9,inset 0 0 0 20px #5F6368}
+.amostra-cor[data-cor="suave-superficie-escuro"]{background:#232128;box-shadow:inset 0 0 0 6px #232128,inset 0 0 0 20px #A7A3B0}
+.amostra-cor[data-cor="suave-superficie-sepia"]{background:#F0E6CF;box-shadow:inset 0 0 0 6px #F0E6CF,inset 0 0 0 20px #6E5E49}
+.amostra-cor[data-cor="acento-fundo-claro"]{background:#FFFFFF;box-shadow:inset 0 0 0 6px #FFFFFF,inset 0 0 0 20px #9A3B5B}
+.amostra-cor[data-cor="acento-fundo-escuro"]{background:#1B1A1F;box-shadow:inset 0 0 0 6px #1B1A1F,inset 0 0 0 20px #E39AB5}
+.amostra-cor[data-cor="acento-fundo-sepia"]{background:#F6EEDC;box-shadow:inset 0 0 0 6px #F6EEDC,inset 0 0 0 20px #8A3552}
+.amostra-cor[data-cor="acento-realce-claro"]{background:#F4F1F5;box-shadow:inset 0 0 0 6px #F4F1F5,inset 0 0 0 20px #9A3B5B}
+.amostra-cor[data-cor="acento-realce-escuro"]{background:#2B2930;box-shadow:inset 0 0 0 6px #2B2930,inset 0 0 0 20px #E39AB5}
+.amostra-cor[data-cor="acento-realce-sepia"]{background:#EEE3CB;box-shadow:inset 0 0 0 6px #EEE3CB,inset 0 0 0 20px #8A3552}
+.amostra-cor[data-cor="acento_texto-acento-claro"]{background:#9A3B5B;box-shadow:inset 0 0 0 6px #9A3B5B,inset 0 0 0 20px #FFFFFF}
+.amostra-cor[data-cor="acento_texto-acento-escuro"]{background:#E39AB5;box-shadow:inset 0 0 0 6px #E39AB5,inset 0 0 0 20px #2A0E1A}
+.amostra-cor[data-cor="acento_texto-acento-sepia"]{background:#8A3552;box-shadow:inset 0 0 0 6px #8A3552,inset 0 0 0 20px #FFFFFF}
+.amostra-cor[data-cor="erro-erro_fundo-claro"]{background:#FCEEEE;box-shadow:inset 0 0 0 6px #FCEEEE,inset 0 0 0 20px #B3261E}
+.amostra-cor[data-cor="erro-erro_fundo-escuro"]{background:#3A2224;box-shadow:inset 0 0 0 6px #3A2224,inset 0 0 0 20px #F2B8B5}
+.amostra-cor[data-cor="erro-erro_fundo-sepia"]{background:#F6E0D6;box-shadow:inset 0 0 0 6px #F6E0D6,inset 0 0 0 20px #9C2A1E}
+.amostra-cor[data-cor="texto-aviso_fundo-claro"]{background:#F4F1F5;box-shadow:inset 0 0 0 6px #F4F1F5,inset 0 0 0 20px #202124}
+.amostra-cor[data-cor="texto-aviso_fundo-escuro"]{background:#2B2930;box-shadow:inset 0 0 0 6px #2B2930,inset 0 0 0 20px #ECEAF0}
+.amostra-cor[data-cor="texto-aviso_fundo-sepia"]{background:#EEE3CB;box-shadow:inset 0 0 0 6px #EEE3CB,inset 0 0 0 20px #3B3024}
+.amostra-cor[data-cor="contorno-fundo-claro"]{background:#FFFFFF;box-shadow:inset 0 0 0 6px #FFFFFF,inset 0 0 0 20px #8E8A96}
+.amostra-cor[data-cor="contorno-fundo-escuro"]{background:#1B1A1F;box-shadow:inset 0 0 0 6px #1B1A1F,inset 0 0 0 20px #6E6A78}
+.amostra-cor[data-cor="contorno-fundo-sepia"]{background:#F6EEDC;box-shadow:inset 0 0 0 6px #F6EEDC,inset 0 0 0 20px #8A7960}
+.amostra-cor[data-cor="acento-fundo-claro"]{background:#FFFFFF;box-shadow:inset 0 0 0 6px #FFFFFF,inset 0 0 0 20px #9A3B5B}
+.amostra-cor[data-cor="acento-fundo-escuro"]{background:#1B1A1F;box-shadow:inset 0 0 0 6px #1B1A1F,inset 0 0 0 20px #E39AB5}
+.amostra-cor[data-cor="acento-fundo-sepia"]{background:#F6EEDC;box-shadow:inset 0 0 0 6px #F6EEDC,inset 0 0 0 20px #8A3552}</style>
+</head>
+<body>
+<main class="guia">
+<h1>Guia de estilo · MinhaJornada</h1>
+<p>Direção C · Leve e legível, aprovada em 2026-11-14. Todo valor visual vem de <code>tokens.css</code>; o app o copia sem alterar e monta as telas com estes componentes. Use os botões de tema abaixo para ver tudo em claro, escuro e sépia.</p>
+<div class="seletor-tema" role="group" aria-label="Tema do guia" style="max-width:var(--largura-painel)">
+  <button class="opcao-tema" data-tema="claro" aria-pressed="true">Claro</button>
+  <button class="opcao-tema" data-tema="escuro" aria-pressed="false">Escuro</button>
+  <button class="opcao-tema" data-tema="sepia" aria-pressed="false">Sépia</button>
+</div>
+
+<section><h2>Cores</h2><p>Mesmos nomes nos três temas; só os valores mudam. Sem tema escolhido, segue o claro ou o escuro do sistema.</p>
+<div class="paleta"><div><i style="background:var(--cor-fundo)"></i><span>--cor-fundo</span></div><div><i style="background:var(--cor-superficie)"></i><span>--cor-superficie</span></div><div><i style="background:var(--cor-realce)"></i><span>--cor-realce</span></div><div><i style="background:var(--cor-texto)"></i><span>--cor-texto</span></div><div><i style="background:var(--cor-suave)"></i><span>--cor-suave</span></div><div><i style="background:var(--cor-acento)"></i><span>--cor-acento</span></div><div><i style="background:var(--cor-acento-texto)"></i><span>--cor-acento-texto</span></div><div><i style="background:var(--cor-borda)"></i><span>--cor-borda</span></div><div><i style="background:var(--cor-contorno)"></i><span>--cor-contorno</span></div><div><i style="background:var(--cor-erro)"></i><span>--cor-erro</span></div><div><i style="background:var(--cor-erro-fundo)"></i><span>--cor-erro-fundo</span></div><div><i style="background:var(--cor-aviso-fundo)"></i><span>--cor-aviso-fundo</span></div></div></section>
+
+<section><h2>Tipografia</h2><p>Atkinson Hyperlegible no texto e na interface (feita para baixa visão); Fraunces só no título do capítulo, no título das telas e na marca. Cinco tamanhos de letra para o texto bíblico (FUN-23).</p>
+<p class="titulo-capitulo" style="pointer-events:none">Salmos 27</p>
+<div class="escala-letra"><p style="font-size:var(--letra-1)"><b>Letra 1</b>Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei.</p><p style="font-size:var(--letra-2)"><b>Letra 2</b>Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei.</p><p style="font-size:var(--letra-3)"><b>Letra 3 (padrão)</b>Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei.</p><p style="font-size:var(--letra-4)"><b>Letra 4</b>Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei.</p><p style="font-size:var(--letra-5)"><b>Letra 5</b>Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei.</p></div></section>
+
+<section><h2>Botões</h2><p>Alvo de toque mínimo de 44 px. O foco aparece como um anel na cor de destaque. Botão só com ícone sempre tem rótulo acessível (FUN-44).</p>
+<div class="vitrine">
+  <button class="botao-primario">Ler Gênesis 1</button>
+  <button class="botao-secundario"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Trocar livro</button>
+  <button class="botao-secundario" disabled>Desativado</button>
+  <button class="botao-secundario foco-demo">Com foco</button>
+  <button class="botao-icone" aria-label="Aparência: letra e tema"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 8.5 5h1L15 18M5 14h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 18v-5.2a2.4 2.4 0 0 1 4.6-.9M16.5 15.5h4.5V18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="botao-icone" aria-label="Sobre o MinhaJornada"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+  <button class="botao-icone" disabled aria-label="Aumentar letra"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+  <button class="botao-voltar"><svg class="icone-p" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Salmos 27</button>
+</div></section>
+
+<section><h2>Navegação entre capítulos</h2><p>Cartões ao fim do capítulo. Em Gênesis 1 o anterior fica desativado; em Apocalipse 22, o seguinte (FUN-14, FUN-15). O deslize lateral faz o mesmo.</p>
+<div class="navegacao-capitulo" style="padding-left:0;padding-right:0;margin:0;max-width:var(--largura-aviso)">
+  <button class="cartao-nav" disabled aria-label="Capítulo anterior: não há"><small>Anterior</small><strong>Início da Bíblia</strong></button>
+  <button class="cartao-nav cartao-nav--seguinte" aria-label="Capítulo seguinte: Gênesis 2"><small>Seguinte</small><strong>Gênesis 2</strong></button>
+</div></section>
+
+<section><h2>Versículo</h2><p>Um por linha, número em pílula à esquerda; acréscimo do tradutor em itálico, sem colchetes (FUN-01, FUN-02).</p>
+<div class="texto-capitulo" style="padding:0;margin:0"><ol class="versiculos">
+<li class="versiculo"><span class="versiculo-numero">7</span><span class="versiculo-texto">Ouve, SENHOR, minha voz, <em>quando</em> eu clamo; tem piedade de mim, e responde-me.</span></li>
+<li class="versiculo"><span class="versiculo-numero">119</span><span class="versiculo-texto">Número de três dígitos cabe na mesma coluna.</span></li>
+</ol></div></section>
+
+<section><h2>Painel de aparência</h2><p>Abre pelo botão “Aa” do leitor. O tamanho da letra muda na hora; nos limites, o botão fica desativado (FUN-24 a FUN-27). O tema muda na hora e fica gravado (FUN-28, FUN-30).</p>
+<section class="painel-aparencia"  aria-label="Aparência" >
+  <h2>Aparência</h2>
+  <div class="painel-linha">
+    <span class="painel-rotulo" id="rotulo-letra">Tamanho da letra</span>
+    <div class="controle-letra" role="group" aria-labelledby="rotulo-letra">
+      <button class="botao-icone" data-acao="menos" aria-label="Diminuir letra"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <output aria-live="polite">Letra 3 de 5</output>
+      <button class="botao-icone" data-acao="mais" aria-label="Aumentar letra"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+  <div class="painel-linha">
+    <span class="painel-rotulo" id="rotulo-tema">Tema</span>
+    <div class="seletor-tema" role="group" aria-labelledby="rotulo-tema">
+      <button class="opcao-tema" data-tema="claro" aria-pressed="true">Claro</button>
+      <button class="opcao-tema" data-tema="escuro" aria-pressed="false">Escuro</button>
+      <button class="opcao-tema" data-tema="sepia" aria-pressed="false">Sépia</button>
+    </div>
+  </div>
+</section></section>
+
+<section><h2>Escolha de livro e de capítulo</h2><p>Livros em lista por testamento, com o número de capítulos; capítulos numa grade. O atual fica marcado.</p>
+<div class="vitrine vitrine--coluna">
+<ul class="lista-livros" style="max-width:var(--largura-aviso)">
+<li><button class="item-livro">Gênesis <small>50</small></button></li>
+<li><button class="item-livro" aria-current="true">Salmos <small>150</small></button></li>
+<li><button class="item-livro">Judas <small>1</small></button></li>
+</ul>
+<ol class="grade-capitulos" style="max-width:var(--largura-aviso)" aria-label="Exemplo de grade">
+<li><button class="botao-capitulo">1</button></li><li><button class="botao-capitulo">2</button></li><li><button class="botao-capitulo" aria-current="true">3</button></li><li><button class="botao-capitulo">4</button></li><li><button class="botao-capitulo">5</button></li><li><button class="botao-capitulo">6</button></li><li><button class="botao-capitulo">7</button></li><li><button class="botao-capitulo">8</button></li>
+</ol></div></section>
+
+<section><h2>Avisos</h2><p>Convite de instalação no iPhone e no iPad (FUN-46, FUN-47) e erro de livro não baixado (FUN-36).</p>
+<div class="vitrine vitrine--coluna">
+<div class="convite-instalacao convite-instalacao--estatico" role="region" aria-label="Instalar o app">
+  <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M5 11v9h14v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <p>Para ler sem internet, instale: toque em Compartilhar e depois em Adicionar à Tela de Início.</p>
+  <button class="botao-icone" aria-label="Dispensar convite"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+</div>
+<div class="aviso aviso--erro" role="alert"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.6 4.2 4.2 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><p>Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.</p></div>
+</div></section>
+
+<section><h2>Estados</h2><p>Desenhados uma vez; as telas reutilizam.</p>
+<div class="vitrine" style="align-items:stretch">
+<div class="caixa" style="flex:1;min-width:var(--coluna-livro)"><span class="rotulo-amostra">Vazio: primeira visita</span>
+<div class="estado"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><h2>Comece a ler</h2><p>Escolha um livro. O app guarda onde você parou.</p><button class="botao-primario">Escolher livro</button></div></div>
+<div class="caixa" style="flex:1;min-width:var(--coluna-livro)"><span class="rotulo-amostra">Carregando: abrindo o capítulo</span>
+<div class="estado" aria-busy="true"><div class="esqueleto" aria-label="Carregando o capítulo"><span></span><span></span><span></span><span></span><span></span><span></span></div></div></div>
+<div class="caixa" style="flex:1;min-width:var(--coluna-livro)"><span class="rotulo-amostra">Erro: sem internet e livro não baixado</span>
+<div class="estado"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.6 4.2 4.2 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><h2>Sem internet</h2><p>Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.</p><button class="botao-secundario"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Escolher outro livro</button></div></div>
+</div></section>
+
+<section><h2>Contraste</h2><p>Razão calculada para cada par usado. Mínimo: 4,5:1 para texto (FUN-32) e 3:1 para contorno de controle e anel de foco.</p>
+<div class="tabela-rolagem"><table class="contraste">
+<thead><tr><th scope="col">Par</th><th scope="col">Mínimo</th><th scope="col">Claro</th><th scope="col">Escuro</th><th scope="col">Sépia</th></tr></thead>
+<tbody><tr><th scope="row">Texto bíblico e títulos</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="texto-fundo-claro"></span>16.1:1</td><td><span class="amostra-cor" data-cor="texto-fundo-escuro"></span>14.5:1</td><td><span class="amostra-cor" data-cor="texto-fundo-sepia"></span>11.1:1</td></tr><tr><th scope="row">Texto em cartão e painel</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="texto-superficie-claro"></span>15.0:1</td><td><span class="amostra-cor" data-cor="texto-superficie-escuro"></span>13.3:1</td><td><span class="amostra-cor" data-cor="texto-superficie-sepia"></span>10.4:1</td></tr><tr><th scope="row">Rótulos e texto de apoio</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="suave-fundo-claro"></span>6.0:1</td><td><span class="amostra-cor" data-cor="suave-fundo-escuro"></span>7.0:1</td><td><span class="amostra-cor" data-cor="suave-fundo-sepia"></span>5.4:1</td></tr><tr><th scope="row">Rótulo em cartão</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="suave-superficie-claro"></span>5.6:1</td><td><span class="amostra-cor" data-cor="suave-superficie-escuro"></span>6.4:1</td><td><span class="amostra-cor" data-cor="suave-superficie-sepia"></span>5.0:1</td></tr><tr><th scope="row">Marca, link, título em foco</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="acento-fundo-claro"></span>6.7:1</td><td><span class="amostra-cor" data-cor="acento-fundo-escuro"></span>7.9:1</td><td><span class="amostra-cor" data-cor="acento-fundo-sepia"></span>6.7:1</td></tr><tr><th scope="row">Número do versículo (pílula)</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="acento-realce-claro"></span>6.0:1</td><td><span class="amostra-cor" data-cor="acento-realce-escuro"></span>6.5:1</td><td><span class="amostra-cor" data-cor="acento-realce-sepia"></span>6.1:1</td></tr><tr><th scope="row">Botão primário, capítulo atual</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="acento_texto-acento-claro"></span>6.7:1</td><td><span class="amostra-cor" data-cor="acento_texto-acento-escuro"></span>8.1:1</td><td><span class="amostra-cor" data-cor="acento_texto-acento-sepia"></span>7.7:1</td></tr><tr><th scope="row">Aviso de erro</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="erro-erro_fundo-claro"></span>5.8:1</td><td><span class="amostra-cor" data-cor="erro-erro_fundo-escuro"></span>8.6:1</td><td><span class="amostra-cor" data-cor="erro-erro_fundo-sepia"></span>6.0:1</td></tr><tr><th scope="row">Convite de instalação</th><td>4.5:1</td><td><span class="amostra-cor" data-cor="texto-aviso_fundo-claro"></span>14.4:1</td><td><span class="amostra-cor" data-cor="texto-aviso_fundo-escuro"></span>12.0:1</td><td><span class="amostra-cor" data-cor="texto-aviso_fundo-sepia"></span>10.1:1</td></tr><tr><th scope="row">Contorno de controle</th><td>3:1</td><td><span class="amostra-cor" data-cor="contorno-fundo-claro"></span>3.4:1</td><td><span class="amostra-cor" data-cor="contorno-fundo-escuro"></span>3.3:1</td><td><span class="amostra-cor" data-cor="contorno-fundo-sepia"></span>3.6:1</td></tr><tr><th scope="row">Anel de foco</th><td>3:1</td><td><span class="amostra-cor" data-cor="acento-fundo-claro"></span>6.7:1</td><td><span class="amostra-cor" data-cor="acento-fundo-escuro"></span>7.9:1</td><td><span class="amostra-cor" data-cor="acento-fundo-sepia"></span>6.7:1</td></tr></tbody></table></div></section>
+
+<section><h2>Campos de formulário</h2><p>Não se aplica: o leitor não tem formulário nem campo de texto no MVP.</p></section>
+</main>
+<script>
+(function () {
+  var r = document.documentElement, temas = ['claro', 'escuro', 'sepia'];
+  var h = location.hash.replace('#', '');
+  if (temas.indexOf(h) >= 0) r.setAttribute('data-tema', h);
+  document.querySelectorAll('.opcao-tema').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.dataset.tema === (r.getAttribute('data-tema') || 'claro')));
+    b.addEventListener('click', function () {
+      r.setAttribute('data-tema', b.dataset.tema);
+      document.querySelectorAll('.opcao-tema').forEach(function (o) { o.setAttribute('aria-pressed', String(o.dataset.tema === b.dataset.tema)); });
+    });
+  });
+  var menos = document.querySelector('[data-acao=menos]'), mais = document.querySelector('[data-acao=mais]'), saida = document.querySelector('.controle-letra output');
+  function letra(d) {
+    var n = Math.min(5, Math.max(1, (+r.getAttribute('data-letra') || 3) + d));
+    r.setAttribute('data-letra', n);
+    if (menos) menos.disabled = n === 1;
+    if (mais) mais.disabled = n === 5;
+    if (saida) saida.textContent = 'Letra ' + n + ' de 5';
+  }
+  if (menos) { menos.onclick = function () { letra(-1); }; mais.onclick = function () { letra(1); }; letra(0); }
+  var abre = document.querySelector('[data-acao=aparencia]'), painel = document.getElementById('painel-aparencia');
+  if (abre && painel) abre.onclick = function () { var v = painel.hidden; painel.hidden = !v; abre.setAttribute('aria-expanded', String(v)); };
+})();
+</script>
+</body>
+</html>

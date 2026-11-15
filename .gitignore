@@ -1,2 +1,17 @@
 .claude/.cache/
 __pycache__/
+.worktree/
+node_modules/
+dist/
+coverage/
+.wrangler/
+.env
+.env.*
+!.env.example
+.dev.vars
+*.log
+.pnpm-store/
+test-results/
+playwright-report/
+*.tsbuildinfo
+public/livros/
