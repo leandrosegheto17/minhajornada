@@ -1043,6 +1043,9 @@ T35
 **Depends on**: None
 **Reuses**: J-03 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-33, FUN-34, FUN-35, FUN-36, FUN-41
+**Status**: rascunhada
+**Testes**: `e2e/offline.spec.ts` › "FUN-34: com Romanos 8 gravado, até o primeiro capítulo aparecer só livros/45.*.json foi pedido entre os livros" (FUN-34); "FUN-33/FUN-35: com os 66 livros guardados, sem rede, o app reabre e mostra Apocalipse 22" (FUN-33, FUN-35); "FUN-36: sem o livro guardado e sem rede, escolher Apocalipse mostra a mensagem exata e o seletor continua disponível" (FUN-36); "FUN-41: navegando por 5 capítulos, nenhuma requisição sai de 127.0.0.1 e não há cookies" (FUN-41)
+**Código**: nenhum (só teste; usa `e2e/apoio/navegar.ts`, T33)
 
 **Done when**:
 
