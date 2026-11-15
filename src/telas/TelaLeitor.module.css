@@ -1,0 +1,102 @@
+/* Leitor (.specs/mockup/telas/leitor.html; guia.html, "leitor"). A letra vem de --letra (data-letra no <html>). */
+
+.cabeca-capitulo {
+  max-width: var(--largura-leitura);
+  margin: 0 auto;
+  padding: var(--esp-4) var(--esp-5) var(--esp-2);
+}
+
+.cabeca-capitulo h1 {
+  margin: 0;
+  font-size: inherit;
+}
+
+.titulo-capitulo {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-gg);
+  font-weight: var(--peso-titulo);
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-1) var(--esp-2) var(--esp-1) 0;
+  border-radius: var(--raio-m);
+  text-align: left;
+  margin: 0;
+}
+
+.titulo-capitulo:hover {
+  color: var(--cor-acento);
+}
+
+.titulo-capitulo :global(.icone) {
+  width: var(--icone-g);
+  height: var(--icone-g);
+  color: var(--cor-suave);
+}
+
+.texto-capitulo {
+  max-width: var(--largura-leitura);
+  margin: 0 auto;
+  padding: var(--esp-3) var(--esp-5) var(--esp-6);
+  font-family: var(--fonte-texto);
+  font-size: var(--letra);
+  line-height: var(--altura-linha-texto);
+  touch-action: pan-y;
+}
+
+.versiculos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navegacao-capitulo {
+  max-width: var(--largura-leitura);
+  margin: 0 auto;
+  padding: var(--esp-3) var(--esp-5) var(--esp-12);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--esp-3);
+}
+
+.cartao-nav {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  padding: var(--esp-3) var(--esp-4);
+  min-height: var(--altura-cartao-nav);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  text-align: left;
+}
+
+.cartao-nav--seguinte {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.cartao-nav:hover {
+  border-color: var(--cor-acento);
+}
+
+.cartao-nav small {
+  color: var(--cor-suave);
+  font-size: var(--texto-p);
+}
+
+.cartao-nav strong {
+  font-size: var(--texto-g);
+}
+
+.cartao-nav:disabled {
+  opacity: 0.45;
+  cursor: default;
+  border-color: var(--cor-borda);
+}
+
+.ancora-painel {
+  position: relative;
+}

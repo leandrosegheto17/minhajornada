@@ -1,0 +1,28 @@
+/* Barra do topo, comum às telas (.specs/mockup/guia.html, "barra do topo"). */
+
+.barra-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-2) var(--esp-3);
+  max-width: var(--largura-leitura);
+  margin: 0 auto;
+}
+
+.barra-topo--larga {
+  max-width: var(--largura-tela);
+}
+
+.marca {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-g);
+  color: var(--cor-acento);
+  padding-left: var(--esp-2);
+}
+
+.grupo-acoes {
+  display: flex;
+  gap: var(--esp-1);
+}

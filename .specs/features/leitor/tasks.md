@@ -710,6 +710,9 @@ T35
 **Depends on**: T21
 **Reuses**: `.specs/mockup/telas/leitor.html`; botões (T16)
 **Requirement**: FUN-01, FUN-05, FUN-10, FUN-11, FUN-12, FUN-13, FUN-14, FUN-15, FUN-49, FUN-50
+**Status**: rascunhada
+**Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-01: mostra o título \"Salmos 27\" e os 14 versículos, cada um com o número" (FUN-01); "enquanto o livro carrega, mostra o estado carregando"; "FUN-05: abrir e trocar de capítulo rola ao topo", "FUN-05: renderizar de novo o mesmo capítulo não rola" (FUN-05); "FUN-10/FUN-12: em Salmos 27, os cartões mostram Salmos 26 e Salmos 28 e disparam anterior e seguinte" (FUN-10, FUN-12); "FUN-11: em Malaquias 4, o seguinte mostra Mateus 1" (FUN-11); "FUN-13: em Mateus 1, o anterior mostra Malaquias 4" (FUN-13); "FUN-14: em Gênesis 1, o anterior fica desativado e não dispara" (FUN-14); "FUN-15: em Apocalipse 22, o seguinte fica desativado e não dispara" (FUN-15); "FUN-49: tocar no título dispara a ação do título" (FUN-49); "FUN-50: em livro de capítulo único, o título oferece outro livro" (FUN-50); "FUN-44: os botões de ícone da barra têm rótulo em português" (FUN-44)
+**Código**: `src/telas/TelaLeitor.tsx`, `src/telas/TelaLeitor.module.css`, `src/telas/comum.module.css` (barra do topo), `src/componentes/icones.tsx` (ícones do mockup)
 
 **Done when**:
 
