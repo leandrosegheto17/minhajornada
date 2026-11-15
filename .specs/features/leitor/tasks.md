@@ -296,6 +296,9 @@ T35
 **Depends on**: T6
 **Reuses**: índice (T2)
 **Requirement**: FUN-22
+**Status**: rascunhada
+**Testes**: `src/navegacao/navegacao.test.ts` › "FUN-22: Romanos 8 é válido", "FUN-22: %s é inválido (null)" (livro 0 e 67, capítulo 0 e 151 em Salmos, capítulo 2 em Judas, fracionários, texto, nulo, objeto sem campos, número), "FUN-22: devolve só livro e capítulo, sem campos a mais" (FUN-22)
+**Código**: `src/navegacao/navegacao.ts` (`refValida`)
 
 **Done when**:
 

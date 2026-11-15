@@ -27,3 +27,17 @@ export function anterior(ref: Ref, indice: Indice): Ref | null {
   if (totalAnterior === null) return null;
   return { livro: ref.livro - 1, capitulo: totalAnterior };
 }
+
+/**
+ * Valida a leitura gravada (FUN-22): devolve a `Ref` quando o livro existe e o capítulo está no intervalo dele;
+ * `null` para qualquer outro valor (tipo errado, fracionário, fora do índice).
+ */
+export function refValida(valor: unknown, indice: Indice): Ref | null {
+  if (typeof valor !== 'object' || valor === null) return null;
+  const { livro, capitulo } = valor as Record<string, unknown>;
+  if (!Number.isInteger(livro) || !Number.isInteger(capitulo)) return null;
+  const total = capitulosDo(livro as number, indice);
+  if (total === null || (livro as number) < 1) return null;
+  if ((capitulo as number) < 1 || (capitulo as number) > total) return null;
+  return { livro: livro as number, capitulo: capitulo as number };
+}
