@@ -1364,6 +1364,8 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 
 Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = verde
 
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 480ab09cbede90f7a1f25d138967be90508059c2 = verde
+
 
 ## Requirement Coverage
 
