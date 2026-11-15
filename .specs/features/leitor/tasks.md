@@ -248,14 +248,14 @@ Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecal
 **Depends on**: None
 **Reuses**: tipo `Segmento` de `design.md`
 **Requirement**: FUN-02
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/biblia/segmentos.test.ts` › "FUN-02: \"[que está]\" de Filemom 1:2 vira itálico sem colchetes", "FUN-02: dois trechos no mesmo versículo", "FUN-02: trecho no início e no fim do versículo", "FUN-02: versículo sem colchete fica num trecho só, sem itálico", "FUN-02: Salmos 27:13 … mantém o espaço e o ponto", "FUN-02: nenhum trecho devolvido contém colchete" (FUN-02)
 **Código**: `src/biblia/segmentos.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-02`: "[que está]" de Filemom 1:2 vira itálico sem colchetes; dois trechos no mesmo versículo; trecho no início e no fim; versículo sem colchete; Salmos 27:13 "[certamente já teria perecido] ." mantém o espaço e o ponto
-- [ ] Gate quick passa
+- [x] Testes `FUN-02`: "[que está]" de Filemom 1:2 vira itálico sem colchetes; dois trechos no mesmo versículo; trecho no início e no fim; versículo sem colchete; Salmos 27:13 "[certamente já teria perecido] ." mantém o espaço e o ponto
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -274,14 +274,14 @@ Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecal
 **Depends on**: None
 **Reuses**: `indice.gerado.json` (T2) como dado real nos testes
 **Requirement**: FUN-10, FUN-11, FUN-12, FUN-13, FUN-14, FUN-15
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/navegacao/navegacao.test.ts` › "FUN-10: Salmos 26 → Salmos 27", "FUN-11: Malaquias 4 → Mateus 1", "FUN-11: Obadias 1 → Jonas 1 (capítulo único)", "FUN-15: Apocalipse 22 não tem seguinte (null)", "FUN-12: Salmos 27 → Salmos 26", "FUN-13: Mateus 1 → Malaquias 4", "FUN-13: Jonas 1 → Obadias 1 (capítulo único)", "FUN-14: Gênesis 1 não tem anterior (null)" (FUN-10 a FUN-15)
 **Código**: `src/navegacao/navegacao.ts`, `src/biblia/indice.ts` (índice tipado lido de `indice.gerado.json`)
 
 **Done when**:
 
-- [ ] Testes `FUN-10` a `FUN-15`: Salmos 26 → 27; Malaquias 4 → Mateus 1; Salmos 27 → 26; Mateus 1 → Malaquias 4; Gênesis 1 anterior = `null`; Apocalipse 22 seguinte = `null`; Obadias 1 → Jonas 1 e Jonas 1 → Obadias 1 (capítulo único)
-- [ ] Gate quick passa
+- [x] Testes `FUN-10` a `FUN-15`: Salmos 26 → 27; Malaquias 4 → Mateus 1; Salmos 27 → 26; Mateus 1 → Malaquias 4; Gênesis 1 anterior = `null`; Apocalipse 22 seguinte = `null`; Obadias 1 → Jonas 1 e Jonas 1 → Obadias 1 (capítulo único)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -300,14 +300,14 @@ Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecal
 **Depends on**: T6
 **Reuses**: índice (T2)
 **Requirement**: FUN-22
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/navegacao/navegacao.test.ts` › "FUN-22: Romanos 8 é válido", "FUN-22: %s é inválido (null)" (livro 0 e 67, capítulo 0 e 151 em Salmos, capítulo 2 em Judas, fracionários, texto, nulo, objeto sem campos, número), "FUN-22: devolve só livro e capítulo, sem campos a mais" (FUN-22)
 **Código**: `src/navegacao/navegacao.ts` (`refValida`)
 
 **Done when**:
 
-- [ ] Testes `FUN-22`: Romanos 8 válido; livro 0 e 67; capítulo 0 e 151 em Salmos; capítulo 2 em Judas; tipos errados (texto, nulo, objeto sem campos, número fracionário)
-- [ ] Gate quick passa
+- [x] Testes `FUN-22`: Romanos 8 válido; livro 0 e 67; capítulo 0 e 151 em Salmos; capítulo 2 em Judas; tipos errados (texto, nulo, objeto sem campos, número fracionário)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -326,14 +326,14 @@ Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecal
 **Depends on**: None
 **Reuses**: nada
 **Requirement**: FUN-16, FUN-17, FUN-18
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/navegacao/deslize.test.ts` › "FUN-16: -60/0 … é seguinte", "FUN-16: -80/79 … é seguinte" (FUN-16); "FUN-17: 60/0 … é anterior", "FUN-17: 80/-79 é anterior" (FUN-17); "FUN-18: %i/%i (menos de 60 px) mantém o capítulo (null)", "FUN-18: %i/%i (horizontal não maior que o vertical) mantém o capítulo (null)" (FUN-18)
 **Código**: `src/navegacao/deslize.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-16` a `FUN-18`: -60/0 seguinte; 60/0 anterior; -59/0 e 59/0 nulo; -80/80 e -80/90 nulo (não maior que o vertical); -80/79 seguinte
-- [ ] Gate quick passa
+- [x] Testes `FUN-16` a `FUN-18`: -60/0 seguinte; 60/0 anterior; -59/0 e 59/0 nulo; -80/80 e -80/90 nulo (não maior que o vertical); -80/79 seguinte
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -352,24 +352,26 @@ Gate: pnpm typecheck && pnpm vitest run --project arquivos test/arquivos/cabecal
 **Depends on**: T7
 **Reuses**: molde de chave única de `ControleEmCasa_LJS/frontend/web/src/dados/sessao.ts:13-23`; `refValida` (T7)
 **Requirement**: FUN-19, FUN-22, FUN-23, FUN-30, FUN-31, FUN-47
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `src/dados/preferencias.test.ts` › "FUN-19: grava e lê a leitura atual", "FUN-19: sem leitura gravada devolve null" (FUN-19); "FUN-22: leitura ilegível (JSON quebrado) é apagada e devolve null", "FUN-22: leitura inválida (%s) é apagada e devolve null" (FUN-22); "FUN-30: grava e lê o tamanho da letra", "FUN-30: gravarLetra fora de 1 a 5 não grava", "FUN-30: grava e lê o tema %s" (FUN-30); "FUN-23: sem letra gravada o padrão é 3" (FUN-23); "FUN-31: letra gravada %s devolve o padrão 3", "FUN-31: sem tema gravado devolve null", "FUN-31: tema %s devolve null" (FUN-31); "FUN-47: dispensar o convite fica gravado" (FUN-47); "localStorage que lança em getItem e setItem não quebra e devolve os padrões", "sem localStorage nenhum, devolve os padrões"
 **Código**: `src/dados/preferencias.ts`
 
 **Done when**:
 
-- [ ] Testes `FUN-19`/`FUN-30`: gravar e ler leitura, letra e tema
-- [ ] Testes `FUN-22`: leitura ilegível (JSON quebrado) ou inválida é apagada e devolve `null`
-- [ ] Testes `FUN-23`/`FUN-31`: letra ausente, 0, 6, "3" texto ou lixo devolve 3; tema desconhecido devolve `null` (tema do sistema)
-- [ ] Teste `FUN-47`: dispensar o convite fica gravado
-- [ ] Teste de erro: `localStorage` que lança em `getItem` e `setItem` (dublê) não quebra; devolve os padrões
-- [ ] Gate quick passa
+- [x] Testes `FUN-19`/`FUN-30`: gravar e ler leitura, letra e tema
+- [x] Testes `FUN-22`: leitura ilegível (JSON quebrado) ou inválida é apagada e devolve `null`
+- [x] Testes `FUN-23`/`FUN-31`: letra ausente, 0, 6, "3" texto ou lixo devolve 3; tema desconhecido devolve `null` (tema do sistema)
+- [x] Teste `FUN-47`: dispensar o convite fica gravado
+- [x] Teste de erro: `localStorage` que lança em `getItem` e `setItem` (dublê) não quebra; devolve os padrões
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(dados): grava leitura e preferências no aparelho`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run src/biblia/segmentos.test.ts src/navegacao src/dados/preferencias.test.ts --reporter=dot @ 3ef3f7bf137c0ddc6b2fe9f796ad57ba9028fb5d = verde
 
 ### T10: Carregar um livro pelo cache ou pela rede
 
