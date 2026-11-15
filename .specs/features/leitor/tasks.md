@@ -270,6 +270,9 @@ T35
 **Depends on**: None
 **Reuses**: `indice.gerado.json` (T2) como dado real nos testes
 **Requirement**: FUN-10, FUN-11, FUN-12, FUN-13, FUN-14, FUN-15
+**Status**: rascunhada
+**Testes**: `src/navegacao/navegacao.test.ts` › "FUN-10: Salmos 26 → Salmos 27", "FUN-11: Malaquias 4 → Mateus 1", "FUN-11: Obadias 1 → Jonas 1 (capítulo único)", "FUN-15: Apocalipse 22 não tem seguinte (null)", "FUN-12: Salmos 27 → Salmos 26", "FUN-13: Mateus 1 → Malaquias 4", "FUN-13: Jonas 1 → Obadias 1 (capítulo único)", "FUN-14: Gênesis 1 não tem anterior (null)" (FUN-10 a FUN-15)
+**Código**: `src/navegacao/navegacao.ts`, `src/biblia/indice.ts` (índice tipado lido de `indice.gerado.json`)
 
 **Done when**:
 
