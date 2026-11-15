@@ -136,6 +136,12 @@ T45
 T46
 ```
 
+### Phase 12: Retrabalho R2
+
+```
+T47
+```
+
 ---
 
 ## Task Breakdown
@@ -1316,6 +1322,24 @@ Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec
 ---
 
 Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exec playwright test --reporter=dot @ 4d15aef2e0a55a4266adf1e2dcd54b903be1356f = verde
+
+### T47: Fumaça do deploy com a lista exata de caminhos provada por teste (A-12)
+
+**What**: Em `test/arquivos/deploy.test.ts`, extrair a lista do laço `for caminho in ...` do passo de fumaça do `deploy.yml` e exigir que seja exatamente `/`, `/sw.js` e o livro (`${livro}`), de modo que tirar qualquer um dos três faça o teste falhar.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `test/arquivos/deploy.test.ts:80-98` (funções `job` e `passos`); `.github/workflows/deploy.yml:122-133`
+**Requirement**: FUN-42 · Achado: A-12 (validation.md)
+**Tests**: teste "A-12: FUN-42: a fumaça confere os cabeçalhos em exatamente /, /sw.js e um livro", que falha ao tirar qualquer caminho do laço
+**Gate**: `pnpm typecheck && pnpm vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+- [ ] Concluída
+
+---
+
 
 ## Requirement Coverage
 

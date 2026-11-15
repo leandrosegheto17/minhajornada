@@ -1,28 +1,33 @@
-# Validação: leitor — FAIL ❌ (rodada 1)
+# Validação: leitor — FAIL ❌ (rodada 2)
 
-- **Data**: 2026-11-15 · **Branch**: feature/leitor @ 5a6b8af · **Árvore**: 939536c2f2e17b5f15f41c7a6bc6c399462a132d
-- **Critérios**: 50/50 com asserção (detalhe em `verificacao-rodada-1.md`) · **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 324 unitários e 25 e2e passaram, 0 falharam
-- **Sensor**: 13 mutações, 12 mortas, 1 sobreviveu (equivalente: 1, `baixar` sem o `cache.match`, já coberto por `carregarLivro`)
-- **Revisão de código**: skill `revisao-codigo`, modo curto (`code-review`): 0 bloqueios, 2 sugestões confirmadas (A-06, A-07); 2 descartadas (erro de livro tratado como não baixado: decisão do dono; versão do build: mesma constante em `define` e na meta)
-- **Segurança**: `auditor-seguranca` (`seguranca.md`): 0 crítico, 0 alto, 2 médios, 3 baixos, todos no retrabalho (A-08 a A-11)
-- **Modelo**: /validar pedido em Sonnet; o dono escolheu seguir em Opus em parte da sessão
+- **Data**: 2026-11-15 · **Branch**: feature/leitor @ c0755e9 · **Árvore**: 73559d05e6cbd0c91960bc14c9df35d7bd136175
+- **Escopo**: diff do retrabalho R1 (`5a6b8af..c0755e9`) e regressão pela suíte inteira (detalhe em `verificacao-rodada-2.md`; rodada 1 em `verificacao-rodada-1.md`)
+- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 344 unitários e 27 e2e passaram, 0 falharam (rodado de novo: o `Gate:` do R1 é de árvore anterior ao commit do prettier); `pnpm audit --audit-level high` sem altas
+- **Sensor**: 16 mutações, 14 mortas, 2 sobreviveram (equivalentes: 0; ambas no A-12)
+- **Revisão de código**: skill `revisao-codigo`, modo curto, sobre o diff do R1: 0 bloqueios; 1 sugestão (o `pnpm install --ignore-scripts` seguido do `wrangler deploy` no job `publicar` nunca rodou de verdade, ver lacunas)
+- **Segurança**: `auditor-seguranca` (`seguranca.md`, "Reteste rodada 2"): SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
+- **Modelo**: /validar pedido em Sonnet; o dono escolheu seguir em Opus
 
 ## Achados
 
 | ID | `arquivo:linha` | Achado e evidência | Correção sugerida | Criticidade | Situação |
 |---|---|---|---|---|---|
-| A-01 | `src/telas/TelaLeitor.tsx:73-85` | Deslize aceita qualquer ponteiro: arrastar o mouse 60 px (selecionar texto) troca de capítulo; a spec fala em dedo | Só `pointerType === 'touch'`; teste com mouse 100/0 sem troca | comum | aberto |
-| A-02 | `src/componentes/Versiculo.test.tsx:14-31`, `e2e/leitura.spec.ts:27-30` | FUN-01 (linha própria, número à esquerda) e FUN-02 (itálico) provados só por DOM | e2e de Filemom 1 confere `fontStyle` e `boundingBox` | comum | aberto |
-| A-03 | `.specs/STATE.md` | Testes alterados em 2026-11-15 (convite, aparência 320 px) sem aprovação gravada em `## Autorizações` | Registrar a aprovação do dono, data e escopo | comum | aberto |
-| A-04 | `src/estado/useLeitor.ts:62-66` | Decisão do dono estende o FUN-36 a JSON ilegível e erro do servidor, sem AD | AD-004 em `STATE.md` citando o FUN-36 | comum | aberto |
-| A-05 | `.github/workflows/deploy.yml:93-94` | FUN-42 provado só sobre o arquivo `_headers`; a fumaça do deploy olha só `/` e 3 cabeçalhos | Fumaça também em `/sw.js` e num livro, com a CSP completa (`frame-ancestors`) | crítica | aberto |
-| A-06 | `src/componentes/ConviteInstalacao.test.tsx:17` | `defineProperty` de `maxTouchPoints` não é desfeito no `afterEach`: vaza entre testes | Apagar a propriedade no `afterEach` | comum | aberto |
-| A-07 | `e2e/aparencia.spec.ts:114-115` | Fecha o painel sem afirmar que fechou | `expect` do painel oculto antes do clique no título | comum | aberto |
-| A-08 | `.github/workflows/deploy.yml:68-69, 79` | SEC-001 e SEC-004: token da Cloudflare no `env` do job inteiro (visível a install e build) e cache do pnpm no job com segredo | Job de build sem segredo com `dist/` como artefato; job de publicar com o token só nos passos do wrangler e sem cache (decisão do dono) | crítica | aberto |
-| A-09 | GitHub, environments `producao` e `tst` | SEC-002: trava de branch só no `if` do workflow | Dono configura *Deployment branches* (`producao` ← `main`, `tst` ← `desenvolvimento`) | crítica | aberto |
-| A-10 | `src/dados/livros.ts:59-68` | SEC-003: o fallback SPA (200 `text/html`) é gravado no `mj-livros` como livro e `baixarFaltantes` passa a pulá-lo | Exigir JSON válido (e `numero` certo) antes do `cache.put` | crítica | aberto |
-| A-11 | `package.json` (wrangler) | SEC-005: `pnpm audit` com 4 altas em dev (`undici` via wrangler; glob/minimatch via workbox-build) | Atualizar o wrangler ou `overrides` do `undici`; `pnpm audit` sem altas | crítica | aberto |
+| A-01 | `src/telas/TelaLeitor.tsx:77` | Só `pointerType === 'touch'`; teste com mouse e caneta em `TelaLeitor.test.tsx:190-200` | — | comum | fechado |
+| A-02 | `e2e/leitura.spec.ts:35-72` | `boundingBox` (número à esquerda, linha própria) e `fontStyle` computado | — | comum | fechado |
+| A-03 | `.specs/STATE.md` (`## Autorizações`) | Aprovações registradas | — | comum | fechado |
+| A-04 | `.specs/STATE.md` (AD-004), `src/estado/useLeitor.ts:72` | AD gravada e citada | — | comum | fechado |
+| A-05 | `.github/workflows/deploy.yml:124-126` | Fumaça em `/`, `/sw.js` e um livro, com a CSP completa; prova incompleta, ver A-12 | — | crítica | fechado |
+| A-06 | `src/componentes/ConviteInstalacao.test.tsx:42, 92-100` | Propriedade apagada no `afterEach` e isolamento provado | — | comum | fechado |
+| A-07 | `e2e/aparencia.spec.ts:116` | `toBeHidden()` do painel | — | comum | fechado |
+| A-08 | `.github/workflows/deploy.yml:56-80, 106, 114-116, 136-139` | Job `construir` sem segredo; token só nos passos do wrangler; `publicar` sem cache e com `--ignore-scripts`; testes em `test/arquivos/deploy.test.ts:36-76` | — | crítica | fechado |
+| A-09 | GitHub, environments; `.specs/preparacao.md:20` | `gh api` (só leitura): `producao` ← `main`, `tst` ← `desenvolvimento` | — | crítica | fechado |
+| A-10 | `src/dados/livros.ts:37-45, 59-62, 77-82` | JSON validado (número e capítulos) antes do `cache.put`; entrada ilegível apagada; testes em `livros.test.ts:62-93` | — | crítica | fechado |
+| A-11 | `package.json` (wrangler 4.162.0) | `pnpm audit --audit-level high` sem altas | — | crítica | fechado |
+| A-12 | `test/arquivos/deploy.test.ts:82-87` | O teste não fixa os caminhos que a fumaça confere (FUN-42): os `toMatch` de `/`, `/sw.js` e `/livros/` casam com outras linhas do passo (a atribuição `livro=` e o `curl` da linha 122, que não olha cabeçalho); duas mutações no laço `for caminho in` (`deploy.yml:124`) sobrevivem com 12/12 testes passando | Extrair a lista do `for caminho in ...` e exigir exatamente `/`, `/sw.js` e `${livro}` | crítica | aberto |
 
 ## Lacunas e o que não foi validado
 
-- Cabeçalhos em resposta real da Cloudflare; instalação em Chrome e Safari reais; contraste medido em pixel (só pelos tokens); execução em Node 24 (rodou em 26).
+- O workflow de deploy nunca rodou (`DEPLOY_ATIVO` inativo): `pnpm install --ignore-scripts` + `wrangler deploy`, o artefato entre jobs e a regra de branch dos environments só se provam no primeiro deploy real (Nível 2 do `/preparar`).
+- Cabeçalhos em resposta real da Cloudflare; instalação em Chrome e Safari reais; Node 24 (rodou em 26).
+- Pendente do dono: confirmar o escopo mínimo do token da Cloudflare.
+- Informativos de segurança sem ação obrigatória: I-6 (plano do GitHub não protege `main` e `desenvolvimento`), I-7 (cache do pnpm no job `construir`), I-8 (exigir SHA nas Actions; `package-manager-cache: false` no `publicar`), I-9 (= primeira lacuna acima).
