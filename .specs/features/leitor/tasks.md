@@ -1032,17 +1032,17 @@ Gate: pnpm typecheck && pnpm vitest run src/App.test.tsx src/componentes/Convite
 **Depends on**: None
 **Reuses**: J-01 e J-02 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-01, FUN-02, FUN-06, FUN-07, FUN-09, FUN-11, FUN-14, FUN-15, FUN-16, FUN-20, FUN-49
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/leitura.spec.ts` › "FUN-21/FUN-09/FUN-01/FUN-02: a primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto, com 25 versículos e \"que está\" em itálico" (FUN-01, FUN-02, FUN-06, FUN-09, FUN-21); "FUN-11/FUN-49/FUN-06/FUN-07: Malaquias 4 → seguinte → Mateus 1; o título mostra a grade de Mateus; \"Trocar livro\" → Salmos → 1 a 150 → 119 com 176 versículos" (FUN-06, FUN-07, FUN-08, FUN-11, FUN-49); "FUN-14/FUN-15: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte" (FUN-14, FUN-15); "FUN-16: um deslize de 100 px da direita para a esquerda em Salmos 27 abre Salmos 28 (toque emulado)" (FUN-16); "FUN-17/FUN-18: deslize para a direita volta um capítulo; deslize curto não troca" (FUN-17, FUN-18); "FUN-19/FUN-20: abrir Romanos 8, recarregar e ver Romanos 8" (FUN-19, FUN-20); "FUN-05: o capítulo novo abre no início" (FUN-05)
 **Código**: `e2e/apoio/navegar.ts` (apoio dos e2e: abrir pela escolha, gravar leitura e letra, deslize de toque, SW ativo, livros guardados)
 
 **Done when**:
 
-- [ ] E2E: primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto com 25 versículos e "que está" em itálico
-- [ ] E2E: Malaquias 4 → seguinte → Mateus 1; tocar no título mostra a grade de Mateus; "Trocar livro" → Salmos → grade de 1 a 150 → 119 mostra 176 versículos
-- [ ] E2E: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte; deslize de 100 px em Salmos 27 abre Salmos 28 (toque emulado)
-- [ ] E2E `FUN-20`: abrir Romanos 8, recarregar e ver Romanos 8
-- [ ] Gate full passa
+- [x] E2E: primeira visita abre a escolha de livro; Filemom abre Filemom 1 direto com 25 versículos e "que está" em itálico
+- [x] E2E: Malaquias 4 → seguinte → Mateus 1; tocar no título mostra a grade de Mateus; "Trocar livro" → Salmos → grade de 1 a 150 → 119 mostra 176 versículos
+- [x] E2E: em Gênesis 1 o anterior está desativado; em Apocalipse 22, o seguinte; deslize de 100 px em Salmos 27 abre Salmos 28 (toque emulado)
+- [x] E2E `FUN-20`: abrir Romanos 8, recarregar e ver Romanos 8
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -1061,17 +1061,17 @@ Gate: pnpm typecheck && pnpm vitest run src/App.test.tsx src/componentes/Convite
 **Depends on**: None
 **Reuses**: J-03 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-33, FUN-34, FUN-35, FUN-36, FUN-41
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/offline.spec.ts` › "FUN-34: com Romanos 8 gravado, até o primeiro capítulo aparecer só livros/45.*.json foi pedido entre os livros" (FUN-34); "FUN-33/FUN-35: com os 66 livros guardados, sem rede, o app reabre e mostra Apocalipse 22" (FUN-33, FUN-35); "FUN-36: sem o livro guardado e sem rede, escolher Apocalipse mostra a mensagem exata e o seletor continua disponível" (FUN-36); "FUN-41: navegando por 5 capítulos, nenhuma requisição sai de 127.0.0.1 e não há cookies" (FUN-41)
 **Código**: nenhum (só teste; usa `e2e/apoio/navegar.ts`, T33)
 
 **Done when**:
 
-- [ ] E2E `FUN-34`: com Romanos 8 gravado, até o primeiro capítulo aparecer só `livros/45.*.json` foi pedido entre os livros
-- [ ] E2E `FUN-33`/`FUN-35`: esperar o `mj-livros` ter 66 entradas, ficar sem rede, recarregar e ler Apocalipse 22
-- [ ] E2E `FUN-36`: com a rede bloqueada para `livros/66.*` antes do download, escolher Apocalipse sem rede mostra a mensagem exata e o seletor continua disponível
-- [ ] E2E `FUN-41`: navegando por 5 capítulos, nenhuma requisição sai de `127.0.0.1` e `context.cookies()` é vazio
-- [ ] Gate full passa
+- [x] E2E `FUN-34`: com Romanos 8 gravado, até o primeiro capítulo aparecer só `livros/45.*.json` foi pedido entre os livros
+- [x] E2E `FUN-33`/`FUN-35`: esperar o `mj-livros` ter 66 entradas, ficar sem rede, recarregar e ler Apocalipse 22
+- [x] E2E `FUN-36`: com a rede bloqueada para `livros/66.*` antes do download, escolher Apocalipse sem rede mostra a mensagem exata e o seletor continua disponível
+- [x] E2E `FUN-41`: navegando por 5 capítulos, nenhuma requisição sai de `127.0.0.1` e `context.cookies()` é vazio
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -1090,23 +1090,25 @@ Gate: pnpm typecheck && pnpm vitest run src/App.test.tsx src/componentes/Convite
 **Depends on**: None
 **Reuses**: J-04 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-29, FUN-30, FUN-43, FUN-44
-**Status**: rascunhada
+**Status**: concluída
 **Testes**: `e2e/aparencia.spec.ts` › "FUN-29: com o sistema escuro e nada gravado, o fundo é o escuro; com o claro, o claro" (FUN-29); "FUN-28: o tema escolhido vale mesmo com o sistema escuro" (FUN-28); "FUN-30: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e \"Aumentar letra\" desativado" (FUN-30); "FUN-24: a letra 5 deixa o texto maior que a letra 3" (FUN-24); "FUN-43/FUN-44: em ${largura} px, nada transborda na lateral e todo botão de ícone tem rótulo" (320 e 1920 px; escolha de livro, leitor em Salmos 119 com letra 5, painel aberto, grade e Sobre) (FUN-43, FUN-44)
 **Código**: nenhum (só teste; usa `e2e/apoio/navegar.ts`, T33)
 
 **Done when**:
 
-- [ ] E2E `FUN-29`: com `colorScheme: 'dark'` e nada gravado, o fundo é o `--cor-fundo` escuro; com `light`, o claro
-- [ ] E2E `FUN-30`: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e "Aumentar letra" desativado
-- [ ] E2E `FUN-43`: em 320 px e 1920 px de largura, no leitor (Salmos 119, letra 5), nas grades e no Sobre, `scrollWidth <= clientWidth`
-- [ ] E2E `FUN-44`: todo `button` sem texto visível tem `aria-label` não vazio em todas as telas
-- [ ] Gate full passa
+- [x] E2E `FUN-29`: com `colorScheme: 'dark'` e nada gravado, o fundo é o `--cor-fundo` escuro; com `light`, o claro
+- [x] E2E `FUN-30`: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e "Aumentar letra" desativado
+- [x] E2E `FUN-43`: em 320 px e 1920 px de largura, no leitor (Salmos 119, letra 5), nas grades e no Sobre, `scrollWidth <= clientWidth`
+- [x] E2E `FUN-44`: todo `button` sem texto visível tem `aria-label` não vazio em todas as telas
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): cobre aparência, larguras de tela e rótulos`
 
 ---
+
+Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec.ts e2e/offline.spec.ts e2e/aparencia.spec.ts --reporter=dot @ b05d0aa51e95acd3eb06c683636a489677b7ee21 = verde
 
 ## Requirement Coverage
 
