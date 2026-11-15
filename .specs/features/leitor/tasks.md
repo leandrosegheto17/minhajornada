@@ -1072,6 +1072,9 @@ T35
 **Depends on**: None
 **Reuses**: J-04 de `.specs/projeto/jornadas.md`
 **Requirement**: FUN-29, FUN-30, FUN-43, FUN-44
+**Status**: rascunhada
+**Testes**: `e2e/aparencia.spec.ts` › "FUN-29: com o sistema escuro e nada gravado, o fundo é o escuro; com o claro, o claro" (FUN-29); "FUN-28: o tema escolhido vale mesmo com o sistema escuro" (FUN-28); "FUN-30: escolher sépia e letra 5, recarregar e ver sépia, letra 5 e \"Aumentar letra\" desativado" (FUN-30); "FUN-24: a letra 5 deixa o texto maior que a letra 3" (FUN-24); "FUN-43/FUN-44: em ${largura} px, nada transborda na lateral e todo botão de ícone tem rótulo" (320 e 1920 px; escolha de livro, leitor em Salmos 119 com letra 5, painel aberto, grade e Sobre) (FUN-43, FUN-44)
+**Código**: nenhum (só teste; usa `e2e/apoio/navegar.ts`, T33)
 
 **Done when**:
 
