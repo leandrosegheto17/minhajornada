@@ -31,6 +31,48 @@ test.describe('primeira visita e leitura (J-01)', () => {
   });
 });
 
+test.describe('aparência do versículo (J-01)', () => {
+  test('FUN-01: cada versículo começa em linha própria, com o número à esquerda do texto', async ({ page }) => {
+    await page.goto('/');
+    await abrirPelaEscolha(page, 'Filemom', 1);
+    await esperarCapitulo(page, 'Filemom', 1);
+
+    const lista = versiculos(page);
+    let fimAnterior = -Infinity;
+    const colunas = new Set<number>();
+    for (const i of [0, 1, 8, 9, 10, 24]) {
+      const item = lista.nth(i);
+      const numero = await item.locator('span').first().boundingBox();
+      const texto = await item.locator('span').nth(1).boundingBox();
+      const caixa = await item.boundingBox();
+      if (!numero || !texto || !caixa) throw new Error(`versículo ${i + 1} sem caixa`);
+      expect(numero.x + numero.width, `versículo ${i + 1}: número à esquerda do texto`).toBeLessThanOrEqual(texto.x);
+      expect(caixa.y, `versículo ${i + 1}: começa abaixo do anterior`).toBeGreaterThanOrEqual(fimAnterior);
+      fimAnterior = caixa.y + caixa.height;
+      colunas.add(Math.round(texto.x));
+    }
+    // O texto fica na mesma coluna com número de 1 ou 2 dígitos (a pílula tem coluna própria).
+    expect([...colunas]).toHaveLength(1);
+  });
+
+  test('FUN-02: o acréscimo do tradutor aparece em itálico (estilo computado) e o resto do versículo não', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await abrirPelaEscolha(page, 'Filemom', 1);
+    await esperarCapitulo(page, 'Filemom', 1);
+
+    const segundo = versiculos(page).nth(1);
+    expect(await segundo.locator('em').evaluate((el) => getComputedStyle(el).fontStyle)).toBe('italic');
+    expect(
+      await segundo
+        .locator('span')
+        .nth(1)
+        .evaluate((el) => getComputedStyle(el).fontStyle),
+    ).toBe('normal');
+  });
+});
+
 test.describe('navegar e retomar (J-02)', () => {
   test('FUN-11/FUN-49/FUN-06/FUN-07: Malaquias 4 → seguinte → Mateus 1; o título mostra a grade de Mateus; "Trocar livro" → Salmos → 1 a 150 → 119 com 176 versículos', async ({
     page,
