@@ -17,7 +17,7 @@
 
 - [ ] Staging — Cloudflare Workers, `minhajornada-tst.ljssoftware.com.br`, a partir de `desenvolvimento`
 - [ ] Produção — Cloudflare Workers, `minhajornada.ljssoftware.com.br`, a partir de `main`
-- [x] Segredos dos ambientes — environments `tst` (só `desenvolvimento`) e `producao` (só `main`) no GitHub, cada um com os secrets `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`; nada no repositório; evidência: `gh secret list --env tst|producao` e `gh api .../deployment-branch-policies` (2026-11-15)
+- [x] Segredos dos ambientes — environments `tst` (só `desenvolvimento`) e `producao` (só `main`) no GitHub, cada um com os secrets `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`; nada no repositório; evidência: `gh secret list --env tst|producao` e `gh api .../deployment-branch-policies` (2026-11-15) Retrabalho R1 (T44, A-09): confirmado pelo dono e conferido por `gh api .../environments/<env>/deployment-branch-policies` em 2026-11-15 (`tst` → `desenvolvimento`, `producao` → `main`; `custom_branch_policies` ligado).
 - [ ] Pipeline de deploy — workflow com smoke de cabeçalhos (CSP, nosniff, Referrer-Policy); reversão testada
   - Andamento (2026-11-14): `.github/workflows/deploy.yml` escrito (manual; `desenvolvimento` → tst, `main` → produção; confere CI verde, build, `wrangler deploy`, fumaça de cabeçalhos e `wrangler rollback` se a fumaça falhar) e `wrangler.jsonc` com `env.tst`; `wrangler deploy --dry-run` ok nos dois ambientes. Inerte até `DEPLOY_ATIVO=true`. Falta: primeiro deploy e reversão testada, combinados para depois da T3 (`public/_headers`) integrada na `desenvolvimento` (decisão do usuário em 2026-11-15); aí liga `DEPLOY_ATIVO=true`
 - [ ] Observabilidade — logs e métricas do Workers na Cloudflare
