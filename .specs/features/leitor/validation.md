@@ -1,11 +1,11 @@
-# Validação: leitor — FAIL ❌ (rodada 2)
+# Validação: leitor — PASS ✅ (rodada 3)
 
-- **Data**: 2026-11-15 · **Branch**: feature/leitor @ c0755e9 · **Árvore**: 73559d05e6cbd0c91960bc14c9df35d7bd136175
-- **Escopo**: diff do retrabalho R1 (`5a6b8af..c0755e9`) e regressão pela suíte inteira (detalhe em `verificacao-rodada-2.md`; rodada 1 em `verificacao-rodada-1.md`)
-- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 344 unitários e 27 e2e passaram, 0 falharam (rodado de novo: o `Gate:` do R1 é de árvore anterior ao commit do prettier); `pnpm audit --audit-level high` sem altas
-- **Sensor**: 16 mutações, 14 mortas, 2 sobreviveram (equivalentes: 0; ambas no A-12)
-- **Revisão de código**: skill `revisao-codigo`, modo curto, sobre o diff do R1: 0 bloqueios; 1 sugestão (o `pnpm install --ignore-scripts` seguido do `wrangler deploy` no job `publicar` nunca rodou de verdade, ver lacunas)
-- **Segurança**: `auditor-seguranca` (`seguranca.md`, "Reteste rodada 2"): SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
+- **Data**: 2026-11-15 · **Branch**: feature/leitor @ 8409d60 · **Árvore**: 1c90fb1c6dba57ebc3a0783595bcc96af62ee0e8
+- **Escopo**: diff do retrabalho R2 (`c0755e9..8409d60`, só a T47) e regressão pela suíte inteira (detalhe em `verificacao-rodada-3.md`; anteriores em `verificacao-rodada-1.md` e `verificacao-rodada-2.md`)
+- **Gate**: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e` = 345 unitários (27 arquivos) e 27 e2e passaram, 0 falharam (rodado de novo: árvore diferente da do `Gate:` da T47)
+- **Sensor**: 3 mutações no laço da fumaça (`deploy.yml:124`), 3 mortas, 0 sobreviveram (inclui as 2 sobreviventes da rodada 2); rodada 2: 16 mutações, 14 mortas
+- **Revisão de código**: modo curto sobre o diff do R2 (9 linhas de teste, nenhuma removida): 0 bloqueios, 0 sugestões; rodada 2: 0 bloqueios
+- **Segurança**: não reaberta na rodada 3 (o R2 só acrescenta teste); vale o reteste da rodada 2 em `seguranca.md`: SEC-001 a SEC-005 fechados; 0 crítico, 0 alto, 0 médio, 0 baixo; 4 informativos (I-6 a I-9)
 - **Modelo**: /validar pedido em Sonnet; o dono escolheu seguir em Opus
 
 ## Achados
@@ -23,7 +23,7 @@
 | A-09 | GitHub, environments; `.specs/preparacao.md:20` | `gh api` (só leitura): `producao` ← `main`, `tst` ← `desenvolvimento` | — | crítica | fechado |
 | A-10 | `src/dados/livros.ts:37-45, 59-62, 77-82` | JSON validado (número e capítulos) antes do `cache.put`; entrada ilegível apagada; testes em `livros.test.ts:62-93` | — | crítica | fechado |
 | A-11 | `package.json` (wrangler 4.162.0) | `pnpm audit --audit-level high` sem altas | — | crítica | fechado |
-| A-12 | `test/arquivos/deploy.test.ts:82-87` | O teste não fixa os caminhos que a fumaça confere (FUN-42): os `toMatch` de `/`, `/sw.js` e `/livros/` casam com outras linhas do passo (a atribuição `livro=` e o `curl` da linha 122, que não olha cabeçalho); duas mutações no laço `for caminho in` (`deploy.yml:124`) sobrevivem com 12/12 testes passando | Extrair a lista do `for caminho in ...` e exigir exatamente `/`, `/sw.js` e `${livro}` | crítica | aberto |
+| A-12 | `test/arquivos/deploy.test.ts:82-87` | O teste não fixa os caminhos que a fumaça confere (FUN-42): os `toMatch` de `/`, `/sw.js` e `/livros/` casam com outras linhas do passo (a atribuição `livro=` e o `curl` da linha 122, que não olha cabeçalho); duas mutações no laço `for caminho in` (`deploy.yml:124`) sobrevivem com 12/12 testes passando | Teste `test/arquivos/deploy.test.ts:89-96` extrai a lista do laço e exige `['"/"', '"/sw.js"', '"${livro}"']` (linha 92); as 2 mutações e a remoção de `/sw.js` morrem | crítica | fechado |
 
 ## Lacunas e o que não foi validado
 
