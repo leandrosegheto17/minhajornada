@@ -3,7 +3,7 @@ import { indice } from '../biblia/indice';
 import type { Ref, Tema } from '../biblia/tipos';
 import { BotaoIcone } from '../componentes/base/Botoes';
 import { Estado } from '../componentes/base/Estado';
-import { IconeAbaixo, IconeAparencia, IconeSobre } from '../componentes/icones';
+import { IconeAbaixo, IconeAparencia, IconeLivro, IconeSemRede, IconeSobre } from '../componentes/icones';
 import { ID_PAINEL_APARENCIA, PainelAparencia } from '../componentes/PainelAparencia';
 import { Versiculo } from '../componentes/Versiculo';
 import type { CargaLivro } from '../estado/useLeitor';
@@ -24,7 +24,11 @@ interface Props {
   tema: Tema | null;
   aoMudarLetra: (delta: 1 | -1) => void;
   aoEscolherTema: (tema: Tema) => void;
+  /** Ação do estado "não baixado" (FUN-36): abre a escolha de livro. */
+  aoEscolherOutroLivro: () => void;
 }
+
+export const MENSAGEM_NAO_BAIXADO = 'Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.';
 
 function nomeDoLivro(livro: number): string {
   return indice.livros[livro - 1]?.nome ?? '';
@@ -49,6 +53,7 @@ export function TelaLeitor({
   tema,
   aoMudarLetra,
   aoEscolherTema,
+  aoEscolherOutroLivro,
 }: Props) {
   const [painelAberto, setPainelAberto] = useState(false);
   const { livro, capitulo } = referencia;
@@ -131,7 +136,16 @@ export function TelaLeitor({
           inicioDeslize.current = null;
         }}
       >
-        {versiculos ? (
+        {carga.situacao === 'naoBaixado' ? (
+          // FUN-36: sem rede e fora do cache; a escolha de outro livro continua disponível.
+          <Estado
+            variante="erro"
+            icone={<IconeSemRede />}
+            titulo="Sem internet"
+            texto={MENSAGEM_NAO_BAIXADO}
+            acao={{ rotulo: 'Escolher outro livro', aoAcionar: aoEscolherOutroLivro, icone: <IconeLivro /> }}
+          />
+        ) : versiculos ? (
           <ol className={estilo.versiculos}>
             {versiculos.map((texto, i) => (
               <Versiculo key={i} numero={i + 1} texto={texto} />

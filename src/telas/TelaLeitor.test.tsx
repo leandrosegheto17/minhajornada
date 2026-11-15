@@ -40,6 +40,7 @@ function propsPara(referencia: Ref, extra: Partial<Props> = {}): Props {
     tema: null,
     aoMudarLetra: vi.fn(),
     aoEscolherTema: vi.fn(),
+    aoEscolherOutroLivro: vi.fn(),
     ...extra,
   };
 }
@@ -269,5 +270,31 @@ describe('painel de aparência no leitor (FUN-24 a FUN-28)', () => {
     expect(props.aoMudarLetra).toHaveBeenCalledWith(1);
     fireEvent.click(screen.getByRole('button', { name: 'Sépia' }));
     expect(props.aoEscolherTema).toHaveBeenCalledWith('sepia');
+  });
+});
+
+describe('livro não baixado (FUN-36)', () => {
+  const naoBaixado = (numero: number): CargaLivro => ({ situacao: 'naoBaixado', numero });
+
+  it('FUN-36: com o estado "não baixado", a mensagem exata aparece e a ação abre a escolha de livro', () => {
+    const props = propsPara({ livro: n('Romanos'), capitulo: 8 }, { carga: naoBaixado(n('Romanos')) });
+    render(<TelaLeitor {...props} />);
+    expect(
+      screen.getByText('Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.'),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Escolher outro livro' }));
+    expect(props.aoEscolherOutroLivro).toHaveBeenCalledTimes(1);
+  });
+
+  it('FUN-36: no estado "não baixado", não há versículos nem carregando', () => {
+    render(<TelaLeitor {...propsPara({ livro: n('Romanos'), capitulo: 8 }, { carga: naoBaixado(n('Romanos')) })} />);
+    expect(within(screen.getByRole('main')).queryAllByRole('listitem')).toHaveLength(0);
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('FUN-36: o título e os cartões continuam disponíveis', () => {
+    render(<TelaLeitor {...propsPara({ livro: n('Romanos'), capitulo: 8 }, { carga: naoBaixado(n('Romanos')) })} />);
+    expect(screen.getByRole('button', { name: 'Romanos 8. Escolher outro capítulo' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Capítulo seguinte: Romanos 9' })).toBeEnabled();
   });
 });

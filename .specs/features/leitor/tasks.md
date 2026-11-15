@@ -877,6 +877,9 @@ T35
 **Depends on**: T22
 **Reuses**: `Estado` (T18), `LivroNaoBaixado` (T10)
 **Requirement**: FUN-36
+**Status**: rascunhada
+**Testes**: `src/telas/TelaLeitor.test.tsx` › "FUN-36: com o estado \"não baixado\", a mensagem exata aparece e a ação abre a escolha de livro", "FUN-36: no estado \"não baixado\", não há versículos nem carregando", "FUN-36: o título e os cartões continuam disponíveis" (FUN-36)
+**Código**: `src/telas/TelaLeitor.tsx` (estado de erro com `MENSAGEM_NAO_BAIXADO` e a prop `aoEscolherOutroLivro`)
 
 **Done when**:
 
