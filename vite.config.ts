@@ -23,7 +23,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { name: 'versao-app', content: versaoApp }, injectTo: 'head' },
       ],
     },
-    // injectManifest (AD-001): o service worker é nosso (`src/pwa/sw.ts`). Manifesto e ícones: tarefa T32.
+    // injectManifest (AD-001): o service worker é nosso (`src/pwa/sw.ts`).
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src/pwa',
@@ -32,7 +32,23 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: false,
       scope: '/',
-      manifest: false,
+      // FUN-45: instalável no Chrome (nome, standalone, ícones de 192 e 512) e na Tela de Início do iPhone.
+      manifest: {
+        name: 'MinhaJornada',
+        short_name: 'MinhaJornada',
+        description: 'A Bíblia Livre para ler no celular, também sem internet.',
+        lang: 'pt-BR',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        theme_color: corFundo,
+        background_color: corFundo,
+        icons: [
+          { src: '/icones/icone-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icones/icone-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/icones/icone-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
       // Só o app (o shell): os livros (`livros/*.json`) ficam no cache `mj-livros`, gerido pelo app (AD-002).
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,woff2,svg,png,webmanifest}'],

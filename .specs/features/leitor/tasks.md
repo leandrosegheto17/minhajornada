@@ -987,6 +987,10 @@ T35
 **Depends on**: None
 **Reuses**: `ControleEmCasa_LJS/frontend/web/vite.config.ts:41-55` (manifesto e `lerToken`)
 **Requirement**: FUN-45
+**Status**: rascunhada
+**Testes**: `e2e/manifesto.spec.ts` › "FUN-45: o manifesto servido tem o nome, standalone e os ícones 192 e 512, cada um com o tamanho declarado", "FUN-45: o manifesto e os ícones vêm do próprio site" (FUN-45)
+**Código**: `public/icones/icone.svg`, `vite.config.ts` (`manifest` do `VitePWA`), `index.html` (favicon e `apple-touch-icon`)
+**Pendência**: `public/icones/icone-192.png`, `icone-512.png` e `icone-maskable-512.png` precisam ser gerados de `icone.svg` (o maskable com o fundo cheio, sem o canto arredondado); o rascunho não roda ferramenta. O `/executar` os gera antes do gate; sem eles, o e2e fica vermelho de propósito.
 
 **Done when**:
 
