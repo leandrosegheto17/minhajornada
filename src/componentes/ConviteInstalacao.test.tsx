@@ -13,7 +13,8 @@ const matchMediaOriginal = window.matchMedia;
 function simularNavegador(ua: string, plataforma: string, toques: number) {
   vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(ua);
   vi.spyOn(navigator, 'platform', 'get').mockReturnValue(plataforma);
-  vi.spyOn(navigator, 'maxTouchPoints', 'get').mockReturnValue(toques);
+  // O jsdom não define maxTouchPoints: vi.spyOn não alcança a propriedade ausente.
+  Object.defineProperty(navigator, 'maxTouchPoints', { value: toques, configurable: true });
 }
 
 function simularInstalado(instalado: boolean) {
