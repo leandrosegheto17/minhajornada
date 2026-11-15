@@ -69,7 +69,7 @@ export function useLeitor(): Leitor {
         if (valido) setCarga({ situacao: 'pronto', numero, livro });
       },
       () => {
-        // Decisão do dono (2026-11-15): qualquer falha ao carregar o livro (sem rede, JSON ilegível, servidor com
+        // AD-004 (decisão do dono, 2026-11-15): qualquer falha ao carregar o livro (sem rede, JSON ilegível, servidor com
         // erro) mostra a mensagem de não baixado do FUN-36, com a escolha de livro.
         if (valido) setCarga({ situacao: 'naoBaixado', numero });
       },
