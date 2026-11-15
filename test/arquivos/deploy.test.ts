@@ -139,6 +139,9 @@ describe('deploy.yml: a fumaça falha quando um cabeçalho do FUN-42 falta (A-13
     'if [ -n "${OMITIR:-}" ] && { [ -z "${OMITIR_EM:-}" ] || [ "${url#"$URL_PUBLICA"}" = "$OMITIR_EM" ]; }; then',
     '  tudo="$(grep -vi -- "$OMITIR" <<< "$tudo")"',
     'fi',
+    'if [ -n "${CAIXA_TITULO:-}" ]; then',
+    '  tudo="${tudo//content-security-policy:/Content-Security-Policy:}"; tudo="${tudo//x-content-type-options:/X-Content-Type-Options:}"; tudo="${tudo//referrer-policy:/Referrer-Policy:}"',
+    'fi',
     'printf "HTTP/2 200\r\n%s\r\n\r\n" "$tudo"',
   ].join('\n');
   writeFileSync(join(bin, 'curl'), stub);
@@ -162,6 +165,12 @@ describe('deploy.yml: a fumaça falha quando um cabeçalho do FUN-42 falta (A-13
   it('A-13: FUN-42: o bloco extraído existe e, com todos os cabeçalhos, sai com 0', () => {
     expect(bloco).toMatch(/for caminho in/);
     const r = rodar({});
+    expect(r.stdout + r.stderr).not.toMatch(/::error/);
+    expect(r.status).toBe(0);
+  });
+
+  it('A-14: FUN-42: cabeçalhos com a caixa de título (HTTP/1.1) passam na fumaça: o grep ignora a caixa', () => {
+    const r = rodar({ CAIXA_TITULO: '1' });
     expect(r.stdout + r.stderr).not.toMatch(/::error/);
     expect(r.status).toBe(0);
   });
