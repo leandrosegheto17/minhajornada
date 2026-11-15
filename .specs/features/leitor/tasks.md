@@ -1382,7 +1382,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 **Tests**: teste "A-14: FUN-42: cabeçalhos com caixa de título passam na fumaça", que falha com `grep -q` no lugar de `grep -qi`
 **Gate**: `pnpm typecheck && pnpm test`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1399,7 +1399,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm exe
 **Tests**: casos "A-13: FUN-42: sem <diretiva> em <caminho> ..." reescritos com a diretiva isolada e a mensagem conferida; mudança de teste existente com motivo A-15 no commit (fortalece, não enfraquece)
 **Gate**: `pnpm typecheck && pnpm test`
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1410,6 +1410,8 @@ Gate: pnpm typecheck && pnpm test @ 2e8708d741bfa2a1e5f88d6002c3537943c37f56 = v
 Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 480ab09cbede90f7a1f25d138967be90508059c2 = verde
 
 Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ c40ba9b7bcf1aaa1352bec7b741eb8c4ab5ba024 = verde
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ b68bc6f5d63a17705d5fcf82d1d49f3c0b1c7748 = verde
 
 
 ## Requirement Coverage
