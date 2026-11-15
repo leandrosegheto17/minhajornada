@@ -86,6 +86,15 @@ describe('deploy.yml: a fumaça confere os cabeçalhos do FUN-42 (A-05)', () => 
     expect(fumaca).toMatch(/\/livros\//);
   });
 
+  it('A-12: FUN-42: o laço que confere os cabeçalhos passa exatamente por /, /sw.js e o livro', () => {
+    const laco = /^\s*for caminho in (.+?); do\s*$/m.exec(fumaca);
+    expect(laco, 'laço `for caminho in ...; do` ausente').not.toBeNull();
+    expect(laco?.[1]?.trim().split(/\s+/)).toEqual(['"/"', '"/sw.js"', '"${livro}"']);
+    // O livro é um arquivo de `dist/livros`, e o curl do laço lê os cabeçalhos de ${URL_PUBLICA}${caminho}.
+    expect(fumaca).toMatch(/livro="\/livros\/\$\(ls dist\/livros/);
+    expect(fumaca).toMatch(/-D - -o \/dev\/null "\$\{URL_PUBLICA\}\$\{caminho\}"/);
+  });
+
   it.each([
     ['content-security-policy', "frame-ancestors 'none'"],
     ['content-security-policy', "default-src 'self'"],
