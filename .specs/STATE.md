@@ -22,6 +22,7 @@
 | Data | Fluxo | Item | Fase | Indicado | Usado |
 |---|---|---|---|---|---|
 | 2026-11-14 | 1 | leitor | /preparar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-15 | 1 | leitor | /validar | Sonnet | Opus (escolha do usuário) |
 
 ## Decisions
 

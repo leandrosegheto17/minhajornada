@@ -120,6 +120,24 @@ T35
 
 ---
 
+### Phase 11: Retrabalho R1
+
+```
+T36
+T37
+T38
+T39
+T40
+T41
+T42
+T43
+T44
+T45
+T46
+```
+
+---
+
 ## Task Breakdown
 
 ### T1: Conversor de um livro
@@ -1109,6 +1127,193 @@ Gate: pnpm typecheck && pnpm vitest run src/App.test.tsx src/componentes/Convite
 ---
 
 Gate: pnpm typecheck && pnpm build && pnpm exec playwright test e2e/leitura.spec.ts e2e/offline.spec.ts e2e/aparencia.spec.ts --reporter=dot @ b05d0aa51e95acd3eb06c683636a489677b7ee21 = verde
+
+### T36: Deslize só com o dedo (A-01)
+
+**What**: O deslize do leitor troca de capítulo só com `pointerType === 'touch'`; mouse e caneta não trocam.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/telas/TelaLeitor.tsx:73-85`; testes de deslize em `src/telas/TelaLeitor.test.tsx:182-225`
+**Requirement**: FUN-16, FUN-17, FUN-18 · Achado: A-01 (validation.md)
+**Tests**: `TelaLeitor.test.tsx`: "FUN-16: arrastar o mouse 100/0 não troca de capítulo" (falha antes da correção); os de toque seguem verdes
+**Gate**: `pnpm typecheck && pnpm vitest run src/telas/TelaLeitor.test.tsx --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T37: Prova visual do versículo e do itálico (A-02)
+
+**What**: No e2e de Filemom 1, afirmar que cada versículo começa em linha própria com o número à esquerda do texto (`boundingBox`) e que o acréscimo tem `font-style: italic` computado.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `e2e/leitura.spec.ts:25-30`
+**Requirement**: FUN-01, FUN-02 · Achado: A-02 (validation.md)
+**Tests**: `e2e/leitura.spec.ts`: "FUN-01: cada versículo em linha própria, número à esquerda" e "FUN-02: o acréscimo aparece em itálico" (rodada vermelha com o CSS do `em` ou da pílula removido)
+**Gate**: `pnpm build && pnpm exec playwright test e2e/leitura.spec.ts --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T38: Registrar as autorizações de teste (A-03)
+
+**What**: Criar `## Autorizações` em `.specs/STATE.md` com a aprovação do dono de 2026-11-15: troca da simulação de `maxTouchPoints` em `ConviteInstalacao.test.tsx` e o passo de fechar o painel em `e2e/aparencia.spec.ts` (asserções iguais).
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: regra de Testes do `CLAUDE.md` (Autorizações)
+**Requirement**: Achado: A-03 (validation.md)
+**Tests**: sem teste (artefato); conferido pelo verificador na checagem (c)
+**Gate**: —
+
+- [ ] Concluída
+
+---
+
+### T39: AD do erro de livro além da falta de rede (A-04)
+
+**What**: Gravar AD-004 em `.specs/STATE.md`: a spec (FUN-36) fala em sem rede; o código trata também JSON ilegível e erro do servidor como não baixado; vale a mensagem do FUN-36, decisão do dono em 2026-11-15. Citar a AD no comentário de `src/estado/useLeitor.ts:62-66`.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/estado/useLeitor.ts:62-66`; teste `src/estado/useLeitor.test.ts` (FUN-36, erro que não é falta de rede)
+**Requirement**: FUN-36 · Achado: A-04 (validation.md)
+**Tests**: o teste existente de FUN-36 segue verde
+**Gate**: `pnpm typecheck && pnpm vitest run src/estado --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T40: Fumaça dos cabeçalhos servidos (A-05)
+
+**What**: A fumaça do `deploy.yml` confere a CSP completa (com `frame-ancestors 'none'`), `X-Content-Type-Options` e `Referrer-Policy` em `/`, `/sw.js` e num `/livros/*.json` do índice.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `.github/workflows/deploy.yml:93-94`; `test/arquivos/cabecalhos.test.ts`
+**Requirement**: FUN-42 · Achado: A-05 (validation.md)
+**Tests**: teste em `test/arquivos/` que lê o `deploy.yml` e exige os três caminhos e `frame-ancestors` na fumaça (vermelho antes)
+**Gate**: `pnpm typecheck && pnpm vitest run --project arquivos --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T41: Desfazer maxTouchPoints entre testes (A-06)
+
+**What**: No `afterEach` de `ConviteInstalacao.test.tsx`, apagar a propriedade `maxTouchPoints` definida pelo teste.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/componentes/ConviteInstalacao.test.tsx:17, 40-44` (autorização de T38)
+**Requirement**: FUN-46 · Achado: A-06 (validation.md)
+**Tests**: depois do `afterEach`, `Object.hasOwn(navigator, 'maxTouchPoints')` é falso
+**Gate**: `pnpm vitest run src/componentes/ConviteInstalacao.test.tsx --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T42: Afirmar o painel fechado no e2e de 320 px (A-07)
+
+**What**: Depois de tocar em "Aparência" de novo, afirmar que a região "Aparência" está oculta antes de tocar no título.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `e2e/aparencia.spec.ts:114-115` (autorização de T38)
+**Requirement**: FUN-43 · Achado: A-07 (validation.md)
+**Tests**: `expect(page.getByRole('region', { name: 'Aparência' })).toBeHidden()`
+**Gate**: `pnpm build && pnpm exec playwright test e2e/aparencia.spec.ts --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T43: Separar build e publicação no deploy (A-08)
+
+**What**: Dividir o `deploy.yml` em job de build sem segredo (gera `dist/` e o envia como artefato, com cache do pnpm) e job de publicar (baixa o artefato, sem `pnpm install` nem cache, com `CLOUDFLARE_API_TOKEN` só nos passos `wrangler deploy` e `wrangler rollback`).
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `.github/workflows/deploy.yml:59-94`; decisão do dono em 2026-11-15 (separar jobs)
+**Requirement**: Achado: A-08 (validation.md; SEC-001 e SEC-004 de `seguranca.md`)
+**Tests**: teste em `test/arquivos/` que lê o `deploy.yml`: nenhum `env` de job com o token, token só em passos `wrangler`, job com segredo sem `cache: pnpm` e sem `pnpm install` (vermelho antes)
+**Gate**: `pnpm typecheck && pnpm vitest run --project arquivos --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T44: Regra de branch dos environments no GitHub (A-09, manual do dono)
+
+**What**: O dono configura em Settings > Environments: `producao` só a partir de `main`, `tst` só a partir de `desenvolvimento`, segredos só nos environments; o `/executar` registra a data em `.specs/preparacao.md` (Nível 2) depois da confirmação via `AskUserQuestion`.
+**Estimativa**: 15 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `seguranca.md` (SEC-002)
+**Requirement**: Achado: A-09 (validation.md)
+**Tests**: manual: confirmação do dono gravada em `preparacao.md`
+**Gate**: —
+
+- [ ] Concluída
+
+---
+
+### T45: Só guardar livro que é JSON válido (A-10)
+
+**What**: `carregarLivro` lê e valida a resposta (JSON com o `numero` pedido) antes do `cache.put`; resposta inválida (ex.: 200 `text/html` do fallback) não vai ao cache e lança `LivroNaoBaixado`.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `src/dados/livros.ts:59-68`; dublê `src/dados/dubleCache.ts`
+**Requirement**: FUN-34, FUN-36 · Achado: A-10 (validation.md)
+**Tests**: `livros.test.ts`: "FUN-34: resposta 200 text/html não é guardada e lança LivroNaoBaixado" e "FUN-34: JSON de outro livro não é guardado" (vermelhos antes)
+**Gate**: `pnpm typecheck && pnpm vitest run src/dados --reporter=dot`
+
+- [ ] Concluída
+
+---
+
+### T46: Dependências de desenvolvimento sem vulnerabilidade alta (A-11)
+
+**What**: Atualizar o `wrangler` (ou `pnpm.overrides` do `undici` >= 7.30.1, e dos pacotes do `workbox-build` se preciso) até `pnpm audit` não ter alta.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `package.json`; `seguranca.md` (SEC-005)
+**Requirement**: Achado: A-11 (validation.md)
+**Tests**: `pnpm audit --audit-level high` sai 0; suíte e build verdes
+**Gate**: `pnpm audit --audit-level high && pnpm typecheck && pnpm test && pnpm build`
+
+- [ ] Concluída
+
+---
 
 ## Requirement Coverage
 
