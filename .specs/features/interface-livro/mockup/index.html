@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MinhaJornada: mockup da interface-livro</title>
+<style>
+:root{--fundo:#F2F3F5;--superficie:#FFFFFF;--texto:#1A1D23;--suave:#5B616E;--acento:#9A3B5B;--borda:#DADDE3;--fonte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root{--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#E39AB5;--borda:#2C313A;color-scheme:dark}}
+*{box-sizing:border-box} body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--fonte);line-height:1.5}
+header{max-width:1240px;margin:0 auto;padding:32px 20px 8px} h1{font-size:28px;margin:0 0 8px} header p{margin:0 0 6px;color:var(--suave);max-width:80ch}
+a{color:var(--acento)}
+section{max-width:1240px;margin:24px auto;padding:20px;background:var(--superficie);border:1px solid var(--borda);border-radius:14px}
+h2{font-size:20px;margin:0 0 4px} h3{font-size:16px;margin:18px 0 6px} .intencao{margin:0 0 6px;color:var(--suave);max-width:90ch}
+.temas{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px} .temas a{font-size:14px;text-decoration:none;border:1px solid var(--borda);border-radius:999px;padding:6px 12px}
+.vistas{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap} .vista{display:flex;flex-direction:column;gap:6px} .vista span{font-size:13px;color:var(--suave)}
+.pc{width:720px;height:450px;overflow:hidden;border:1px solid var(--borda);border-radius:10px;max-width:100%} .pc iframe{width:1440px;height:900px;border:0;transform:scale(.5);transform-origin:0 0}
+.cel{width:390px;height:720px;border:1px solid var(--borda);border-radius:28px;overflow:hidden;max-width:100%} .cel iframe{width:390px;height:720px;border:0}
+.cel-p{width:260px;height:480px;border:1px solid var(--borda);border-radius:20px;overflow:hidden} .cel-p iframe{width:390px;height:720px;border:0;transform:scale(.6667);transform-origin:0 0}
+table{border-collapse:collapse;font-size:14px;width:100%} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--borda);vertical-align:top} code{font-size:13px}
+.escolha{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:20px}
+</style>
+</head>
+<body>
+<header>
+<h1>Mockup da feature interface-livro</h1>
+<p>As telas novas e a barra de título comum usam o guia do projeto (<code>tokens.css</code>, direção C) e só acrescentam os tokens de <code>tokens-novos.css</code>, listados no fim desta página. Os botões abaixo de cada título abrem a tela inteira no tema escolhido.</p>
+<p>Spec: FUN-51 a FUN-92. O texto bíblico é o da Bíblia Livre, igual à fonte.</p>
+</header>
+
+<section><h2>1. Página inicial: escolha a imagem de fundo</h2>
+<p class="intencao">Toda abertura do app passa por aqui (FUN-51). O cartão fica à direita no PC e embaixo, sobre a imagem, no celular (FUN-52, FUN-53). Um véu escurece a foto do lado do cartão, e o crédito da foto fica num selo legível. As três fotos têm a licença do Unsplash, que permite o uso sem custo. A escolhida é salva no próprio site (FUN-58).</p>
+<div class="escolha">
+  <div class="vista"><span><strong>A</strong> · Bíblia aberta na luz (Aaron Burden)</span><div class="pc" style="width:100%;max-width:560px;height:350px"><iframe src="telas/inicial.html?img=a" title="Inicial, imagem A" loading="lazy" style="transform:scale(.3889)"></iframe></div><div class="temas"><a href="telas/inicial.html?img=a">Abrir</a> <a href="telas/inicial.html?img=a#escuro">Escuro</a></div></div>
+  <div class="vista"><span><strong>B</strong> · Pessoas de mãos erguidas ao pôr do sol (Rajesh Rajput)</span><div class="pc" style="width:100%;max-width:560px;height:350px"><iframe src="telas/inicial.html?img=b" title="Inicial, imagem B" loading="lazy" style="transform:scale(.3889)"></iframe></div><div class="temas"><a href="telas/inicial.html?img=b">Abrir</a> <a href="telas/inicial.html?img=b#escuro">Escuro</a></div></div>
+  <div class="vista"><span><strong>C</strong> · Braços abertos no alto do morro (Jonny Gios)</span><div class="pc" style="width:100%;max-width:560px;height:350px"><iframe src="telas/inicial.html?img=c" title="Inicial, imagem C" loading="lazy" style="transform:scale(.3889)"></iframe></div><div class="temas"><a href="telas/inicial.html?img=c">Abrir</a> <a href="telas/inicial.html?img=c#escuro">Escuro</a></div></div>
+</div>
+<h3>No celular, com leitura gravada, e se a imagem não carregar</h3>
+<div class="vistas">
+  <div class="vista"><span>A · celular</span><div class="cel-p"><iframe src="telas/inicial.html?img=a" title="Inicial A no celular" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>B · celular</span><div class="cel-p"><iframe src="telas/inicial.html?img=b#escuro" title="Inicial B no celular" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>C · celular, com “Você parou em Romanos 8”</span><div class="cel-p"><iframe src="telas/inicial.html?img=c&amp;retomada=1#sepia" title="Inicial C no celular com retomada" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Imagem não carregou (fundo do tema)</span><div class="cel-p"><iframe src="telas/inicial.html?img=nenhuma" title="Inicial sem imagem" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>2. Barra de título em todas as telas</h2>
+<p class="intencao">Ordem: marca (vai à inicial), formato (mostra para onde troca: “Livro” na rolagem e “Rolagem” no livro), “Aa” (letra e tema), Sobre e “Entrar / Criar conta”. Ela fica presa ao topo (FUN-60 a FUN-65). Abaixo de 640 px o formato vira só ícone; abaixo de 480 px a conta também. Os rótulos acessíveis continuam.</p>
+<h3>Leitor em rolagem: única mudança é a barra</h3>
+<p class="intencao">Hoje a barra do leitor tem só a marca à esquerda e “Aa” e Sobre à direita (<code>.specs/mockup/telas/leitor.html</code>). O resto do leitor não muda.</p>
+<div class="temas"><a href="telas/leitor.html#claro">Claro</a> <a href="telas/leitor.html#escuro">Escuro</a> <a href="telas/leitor.html#sepia">Sépia</a></div>
+<div class="vistas">
+  <div class="vista"><span>PC, 1440 px (escala 50%)</span><div class="pc"><iframe src="telas/leitor.html" title="Leitor em rolagem no PC" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="telas/leitor.html#escuro" title="Leitor em rolagem no celular" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>3. Modo livro</h2>
+<p class="intencao">Tela larga (a partir de 900 px e mais larga que alta): duas páginas lado a lado. Tela estreita: uma página (FUN-73, FUN-74). Cada livro começa no topo de uma página nova, com o nome; o número do capítulo abre o primeiro versículo (FUN-76). Nenhum versículo é cortado (FUN-75). O título abre o seletor de hoje (FUN-84). As setas e o deslize passam a página.</p>
+<div class="temas"><a href="telas/livro.html#claro">Claro</a> <a href="telas/livro.html#escuro">Escuro</a> <a href="telas/livro.html#sepia">Sépia</a> <a href="telas/livro.html?estado=carregando">Carregando</a> <a href="telas/livro.html?estado=erro">Sem rede (FUN-87)</a></div>
+<div class="vistas">
+  <div class="vista"><span>PC, 1440 × 900 (escala 50%)</span><div class="pc"><iframe src="telas/livro.html" title="Modo livro no PC" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="telas/livro.html#sepia" title="Modo livro no celular" loading="lazy"></iframe></div></div>
+</div>
+<h3>Estados</h3>
+<div class="vistas">
+  <div class="vista"><span>Carregando</span><div class="pc"><iframe src="telas/livro.html?estado=carregando" title="Modo livro carregando" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Sem rede, livro não baixado</span><div class="cel-p"><iframe src="telas/livro.html?estado=erro#escuro" title="Modo livro sem rede" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>4. Capa com o plano pago</h2>
+<p class="intencao">Antes de Gênesis 1, com “anterior” desativado (FUN-88, FUN-91). PC: texto do pago à esquerda, capa à direita (FUN-89). Celular: a capa primeiro e, com “Seguinte”, o texto do pago (FUN-90). “Quero saber” leva à tela “em breve” (FUN-92). O texto do pago é rascunho: ajuste à vontade.</p>
+<div class="temas"><a href="telas/capa.html#claro">Claro</a> <a href="telas/capa.html#escuro">Escuro</a> <a href="telas/capa.html#sepia">Sépia</a></div>
+<div class="vistas">
+  <div class="vista"><span>PC, 1440 × 900 (escala 50%)</span><div class="pc"><iframe src="telas/capa.html" title="Capa no PC" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Celular: capa</span><div class="cel-p"><iframe src="telas/capa.html" title="Capa no celular" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Celular: depois de “Seguinte”</span><div class="cel-p"><iframe src="telas/capa.html?pagina=pago" title="Texto do pago no celular" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>5. Tela “em breve”</h2>
+<p class="intencao">Aberta por “Criar conta”, “Entrar / Criar conta” e “Quero saber” (FUN-57). Usa o estado “vazio” do guia, com “Voltar”.</p>
+<div class="temas"><a href="telas/em-breve.html#claro">Claro</a> <a href="telas/em-breve.html#escuro">Escuro</a> <a href="telas/em-breve.html#sepia">Sépia</a></div>
+<div class="vistas">
+  <div class="vista"><span>PC (escala 50%)</span><div class="pc"><iframe src="telas/em-breve.html" title="Em breve no PC" loading="lazy"></iframe></div></div>
+  <div class="vista"><span>Celular, 320 px de largura útil</span><div class="cel-p"><iframe src="telas/em-breve.html#escuro" title="Em breve no celular" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>Tokens novos (tokens-novos.css)</h2>
+<p class="intencao">Entram no <code>tokens.css</code> do projeto na integração. Cores novas: nenhuma. A capa usa o par acento/texto do acento, o mesmo do botão primário, já conferido no guia (≥ 4,5:1 nos três temas). O cartão da inicial usa superfície e texto do tema (FUN-59).</p>
+<table>
+<tr><th>Token</th><th>Valor</th><th>Uso</th></tr>
+<tr><td><code>--altura-barra</code></td><td>56px</td><td>Barra de título</td></tr>
+<tr><td><code>--largura-barra</code></td><td>1240px</td><td>Conteúdo da barra no PC</td></tr>
+<tr><td><code>--largura-cartao-inicial</code></td><td>400px</td><td>Cartão “Ler Bíblia / Criar conta”</td></tr>
+<tr><td><code>--veu-imagem</code>, <code>--veu-imagem-celular</code></td><td>gradientes escuros (10% a 62%)</td><td>Escurecem a foto do lado do cartão</td></tr>
+<tr><td><code>--largura-pagina</code></td><td>520px</td><td>Página no PC</td></tr>
+<tr><td><code>--respiro-pagina</code>, <code>--respiro-pagina-celular</code></td><td>40px, 20px</td><td>Margem interna da página</td></tr>
+<tr><td><code>--sombra-pagina</code>, <code>--sombra-lombada</code>, <code>--sombra-lombada-direita</code></td><td>sombras</td><td>Papel e dobra do livro aberto</td></tr>
+<tr><td><code>--texto-titulo-livro</code>, <code>--texto-numero-capitulo</code>, <code>--texto-capa</code></td><td>clamp(30px, 4vw, 40px), 1.9em, clamp(38px, 5vw, 56px)</td><td>Nome do livro, número do capítulo, título da capa</td></tr>
+<tr><td><code>--cor-capa</code>, <code>--cor-capa-texto</code></td><td>= acento, = texto do acento</td><td>Capa</td></tr>
+<tr><td><code>--quebra-barra-compacta</code>, <code>--quebra-livro-duplo</code></td><td>480px, 900px</td><td>Conta só ícone; duas páginas</td></tr>
+</table>
+<h3>Para o plano: a imagem no app</h3>
+<p class="intencao">As fotos aqui são JPG de 1920 px (175 a 360 KB). No app, o pré-cache hoje só guarda <code>png</code> e <code>svg</code> (<code>vite.config.ts:55-58</code>). O plano decide entre ampliar o pré-cache para <code>webp</code> (recomendado: cerca de 150 KB) ou usar PNG, que é bem maior. O crédito da foto também vai para o “Sobre”.</p>
+</section>
+</body>
+</html>
