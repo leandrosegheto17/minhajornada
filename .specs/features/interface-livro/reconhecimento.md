@@ -5,7 +5,7 @@
 - **Encaixe**: estende padrão (telas, reducer, preferências, barra) e padrão novo (paginação com medição de layout, `ResizeObserver`)
 - **Arquitetura**: cabe. A paginação entra como camada nova (função pura + componente que mede), sem mudar dados nem contratos
 - **Telas**: cria página inicial, tela "em breve", leitor em formato livro e capa; muda a barra de todas as telas (leitor, livros, capítulos, Sobre)
-- **Mockup**: pendente
+- **Mockup**: aprovado em 2026-11-17 (`mockup/`, imagem de fundo A: Bíblia aberta na luz, Aaron Burden / Unsplash)
 - **Plano aprovado em**: pendente
 
 ## Onde entra

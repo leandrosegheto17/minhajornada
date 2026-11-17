@@ -37,7 +37,7 @@ O leitor abre direto no texto e só tem o formato de rolagem por capítulo. O do
 | Abertura do app | Sempre a página inicial; "Ler Bíblia" abre o ponto gravado ou, sem leitura gravada, a escolha de livro (rolagem) ou a capa (livro) | Decisão do usuário em 2026-11-17; altera FUN-20 e FUN-21 | y |
 | Modo livro no celular | 1 página em tela estreita, 2 páginas lado a lado em tela larga | Decisão do usuário em 2026-11-17 | y |
 | Limite entre tela estreita e larga | Larga quando a área visível tem pelo menos 900 px de largura e é mais larga que alta | Duas colunas de texto confortável pedem ~420 px cada; o valor exato pode ser ajustado no mockup | n |
-| Imagem de fundo da página inicial | Foto de licença livre (Unsplash ou Pexels), escolhida no mockup, salva no próprio site, com o crédito registrado no "Sobre" | Decisão do usuário em 2026-11-17; FUN-41 proíbe outros domínios | y |
+| Imagem de fundo da página inicial | Foto A do mockup ("Bíblia aberta na luz", Aaron Burden, licença Unsplash), salva no próprio site, com o crédito na página inicial e no "Sobre" | Decisão do usuário em 2026-11-17; FUN-41 proíbe outros domínios | y |
 | Escolha do formato | Botão "Rolagem / Livro" na barra de título, gravado no aparelho; padrão: rolagem | Decisão do usuário em 2026-11-17 | y |
 | Capa | Uma capa só, da Bíblia, antes de Gênesis 1 | Decisão do usuário em 2026-11-17 | y |
 | Ida a um capítulo no modo livro | O seletor de hoje (título, grade, "Trocar livro"); escolher um capítulo abre a página onde ele começa | Decisão do usuário em 2026-11-17 | y |
