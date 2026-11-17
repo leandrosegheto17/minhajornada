@@ -66,3 +66,19 @@
 - **Scope**: `src/estado/useLeitor.ts` (carga do livro); testes em `src/estado/useLeitor.test.ts` (FUN-36).
 - **Date**: 2026-11-15
 - **Status**: active
+
+### AD-005
+- **Decision**: Na tela estreita, "anterior" na primeira página de Gênesis mostra a página do plano pago, e "anterior" nela mostra a capa. Na tela larga, mostra o par capa e plano pago, como manda FUN-88.
+- **Reason**: A spec manda FUN-88 ("anterior" na primeira página de Gênesis mostra a capa) e FUN-90 (na tela estreita, a ordem é capa → pago → Gênesis). Na tela estreita, voltar direto à capa pularia a página do pago, que fica entre as duas. Vale a ordem de FUN-90 nos dois sentidos.
+- **Trade-off**: Na tela estreita, chegar à capa a partir de Gênesis custa dois toques.
+- **Scope**: Feature `interface-livro`, `src/livro/folhear.ts`; testes de FUN-88 e FUN-90.
+- **Date**: 2026-11-17
+- **Status**: active
+
+### AD-006
+- **Decision**: A leitura gravada inválida continua sendo apagada na abertura do app, por `lerLeitura` (`src/dados/preferencias.ts:57-63`). Quando "Ler Bíblia" é acionado, o estado já não tem leitura e age como sem leitura gravada.
+- **Reason**: FUN-56 manda apagar quando "Ler Bíblia" é acionado. O efeito visível é o mesmo (escolha de livro ou capa), e a validação fica onde já está testada (FUN-22).
+- **Trade-off**: O valor inválido é apagado antes do toque, mesmo que a pessoa nunca toque em "Ler Bíblia".
+- **Scope**: Feature `interface-livro`; testes de FUN-56 em `src/estado/leitor.test.ts` e `src/estado/useLeitor.test.ts`.
+- **Date**: 2026-11-17
+- **Status**: active
