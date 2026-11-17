@@ -2,14 +2,21 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+interface Wrangler {
+  main?: string;
+  assets?: { directory?: string };
+  observability?: { enabled?: boolean };
+  env?: { tst?: { observability?: { enabled?: boolean } } };
+}
+
 /** `wrangler.jsonc` sem os comentários de linha e sem as vírgulas finais, para o JSON.parse. */
-function lerWrangler(): Record<string, any> {
+function lerWrangler(): Wrangler {
   const texto = readFileSync(join(process.cwd(), 'wrangler.jsonc'), 'utf8')
     .split('\n')
     .filter((linha) => !linha.trimStart().startsWith('//'))
     .join('\n')
     .replace(/,(\s*[}\]])/g, '$1');
-  return JSON.parse(texto) as Record<string, any>;
+  return JSON.parse(texto) as Wrangler;
 }
 
 describe('wrangler.jsonc: observabilidade do Worker (item Observabilidade do /preparar)', () => {
