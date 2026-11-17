@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MinhaJornada">
+  <rect width="512" height="512" rx="112" fill="#9A3B5B"/>
+  <circle cx="256" cy="128" r="34" fill="#F3D3DE"/>
+  <path d="M256 330 C224 306 176 298 126 302 V398 C176 394 224 402 256 426 C288 402 336 394 386 398 V302 C336 298 288 306 256 330 Z" fill="#FFFFFF"/>
+  <path d="M256 330 V426" stroke="#9A3B5B" stroke-width="10"/>
+  <path d="M256 360 C256 318 216 300 228 262 C240 226 300 222 296 182 C294 160 276 146 268 134" fill="none" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round" stroke-dasharray="1 0"/>
+</svg>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos de ícone · MinhaJornada</title>
+<style>
+:root{--fundo:#F2F3F5;--superficie:#FFFFFF;--texto:#1A1D23;--suave:#5B616E;--borda:#DADDE3;--fonte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box} body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--fonte);line-height:1.5}
+header{max-width:1240px;margin:0 auto;padding:28px 20px 4px} h1{font-size:26px;margin:0 0 6px} header p{margin:0 0 6px;color:var(--suave);max-width:85ch}
+.grade{max-width:1240px;margin:16px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:16px}
+.modelo{background:var(--superficie);border:1px solid var(--borda);border-radius:14px;padding:16px;display:grid;gap:10px}
+.modelo h2{font-size:17px;margin:0} .modelo p{margin:0;color:var(--suave);font-size:14px}
+.tamanhos{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.tamanhos figure{margin:0;display:grid;justify-items:center;gap:4px;font-size:12px;color:var(--suave)}
+.mascara{width:96px;height:96px}
+.mascara img{width:96px;height:96px;border-radius:50%;display:block}
+.tela{display:flex;gap:12px;padding:12px;border-radius:12px;background:linear-gradient(160deg,#2b3a55,#1b2233)}
+.tela figure{margin:0;display:grid;justify-items:center;gap:4px;font-size:11px;color:#E6E8EC}
+.tela img{width:56px;height:56px;border-radius:14px}
+.base{max-width:1240px;margin:16px auto;padding:0 20px}
+.base div{background:var(--superficie);border:1px solid var(--borda);border-radius:14px;padding:16px;display:flex;gap:16px;align-items:center}
+.base img{width:120px;height:auto}
+</style>
+</head>
+<body>
+<header>
+<h1>Modelos de ícone do MinhaJornada</h1>
+<p>Base: o ícone do app no site LJSSoftware (<code>assets/img/icons/icon-minha-jornada.svg</code>), um livro aberto com um caminho na página direita. Os modelos foram redesenhados em vetor limpo, em 512 × 512, com o desenho dentro da zona segura do ícone “maskable” (círculo de 80%), como o atual.</p>
+<p>Cada modelo aparece em 192 px (instalação), 64 e 32 px (aba do navegador), recortado em círculo (Android) e na tela inicial de um celular.</p>
+</header>
+<section class="base"><div><img src="icones/base-ljs.png" alt="Ícone de origem no LJSSoftware"><p><strong>Origem (LJSSoftware).</strong> Livro aberto azul e verde-azulado, com contorno azul-marinho e um caminho sinuoso que nasce na lombada.</p></div></section>
+<div class="grade" id="grade"></div>
+<script>
+var modelos = [
+  ['0-atual', 'Atual (para comparar)', 'O ícone de hoje: livro em linha branca sobre vinho, sem o caminho.'],
+  ['1-fiel-ljs', '1 · Fiel ao LJSSoftware', 'O desenho e as cores da origem, com contorno, sobre fundo branco. Liga o app à marca LJS, mas foge do vinho do app.'],
+  ['2-ljs-em-vinho', '2 · LJS nas cores do app', 'O mesmo desenho com contorno, em branco e rosa sobre vinho. O caminho fica em vinho.'],
+  ['2a-vinho-caminho-largo', '2a · Cores do 2, caminho da origem', 'Cores do modelo 2 com o caminho redesenhado como na origem: uma faixa que nasce larga na lombada, faz o S e afina até o canto de cima da página.'],
+  ['2b-vinho-caminho-amplo', '2b · Cores do 2, caminho mais amplo', 'Como o 2a, com a faixa um pouco mais larga e o S mais aberto, ocupando mais a página.'],
+  ['3-plano-vazado', '3 · Plano, caminho vazado', 'Livro branco sem contorno sobre vinho, e o caminho recortado na página. É o mais limpo e o mais legível em 32 px.'],
+  ['4-caminho-para-a-luz', '4 · Caminho para a luz', 'O caminho sai do livro e sobe até uma luz. Conta a ideia de “jornada” mais diretamente, mas tem mais detalhe.'],
+  ['5-traco-sepia', '5 · Traço sobre sépia', 'Livro em linha vinho e caminho pontilhado sobre o creme do tema sépia. Delicado; some um pouco em 32 px.'],
+  ['6-familia-ljs', '6 · Família LJS', 'Fundo azul da marca LJS, livro branco e caminho azul-marinho. Simples como o 3, nas cores da LJS.']
+];
+var g = document.getElementById('grade');
+modelos.forEach(function (m) {
+  var s = 'icones/' + m[0] + '.svg';
+  var el = document.createElement('article'); el.className = 'modelo';
+  el.innerHTML = '<h2>' + m[1] + '</h2><p>' + m[2] + '</p>' +
+    '<div class="tamanhos">' +
+      '<figure><img src="' + s + '" width="192" height="192" alt=""><figcaption>192 px</figcaption></figure>' +
+      '<figure><img src="' + s + '" width="64" height="64" alt=""><figcaption>64</figcaption></figure>' +
+      '<figure><img src="' + s + '" width="32" height="32" alt=""><figcaption>32</figcaption></figure>' +
+      '<figure><div class="mascara"><img src="' + s + '" alt=""></div><figcaption>círculo</figcaption></figure>' +
+    '</div>' +
+    '<div class="tela"><figure><img src="' + s + '" alt=""><figcaption>MinhaJornada</figcaption></figure>' +
+      '</div>';
+  g.appendChild(el);
+});
+</script>
+</body>
+</html>

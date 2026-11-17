@@ -2,7 +2,7 @@
 
 - **Base**: print do usuário (página inicial, modo livro com capa, plano pago, barra de título) e respostas em 2026-11-17; spec do `leitor` (`.specs/features/leitor/spec.md`)
 - **Tamanho**: Large (várias telas novas, paginação dinâmica, altera requisitos existentes)
-- **Aprovação**: spec aprovada pelo usuário em 2026-11-17, com as premissas da tabela abaixo (inclui a mudança dos testes de FUN-20 e FUN-21)
+- **Aprovação**: spec aprovada pelo usuário em 2026-11-17, com as premissas da tabela abaixo (inclui a mudança dos testes de FUN-20 e FUN-21); FUN-93 e FUN-94 (ícone) acrescentados a pedido do dono em 2026-11-17, no mockup
 
 ## Problem Statement
 
@@ -179,6 +179,19 @@ Os demais FUN-01 a FUN-50 continuam valendo no formato de rolagem; FUN-01 a FUN-
 
 **Independent Test**: no modo livro, abrir Gênesis 1, tocar "anterior", ver a capa com o texto do pago ao lado e "anterior" desativado.
 
+### P2: Ícone do app
+
+**User Story**: Como leitor, quero reconhecer o MinhaJornada pelo mesmo ícone do site LJSSoftware, nas cores do app, para achá-lo na tela inicial e nas abas.
+
+**Why P2**: Pedido do dono em 2026-11-17, durante o mockup; o app funciona com o ícone atual.
+
+**Acceptance Criteria**:
+
+1. The sistema SHALL usar o desenho do ícone 2a do mockup (`.specs/features/interface-livro/mockup/icones/2a-vinho-caminho-largo.svg`) no favicon SVG, no `apple-touch-icon` e nos ícones do manifesto de 192 px, 512 px e maskable de 512 px. (FUN-93)
+2. The sistema SHALL servir o favicon SVG como XML válido, que o navegador carrega como imagem (sem `--` dentro de comentário, defeito do `public/icones/icone.svg` atual). (FUN-94)
+
+**Independent Test**: abrir `/icones/icone.svg` numa tag `<img>` e ver o ícone; instalar o app e ver o livro com o caminho na tela inicial.
+
 ---
 
 ## Edge Cases
@@ -238,10 +251,12 @@ Varredura de requisitos implícitos (Large): validação de entrada coberta por 
 | FUN-90 | P1: Capa | Design | Pending |
 | FUN-91 | P1: Capa | Design | Pending |
 | FUN-92 | P1: Capa | Design | Pending |
+| FUN-93 | P2: Ícone do app | Design | Pending |
+| FUN-94 | P2: Ícone do app | Design | Pending |
 
 **ID format:** `FUN-NN` (continua a numeração da spec do `leitor`)
 
-**Coverage:** 42 total, 0 mapped to tasks, 42 unmapped ⚠️
+**Coverage:** 44 total, 0 mapped to tasks, 44 unmapped ⚠️
 
 ---
 

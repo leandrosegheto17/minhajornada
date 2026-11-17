@@ -5,7 +5,7 @@
 - **Encaixe**: estende padrão (telas, reducer, preferências, barra) e padrão novo (paginação com medição de layout, `ResizeObserver`)
 - **Arquitetura**: cabe. A paginação entra como camada nova (função pura + componente que mede), sem mudar dados nem contratos
 - **Telas**: cria página inicial, tela "em breve", leitor em formato livro e capa; muda a barra de todas as telas (leitor, livros, capítulos, Sobre)
-- **Mockup**: aprovado em 2026-11-17 (`mockup/`, imagem de fundo A: Bíblia aberta na luz, Aaron Burden / Unsplash)
+- **Mockup**: aprovado em 2026-11-17 (`mockup/`, imagem de fundo A: Bíblia aberta na luz, Aaron Burden / Unsplash; ícone 2a, `mockup/icones/2a-vinho-caminho-largo.svg`)
 - **Plano aprovado em**: pendente
 
 ## Onde entra
@@ -25,6 +25,7 @@
 | `public/` ou `src/estilo/` | Imagem de fundo (PNG ou SVG, ver riscos) e crédito no "Sobre" (`TelaSobre.tsx`) | sim |
 | `src/estilo/tokens.css` | Tokens da página, da capa e do cartão | não |
 | `e2e/apoio/navegar.ts:4-30` | Helpers passam pela página inicial ("Ler Bíblia") | não |
+| `public/icones/icone.svg`, `icone-192.png`, `icone-512.png`, `icone-maskable-512.png` | Novo desenho (ícone 2a do mockup); o SVG atual é XML inválido (`--` no comentário, linha 2) e não carrega como imagem | não |
 
 ## Reaproveitamento
 

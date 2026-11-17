@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MinhaJornada">
+  <rect width="512" height="512" rx="112" fill="#9A3B5B"/>
+  <path d="M256 186 C222 158 176 148 132 150 V358 C176 356 222 366 256 392 Z" fill="#FFFFFF"/><path d="M256 186 C290 158 336 148 380 150 V358 C336 356 290 366 256 392 Z" fill="#FFFFFF"/>
+  <path d="M256 186 V392" stroke="#9A3B5B" stroke-width="10"/>
+  <path d="M266 384 C282 352 330 330 330 290 C330 256 288 248 290 216 C292 188 330 168 376 160" fill="none" stroke="#9A3B5B" stroke-width="24" stroke-linecap="round"/>
+</svg>
