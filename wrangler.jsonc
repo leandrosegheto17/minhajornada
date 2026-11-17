@@ -8,10 +8,13 @@
     "not_found_handling": "single-page-application",
   },
   "routes": [{ "pattern": "minhajornada.ljssoftware.com.br", "custom_domain": true }],
+  // Logs do Workers no painel da Cloudflare (item Observabilidade do /preparar). Sem Sentry: não há servidor (AD-003).
+  "observability": { "enabled": true },
   "env": {
     "tst": {
       "name": "minhajornada-tst",
       "routes": [{ "pattern": "minhajornada-tst.ljssoftware.com.br", "custom_domain": true }],
+      "observability": { "enabled": true },
     },
   },
 }
