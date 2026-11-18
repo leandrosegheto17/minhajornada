@@ -120,6 +120,12 @@ T30 → T31
 T32 → T33
 ```
 
+### Phase 12: Retrabalho R1
+
+```
+T34 → T35 → T36 → T37 → T38 → T39 → T40 → T41 → T42
+```
+
 ---
 
 ## Task Breakdown
@@ -914,6 +920,170 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2
 ---
 
 Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b814943a2a20f60498 = verde
+
+## Phase 12: Retrabalho R1
+
+### T34: Medida com a largura real da página (A-11)
+
+**What**: Na tela larga, medir os blocos com a largura da página mostrada (hoje a medida tem 520 px e a página 430,5 px em 1280 × 800) e somar as margens dos blocos às alturas, para nenhum versículo ficar escondido.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: sim
+**Criticidade**: crítica
+**Where**: `src/livro/useMedidas.ts`, `src/livro/livro.module.css`, `e2e/livro.spec.ts`
+**Depends on**: None (as Phases anteriores inteiras vêm antes)
+**Reuses**: `medirNoDom` em `src/livro/useMedidas.ts:33`; `.medida` em `src/livro/livro.module.css:252-259`
+**Requirement**: FUN-75, FUN-73 · Achado: A-11 (validation.md)
+**Tests**: `e2e/livro.spec.ts`: `FUN-75` em 1280 × 800, Rute inteira sem bloco que comece abaixo da caixa do texto ou fique escondido; `useMedidas.test.ts`: a altura medida inclui a margem do bloco. Vermelho antes da correção
+**Gate**: full
+
+- [ ] Concluída
+
+---
+
+### T35: Versículo dividido não trava a navegação (A-14)
+
+**What**: "Seguinte" e "anterior" passam pelas fatias de um versículo maior que a página: a âncora (ou o destino) distingue a fatia, e a repaginação mantém a fatia visível.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: sim
+**Criticidade**: crítica
+**Where**: `src/telas/TelaLivro.tsx`, `src/livro/paginacao.ts`, `src/estado/leitor.ts`
+**Depends on**: T34
+**Reuses**: `ancoraDaPagina` em `src/telas/TelaLivro.tsx:47-50`; `paginaDoVersiculo`/`primeiroVersiculo` em `src/livro/paginacao.ts:118-143`; tipo `Ancora` em `src/estado/leitor.ts:15`
+**Requirement**: FUN-77, FUN-78, FUN-85, FUN-75 · Achado: A-14 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-77` versículo dividido em 3 páginas, "seguinte" passa pelas três e chega ao versículo seguinte; `FUN-78` "anterior" volta pelas fatias. Vermelho antes
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T36: Paginação dos 66 livros sem perda nem repetição (A-01)
+
+**What**: Teste sobre os 66 JSON reais de `public/livros/`: `blocosDoLivro` e `paginar` com alturas determinísticas (inclusive página pequena, que força divisão) cobrem cada bloco uma vez, em ordem.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `test/arquivos/paginacao-66.test.ts`
+**Depends on**: T35
+**Reuses**: `todasAsPartes` em `src/livro/paginacao.test.ts:19-30`; leitura de arquivo como em `test/arquivos/converter-biblia.test.ts`
+**Requirement**: FUN-75, FUN-76 · Achado: A-01 (validation.md)
+**Tests**: `test/arquivos/paginacao-66.test.ts` (projeto `arquivos`): `FUN-75` nos 66 livros, cada versículo uma vez e em ordem
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T37: Remedir ao remontar o contêiner de medida (A-12)
+
+**What**: `useMedidas` remede quando o contêiner volta a existir (capa ou plano pago → livro), e o `ResizeObserver` segue o nó atual.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/livro/useMedidas.ts`
+**Depends on**: T36
+**Reuses**: `src/livro/useMedidas.ts:45-76`
+**Requirement**: FUN-86 · Achado: A-12 (validation.md)
+**Tests**: `useMedidas.test.ts` ou `TelaLivro.test.tsx`: `FUN-86` a letra muda com a capa à mostra e, ao voltar ao mesmo livro, a medida é a nova. Vermelho antes
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T38: Sobre volta à capa no formato livro (A-13)
+
+**What**: No formato livro sem leitura (capa), voltar do Sobre retorna ao leitor (capa), não à escolha de livro.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/App.tsx`
+**Depends on**: T37
+**Reuses**: ramo do Sobre em `src/App.tsx` (`aoVoltar`)
+**Requirement**: FUN-60 · Achado: A-13 (validation.md)
+**Tests**: `App.test.tsx`: formato livro, capa → Sobre → voltar mostra a capa. Vermelho antes
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T39: Folhear na tela larga e lugar da âncora (A-02, A-03)
+
+**What**: Testes da ligação na tela larga e do lugar conforme AD-007.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/telas/TelaLivro.test.tsx`, `src/App.test.tsx`, `e2e/capa.spec.ts`, `e2e/livro.spec.ts`
+**Depends on**: T38
+**Reuses**: `src/telas/TelaLivro.test.tsx:58-105`; `e2e/capa.spec.ts`; `e2e/livro.spec.ts`; AD-007
+**Requirement**: FUN-77, FUN-78, FUN-82, FUN-85, FUN-88, FUN-71, FUN-84 · Achados: A-02, A-03 (validation.md)
+**Tests**: `TelaLivro.test.tsx` com `larga: true`: `FUN-77` "seguinte" vai ao primeiro versículo do par seguinte, `FUN-88` "anterior" em Gênesis 1 vai à capa; `FUN-71` página que começa no capítulo anterior ao da âncora, rolagem no capítulo da âncora (AD-007); e2e 1280 px: Gênesis 1 → anterior → capa à direita; e2e João 3 com título e rolagem exatos
+**Gate**: full
+
+- [ ] Concluída
+
+---
+
+### T40: Contraste do cartão e desenho dos PNGs (A-04, A-08)
+
+**What**: Testes de contraste `--cor-suave` × `--cor-superficie` nos temas e do desenho 2a nos PNGs.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/estilo/estilo.test.ts`, `test/arquivos/icones-png.test.ts`
+**Depends on**: T39
+**Reuses**: `src/estilo/estilo.test.ts:105-122`; `test/arquivos/icones-png.test.ts`
+**Requirement**: FUN-59, FUN-93 · Achados: A-04, A-08 (validation.md)
+**Tests**: `estilo.test.ts`: `FUN-59` par suave × superfície ≥ 4,5:1 nos temas; `icones-png.test.ts`: `FUN-93` pixel do desenho (página clara) no centro dos três PNGs
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T41: Foto, limite de 480 px e rolagem lateral nas telas novas (A-05, A-06, A-07)
+
+**What**: E2E da foto cobrindo a área abaixo da barra, do limite 479/480 px da conta e da ausência de rolagem lateral em em breve, livro, capa e plano pago.
+**Estimativa**: 2h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `e2e/entrada.spec.ts`
+**Depends on**: T40
+**Reuses**: `e2e/entrada.spec.ts`; `semRolagemLateral` de `e2e/aparencia.spec.ts:11-18`
+**Requirement**: FUN-52, FUN-64 · Achados: A-05, A-06, A-07 (validation.md)
+**Tests**: `entrada.spec.ts`: `FUN-52` foto cobre a área abaixo da barra; `FUN-64` 479 px só ícone, 480 px com texto; sem rolagem lateral em 320 e 1920 px nas 4 telas novas
+**Gate**: full
+
+- [ ] Concluída
+
+---
+
+### T42: Gate completo registrado (A-09)
+
+**What**: Fechar o retrabalho com o `Gate:` completo (lint, typecheck, test, build, e2e) da árvore final no `tasks.md`.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `.specs/features/interface-livro/tasks.md`
+**Depends on**: T41
+**Reuses**: `.claude/scripts/fechar-lote.py --gate`
+**Requirement**: Achado: A-09 (validation.md)
+**Tests**: o próprio gate completo
+**Gate**: build
+
+- [ ] Concluída
+
+---
 
 ## Requirement Coverage
 

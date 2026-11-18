@@ -22,6 +22,7 @@
 | 2026-11-15 | 1 | leitor | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /preparar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-18 | 3 | interface-livro | /validar | Sonnet | Opus (escolha do usuário) |
 
 ## Autorizações
 
@@ -82,3 +83,20 @@
 - **Scope**: Feature `interface-livro`; testes de FUN-56 em `src/estado/leitor.test.ts` e `src/estado/useLeitor.test.ts`.
 - **Date**: 2026-11-17
 - **Status**: active
+
+### AD-007
+- **Decision**: No formato livro, o lugar é o da âncora: voltar à rolagem abre o capítulo da âncora (o capítulo escolhido), mesmo quando a página mostrada começa no fim do capítulo anterior (ex.: entrar por João 3 e a página começar em João 2).
+- **Reason**: A spec manda FUN-71 (a rolagem abre o capítulo do primeiro versículo da página atual); o código abre o da âncora. Decisão do dono no /validar (A-03): o leitor volta ao capítulo que escolheu.
+- **Trade-off**: O título da página pode mostrar o capítulo anterior (primeiro versículo da página, FUN-84) e a rolagem abrir o seguinte.
+- **Scope**: Feature `interface-livro`, `src/estado/leitor.ts` (`trocarFormato`); teste exato em `TelaLivro`/`App` e no e2e (T39).
+- **Date**: 2026-11-18
+- **Status**: active
+
+### AD-008
+- **Decision**: A medida das páginas do livro não é refeita ao trocar o tema; a chave de `useMedidas` é a letra (e o livro, pelos blocos).
+- **Reason**: O design manda remedir por "letra, tema, livro"; os temas só mudam cor (`src/estilo/tokens.css`), sem alterar altura. Decisão do dono no /validar (A-10).
+- **Trade-off**: Se um tema futuro mudar fonte ou espaçamento, a chave precisa incluir o tema.
+- **Scope**: Feature `interface-livro`, `src/telas/TelaLivro.tsx:76`.
+- **Date**: 2026-11-18
+- **Status**: active
+
