@@ -4,7 +4,9 @@ import {
   abrirPelaEscolha,
   deslizar,
   esperarCapitulo,
+  esperarInicial,
   irParaEscolhaDeLivro,
+  lerBiblia,
   versiculos,
 } from './apoio/navegar';
 
@@ -15,6 +17,8 @@ test.describe('primeira visita e leitura (J-01)', () => {
     page,
   }) => {
     await page.goto('/');
+    await esperarInicial(page);
+    await lerBiblia(page);
     await expect(page.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeVisible();
     await expect(page.getByRole('region', { name: /Antigo Testamento/ }).getByRole('button')).toHaveCount(39);
     await expect(page.getByRole('region', { name: /Novo Testamento/ }).getByRole('button')).toHaveCount(27);
@@ -132,7 +136,21 @@ test.describe('navegar e retomar (J-02)', () => {
     await page.goto('/');
     await abrirPelaEscolha(page, 'Romanos', 8);
     await page.reload();
+    // FUN-51: o app abre sempre na página inicial; FUN-54: "Ler Bíblia" continua de onde parou.
+    await esperarInicial(page);
+    await lerBiblia(page);
     await esperarCapitulo(page, 'Romanos', 8);
+  });
+
+  test('FUN-51/FUN-54: com Romanos 8 gravado, abrir mostra a inicial e "Ler Bíblia" abre Romanos 8; recarregar volta à inicial', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await esperarInicial(page);
+    await abrirGravado(page, 45, 8);
+    await esperarCapitulo(page, 'Romanos', 8);
+    await page.reload();
+    await esperarInicial(page);
   });
 
   test('FUN-05: o capítulo novo abre no início', async ({ page }) => {

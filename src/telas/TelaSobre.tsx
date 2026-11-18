@@ -1,9 +1,9 @@
 import { BotaoVoltar } from '../componentes/base/Botoes';
-import comum from './comum.module.css';
 import escolha from './Escolha.module.css';
 import estilo from './TelaSobre.module.css';
 
 export const LINK_LICENCA = 'https://creativecommons.org/licenses/by/4.0/br/';
+export const LINK_UNSPLASH = 'https://unsplash.com/license';
 export const LINK_FONTE = 'https://sites.google.com/site/biblialivre/';
 
 interface Props {
@@ -19,10 +19,8 @@ interface Props {
 export function TelaSobre({ rotuloVoltar, aoVoltar }: Props) {
   return (
     <>
-      <header className={comum['barra-topo']}>
-        <BotaoVoltar onClick={aoVoltar}>{rotuloVoltar}</BotaoVoltar>
-      </header>
       <main className={estilo['texto-sobre']}>
+        <BotaoVoltar onClick={aoVoltar}>{rotuloVoltar}</BotaoVoltar>
         <h1 className={escolha['titulo-tela']}>Sobre o MinhaJornada</h1>
 
         <h2>O texto bíblico</h2>
@@ -41,6 +39,15 @@ export function TelaSobre({ rotuloVoltar, aoVoltar }: Props) {
         <p>
           Só o formato do arquivo foi convertido para o app; o texto não foi modificado. Os autores da Bíblia Livre não
           endossam este app.
+        </p>
+
+        <h2>A foto da página inicial</h2>
+        <p>
+          A foto da página inicial é de Aaron Burden, publicada no{' '}
+          <a href={LINK_UNSPLASH} rel="noopener noreferrer" target="_blank">
+            Unsplash
+          </a>{' '}
+          sob a licença Unsplash.
         </p>
 
         <h2>O itálico</h2>

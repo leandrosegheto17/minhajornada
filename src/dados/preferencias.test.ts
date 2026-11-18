@@ -4,9 +4,11 @@ import {
   apagarLeitura,
   conviteDispensado,
   dispensarConvite,
+  gravarFormato,
   gravarLeitura,
   gravarLetra,
   gravarTema,
+  lerFormato,
   lerLeitura,
   lerLetra,
   lerTema,
@@ -103,6 +105,44 @@ describe('tema (FUN-30, FUN-31)', () => {
   ])('FUN-31: tema %s devolve null (tema do sistema)', (_caso, bruto) => {
     localStorage.setItem(CHAVES.tema, bruto);
     expect(lerTema()).toBeNull();
+  });
+});
+
+describe('formato de leitura (FUN-66, FUN-68, FUN-69)', () => {
+  it('FUN-66: sem valor gravado o formato é rolagem', () => {
+    expect(lerFormato()).toBe('rolagem');
+  });
+
+  it.each(['rolagem', 'livro'] as const)('FUN-68: grava e lê o formato %s em mj:formato', (formato) => {
+    gravarFormato(formato);
+    expect(localStorage.getItem(CHAVES.formato)).toBe(JSON.stringify(formato));
+    expect(lerFormato()).toBe(formato);
+  });
+
+  it.each([
+    ['ilegível', 'livro'],
+    ['desconhecido', '"pagina"'],
+    ['número', '2'],
+    ['nulo', 'null'],
+  ])('FUN-69: formato %s devolve rolagem', (_caso, bruto) => {
+    localStorage.setItem(CHAVES.formato, bruto);
+    expect(lerFormato()).toBe('rolagem');
+  });
+
+  it('FUN-69: sem localStorage, ler dá rolagem e gravar não lança', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('SecurityError');
+    });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('QuotaExceededError');
+    });
+    expect(() => gravarFormato('livro')).not.toThrow();
+    expect(lerFormato()).toBe('rolagem');
+  });
+
+  it('FUN-68: formato inválido não é gravado', () => {
+    gravarFormato('pagina' as never);
+    expect(localStorage.getItem(CHAVES.formato)).toBeNull();
   });
 });
 

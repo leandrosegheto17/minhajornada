@@ -11,7 +11,6 @@ function renderizar(extra: Partial<Props> = {}) {
     referencia: null,
     aoEscolherLivro: vi.fn(),
     aoVoltarALeitura: vi.fn(),
-    aoAbrirSobre: vi.fn(),
     ...extra,
   };
   render(<TelaLivros {...props} />);
@@ -61,16 +60,16 @@ describe('escolha de livro (FUN-06)', () => {
     expect(screen.getByRole('button', { name: 'Gênesis, 50 capítulos' })).not.toHaveAttribute('aria-current');
   });
 
-  it('com capítulo aberto, a barra volta à leitura; sem ele, mostra a marca', () => {
+  it('FUN-60: com capítulo aberto, o topo do conteúdo volta à leitura', () => {
     const props = renderizar({ referencia: { livro: 19, capitulo: 27 } });
     fireEvent.click(screen.getByRole('button', { name: 'Salmos 27' }));
     expect(props.aoVoltarALeitura).toHaveBeenCalledTimes(1);
   });
 
-  it('na primeira visita (FUN-21), a barra mostra a marca e o Sobre', () => {
-    const props = renderizar({ referencia: null });
-    expect(screen.getByText('MinhaJornada')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
-    expect(props.aoAbrirSobre).toHaveBeenCalledTimes(1);
+  it('FUN-60: a tela não traz marca nem Sobre (são da barra de título) e sem capítulo não há "voltar"', () => {
+    renderizar({ referencia: null });
+    expect(screen.queryByText('MinhaJornada')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Sobre o MinhaJornada' })).toBeNull();
+    expect(screen.queryByRole('banner')).toBeNull();
   });
 });

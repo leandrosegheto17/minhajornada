@@ -120,6 +120,24 @@ T30 → T31
 T32 → T33
 ```
 
+### Phase 12: Retrabalho R1
+
+```
+T34 → T35 → T36 → T37 → T38 → T39 → T40 → T41 → T42
+```
+
+### Phase 13: Retrabalho R2
+
+```
+T43 → T44
+```
+
+### Phase 14: Retrabalho R3
+
+```
+T45
+```
+
 ---
 
 ## Task Breakdown
@@ -138,8 +156,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-66`, `FUN-68`, `FUN-69` em `src/dados/preferencias.test.ts`: sem valor dá `rolagem`; grava e lê `livro`; JSON ilegível, `"pagina"` e número dão `rolagem`; sem `localStorage` não lança
-- [ ] Gate quick passa
+- [x] Testes `FUN-66`, `FUN-68`, `FUN-69` em `src/dados/preferencias.test.ts`: sem valor dá `rolagem`; grava e lê `livro`; JSON ilegível, `"pagina"` e número dão `rolagem`; sem `localStorage` não lança
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -161,9 +179,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-51` em `src/estado/leitor.test.ts`: com leitura válida, sem leitura e com leitura inválida, a tela é `inicial`; `ref` guarda só a leitura válida; formato gravado `livro` vira `estado.formato`
-- [ ] Os testes de `iniciar` de FUN-20/FUN-21 (`src/estado/leitor.test.ts:19-36`) passam a esperar `inicial`, com o motivo no commit (mudança autorizada pela spec)
-- [ ] Gate quick passa
+- [x] Testes `FUN-51` em `src/estado/leitor.test.ts`: com leitura válida, sem leitura e com leitura inválida, a tela é `inicial`; `ref` guarda só a leitura válida; formato gravado `livro` vira `estado.formato`
+- [x] Os testes de `iniciar` de FUN-20/FUN-21 (`src/estado/leitor.test.ts:19-36`) passam a esperar `inicial`, com o motivo no commit (mudança autorizada pela spec)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -185,8 +203,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-54`, `FUN-55`, `FUN-56` em `src/estado/leitor.test.ts`: Romanos 8 gravado abre Romanos 8 na rolagem e a âncora Romanos 8:1 no livro; sem leitura abre `livros` (rolagem) e a âncora `capa` (livro); leitura inválida na abertura (AD-006) age como sem leitura
-- [ ] Gate quick passa
+- [x] Testes `FUN-54`, `FUN-55`, `FUN-56` em `src/estado/leitor.test.ts`: Romanos 8 gravado abre Romanos 8 na rolagem e a âncora Romanos 8:1 no livro; sem leitura abre `livros` (rolagem) e a âncora `capa` (livro); leitura inválida na abertura (AD-006) age como sem leitura
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -208,14 +226,16 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-67`, `FUN-70`, `FUN-71` em `src/estado/leitor.test.ts`: João 3 na rolagem vira âncora João 3:1; âncora Rute 1:12 vira rolagem em Rute 1; âncora `capa` e `pago` viram a tela `livros`; fora do leitor (inicial, sobre) só troca o formato, sem mudar a tela
-- [ ] Gate quick passa
+- [x] Testes `FUN-67`, `FUN-70`, `FUN-71` em `src/estado/leitor.test.ts`: João 3 na rolagem vira âncora João 3:1; âncora Rute 1:12 vira rolagem em Rute 1; âncora `capa` e `pago` viram a tela `livros`; fora do leitor (inicial, sobre) só troca o formato, sem mudar a tela
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(estado): troca entre rolagem e livro sem perder o capítulo`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado/leitor.test.ts src/navegacao src/biblia --reporter=dot @ 5f3580d3b88987e3004ad091285e6db064936b1c = verde
 
 ### T5: Em breve, voltar e inicial
 
@@ -231,8 +251,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-57`, `FUN-62` em `src/estado/leitor.test.ts`: em breve a partir da inicial e do leitor volta à tela de origem; `voltar` sem origem vai à `inicial`; `irPara('inicial')` do leitor, da grade e do Sobre
-- [ ] Gate quick passa
+- [x] Testes `FUN-57`, `FUN-62` em `src/estado/leitor.test.ts`: em breve a partir da inicial e do leitor volta à tela de origem; `voltar` sem origem vai à `inicial`; `irPara('inicial')` do leitor, da grade e do Sobre
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -254,8 +274,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-83`, `FUN-84`, `FUN-85`, `FUN-88` em `src/estado/leitor.test.ts`: Salmos 23 pela grade no livro dá âncora Salmos 23:1; âncora Rute 2:5 deixa `ref` em Rute 2; âncora `capa` não muda `ref`; âncora com versículo ou capítulo fora do índice é ignorada (mesmo objeto)
-- [ ] Gate quick passa
+- [x] Testes `FUN-83`, `FUN-84`, `FUN-85`, `FUN-88` em `src/estado/leitor.test.ts`: Salmos 23 pela grade no livro dá âncora Salmos 23:1; âncora Rute 2:5 deixa `ref` em Rute 2; âncora `capa` não muda `ref`; âncora com versículo ou capítulo fora do índice é ignorada (mesmo objeto)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -277,15 +297,17 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-68`, `FUN-85`, `FUN-87` em `src/estado/useLeitor.test.ts`: troca de formato grava `mj:formato`; âncora Rute 2:5 grava `{livro: 8, capitulo: 2}`; capa não grava; âncora `fim` de Rute carrega o livro 8; livro fora do cache sem rede dá `naoBaixado`
-- [ ] Os testes de FUN-20/FUN-21 (`src/estado/useLeitor.test.ts:59-74`) passam a esperar `inicial` e a carga só depois de `lerBiblia` (mudança autorizada pela spec)
-- [ ] Gate quick passa
+- [x] Testes `FUN-68`, `FUN-85`, `FUN-87` em `src/estado/useLeitor.test.ts`: troca de formato grava `mj:formato`; âncora Rute 2:5 grava `{livro: 8, capitulo: 2}`; capa não grava; âncora `fim` de Rute carrega o livro 8; livro fora do cache sem rede dá `naoBaixado`
+- [x] Os testes de FUN-20/FUN-21 (`src/estado/useLeitor.test.ts:59-74`) passam a esperar `inicial` e a carga só depois de `lerBiblia` (mudança autorizada pela spec)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(estado): liga formato e âncora ao aparelho`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado src/navegacao src/biblia --reporter=dot @ 0b8d667b590c0be7af54f841971568b22c2eb492 = verde
 
 ### T8: Blocos do livro
 
@@ -301,8 +323,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-76` em `src/livro/paginacao.test.ts`: Rute dá 1 + 85 blocos, com o nome primeiro e `abreCapitulo` nos versículos 1 dos capítulos 1 a 4; livro de capítulo único (Judas) marca só o versículo 1
-- [ ] Gate quick passa
+- [x] Testes `FUN-76` em `src/livro/paginacao.test.ts`: Rute dá 1 + 85 blocos, com o nome primeiro e `abreCapitulo` nos versículos 1 dos capítulos 1 a 4; livro de capítulo único (Judas) marca só o versículo 1
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -324,9 +346,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Casos limite e estados listados antes de codar (Domínio: sim): bloco que cabe exato, bloco 1 px maior, bloco maior que 2 páginas, página menor que uma linha, lista vazia, alturas zero
-- [ ] Testes `FUN-75` em `src/livro/paginacao.test.ts`: cada bloco aparece uma vez e em ordem; nenhuma página passa da altura; bloco maior que a página ocupa páginas seguidas com `recorte` múltiplo da linha; nenhum bloco que cabe é dividido; entradas inválidas terminam
-- [ ] Gate quick passa
+- [x] Casos limite e estados listados antes de codar (Domínio: sim): bloco que cabe exato, bloco 1 px maior, bloco maior que 2 páginas, página menor que uma linha, lista vazia, alturas zero
+- [x] Testes `FUN-75` em `src/livro/paginacao.test.ts`: cada bloco aparece uma vez e em ordem; nenhuma página passa da altura; bloco maior que a página ocupa páginas seguidas com `recorte` múltiplo da linha; nenhum bloco que cabe é dividido; entradas inválidas terminam
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -348,14 +370,16 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-70`, `FUN-83`, `FUN-85`, `FUN-86` em `src/livro/paginacao.test.ts`: versículo no meio, no início e na fatia seguinte de um versículo dividido; primeiro versículo de página que começa com o nome do livro; alvo inexistente cai no capítulo ou no livro
-- [ ] Gate quick passa
+- [x] Testes `FUN-70`, `FUN-83`, `FUN-85`, `FUN-86` em `src/livro/paginacao.test.ts`: versículo no meio, no início e na fatia seguinte de um versículo dividido; primeiro versículo de página que começa com o nome do livro; alvo inexistente cai no capítulo ou no livro
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(livro): acha a página de um versículo`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/navegacao src/biblia --reporter=dot @ 748995df7dd69e82972139d857ef4232f86519e0 = verde
 
 ### T11: Folhear
 
@@ -371,9 +395,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Casos limite e estados listados antes de codar: livro de 1 página, número ímpar de páginas em tela larga, última página de Apocalipse (larga e estreita), primeira de Gênesis, capa, pago; se a spec não define algum, parar e perguntar
-- [ ] Testes com os IDs em `src/livro/folhear.test.ts`: par 0–1 e 2–3 na larga, página única na estreita; seguinte na última de Rute vai a 1 Samuel 1:1; anterior na primeira de 1 Samuel vai a `fim` de Rute; Apocalipse sem seguinte; capa sem anterior; Gênesis → capa (larga) e → pago → capa (estreita, AD-005); capa → pago → Gênesis (estreita) e capa → Gênesis (larga)
-- [ ] Gate quick passa
+- [x] Casos limite e estados listados antes de codar: livro de 1 página, número ímpar de páginas em tela larga, última página de Apocalipse (larga e estreita), primeira de Gênesis, capa, pago; se a spec não define algum, parar e perguntar
+- [x] Testes com os IDs em `src/livro/folhear.test.ts`: par 0–1 e 2–3 na larga, página única na estreita; seguinte na última de Rute vai a 1 Samuel 1:1; anterior na primeira de 1 Samuel vai a `fim` de Rute; Apocalipse sem seguinte; capa sem anterior; Gênesis → capa (larga) e → pago → capa (estreita, AD-005); capa → pago → Gênesis (estreita) e capa → Gênesis (larga)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -395,8 +419,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-73`, `FUN-74` em `src/livro/useTelaLarga.test.ts`: consulta exata; verdadeiro e falso; muda quando a consulta muda; remove o ouvinte ao desmontar
-- [ ] Gate quick passa
+- [x] Testes `FUN-73`, `FUN-74` em `src/livro/useTelaLarga.test.ts`: consulta exata; verdadeiro e falso; muda quando a consulta muda; remove o ouvinte ao desmontar
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -418,14 +442,16 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-86` em `src/livro/useMedidas.test.ts` com `medir` e `ResizeObserver` dublês: mede ao montar; remede quando a chave (letra, tema, livro) muda; remede no aviso de outro tamanho e não no aviso do mesmo tamanho; desconecta o observador ao desmontar; `medidas` é `null` até a primeira medida
-- [ ] Gate quick passa
+- [x] Testes `FUN-86` em `src/livro/useMedidas.test.ts` com `medir` e `ResizeObserver` dublês: mede ao montar; remede quando a chave (letra, tema, livro) muda; remede no aviso de outro tamanho e não no aviso do mesmo tamanho; desconecta o observador ao desmontar; `medidas` é `null` até a primeira medida
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(livro): mede os versículos na largura da página`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/navegacao src/biblia --reporter=dot @ b16156b337be807eeab17bf41e036291be58d662 = verde
 
 ### T14: Ícones da barra
 
@@ -441,8 +467,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Ícones com `aria-hidden` e `viewBox` 24, no molde dos existentes
-- [ ] Gate quick passa
+- [x] Ícones com `aria-hidden` e `viewBox` 24, no molde dos existentes
+- [x] Gate quick passa
 
 **Tests**: none
 **Gate**: quick
@@ -464,8 +490,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Teste em `src/estilo/estilo.test.ts`: cada token novo existe; `--cor-capa` e `--cor-capa-texto` apontam para o acento e o texto do acento (contraste já conferido, FUN-59); `--quebra-livro-duplo` é 900px
-- [ ] Gate quick passa
+- [x] Teste em `src/estilo/estilo.test.ts`: cada token novo existe; `--cor-capa` e `--cor-capa-texto` apontam para o acento e o texto do acento (contraste já conferido, FUN-59); `--quebra-livro-duplo` é 900px
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -487,9 +513,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/componentes/BarraTitulo.test.tsx`: `FUN-61` ordem marca, formato, Aa, Sobre, conta; `FUN-62` marca dispara a ida à inicial; `FUN-63` Aa abre o painel com letra e tema; `FUN-72` rótulo "Ler como livro" na rolagem e "Ler em rolagem" no livro; `FUN-64` rótulo acessível "Entrar ou criar conta"; `FUN-65` classe de barra presa (posição `sticky` no CSS, conferida no E2E de T32)
-- [ ] Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172`, `:261-280`) passam para este arquivo, com as mesmas asserções
-- [ ] Gate quick passa
+- [x] Testes em `src/componentes/BarraTitulo.test.tsx`: `FUN-61` ordem marca, formato, Aa, Sobre, conta; `FUN-62` marca dispara a ida à inicial; `FUN-63` Aa abre o painel com letra e tema; `FUN-72` rótulo "Ler como livro" na rolagem e "Ler em rolagem" no livro; `FUN-64` rótulo acessível "Entrar ou criar conta"; `FUN-65` classe de barra presa (posição `sticky` no CSS, conferida no E2E de T32)
+- [x] Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172`, `:261-280`) passam para este arquivo, com as mesmas asserções
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -511,15 +537,17 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Teste `FUN-60` em `src/App.test.tsx`: a barra aparece na escolha de livro, na grade, no leitor e no Sobre, uma vez só
-- [ ] Testes das telas ajustados: `TelaLivros.test.tsx:64-75` (marca e Sobre saem da tela; "voltar à leitura" continua), `TelaLeitor.test.tsx` sem a barra (já movida em T16)
-- [ ] Gate quick passa
+- [x] Teste `FUN-60` em `src/App.test.tsx`: a barra aparece na escolha de livro, na grade, no leitor e no Sobre, uma vez só
+- [x] Testes das telas ajustados: `TelaLivros.test.tsx:64-75` (marca e Sobre saem da tela; "voltar à leitura" continua), `TelaLeitor.test.tsx` sem a barra (já movida em T16)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `refactor(telas): a barra de título sai das telas e vai para o app`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/componentes src/telas src/estilo src/estado src/livro src/dados src/navegacao src/biblia --reporter=dot @ f610f26ecf1d08f57227372b5a1fecf19e0d8e67 = verde
 
 ### T18: Foto da página inicial
 
@@ -535,8 +563,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Teste `FUN-58` (projeto `arquivos`): o `globPatterns` inclui `webp`; `inicial.webp` existe, tem mais de 4 KiB (não vira `data:`) e menos de 2 MiB (cabe no pré-cache)
-- [ ] Gate quick passa
+- [x] Teste `FUN-58` (projeto `arquivos`): o `globPatterns` inclui `webp`; `inicial.webp` existe, tem mais de 4 KiB (não vira `data:`) e menos de 2 MiB (cabe no pré-cache)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -558,8 +586,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/telas/TelaInicial.test.tsx`: `FUN-52` foto e cartão com os dois botões; `FUN-59` texto alternativo em português; "Ler Bíblia" e "Criar conta" disparam as ações; o erro da foto a esconde e mantém o cartão; crédito "Foto: Aaron Burden / Unsplash"
-- [ ] Gate quick passa
+- [x] Testes em `src/telas/TelaInicial.test.tsx`: `FUN-52` foto e cartão com os dois botões; `FUN-59` texto alternativo em português; "Ler Bíblia" e "Criar conta" disparam as ações; o erro da foto a esconde e mantém o cartão; crédito "Foto: Aaron Burden / Unsplash"
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -581,14 +609,16 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-57` em `src/telas/TelaEmBreve.test.tsx`: informa que conta e plano não estão disponíveis; "Voltar" e "Ler Bíblia" disparam as ações
-- [ ] Gate quick passa
+- [x] Testes `FUN-57` em `src/telas/TelaEmBreve.test.tsx`: informa que conta e plano não estão disponíveis; "Voltar" e "Ler Bíblia" disparam as ações
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(telas): tela em breve da conta e do plano de estudo`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 6e8a87166874646f98332aa0148ccc9e5323c8f6 = verde
 
 ### T21: Crédito da foto no Sobre
 
@@ -604,8 +634,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Teste em `src/telas/TelaSobre.test.tsx`: o Sobre cita a foto, o autor e a licença Unsplash
-- [ ] Gate quick passa
+- [x] Teste em `src/telas/TelaSobre.test.tsx`: o Sobre cita a foto, o autor e a licença Unsplash
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -627,9 +657,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/App.test.tsx`: `FUN-51` abre na inicial com e sem leitura; `FUN-54` Romanos 8 gravado e "Ler Bíblia" mostra Romanos 8; `FUN-55` sem leitura mostra "Escolha o livro"; `FUN-57` "Criar conta" e a conta da barra abrem "em breve" e "Voltar" volta; `FUN-62` a marca volta à inicial
-- [ ] Os testes `src/App.test.tsx:46-66` (FUN-20, FUN-21) mudam para a abertura nova (autorizado pela spec)
-- [ ] Gate quick passa
+- [x] Testes em `src/App.test.tsx`: `FUN-51` abre na inicial com e sem leitura; `FUN-54` Romanos 8 gravado e "Ler Bíblia" mostra Romanos 8; `FUN-55` sem leitura mostra "Escolha o livro"; `FUN-57` "Criar conta" e a conta da barra abrem "em breve" e "Voltar" volta; `FUN-62` a marca volta à inicial
+- [x] Os testes `src/App.test.tsx:46-66` (FUN-20, FUN-21) mudam para a abertura nova (autorizado pela spec)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -651,15 +681,17 @@ T32 → T33
 
 **Done when**:
 
-- [ ] E2E `FUN-51`/`FUN-54` em `e2e/leitura.spec.ts`: abrir, ver a inicial, "Ler Bíblia", ver Romanos 8 gravado; recarregar e ver a inicial de novo
-- [ ] Mudanças nos testes E2E existentes só no caminho de abertura, asserções iguais (autorizado pela spec)
-- [ ] Gate full passa
+- [x] E2E `FUN-51`/`FUN-54` em `e2e/leitura.spec.ts`: abrir, ver a inicial, "Ler Bíblia", ver Romanos 8 gravado; recarregar e ver a inicial de novo
+- [x] Mudanças nos testes E2E existentes só no caminho de abertura, asserções iguais (autorizado pela spec)
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): jornadas entram pela página inicial`
 
 ---
+
+Gate: pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ f1e572971e2470e688dc5768ffcf644051590daa = verde
 
 ### T24: Página do livro
 
@@ -675,8 +707,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/livro/PaginaLivro.test.tsx`: `FUN-76` nome do livro e número do capítulo; versículo com "[que está]" em itálico sem colchetes; texto como texto (`<img onerror>` não vira elemento, FUN-04); `FUN-75` parte recortada desloca pelo `recorte`; rodapé "Rute 1" e número da página
-- [ ] Gate quick passa
+- [x] Testes em `src/livro/PaginaLivro.test.tsx`: `FUN-76` nome do livro e número do capítulo; versículo com "[que está]" em itálico sem colchetes; texto como texto (`<img onerror>` não vira elemento, FUN-04); `FUN-75` parte recortada desloca pelo `recorte`; rodapé "Rute 1" e número da página
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -698,8 +730,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/livro/CapaLivro.test.tsx`: `FUN-89` textos da capa; `FUN-92` o pago diz que não está disponível e "Quero saber" dispara a ação
-- [ ] Gate quick passa
+- [x] Testes em `src/livro/CapaLivro.test.tsx`: `FUN-89` textos da capa; `FUN-92` o pago diz que não está disponível e "Quero saber" dispara a ação
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -721,14 +753,16 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-77`/`FUN-78` setas despacham a âncora certa; `FUN-79`/`FUN-80` deslize de 60 px passa e de 59 px não; `FUN-81` seguinte desativado na última de Apocalipse; `FUN-91` anterior desativado na capa; `FUN-84` título "Rute 1" e toque dispara a grade; `FUN-87` mensagem de não baixado e "Escolher outro livro"; carregando enquanto não há medida
-- [ ] Gate quick passa
+- [x] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-77`/`FUN-78` setas despacham a âncora certa; `FUN-79`/`FUN-80` deslize de 60 px passa e de 59 px não; `FUN-81` seguinte desativado na última de Apocalipse; `FUN-91` anterior desativado na capa; `FUN-84` título "Rute 1" e toque dispara a grade; `FUN-87` mensagem de não baixado e "Escolher outro livro"; carregando enquanto não há medida
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(telas): folhear o livro com setas e deslize`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ d7cef5b22f524855ee915617bde98c532374e109 = verde
 
 ### T27: Tela do livro: lugar e capa
 
@@ -744,9 +778,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Casos limite listados antes de codar: âncora `fim` com livro ainda carregando, repaginar com âncora num versículo dividido, troca de larga para estreita na capa
-- [ ] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-86` medida nova mantém Rute 1:12 visível; `FUN-82` fim de Rute vai à última página; `FUN-85` mudar de página despacha a âncora do primeiro versículo; `FUN-89` capa e pago lado a lado na larga; `FUN-90` capa sozinha na estreita
-- [ ] Gate quick passa
+- [x] Casos limite listados antes de codar: âncora `fim` com livro ainda carregando, repaginar com âncora num versículo dividido, troca de larga para estreita na capa
+- [x] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-86` medida nova mantém Rute 1:12 visível; `FUN-82` fim de Rute vai à última página; `FUN-85` mudar de página despacha a âncora do primeiro versículo; `FUN-89` capa e pago lado a lado na larga; `FUN-90` capa sozinha na estreita
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -768,8 +802,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes em `src/App.test.tsx`: `FUN-67` o botão de formato troca de `TelaLeitor` para `TelaLivro` e volta; `FUN-70`/`FUN-71` o título continua no mesmo capítulo; `FUN-66` sem formato gravado, rolagem
-- [ ] Gate quick passa
+- [x] Testes em `src/App.test.tsx`: `FUN-67` o botão de formato troca de `TelaLeitor` para `TelaLivro` e volta; `FUN-70`/`FUN-71` o título continua no mesmo capítulo; `FUN-66` sem formato gravado, rolagem
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -791,15 +825,17 @@ T32 → T33
 
 **Done when**:
 
-- [ ] E2E com os IDs: `FUN-73` duas páginas lado a lado (mesmo `y`, `x` crescente); `FUN-74` uma página; `FUN-75` todo versículo visível cabe na caixa da página (`boundingBox`); `FUN-76`/`FUN-82` "1 Samuel" no topo da página depois da última de Rute; `FUN-70`/`FUN-71` João 3 → livro → passar páginas → rolagem no capítulo da página; `FUN-83` Salmos 23 pela grade abre a página com Salmos 23:1
-- [ ] E2E rodado sem a mudança (vermelho) e com ela (verde), uma vez ao fim do lote
-- [ ] Gate full passa
+- [x] E2E com os IDs: `FUN-73` duas páginas lado a lado (mesmo `y`, `x` crescente); `FUN-74` uma página; `FUN-75` todo versículo visível cabe na caixa da página (`boundingBox`); `FUN-76`/`FUN-82` "1 Samuel" no topo da página depois da última de Rute; `FUN-70`/`FUN-71` João 3 → livro → passar páginas → rolagem no capítulo da página; `FUN-83` Salmos 23 pela grade abre a página com Salmos 23:1
+- [x] E2E rodado sem a mudança (vermelho) e com ela (verde), uma vez ao fim do lote
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): jornadas do modo livro`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2357e613f5ca75ae4b = verde
 
 ### T30: Ícone SVG
 
@@ -815,9 +851,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Teste `FUN-94` (projeto `arquivos`): o SVG faz parse como XML (`DOMParser` ou parser node) e nenhum comentário contém `--`
-- [ ] Teste `FUN-93`: o SVG tem o caminho em vinho (`#9A3B5B`) e o `viewBox` 512
-- [ ] Gate quick passa
+- [x] Teste `FUN-94` (projeto `arquivos`): o SVG faz parse como XML (`DOMParser` ou parser node) e nenhum comentário contém `--`
+- [x] Teste `FUN-93`: o SVG tem o caminho em vinho (`#9A3B5B`) e o `viewBox` 512
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -839,9 +875,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Teste `FUN-93` (projeto `arquivos`): os três PNGs têm 192 × 192, 512 × 512 e 512 × 512 (cabeçalho PNG) e o maskable tem o pixel do canto vinho (sem transparência)
-- [ ] `e2e/manifesto.spec.ts` continua verde
-- [ ] Gate full passa
+- [x] Teste `FUN-93` (projeto `arquivos`): os três PNGs têm 192 × 192, 512 × 512 e 512 × 512 (cabeçalho PNG) e o maskable tem o pixel do canto vinho (sem transparência)
+- [x] `e2e/manifesto.spec.ts` continua verde
+- [x] Gate full passa
 
 **Tests**: unit
 **Gate**: full
@@ -863,8 +899,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] E2E com os IDs: `FUN-52` cartão com `x` maior que o meio da tela em 1440 px; `FUN-53` cartão centralizado em 375 px; `FUN-58` sem rede, a foto carrega (`naturalWidth > 0`); `FUN-60` barra nas sete telas; `FUN-65` barra no topo depois de rolar; `FUN-64` 320 px sem rolagem horizontal e conta só ícone
-- [ ] Gate full passa
+- [x] E2E com os IDs: `FUN-52` cartão com `x` maior que o meio da tela em 1440 px; `FUN-53` cartão centralizado em 375 px; `FUN-58` sem rede, a foto carrega (`naturalWidth > 0`); `FUN-60` barra nas sete telas; `FUN-65` barra no topo depois de rolar; `FUN-64` 320 px sem rolagem horizontal e conta só ícone
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -886,14 +922,244 @@ T32 → T33
 
 **Done when**:
 
-- [ ] E2E com os IDs: `FUN-88`/`FUN-89` capa à direita e pago à esquerda em 1280 px; `FUN-90` capa, pago e Gênesis em 375 px; `FUN-91` anterior desativado na capa; `FUN-92` "Quero saber" abre "em breve"; `FUN-86` Rute 1:12 visível antes e depois de mudar a letra para 5
-- [ ] Gate full passa
+- [x] E2E com os IDs: `FUN-88`/`FUN-89` capa à direita e pago à esquerda em 1280 px; `FUN-90` capa, pago e Gênesis em 375 px; `FUN-91` anterior desativado na capa; `FUN-92` "Quero saber" abre "em breve"; `FUN-86` Rute 1:12 visível antes e depois de mudar a letra para 5
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): capa e repaginação do livro`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b814943a2a20f60498 = verde
+
+## Phase 12: Retrabalho R1
+
+### T34: Medida com a largura real da página (A-11)
+
+**What**: Na tela larga, medir os blocos com a largura da página mostrada (hoje a medida tem 520 px e a página 430,5 px em 1280 × 800) e somar as margens dos blocos às alturas, para nenhum versículo ficar escondido.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: sim
+**Criticidade**: crítica
+**Where**: `src/livro/useMedidas.ts`, `src/livro/livro.module.css`, `e2e/livro.spec.ts`
+**Depends on**: None (as Phases anteriores inteiras vêm antes)
+**Reuses**: `medirNoDom` em `src/livro/useMedidas.ts:33`; `.medida` em `src/livro/livro.module.css:252-259`
+**Requirement**: FUN-75, FUN-73 · Achado: A-11 (validation.md)
+**Tests**: `e2e/livro.spec.ts`: `FUN-75` em 1280 × 800, Rute inteira sem bloco que comece abaixo da caixa do texto ou fique escondido; `useMedidas.test.ts`: a altura medida inclui a margem do bloco. Vermelho antes da correção
+**Gate**: full
+
+- [x] Concluída
+
+---
+
+### T35: Versículo dividido não trava a navegação (A-14)
+
+**What**: "Seguinte" e "anterior" passam pelas fatias de um versículo maior que a página: a âncora (ou o destino) distingue a fatia, e a repaginação mantém a fatia visível.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: sim
+**Criticidade**: crítica
+**Where**: `src/telas/TelaLivro.tsx`, `src/livro/paginacao.ts`, `src/estado/leitor.ts`
+**Depends on**: T34
+**Reuses**: `ancoraDaPagina` em `src/telas/TelaLivro.tsx:47-50`; `paginaDoVersiculo`/`primeiroVersiculo` em `src/livro/paginacao.ts:118-143`; tipo `Ancora` em `src/estado/leitor.ts:15`
+**Requirement**: FUN-77, FUN-78, FUN-85, FUN-75 · Achado: A-14 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-77` versículo dividido em 3 páginas, "seguinte" passa pelas três e chega ao versículo seguinte; `FUN-78` "anterior" volta pelas fatias. Vermelho antes
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T36: Paginação dos 66 livros sem perda nem repetição (A-01)
+
+**What**: Teste sobre os 66 JSON reais de `public/livros/`: `blocosDoLivro` e `paginar` com alturas determinísticas (inclusive página pequena, que força divisão) cobrem cada bloco uma vez, em ordem.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `test/arquivos/paginacao-66.test.ts`
+**Depends on**: T35
+**Reuses**: `todasAsPartes` em `src/livro/paginacao.test.ts:19-30`; leitura de arquivo como em `test/arquivos/converter-biblia.test.ts`
+**Requirement**: FUN-75, FUN-76 · Achado: A-01 (validation.md)
+**Tests**: `test/arquivos/paginacao-66.test.ts` (projeto `arquivos`): `FUN-75` nos 66 livros, cada versículo uma vez e em ordem
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T37: Remedir ao remontar o contêiner de medida (A-12)
+
+**What**: `useMedidas` remede quando o contêiner volta a existir (capa ou plano pago → livro), e o `ResizeObserver` segue o nó atual.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/livro/useMedidas.ts`
+**Depends on**: T36
+**Reuses**: `src/livro/useMedidas.ts:45-76`
+**Requirement**: FUN-86 · Achado: A-12 (validation.md)
+**Tests**: `useMedidas.test.ts` ou `TelaLivro.test.tsx`: `FUN-86` a letra muda com a capa à mostra e, ao voltar ao mesmo livro, a medida é a nova. Vermelho antes
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T38: Sobre volta à capa no formato livro (A-13)
+
+**What**: No formato livro sem leitura (capa), voltar do Sobre retorna ao leitor (capa), não à escolha de livro.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/App.tsx`
+**Depends on**: T37
+**Reuses**: ramo do Sobre em `src/App.tsx` (`aoVoltar`)
+**Requirement**: FUN-60 · Achado: A-13 (validation.md)
+**Tests**: `App.test.tsx`: formato livro, capa → Sobre → voltar mostra a capa. Vermelho antes
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T39: Folhear na tela larga e lugar da âncora (A-02, A-03)
+
+**What**: Testes da ligação na tela larga e do lugar conforme AD-007.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/telas/TelaLivro.test.tsx`, `src/App.test.tsx`, `e2e/capa.spec.ts`, `e2e/livro.spec.ts`
+**Depends on**: T38
+**Reuses**: `src/telas/TelaLivro.test.tsx:58-105`; `e2e/capa.spec.ts`; `e2e/livro.spec.ts`; AD-007
+**Requirement**: FUN-77, FUN-78, FUN-82, FUN-85, FUN-88, FUN-71, FUN-84 · Achados: A-02, A-03 (validation.md)
+**Tests**: `TelaLivro.test.tsx` com `larga: true`: `FUN-77` "seguinte" vai ao primeiro versículo do par seguinte, `FUN-88` "anterior" em Gênesis 1 vai à capa; `FUN-71` página que começa no capítulo anterior ao da âncora, rolagem no capítulo da âncora (AD-007); e2e 1280 px: Gênesis 1 → anterior → capa à direita; e2e João 3 com título e rolagem exatos
+**Gate**: full
+
+- [x] Concluída
+
+---
+
+### T40: Contraste do cartão e desenho dos PNGs (A-04, A-08)
+
+**What**: Testes de contraste `--cor-suave` × `--cor-superficie` nos temas e do desenho 2a nos PNGs.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/estilo/estilo.test.ts`, `test/arquivos/icones-png.test.ts`
+**Depends on**: T39
+**Reuses**: `src/estilo/estilo.test.ts:105-122`; `test/arquivos/icones-png.test.ts`
+**Requirement**: FUN-59, FUN-93 · Achados: A-04, A-08 (validation.md)
+**Tests**: `estilo.test.ts`: `FUN-59` par suave × superfície ≥ 4,5:1 nos temas; `icones-png.test.ts`: `FUN-93` pixel do desenho (página clara) no centro dos três PNGs
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T41: Foto, limite de 480 px e rolagem lateral nas telas novas (A-05, A-06, A-07)
+
+**What**: E2E da foto cobrindo a área abaixo da barra, do limite 479/480 px da conta e da ausência de rolagem lateral em em breve, livro, capa e plano pago.
+**Estimativa**: 2h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `e2e/entrada.spec.ts`
+**Depends on**: T40
+**Reuses**: `e2e/entrada.spec.ts`; `semRolagemLateral` de `e2e/aparencia.spec.ts:11-18`
+**Requirement**: FUN-52, FUN-64 · Achados: A-05, A-06, A-07 (validation.md)
+**Tests**: `entrada.spec.ts`: `FUN-52` foto cobre a área abaixo da barra; `FUN-64` 479 px só ícone, 480 px com texto; sem rolagem lateral em 320 e 1920 px nas 4 telas novas
+**Gate**: full
+
+- [x] Concluída
+
+---
+
+### T42: Gate completo registrado (A-09)
+
+**What**: Fechar o retrabalho com o `Gate:` completo (lint, typecheck, test, build, e2e) da árvore final no `tasks.md`.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `.specs/features/interface-livro/tasks.md`
+**Depends on**: T41
+**Reuses**: `.claude/scripts/fechar-lote.py --gate`
+**Requirement**: Achado: A-09 (validation.md)
+**Tests**: o próprio gate completo
+**Gate**: build
+
+- [x] Concluída
+
+---
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 77a673a8562860fc521a3415355f823e5875e671 = verde
+
+## Phase 13: Retrabalho R2
+
+### T43: Fatia da âncora guardada no estado (A-15)
+
+**What**: Provar e, se preciso, corrigir que o reducer guarda a fatia da âncora (`irParaAncora`) e que `mesmaAncora` distingue fatias, para "seguinte" não travar num versículo maior que a página.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `src/estado/leitor.test.ts`, `src/App.test.tsx` (e `src/estado/leitor.ts`, se o teste revelar defeito)
+**Depends on**: None
+**Reuses**: `mesmaAncora` em `src/estado/leitor.ts:86-96`; `irParaAncora` em `src/estado/leitor.ts:184-196`; testes de âncora em `src/estado/leitor.test.ts:446-473`; versículo dividido em `src/telas/TelaLivro.test.tsx:288-340`
+**Requirement**: FUN-77, FUN-78, FUN-85 · Achado: A-15 (validation.md)
+**Tests**: `leitor.test.ts`: `FUN-77` `irParaAncora` com `fatia: 1` guarda `ancora.fatia === 1` e muda o estado; fatia 0 e ausente são a mesma âncora; `App.test.tsx`: `FUN-77` versículo dividido em 3 páginas, "seguinte" passa pelas três fatias. Cada teste falha com o reducer descartando a fatia ou com `mesmaAncora` ignorando-a
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T44: "Seguinte" da capa na tela larga (A-16)
+
+**What**: Teste de `TelaLivro` com `larga: true`: da capa (e do plano pago), "seguinte" vai a Gênesis 1:1, não ao plano pago.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/telas/TelaLivro.test.tsx`
+**Depends on**: T43
+**Reuses**: testes com `larga: true` em `src/telas/TelaLivro.test.tsx:357-374`; `destinoDaCapa` em `src/telas/TelaLivro.tsx:106`
+**Requirement**: FUN-89, FUN-77 · Achado: A-16 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-89` na tela larga, "seguinte" a partir da capa chama `aoIrParaAncora` com Gênesis 1:1; falha com `larga` → `false` em `destinoDaCapa`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ ebe702b630761b1f0e68d964d21378418c43cb2d = verde
+
+## Phase 14: Retrabalho R3
+
+### T45: Letra nova repagina na tela do livro (A-17)
+
+**What**: Teste de `TelaLivro` que prova a ligação `letra → chave` de `useMedidas` (AD-008): ao mudar a letra, a tela remede e repagina, mantendo a página do versículo da âncora.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `src/telas/TelaLivro.test.tsx`
+**Depends on**: None
+**Reuses**: chamada `useMedidas(blocos, letra, medir)` em `src/telas/TelaLivro.tsx:82`; teste da chave em `src/livro/useMedidas.test.ts:97`; AD-008
+**Requirement**: FUN-86 · Achado: A-17 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-86` `rerender` com `letra` 3 → 4 e o mesmo `medir` (identidade estável), que conta chamadas e devolve alturas maiores na segunda: `medir` chamado de novo e o total de páginas muda, com a página do versículo da âncora à mostra. Falha com `useMedidas(blocos, 0, medir)`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 8245516cef09f5281fdee0b112afab3f39446d61 = verde
 
 ## Requirement Coverage
 

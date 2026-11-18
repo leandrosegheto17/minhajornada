@@ -1,8 +1,17 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type { Livro, Ref, Tema } from '../biblia/tipos';
 import { baixarFaltantes, carregarLivro, limparAntigos } from '../dados/livros';
-import { gravarLeitura, gravarLetra, gravarTema, lerLeitura, lerLetra, lerTema } from '../dados/preferencias';
-import { ESTADO_INICIAL, reduzirLeitor, type AcaoLeitor, type EstadoLeitor, type Tela } from './leitor';
+import {
+  gravarFormato,
+  gravarLeitura,
+  gravarLetra,
+  gravarTema,
+  lerFormato,
+  lerLeitura,
+  lerLetra,
+  lerTema,
+} from '../dados/preferencias';
+import { ESTADO_INICIAL, reduzirLeitor, type AcaoLeitor, type Ancora, type EstadoLeitor, type Tela } from './leitor';
 
 /** Situação do livro da `Ref` aberta. */
 export type CargaLivro =
@@ -24,15 +33,43 @@ export interface Leitor {
   mudarLetra(delta: 1 | -1): void;
   escolherTema(tema: Tema): void;
   irPara(tela: Tela): void;
+  /** "Ler Bíblia" (FUN-54, FUN-55). */
+  lerBiblia(): void;
+  /** Botão de formato da barra (FUN-67). */
+  trocarFormato(): void;
+  abrirEmBreve(): void;
+  voltar(): void;
+  /** Passar página no formato livro: o lugar novo (FUN-77, FUN-85). */
+  irParaAncora(ancora: Ancora): void;
 }
 
 function reduzir(estado: EstadoLeitor, acao: AcaoLeitor): EstadoLeitor {
   return reduzirLeitor(estado, acao);
 }
 
-/** Estado da primeira renderização: o que está gravado no aparelho (FUN-20 a FUN-23, FUN-30). */
+/**
+ * Livro a carregar (FUN-84): só no leitor. No formato livro é o da âncora (de texto ou de fim; na capa e no texto do
+ * plano pago não há livro); na rolagem, o do capítulo aberto. Fora do leitor (página inicial, escolha, grade, Sobre,
+ * "em breve") não se carrega nada.
+ */
+function livroDoLeitor(estado: EstadoLeitor): number | null {
+  if (estado.tela !== 'leitor') return null;
+  if (estado.formato === 'rolagem') return estado.ref?.livro ?? null;
+  const ancora = estado.ancora;
+  if (ancora.tipo === 'texto') return ancora.ref.livro;
+  if (ancora.tipo === 'fim') return ancora.livro;
+  return null;
+}
+
+/** Estado da primeira renderização: o que está gravado no aparelho (FUN-30, FUN-51, FUN-66). */
 function estadoGravado(): EstadoLeitor {
-  return reduzirLeitor(ESTADO_INICIAL, { tipo: 'iniciar', ref: lerLeitura(), letra: lerLetra(), tema: lerTema() });
+  return reduzirLeitor(ESTADO_INICIAL, {
+    tipo: 'iniciar',
+    ref: lerLeitura(),
+    letra: lerLetra(),
+    tema: lerTema(),
+    formato: lerFormato(),
+  });
 }
 
 /**
@@ -54,12 +91,11 @@ export function useLeitor(): Leitor {
     cargaRef.current = carga;
   }, [carga]);
 
-  const numero = estado.ref?.livro ?? null;
-  const noLeitor = estado.tela === 'leitor';
+  const numero = livroDoLeitor(estado);
 
-  // Carrega o livro da Ref aberta; só a última pedida vale.
+  // Carrega o livro aberto no leitor; só a última pedida vale.
   useEffect(() => {
-    if (numero === null || !noLeitor) return;
+    if (numero === null) return;
     // O livro já pronto (outro capítulo dele, ou a volta do Sobre) não carrega de novo.
     if (cargaRef.current?.numero === numero && cargaRef.current.situacao === 'pronto') return;
     let valido = true;
@@ -77,13 +113,21 @@ export function useLeitor(): Leitor {
     return () => {
       valido = false;
     };
-  }, [numero, noLeitor]);
+  }, [numero]);
 
-  // FUN-19: grava o capítulo aberto.
+  // FUN-19 e FUN-85: grava o capítulo aberto; no formato livro, só com a âncora de texto (a capa, o texto do plano pago
+  // e o fim de um livro não gravam nada).
   const ref = estado.ref;
+  const noLeitor = estado.tela === 'leitor';
+  const gravaLeitura = estado.formato === 'rolagem' || estado.ancora.tipo === 'texto';
   useEffect(() => {
-    if (ref && noLeitor) gravarLeitura(ref);
-  }, [ref, noLeitor]);
+    if (ref && noLeitor && gravaLeitura) gravarLeitura(ref);
+  }, [ref, noLeitor, gravaLeitura]);
+
+  // FUN-68: o formato gravado quando muda.
+  useEffect(() => {
+    if (estado.formato !== lerFormato()) gravarFormato(estado.formato);
+  }, [estado.formato]);
 
   // FUN-23 a FUN-27 e FUN-30: a letra no <html> (o CSS lê `data-letra`) e gravada quando muda.
   useEffect(() => {
@@ -123,6 +167,11 @@ export function useLeitor(): Leitor {
       mudarLetra: (delta: 1 | -1) => despachar({ tipo: 'mudarLetra', delta }),
       escolherTema: (tema: Tema) => despachar({ tipo: 'escolherTema', tema }),
       irPara: (tela: Tela) => despachar({ tipo: 'irPara', tela }),
+      lerBiblia: () => despachar({ tipo: 'lerBiblia' }),
+      trocarFormato: () => despachar({ tipo: 'trocarFormato' }),
+      abrirEmBreve: () => despachar({ tipo: 'abrirEmBreve' }),
+      voltar: () => despachar({ tipo: 'voltar' }),
+      irParaAncora: (ancora: Ancora) => despachar({ tipo: 'irParaAncora', ancora }),
     }),
     [],
   );

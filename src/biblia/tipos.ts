@@ -26,4 +26,6 @@ export interface Indice {
 
 export type Ref = { livro: number; capitulo: number };
 export type Tema = 'claro' | 'escuro' | 'sepia';
+/** Formato de leitura (FUN-66): capítulo corrido ou páginas de livro. */
+export type Formato = 'rolagem' | 'livro';
 export type Segmento = { texto: string; italico: boolean };

@@ -1,19 +1,24 @@
 import { indice } from './biblia/indice';
+import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
 import { useLeitor } from './estado/useLeitor';
+import { useTelaLarga } from './livro/useTelaLarga';
+import { TelaLivro } from './telas/TelaLivro';
 import { TelaCapitulos } from './telas/TelaCapitulos';
+import { TelaEmBreve } from './telas/TelaEmBreve';
+import { TelaInicial } from './telas/TelaInicial';
 import { TelaLeitor } from './telas/TelaLeitor';
 import { TelaLivros } from './telas/TelaLivros';
 import { TelaSobre } from './telas/TelaSobre';
 
 /**
- * Composição do app (design: "Telas", sem rotas): a tela do estado do leitor, o painel (dentro do leitor) e o convite
- * de instalação. Na primeira visita (FUN-21), a própria escolha de livro é o estado vazio.
- * SPEC_DEVIATION: o vazio "Comece a ler" do guia não vira uma tela à parte antes da escolha de livro: a spec (FUN-21)
- * manda mostrar a escolha direto, e a tela intermediária acrescentaria um toque.
+ * Composição do app (design: "Telas", sem rotas): a barra de título (FUN-60), a tela do estado do leitor e o convite
+ * de instalação. O app abre na página inicial (FUN-51); sem leitura gravada, "Ler Bíblia" mostra a escolha de livro
+ * (FUN-55).
  */
 export function App() {
   const leitor = useLeitor();
+  const larga = useTelaLarga();
   const { estado, carga } = leitor;
   const ref = estado.ref;
 
@@ -21,7 +26,26 @@ export function App() {
   const abrirSobre = () => leitor.irPara('sobre');
 
   let tela;
-  if (estado.tela === 'leitor' && ref && carga) {
+  if (estado.tela === 'inicial') {
+    // FUN-51: o app abre sempre na página inicial, com ou sem leitura gravada.
+    tela = <TelaInicial aoLerBiblia={leitor.lerBiblia} aoCriarConta={leitor.abrirEmBreve} />;
+  } else if (estado.tela === 'emBreve') {
+    tela = <TelaEmBreve aoVoltar={leitor.voltar} aoLerBiblia={leitor.lerBiblia} />;
+  } else if (estado.tela === 'leitor' && estado.formato === 'livro') {
+    // FUN-66, FUN-67: no formato livro a tela é a do livro, com a âncora; a capa e o plano pago não têm livro (carga nula).
+    tela = (
+      <TelaLivro
+        ancora={estado.ancora}
+        carga={carga}
+        larga={larga}
+        letra={estado.letra}
+        aoIrParaAncora={leitor.irParaAncora}
+        aoTocarTitulo={leitor.tocarTitulo}
+        aoEscolherOutroLivro={leitor.trocarLivro}
+        aoQueroSaber={leitor.abrirEmBreve}
+      />
+    );
+  } else if (estado.tela === 'leitor' && ref && carga) {
     tela = (
       <TelaLeitor
         referencia={ref}
@@ -29,11 +53,6 @@ export function App() {
         aoTocarTitulo={leitor.tocarTitulo}
         aoAnterior={leitor.anterior}
         aoSeguinte={leitor.seguinte}
-        aoAbrirSobre={abrirSobre}
-        letra={estado.letra}
-        tema={estado.tema}
-        aoMudarLetra={leitor.mudarLetra}
-        aoEscolherTema={leitor.escolherTema}
         aoEscolherOutroLivro={leitor.trocarLivro}
       />
     );
@@ -45,30 +64,33 @@ export function App() {
         aoAbrirCapitulo={leitor.abrirCapitulo}
         aoTrocarLivro={leitor.trocarLivro}
         aoVoltarALeitura={voltarALeitura}
-        aoAbrirSobre={abrirSobre}
       />
     );
   } else if (estado.tela === 'sobre') {
     const nome = ref ? indice.livros[ref.livro - 1]?.nome : undefined;
     tela = (
       <TelaSobre
-        rotuloVoltar={ref && nome ? `${nome} ${ref.capitulo}` : 'Livros'}
-        aoVoltar={() => leitor.irPara(ref ? 'leitor' : 'livros')}
+        rotuloVoltar={ref && nome ? `${nome} ${ref.capitulo}` : estado.formato === 'livro' ? 'Capa' : 'Livros'}
+        aoVoltar={() => leitor.irPara(ref || estado.formato === 'livro' ? 'leitor' : 'livros')}
       />
     );
   } else {
-    tela = (
-      <TelaLivros
-        referencia={ref}
-        aoEscolherLivro={leitor.escolherLivro}
-        aoVoltarALeitura={voltarALeitura}
-        aoAbrirSobre={abrirSobre}
-      />
-    );
+    tela = <TelaLivros referencia={ref} aoEscolherLivro={leitor.escolherLivro} aoVoltarALeitura={voltarALeitura} />;
   }
 
   return (
     <>
+      <BarraTitulo
+        formato={estado.formato}
+        letra={estado.letra}
+        tema={estado.tema}
+        aoIrParaInicial={() => leitor.irPara('inicial')}
+        aoTrocarFormato={leitor.trocarFormato}
+        aoAbrirSobre={abrirSobre}
+        aoAbrirConta={leitor.abrirEmBreve}
+        aoMudarLetra={leitor.mudarLetra}
+        aoEscolherTema={leitor.escolherTema}
+      />
       {tela}
       <ConviteInstalacao />
     </>

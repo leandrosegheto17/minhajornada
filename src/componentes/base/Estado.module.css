@@ -16,11 +16,21 @@
   color: var(--cor-acento);
 }
 
+.estado h1,
 .estado h2 {
   font-family: var(--fonte-titulo);
   font-weight: var(--peso-titulo);
   font-size: var(--texto-g);
   margin: 0;
+}
+
+.estado ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--esp-2);
+  color: var(--cor-suave);
 }
 
 .estado p {

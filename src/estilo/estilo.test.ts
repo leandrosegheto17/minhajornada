@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { lerToken } from '../../scripts/lerToken.mjs';
 
@@ -68,6 +68,38 @@ describe('tokens.css', () => {
   it('declara a cor de fundo do tema claro', () => {
     expect(lerToken(tokens, '--cor-fundo')).toBe('#FFFFFF');
   });
+
+  it.each([
+    '--altura-barra',
+    '--largura-barra',
+    '--largura-cartao-inicial',
+    '--veu-imagem',
+    '--veu-imagem-celular',
+    '--largura-pagina',
+    '--respiro-pagina',
+    '--respiro-pagina-celular',
+    '--sombra-pagina',
+    '--sombra-lombada',
+    '--sombra-lombada-direita',
+    '--texto-titulo-livro',
+    '--texto-numero-capitulo',
+    '--cor-capa',
+    '--cor-capa-texto',
+    '--texto-capa',
+    '--quebra-barra-compacta',
+    '--quebra-livro-duplo',
+  ])('FUN-59 e FUN-73: o token novo %s existe', (nome) => {
+    expect(lerToken(tokens, nome)).toBeTruthy();
+  });
+
+  it('FUN-59: a capa usa o acento e o texto do acento (contraste já conferido)', () => {
+    expect(lerToken(tokens, '--cor-capa')).toBe('var(--cor-acento)');
+    expect(lerToken(tokens, '--cor-capa-texto')).toBe('var(--cor-acento-texto)');
+  });
+
+  it('FUN-73: a quebra do livro em duas páginas é 900px', () => {
+    expect(lerToken(tokens, '--quebra-livro-duplo')).toBe('900px');
+  });
 });
 
 describe('contraste do texto (FUN-32)', () => {
@@ -88,6 +120,14 @@ describe('contraste do texto (FUN-32)', () => {
     const css = corpo();
     expect(contraste(lerToken(css, '--cor-texto'), lerToken(css, '--cor-superficie'))).toBeGreaterThanOrEqual(4.5);
   });
+
+  it.each(temas)(
+    'FUN-59: no tema %s, o texto suave sobre a superfície do cartão tem pelo menos 4,5:1',
+    (_tema, corpo) => {
+      const css = corpo();
+      expect(contraste(lerToken(css, '--cor-suave'), lerToken(css, '--cor-superficie'))).toBeGreaterThanOrEqual(4.5);
+    },
+  );
 
   it('a conta de contraste reconhece um par ruim (cinza claro sobre branco)', () => {
     expect(contraste('#CCCCCC', '#FFFFFF')).toBeLessThan(4.5);
@@ -181,5 +221,24 @@ describe('global.css', () => {
 
   it('não usa cor literal: só var(--...)', () => {
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+  });
+});
+
+describe('foto da página inicial (FUN-58)', () => {
+  const foto = new URL('imagens/inicial.webp', ESTILO);
+
+  it('FUN-58: o pré-cache do app inclui webp', () => {
+    const config = readFileSync(new URL('../../vite.config.ts', import.meta.url), 'utf8');
+    expect(config).toMatch(/globPatterns:[^\]]*\bwebp\b/);
+  });
+
+  it('FUN-58: inicial.webp existe, é WebP e tem de 4 KiB a 2 MiB (não vira data: e cabe no pré-cache)', () => {
+    expect(existsSync(foto)).toBe(true);
+    const bytes = readFileSync(foto);
+    expect(bytes.subarray(0, 4).toString('ascii')).toBe('RIFF');
+    expect(bytes.subarray(8, 12).toString('ascii')).toBe('WEBP');
+    const tamanho = statSync(foto).size;
+    expect(tamanho).toBeGreaterThan(4 * 1024);
+    expect(tamanho).toBeLessThan(2 * 1024 * 1024);
   });
 });

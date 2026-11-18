@@ -1,0 +1,135 @@
+/* Barra de título (.specs/features/interface-livro/mockup/componentes.css, .barra-titulo). */
+
+.barra-titulo {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.barra-titulo__conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  min-height: var(--altura-barra);
+  max-width: var(--largura-barra);
+  margin: 0 auto;
+  padding: var(--esp-1) var(--esp-3);
+}
+
+.marca {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-g);
+  color: var(--cor-acento);
+  min-height: var(--alvo-toque);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--esp-2);
+  border-radius: var(--raio-p);
+}
+
+.marca:hover {
+  background: var(--cor-realce);
+}
+
+.grupo-acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.botao-formato {
+  min-height: var(--alvo-toque);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: 0 var(--esp-3);
+  border-radius: var(--raio-total);
+  color: var(--cor-suave);
+  font-weight: var(--peso-forte);
+  font-size: var(--texto-p);
+}
+
+.botao-formato:hover {
+  background: var(--cor-realce);
+  color: var(--cor-texto);
+}
+
+.botao-conta {
+  min-height: var(--alvo-toque);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: 0 var(--esp-4);
+  margin-left: var(--esp-1);
+  border-radius: var(--raio-total);
+  border: 1px solid var(--cor-contorno);
+  font-weight: var(--peso-forte);
+  font-size: var(--texto-p);
+  color: var(--cor-texto);
+  white-space: nowrap;
+}
+
+.botao-conta:hover {
+  background: var(--cor-realce);
+}
+
+.ancora-painel {
+  position: relative;
+}
+
+@media (max-width: 639px) {
+  .botao-formato {
+    width: var(--alvo-toque);
+    padding: 0;
+    justify-content: center;
+  }
+
+  .rotulo-formato {
+    display: none;
+  }
+}
+
+/* --quebra-barra-compacta (480px): "Entrar / Criar conta" vira só o ícone (FUN-64). */
+@media (max-width: 479px) {
+  .botao-conta {
+    width: var(--alvo-toque);
+    padding: 0;
+    justify-content: center;
+    margin-left: 0;
+    border-color: transparent;
+    color: var(--cor-suave);
+  }
+
+  .rotulo-conta {
+    display: none;
+  }
+
+  .marca {
+    font-size: var(--texto-m);
+    padding: 0 var(--esp-1);
+  }
+
+  /* 320 px: a marca cede espaço (reticências) antes de a barra transbordar (FUN-43). */
+  .barra-titulo__conteudo {
+    padding: var(--esp-1) var(--esp-2);
+    gap: var(--esp-1);
+  }
+
+  .marca {
+    min-width: 0;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: var(--alvo-toque);
+  }
+
+  .grupo-acoes {
+    gap: 0;
+    flex-shrink: 0;
+  }
+}

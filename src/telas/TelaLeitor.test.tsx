@@ -35,11 +35,6 @@ function propsPara(referencia: Ref, extra: Partial<Props> = {}): Props {
     aoTocarTitulo: vi.fn(),
     aoAnterior: vi.fn(),
     aoSeguinte: vi.fn(),
-    aoAbrirSobre: vi.fn(),
-    letra: 3,
-    tema: null,
-    aoMudarLetra: vi.fn(),
-    aoEscolherTema: vi.fn(),
     aoEscolherOutroLivro: vi.fn(),
     ...extra,
   };
@@ -147,7 +142,7 @@ describe('anterior e seguinte (FUN-10 a FUN-15)', () => {
   });
 });
 
-describe('título e barra (FUN-49, FUN-50, FUN-44)', () => {
+describe('título (FUN-49, FUN-50)', () => {
   it('FUN-49: tocar no título dispara a ação do título', () => {
     const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
     render(<TelaLeitor {...props} />);
@@ -160,14 +155,6 @@ describe('título e barra (FUN-49, FUN-50, FUN-44)', () => {
     render(<TelaLeitor {...props} />);
     fireEvent.click(screen.getByRole('button', { name: 'Filemom 1. Escolher outro livro' }));
     expect(props.aoTocarTitulo).toHaveBeenCalledTimes(1);
-  });
-
-  it('FUN-44: os botões de ícone da barra têm rótulo em português', () => {
-    const props = propsPara({ livro: n('Salmos'), capitulo: 27 });
-    render(<TelaLeitor {...props} />);
-    expect(screen.getByRole('button', { name: 'Aparência: letra e tema' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
-    expect(props.aoAbrirSobre).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -252,36 +239,6 @@ describe('deslize lateral (FUN-16 a FUN-18)', () => {
     fireEvent.pointerDown(area, { pointerId: 1, isPrimary: true, clientX: 200, clientY: 300 });
     fireEvent.pointerUp(area, { pointerId: 2, isPrimary: true, clientX: 50, clientY: 300 });
     expect(props.aoSeguinte).not.toHaveBeenCalled();
-  });
-});
-
-describe('painel de aparência no leitor (FUN-24 a FUN-28)', () => {
-  it('o "Aa" alterna aria-expanded e mostra ou esconde o painel', () => {
-    render(<TelaLeitor {...propsPara({ livro: n('Salmos'), capitulo: 27 })} />);
-    const aa = screen.getByRole('button', { name: 'Aparência: letra e tema' });
-    expect(aa).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByRole('region', { name: 'Aparência' })).toBeNull();
-
-    fireEvent.click(aa);
-    expect(aa).toHaveAttribute('aria-expanded', 'true');
-    const painel = screen.getByRole('region', { name: 'Aparência' });
-    expect(aa).toHaveAttribute('aria-controls', painel.id);
-
-    fireEvent.click(aa);
-    expect(aa).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByRole('region', { name: 'Aparência' })).toBeNull();
-  });
-
-  it('FUN-24/FUN-28: o painel aberto repassa a letra e o tema ao leitor', () => {
-    const props = propsPara({ livro: n('Salmos'), capitulo: 27 }, { letra: 4, tema: 'escuro' });
-    render(<TelaLeitor {...props} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Aparência: letra e tema' }));
-    expect(screen.getByText('Letra 4 de 5')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Escuro' })).toHaveAttribute('aria-pressed', 'true');
-    fireEvent.click(screen.getByRole('button', { name: 'Aumentar letra' }));
-    expect(props.aoMudarLetra).toHaveBeenCalledWith(1);
-    fireEvent.click(screen.getByRole('button', { name: 'Sépia' }));
-    expect(props.aoEscolherTema).toHaveBeenCalledWith('sepia');
   });
 });
 
