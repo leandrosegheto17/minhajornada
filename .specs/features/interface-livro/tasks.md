@@ -233,8 +233,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado/leitor.test.ts
 
 **Done when**:
 
-- [ ] Testes `FUN-57`, `FUN-62` em `src/estado/leitor.test.ts`: em breve a partir da inicial e do leitor volta à tela de origem; `voltar` sem origem vai à `inicial`; `irPara('inicial')` do leitor, da grade e do Sobre
-- [ ] Gate quick passa
+- [x] Testes `FUN-57`, `FUN-62` em `src/estado/leitor.test.ts`: em breve a partir da inicial e do leitor volta à tela de origem; `voltar` sem origem vai à `inicial`; `irPara('inicial')` do leitor, da grade e do Sobre
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -256,8 +256,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado/leitor.test.ts
 
 **Done when**:
 
-- [ ] Testes `FUN-83`, `FUN-84`, `FUN-85`, `FUN-88` em `src/estado/leitor.test.ts`: Salmos 23 pela grade no livro dá âncora Salmos 23:1; âncora Rute 2:5 deixa `ref` em Rute 2; âncora `capa` não muda `ref`; âncora com versículo ou capítulo fora do índice é ignorada (mesmo objeto)
-- [ ] Gate quick passa
+- [x] Testes `FUN-83`, `FUN-84`, `FUN-85`, `FUN-88` em `src/estado/leitor.test.ts`: Salmos 23 pela grade no livro dá âncora Salmos 23:1; âncora Rute 2:5 deixa `ref` em Rute 2; âncora `capa` não muda `ref`; âncora com versículo ou capítulo fora do índice é ignorada (mesmo objeto)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -279,15 +279,17 @@ Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado/leitor.test.ts
 
 **Done when**:
 
-- [ ] Testes `FUN-68`, `FUN-85`, `FUN-87` em `src/estado/useLeitor.test.ts`: troca de formato grava `mj:formato`; âncora Rute 2:5 grava `{livro: 8, capitulo: 2}`; capa não grava; âncora `fim` de Rute carrega o livro 8; livro fora do cache sem rede dá `naoBaixado`
-- [ ] Os testes de FUN-20/FUN-21 (`src/estado/useLeitor.test.ts:59-74`) passam a esperar `inicial` e a carga só depois de `lerBiblia` (mudança autorizada pela spec)
-- [ ] Gate quick passa
+- [x] Testes `FUN-68`, `FUN-85`, `FUN-87` em `src/estado/useLeitor.test.ts`: troca de formato grava `mj:formato`; âncora Rute 2:5 grava `{livro: 8, capitulo: 2}`; capa não grava; âncora `fim` de Rute carrega o livro 8; livro fora do cache sem rede dá `naoBaixado`
+- [x] Os testes de FUN-20/FUN-21 (`src/estado/useLeitor.test.ts:59-74`) passam a esperar `inicial` e a carga só depois de `lerBiblia` (mudança autorizada pela spec)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(estado): liga formato e âncora ao aparelho`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado src/navegacao src/biblia --reporter=dot @ 0b8d667b590c0be7af54f841971568b22c2eb492 = verde
 
 ### T8: Blocos do livro
 
