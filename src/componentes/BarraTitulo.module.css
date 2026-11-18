@@ -113,11 +113,23 @@
     padding: 0 var(--esp-1);
   }
 
+  /* 320 px: a marca cede espaço (reticências) antes de a barra transbordar (FUN-43). */
   .barra-titulo__conteudo {
     padding: var(--esp-1) var(--esp-2);
+    gap: var(--esp-1);
+  }
+
+  .marca {
+    min-width: 0;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: var(--alvo-toque);
   }
 
   .grupo-acoes {
     gap: 0;
+    flex-shrink: 0;
   }
 }
