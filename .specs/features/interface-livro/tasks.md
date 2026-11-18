@@ -126,6 +126,12 @@ T32 → T33
 T34 → T35 → T36 → T37 → T38 → T39 → T40 → T41 → T42
 ```
 
+### Phase 13: Retrabalho R2
+
+```
+T43 → T44
+```
+
 ---
 
 ## Task Breakdown
@@ -1086,6 +1092,44 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 ---
 
 Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 77a673a8562860fc521a3415355f823e5875e671 = verde
+
+## Phase 13: Retrabalho R2
+
+### T43: Fatia da âncora guardada no estado (A-15)
+
+**What**: Provar e, se preciso, corrigir que o reducer guarda a fatia da âncora (`irParaAncora`) e que `mesmaAncora` distingue fatias, para "seguinte" não travar num versículo maior que a página.
+**Estimativa**: 1,5h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `src/estado/leitor.test.ts`, `src/App.test.tsx` (e `src/estado/leitor.ts`, se o teste revelar defeito)
+**Depends on**: None
+**Reuses**: `mesmaAncora` em `src/estado/leitor.ts:86-96`; `irParaAncora` em `src/estado/leitor.ts:184-196`; testes de âncora em `src/estado/leitor.test.ts:446-473`; versículo dividido em `src/telas/TelaLivro.test.tsx:288-340`
+**Requirement**: FUN-77, FUN-78, FUN-85 · Achado: A-15 (validation.md)
+**Tests**: `leitor.test.ts`: `FUN-77` `irParaAncora` com `fatia: 1` guarda `ancora.fatia === 1` e muda o estado; fatia 0 e ausente são a mesma âncora; `App.test.tsx`: `FUN-77` versículo dividido em 3 páginas, "seguinte" passa pelas três fatias. Cada teste falha com o reducer descartando a fatia ou com `mesmaAncora` ignorando-a
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T44: "Seguinte" da capa na tela larga (A-16)
+
+**What**: Teste de `TelaLivro` com `larga: true`: da capa (e do plano pago), "seguinte" vai a Gênesis 1:1, não ao plano pago.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/telas/TelaLivro.test.tsx`
+**Depends on**: T43
+**Reuses**: testes com `larga: true` em `src/telas/TelaLivro.test.tsx:357-374`; `destinoDaCapa` em `src/telas/TelaLivro.tsx:106`
+**Requirement**: FUN-89, FUN-77 · Achado: A-16 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-89` na tela larga, "seguinte" a partir da capa chama `aoIrParaAncora` com Gênesis 1:1; falha com `larga` → `false` em `destinoDaCapa`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
 
 ## Requirement Coverage
 
