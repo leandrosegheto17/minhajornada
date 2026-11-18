@@ -18,6 +18,18 @@ test.describe('cartão da página inicial (FUN-52, FUN-53)', () => {
   test.describe('tela larga', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
 
+    test('FUN-52: a foto cobre toda a área abaixo da barra (de ponta a ponta e até o pé da tela)', async ({ page }) => {
+      await page.goto('/');
+      await esperarInicial(page);
+      const foto = await page.getByRole('img', { name: /Bíblia aberta sobre uma pedra/ }).boundingBox();
+      const topo = await barra(page).boundingBox();
+      if (!foto || !topo) throw new Error('foto ou barra sem caixa');
+      expect(Math.abs(foto.y - (topo.y + topo.height))).toBeLessThanOrEqual(1);
+      expect(foto.x).toBeLessThanOrEqual(1);
+      expect(foto.x + foto.width).toBeGreaterThanOrEqual(1440 - 1);
+      expect(foto.y + foto.height).toBeGreaterThanOrEqual(900 - 1);
+    });
+
     test('FUN-52: em 1440 px o cartão fica à direita (x maior que o meio da tela)', async ({ page }) => {
       await page.goto('/');
       await esperarInicial(page);
@@ -145,3 +157,71 @@ test.describe('barra de título (FUN-60, FUN-64, FUN-65)', () => {
     });
   });
 });
+
+test.describe('barra de título: limite de 480 px (FUN-64)', () => {
+  const conta = (page: Page) => page.getByRole('button', { name: 'Entrar ou criar conta' });
+
+  test.describe('479 px', () => {
+    test.use({ viewport: { width: 479, height: 800 } });
+
+    test('FUN-64: em 479 px a conta é só o ícone', async ({ page }) => {
+      await page.goto('/');
+      await esperarInicial(page);
+      await expect(page.getByText('Entrar / Criar conta')).toBeHidden();
+      await expect(conta(page)).toBeVisible();
+    });
+  });
+
+  test.describe('480 px', () => {
+    test.use({ viewport: { width: 480, height: 800 } });
+
+    test('FUN-64: em 480 px a conta mostra o texto "Entrar / Criar conta"', async ({ page }) => {
+      await page.goto('/');
+      await esperarInicial(page);
+      await expect(page.getByText('Entrar / Criar conta')).toBeVisible();
+      await expect(conta(page)).toBeVisible();
+    });
+  });
+});
+
+/** Formato livro gravado e sem leitura: "Ler Bíblia" abre a capa (FUN-88). */
+async function abrirNaCapa(page: Page): Promise<void> {
+  await page.goto('/');
+  await esperarInicial(page);
+  await page.evaluate(() => {
+    localStorage.removeItem('mj:leitura');
+    localStorage.setItem('mj:formato', JSON.stringify('livro'));
+  });
+  await page.reload();
+  await esperarInicial(page);
+  await lerBiblia(page);
+  await expect(page.getByRole('article', { name: 'Capa' })).toBeVisible();
+}
+
+for (const largura of [320, 1920]) {
+  test.describe(`sem rolagem lateral em ${largura} px nas telas novas (FUN-43)`, () => {
+    test.use({ viewport: { width: largura, height: 900 } });
+
+    test(`FUN-43: em breve, livro, capa e plano pago não transbordam em ${largura} px`, async ({ page }) => {
+      await page.goto('/');
+      await esperarInicial(page);
+      await page.getByRole('button', { name: 'Criar conta', exact: true }).click();
+      await expect(page.getByRole('heading', { level: 1, name: /em breve/ })).toBeVisible();
+      await semRolagemLateral(page, `em breve, ${largura} px`);
+
+      await page.goto('/');
+      await abrirGravado(page, 45, 8);
+      await esperarCapitulo(page, 'Romanos', 8);
+      await page.getByRole('button', { name: 'Ler como livro' }).click();
+      await expect(page.getByRole('main', { name: 'Leitura em formato livro' })).toBeVisible();
+      await semRolagemLateral(page, `livro, ${largura} px`);
+
+      await abrirNaCapa(page);
+      await semRolagemLateral(page, `capa, ${largura} px`);
+
+      if (largura < 900) await page.getByRole('button', { name: 'Página seguinte' }).click();
+      await expect(page.getByRole('article', { name: 'Plano de estudo' })).toBeVisible();
+      await semRolagemLateral(page, `plano pago, ${largura} px`);
+    });
+  });
+}
