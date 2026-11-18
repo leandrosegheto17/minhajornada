@@ -53,7 +53,7 @@ export default defineConfig({
       },
       // Só o app (o shell): os livros (`livros/*.json`) ficam no cache `mj-livros`, gerido pelo app (AD-002).
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,woff2,svg,png,webmanifest}'],
+        globPatterns: ['**/*.{js,css,html,woff2,svg,png,webp,webmanifest}'],
         globIgnores: ['livros/**'],
       },
       devOptions: { enabled: false },
