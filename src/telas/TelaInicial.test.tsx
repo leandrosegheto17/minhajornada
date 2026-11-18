@@ -12,7 +12,9 @@ describe('página inicial (FUN-52, FUN-59)', () => {
   it('FUN-52: mostra a foto e o cartão com "Ler Bíblia" e "Criar conta"', () => {
     renderizar();
     expect(screen.getByRole('img')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1, name: 'A Palavra perto de você, onde estiver' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'A Palavra perto de você, onde estiver' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Ler Bíblia' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Criar conta' })).toBeInTheDocument();
   });

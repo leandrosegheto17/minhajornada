@@ -41,7 +41,12 @@ export function BarraTitulo({
   return (
     <header className={estilo['barra-titulo']}>
       <div className={estilo['barra-titulo__conteudo']}>
-        <button type="button" className={estilo.marca} aria-label="MinhaJornada, página inicial" onClick={aoIrParaInicial}>
+        <button
+          type="button"
+          className={estilo.marca}
+          aria-label="MinhaJornada, página inicial"
+          onClick={aoIrParaInicial}
+        >
           MinhaJornada
         </button>
         <div className={estilo['grupo-acoes']}>
@@ -74,7 +79,12 @@ export function BarraTitulo({
           <BotaoIcone rotulo="Sobre o MinhaJornada" onClick={aoAbrirSobre}>
             <IconeSobre />
           </BotaoIcone>
-          <button type="button" className={estilo['botao-conta']} aria-label="Entrar ou criar conta" onClick={aoAbrirConta}>
+          <button
+            type="button"
+            className={estilo['botao-conta']}
+            aria-label="Entrar ou criar conta"
+            onClick={aoAbrirConta}
+          >
             <IconeConta />
             <span className={estilo['rotulo-conta']}>Entrar / Criar conta</span>
           </button>

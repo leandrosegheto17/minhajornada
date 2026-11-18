@@ -21,7 +21,7 @@
 }
 
 .inicial::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background: var(--veu-imagem);

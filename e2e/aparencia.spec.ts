@@ -1,5 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
-import { abrirGravado, abrirPelaEscolha, esperarCapitulo, esperarInicial, gravarLetra, lerBiblia } from './apoio/navegar';
+import {
+  abrirGravado,
+  abrirPelaEscolha,
+  esperarCapitulo,
+  esperarInicial,
+  gravarLetra,
+  lerBiblia,
+} from './apoio/navegar';
 
 // J-04 de .specs/projeto/jornadas.md, no build servido por `vite preview`.
 

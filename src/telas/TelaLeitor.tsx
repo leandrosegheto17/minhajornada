@@ -34,14 +34,7 @@ function rotulo(ref: Ref): string {
  * Leitura de um capítulo (.specs/mockup/telas/leitor.html): o título como botão (FUN-49, FUN-50); a barra é a
  * `BarraTitulo` do app (FUN-60); os versículos (FUN-01); os cartões anterior e seguinte, desativados nos limites (FUN-10 a FUN-15).
  */
-export function TelaLeitor({
-  referencia,
-  carga,
-  aoTocarTitulo,
-  aoAnterior,
-  aoSeguinte,
-  aoEscolherOutroLivro,
-}: Props) {
+export function TelaLeitor({ referencia, carga, aoTocarTitulo, aoAnterior, aoSeguinte, aoEscolherOutroLivro }: Props) {
   const { livro, capitulo } = referencia;
 
   // FUN-05: cada capítulo aberto começa do início.
