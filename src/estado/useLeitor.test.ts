@@ -56,18 +56,25 @@ afterEach(() => {
   localStorage.clear();
 });
 
-describe('abertura (FUN-20, FUN-21)', () => {
-  it('FUN-20: com leitura gravada, abre o leitor nela e carrega o livro', async () => {
+describe('abertura (FUN-51, FUN-54, FUN-55; substitui FUN-20 e FUN-21)', () => {
+  it('FUN-51: com leitura gravada, abre a página inicial sem carregar nada; "Ler Bíblia" abre o capítulo e carrega o livro', async () => {
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Romanos'), capitulo: 8 }));
     const { result } = renderHook(() => useLeitor());
-    expect(result.current.estado.tela).toBe('leitor');
+    expect(result.current.estado.tela).toBe('inicial');
     expect(result.current.estado.ref).toEqual({ livro: n('Romanos'), capitulo: 8 });
+    expect(result.current.carga).toBeNull();
+    expect(dubles.carregarLivro).not.toHaveBeenCalled();
+    act(() => result.current.lerBiblia());
+    expect(result.current.estado.tela).toBe('leitor');
     await waitFor(() => expect(result.current.carga?.situacao).toBe('pronto'));
     expect(dubles.carregarLivro).toHaveBeenCalledWith(n('Romanos'));
   });
 
-  it('FUN-21: sem leitura gravada, abre a escolha de livro e não carrega nada', () => {
+  it('FUN-51/FUN-55: sem leitura gravada, abre a página inicial; "Ler Bíblia" abre a escolha de livro, sem carregar nada', () => {
     const { result } = renderHook(() => useLeitor());
+    expect(result.current.estado.tela).toBe('inicial');
+    expect(result.current.carga).toBeNull();
+    act(() => result.current.lerBiblia());
     expect(result.current.estado.tela).toBe('livros');
     expect(result.current.carga).toBeNull();
     expect(dubles.carregarLivro).not.toHaveBeenCalled();
@@ -132,12 +139,100 @@ describe('aparência (FUN-28, FUN-30)', () => {
   });
 });
 
+describe('formato e âncora (FUN-66, FUN-68, FUN-85, FUN-87)', () => {
+  const rute = () => n('Rute');
+  const aberturaNoLivro = (ref: { livro: number; capitulo: number } | null) => {
+    localStorage.setItem(CHAVES.formato, JSON.stringify('livro'));
+    if (ref) localStorage.setItem(CHAVES.leitura, JSON.stringify(ref));
+    const pronto = renderHook(() => useLeitor());
+    act(() => pronto.result.current.lerBiblia());
+    return pronto;
+  };
+
+  it('FUN-66: o formato gravado é lido na abertura e nada é regravado', () => {
+    localStorage.setItem(CHAVES.formato, JSON.stringify('livro'));
+    const { result } = renderHook(() => useLeitor());
+    expect(result.current.estado.formato).toBe('livro');
+    expect(localStorage.getItem(CHAVES.formato)).toBe('"livro"');
+  });
+
+  it('FUN-68: trocar o formato grava mj:formato nas duas direções', () => {
+    const { result } = renderHook(() => useLeitor());
+    expect(localStorage.getItem(CHAVES.formato)).toBeNull();
+    act(() => result.current.trocarFormato());
+    expect(result.current.estado.formato).toBe('livro');
+    expect(JSON.parse(localStorage.getItem(CHAVES.formato) ?? 'null')).toBe('livro');
+    act(() => result.current.trocarFormato());
+    expect(JSON.parse(localStorage.getItem(CHAVES.formato) ?? 'null')).toBe('rolagem');
+  });
+
+  it('FUN-85: a âncora Rute 2:5 grava {livro: 8, capitulo: 2}', () => {
+    const { result } = aberturaNoLivro({ livro: rute(), capitulo: 1 });
+    act(() => result.current.irParaAncora({ tipo: 'texto', ref: { livro: rute(), capitulo: 2 }, versiculo: 5 }));
+    expect(rute()).toBe(8);
+    expect(JSON.parse(localStorage.getItem(CHAVES.leitura) ?? 'null')).toEqual({ livro: 8, capitulo: 2 });
+  });
+
+  it('FUN-85: a capa e o texto do plano pago não gravam nem apagam a leitura', () => {
+    const { result } = aberturaNoLivro({ livro: rute(), capitulo: 2 });
+    act(() => result.current.irParaAncora({ tipo: 'capa' }));
+    expect(JSON.parse(localStorage.getItem(CHAVES.leitura) ?? 'null')).toEqual({ livro: 8, capitulo: 2 });
+    act(() => result.current.irParaAncora({ tipo: 'pago' }));
+    expect(JSON.parse(localStorage.getItem(CHAVES.leitura) ?? 'null')).toEqual({ livro: 8, capitulo: 2 });
+  });
+
+  it('FUN-85: sem leitura gravada, abrir a capa do livro não grava nem carrega nada', () => {
+    const { result } = aberturaNoLivro(null);
+    expect(result.current.estado.ancora).toEqual({ tipo: 'capa' });
+    expect(localStorage.getItem(CHAVES.leitura)).toBeNull();
+    expect(dubles.carregarLivro).not.toHaveBeenCalled();
+  });
+
+  it('FUN-85: a âncora "fim" não grava a leitura', () => {
+    const { result } = aberturaNoLivro({ livro: n('Salmos'), capitulo: 23 });
+    act(() => result.current.irParaAncora({ tipo: 'fim', livro: rute() }));
+    expect(JSON.parse(localStorage.getItem(CHAVES.leitura) ?? 'null')).toEqual({ livro: n('Salmos'), capitulo: 23 });
+  });
+
+  it('FUN-84: a âncora "fim" de Rute carrega o livro 8', async () => {
+    const { result } = aberturaNoLivro({ livro: n('Salmos'), capitulo: 23 });
+    await waitFor(() => expect(result.current.carga).toMatchObject({ situacao: 'pronto', numero: n('Salmos') }));
+    act(() => result.current.irParaAncora({ tipo: 'fim', livro: rute() }));
+    expect(dubles.carregarLivro).toHaveBeenCalledWith(8);
+    await waitFor(() => expect(result.current.carga).toMatchObject({ situacao: 'pronto', numero: 8 }));
+  });
+
+  it('FUN-84: a âncora de texto em outro livro carrega o livro dela', async () => {
+    const { result } = aberturaNoLivro({ livro: rute(), capitulo: 4 });
+    await waitFor(() => expect(result.current.carga?.situacao).toBe('pronto'));
+    const samuel = n('1 Samuel');
+    act(() => result.current.irParaAncora({ tipo: 'texto', ref: { livro: samuel, capitulo: 1 }, versiculo: 1 }));
+    await waitFor(() => expect(result.current.carga).toMatchObject({ situacao: 'pronto', numero: samuel }));
+  });
+
+  it('FUN-87: livro da âncora fora do cache e sem rede fica naoBaixado', async () => {
+    dubles.carregarLivro.mockRejectedValue(new LivroNaoBaixado(rute()));
+    const { result } = aberturaNoLivro({ livro: n('Salmos'), capitulo: 23 });
+    act(() => result.current.irParaAncora({ tipo: 'fim', livro: rute() }));
+    await waitFor(() => expect(result.current.carga).toEqual({ situacao: 'naoBaixado', numero: rute() }));
+  });
+
+  it('FUN-57: "em breve" guarda a tela de origem e "voltar" retorna a ela', () => {
+    const { result } = renderHook(() => useLeitor());
+    act(() => result.current.abrirEmBreve());
+    expect(result.current.estado.tela).toBe('emBreve');
+    act(() => result.current.voltar());
+    expect(result.current.estado.tela).toBe('inicial');
+  });
+});
+
 describe('download dos livros que faltam (FUN-33)', () => {
   it('FUN-33: baixarFaltantes é chamado uma vez, só depois do primeiro capítulo pronto', async () => {
     const primeiro = adiada<Livro>();
     dubles.carregarLivro.mockImplementationOnce(() => primeiro.promessa);
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
 
     expect(result.current.carga?.situacao).toBe('carregando');
     expect(dubles.baixarFaltantes).not.toHaveBeenCalled();
@@ -158,8 +253,9 @@ describe('download dos livros que faltam (FUN-33)', () => {
     expect(dubles.baixarFaltantes).toHaveBeenCalledTimes(1);
   });
 
-  it('FUN-33: sem capítulo aberto (escolha de livro), não baixa nada', () => {
-    renderHook(() => useLeitor());
+  it('FUN-33: sem capítulo aberto (página inicial e escolha de livro), não baixa nada', () => {
+    const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     expect(dubles.baixarFaltantes).not.toHaveBeenCalled();
   });
 
@@ -167,6 +263,7 @@ describe('download dos livros que faltam (FUN-33)', () => {
     dubles.carregarLivro.mockRejectedValue(new LivroNaoBaixado(n('Salmos')));
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     await waitFor(() => expect(result.current.carga?.situacao).toBe('naoBaixado'));
     expect(dubles.baixarFaltantes).not.toHaveBeenCalled();
   });
@@ -174,7 +271,8 @@ describe('download dos livros que faltam (FUN-33)', () => {
   it('erro em limparAntigos não impede o download', async () => {
     dubles.limparAntigos.mockRejectedValue(new Error('cache recusado'));
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
-    renderHook(() => useLeitor());
+    const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     await waitFor(() => expect(dubles.baixarFaltantes).toHaveBeenCalledTimes(1));
   });
 });
@@ -188,6 +286,7 @@ describe('carregamento do livro', () => {
     );
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
 
     act(() => result.current.trocarLivro());
     act(() => result.current.escolherLivro(n('Judas')));
@@ -207,6 +306,7 @@ describe('carregamento do livro', () => {
     dubles.carregarLivro.mockImplementation((numero) => (numero === n('Salmos') ? salmos.promessa : judas.promessa));
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
 
     act(() => result.current.trocarLivro());
     act(() => result.current.escolherLivro(n('Judas')));
@@ -219,6 +319,7 @@ describe('carregamento do livro', () => {
     dubles.carregarLivro.mockRejectedValue(new LivroNaoBaixado(n('Romanos')));
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Romanos'), capitulo: 8 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     await waitFor(() => expect(result.current.carga).toEqual({ situacao: 'naoBaixado', numero: n('Romanos') }));
   });
 
@@ -226,6 +327,7 @@ describe('carregamento do livro', () => {
     dubles.carregarLivro.mockRejectedValue(new SyntaxError('Unexpected token < in JSON'));
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Romanos'), capitulo: 8 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     await waitFor(() => expect(result.current.carga).toEqual({ situacao: 'naoBaixado', numero: n('Romanos') }));
     expect(dubles.baixarFaltantes).not.toHaveBeenCalled();
   });
@@ -233,6 +335,7 @@ describe('carregamento do livro', () => {
   it('outro capítulo do mesmo livro não carrega o livro de novo', async () => {
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     await waitFor(() => expect(result.current.carga?.situacao).toBe('pronto'));
     const chamadas = dubles.carregarLivro.mock.calls.length;
     act(() => result.current.seguinte());
@@ -244,6 +347,7 @@ describe('carregamento do livro', () => {
     dubles.carregarLivro.mockRejectedValueOnce(new LivroNaoBaixado(n('Salmos')));
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: n('Salmos'), capitulo: 26 }));
     const { result } = renderHook(() => useLeitor());
+    act(() => result.current.lerBiblia());
     await waitFor(() => expect(result.current.carga?.situacao).toBe('naoBaixado'));
 
     act(() => result.current.trocarLivro());
