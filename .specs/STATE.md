@@ -3,15 +3,15 @@
 ## Retomada
 
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
-- **Item**: `.specs/features/interface-livro/`
-- **Fase aprovada**: 3, Plano, em 2026-11-18; fase 4 (rede de proteção planejada) concluída em 2026-11-18, sem T0 (`tasks.md`, `## Linha de base`)
-- **Próxima fase**: planejamento concluído; seguem `/executar` e `/validar` (Sonnet). A feature anterior, `leitor`, está integrada em `desenvolvimento` (push pendente)
+- **Item**: `.specs/features/texto-atualizado/`
+- **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
+- **Próxima fase**: 2, Reconhecimento (skill `inventario`, depois `reconhecimento`) — modelo indicado: opus
 - **Serviços no ar**: nenhum
-- **Progresso**: Feature atual (.specs/features/interface-livro): Faltam 33 de 33 tarefas: 0% concluído, conferida em 2026-11-18
+- **Progresso**: Produto: Faltam 3 de 6 features: 50% concluído; texto-atualizado sem tarefas ainda, conferida em 2026-11-18
 - **Combinado na conversa e não registrado em artefato**:
-  - Branches: `desenvolvimento` faz o papel da main e é a branch padrão no GitHub (repositório privado `minhajornada`). Toda feature nasce de `desenvolvimento` e volta para ela (**Branch pai** = `desenvolvimento`). A `main` só recebe a integração de `desenvolvimento` quando o usuário pedir.
-  - Publicação: Cloudflare. `desenvolvimento` → `minhajornada-tst.ljssoftware.com.br`; `main` → `minhajornada.ljssoftware.com.br`.
-  - Galeria do mockup publicada como artifact privado: https://claude.ai/artifact/PLyzqUYu82F25xHSfwQp2o (telas e modelos de ícone).
+  - Branches: `desenvolvimento` faz o papel da main; toda feature nasce dela e volta para ela (**Branch pai** = `desenvolvimento`). A `main` só recebe `desenvolvimento` quando o usuário pedir.
+  - Publicação: `desenvolvimento` → tst (`minhajornada-tst.ljssoftware.com.br`, workflow `deploy` manual depois do CI verde); `main` → produção. O tst foi publicado em 2026-11-18 com a `livro-tela-cheia` (run 44404040537).
+  - Reconhecimento deve olhar: `scripts/converter-biblia.ts` e `src/biblia/conversor.ts` (onde as correções entram no build), `src/biblia/segmentos.ts` (colchetes → itálico), `src/telas/TelaSobre.tsx` e `src/livro/CapaLivro.tsx` (texto do crédito), navegação de telas (onde entra "Correções no texto") e o cache por hash (AD-002). A página de revisão é um artifact privado no claude.ai (com banco do artifact), fora do app.
 - **Gravada em**: 2026-11-18
 
 ## Modelo
@@ -23,6 +23,7 @@
 | 2026-11-18 | 3 | interface-livro | /preparar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-18 | 3 | livro-tela-cheia | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
