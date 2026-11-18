@@ -43,6 +43,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-15 | Feature `leitor`, retrabalho R1 (T36, T41, T42) | Helper `deslizar` de `TelaLeitor.test.tsx` com `pointerType: 'touch'` (T36); `afterEach` de `ConviteInstalacao.test.tsx` apaga `maxTouchPoints` (T41); uma asserção a mais no e2e de 320 px (T42). Nenhum teste enfraquecido. Aprovada pelo dono. |
 | 2026-11-15 | Feature `leitor`, `/validar` rodada 5 | A-16 (comum: valor errado de `referrer-policy` e `x-content-type-options` sem prova por execução) aceito como lacuna, sem retrabalho; feature segue para a integração. Decisão do dono. |
 | 2026-11-18 | Feature `interface-livro`, T16 e T17 | Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172` e `:261-280`, `src/telas/TelaLivros.test.tsx:64-75`) passam para `src/componentes/BarraTitulo.test.tsx`, com as mesmas asserções. Aprovada pelo dono. |
+| 2026-11-18 | Feature `livro-tela-cheia` | Testes do desenho antigo da tela larga (proporção 3 × 4, `--largura-pagina`, `--largura-barra`, posição da barra e dos botões nos e2e de tela larga) podem ser trocados por testes do desenho novo, tão fortes quanto antes. Aprovada pelo dono. |
 
 ## Decisions
 
