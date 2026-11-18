@@ -212,6 +212,18 @@ describe('App', () => {
     expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
   });
 
+  it('FUN-60: no formato livro sem leitura, o Sobre volta à capa (não à escolha de livro)', () => {
+    localStorage.setItem(CHAVES.formato, JSON.stringify('livro'));
+    render(<App />);
+    lerBiblia();
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
+    expect(titulo1('Sobre o MinhaJornada')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Capa' }));
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeNull();
+  });
+
   it('FUN-71: no livro, passar página muda o lugar e voltar à rolagem abre o capítulo da página', async () => {
     gravarRomanos8();
     await guardarRomanos();

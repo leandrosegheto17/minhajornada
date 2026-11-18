@@ -441,3 +441,18 @@ describe('irPara', () => {
     expect(reduzirLeitor(antes, { tipo: 'irPara', tela: 'leitor' }, indice)).toBe(antes);
   });
 });
+
+describe('Sobre no formato livro sem leitura (FUN-60)', () => {
+  it('FUN-60: irPara leitor volta à capa quando o formato é livro e não há capítulo', () => {
+    const sobre = aplicar(ESTADO_INICIAL, trocarFormato, lerBiblia, { tipo: 'irPara', tela: 'sobre' });
+    expect(sobre.tela).toBe('sobre');
+    const volta = aplicar(sobre, { tipo: 'irPara', tela: 'leitor' });
+    expect(volta.tela).toBe('leitor');
+    expect(volta.ancora).toEqual({ tipo: 'capa' });
+  });
+
+  it('FUN-60: na rolagem sem capítulo, irPara leitor continua ignorado', () => {
+    const estado = aplicar(ESTADO_INICIAL, { tipo: 'irPara', tela: 'leitor' });
+    expect(estado.tela).toBe('inicial');
+  });
+});

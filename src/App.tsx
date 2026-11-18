@@ -70,8 +70,8 @@ export function App() {
     const nome = ref ? indice.livros[ref.livro - 1]?.nome : undefined;
     tela = (
       <TelaSobre
-        rotuloVoltar={ref && nome ? `${nome} ${ref.capitulo}` : 'Livros'}
-        aoVoltar={() => leitor.irPara(ref ? 'leitor' : 'livros')}
+        rotuloVoltar={ref && nome ? `${nome} ${ref.capitulo}` : estado.formato === 'livro' ? 'Capa' : 'Livros'}
+        aoVoltar={() => leitor.irPara(ref || estado.formato === 'livro' ? 'leitor' : 'livros')}
       />
     );
   } else {

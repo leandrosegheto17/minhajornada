@@ -230,8 +230,9 @@ export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: In
     case 'irPara': {
       if (acao.tela === estado.tela) return estado;
       if (acao.tela === 'emBreve') return abrirEmBreve(estado);
-      // Leitor sem capítulo e grade sem livro não existem: a ação é ignorada.
-      if (acao.tela === 'leitor' && !estado.ref) return estado;
+      // Leitor sem capítulo e grade sem livro não existem: a ação é ignorada. No formato livro o leitor existe sem
+      // capítulo (a capa e o plano pago), e é para onde o Sobre volta.
+      if (acao.tela === 'leitor' && !estado.ref && estado.formato !== 'livro') return estado;
       if (acao.tela === 'capitulos') {
         const livro = estado.livroGrade ?? estado.ref?.livro ?? null;
         if (livro === null || capitulosDo(livro, indice) === null) return estado;
