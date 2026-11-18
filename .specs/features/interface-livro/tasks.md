@@ -833,9 +833,9 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2
 
 **Done when**:
 
-- [ ] Teste `FUN-94` (projeto `arquivos`): o SVG faz parse como XML (`DOMParser` ou parser node) e nenhum comentário contém `--`
-- [ ] Teste `FUN-93`: o SVG tem o caminho em vinho (`#9A3B5B`) e o `viewBox` 512
-- [ ] Gate quick passa
+- [x] Teste `FUN-94` (projeto `arquivos`): o SVG faz parse como XML (`DOMParser` ou parser node) e nenhum comentário contém `--`
+- [x] Teste `FUN-93`: o SVG tem o caminho em vinho (`#9A3B5B`) e o `viewBox` 512
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -857,9 +857,9 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2
 
 **Done when**:
 
-- [ ] Teste `FUN-93` (projeto `arquivos`): os três PNGs têm 192 × 192, 512 × 512 e 512 × 512 (cabeçalho PNG) e o maskable tem o pixel do canto vinho (sem transparência)
-- [ ] `e2e/manifesto.spec.ts` continua verde
-- [ ] Gate full passa
+- [x] Teste `FUN-93` (projeto `arquivos`): os três PNGs têm 192 × 192, 512 × 512 e 512 × 512 (cabeçalho PNG) e o maskable tem o pixel do canto vinho (sem transparência)
+- [x] `e2e/manifesto.spec.ts` continua verde
+- [x] Gate full passa
 
 **Tests**: unit
 **Gate**: full
@@ -881,8 +881,8 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2
 
 **Done when**:
 
-- [ ] E2E com os IDs: `FUN-52` cartão com `x` maior que o meio da tela em 1440 px; `FUN-53` cartão centralizado em 375 px; `FUN-58` sem rede, a foto carrega (`naturalWidth > 0`); `FUN-60` barra nas sete telas; `FUN-65` barra no topo depois de rolar; `FUN-64` 320 px sem rolagem horizontal e conta só ícone
-- [ ] Gate full passa
+- [x] E2E com os IDs: `FUN-52` cartão com `x` maior que o meio da tela em 1440 px; `FUN-53` cartão centralizado em 375 px; `FUN-58` sem rede, a foto carrega (`naturalWidth > 0`); `FUN-60` barra nas sete telas; `FUN-65` barra no topo depois de rolar; `FUN-64` 320 px sem rolagem horizontal e conta só ícone
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
@@ -904,14 +904,16 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2
 
 **Done when**:
 
-- [ ] E2E com os IDs: `FUN-88`/`FUN-89` capa à direita e pago à esquerda em 1280 px; `FUN-90` capa, pago e Gênesis em 375 px; `FUN-91` anterior desativado na capa; `FUN-92` "Quero saber" abre "em breve"; `FUN-86` Rute 1:12 visível antes e depois de mudar a letra para 5
-- [ ] Gate full passa
+- [x] E2E com os IDs: `FUN-88`/`FUN-89` capa à direita e pago à esquerda em 1280 px; `FUN-90` capa, pago e Gênesis em 375 px; `FUN-91` anterior desativado na capa; `FUN-92` "Quero saber" abre "em breve"; `FUN-86` Rute 1:12 visível antes e depois de mudar a letra para 5
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): capa e repaginação do livro`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b814943a2a20f60498 = verde
 
 ## Requirement Coverage
 
