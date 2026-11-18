@@ -65,6 +65,29 @@ test.describe('tela estreita e retrato como hoje (FUN-102)', () => {
     });
   }
 
+  // A capa na tela estreita e no retrato fica como hoje (A-02): a reserva da linha do título é só da tela larga.
+  for (const [largura, altura] of [
+    [375, 812],
+    [899, 800],
+    [1024, 1366],
+  ] as const) {
+    test.describe(`capa ${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-102: em ${largura} × ${altura} a capa fica como hoje`, async ({ page }) => {
+        await abrirNaCapa(page);
+        const pagina = await caixa(capaLivro(page));
+        const ant = await caixa(anterior(page));
+        const pe = await alturaJanela(page);
+        expect(Math.abs(pagina.y - 69), `topo da capa a ${pagina.y} px`).toBeLessThanOrEqual(TOL);
+        expect(
+          Math.abs(pe - (ant.y + ant.height) - 77),
+          `botões a ${pe - (ant.y + ant.height)} px do pé`,
+        ).toBeLessThanOrEqual(TOL);
+      });
+    });
+  }
+
   // Margem lateral da barra hoje: 8 px abaixo de 640 px (`--esp-2`) e 12 px acima (`--esp-3`).
   for (const [largura, altura, margem] of [
     [375, 812, 8],
