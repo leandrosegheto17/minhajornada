@@ -186,6 +186,14 @@ describe('medirNoDom (FUN-75)', () => {
     expect(medidas).toEqual({ alturas: [24, 60, 36], alturaPagina: 480, alturaLinha: 24 });
   });
 
+  it('FUN-75: a altura de cada bloco inclui as margens de cima e de baixo (o espaço entre versículos ocupa a página)', () => {
+    const raiz = contenedor(480, [24, 60], { lineHeight: '24px', fontSize: '16px' });
+    (raiz.children[0] as HTMLElement).style.marginBottom = '6px';
+    (raiz.children[1] as HTMLElement).style.marginTop = '4px';
+    (raiz.children[1] as HTMLElement).style.marginBottom = '6px';
+    expect(medirNoDom(raiz).alturas).toEqual([30, 70]);
+  });
+
   it('linha unitária (1.5) vale a letra vezes o número', () => {
     const medidas = medirNoDom(contenedor(480, [30], { lineHeight: '1.5', fontSize: '20px' }));
     expect(medidas.alturaLinha).toBe(30);

@@ -22,6 +22,13 @@ function linhaEmPx(valor: string, letra: number): number {
   return 1.2 * letra;
 }
 
+/** Altura do bloco com as margens de cima e de baixo: o espaço entre versículos também ocupa a página (FUN-75). */
+function alturaComMargens(filho: Element): number {
+  const estilo = getComputedStyle(filho);
+  const margem = (valor: string) => (Number.isFinite(parseFloat(valor)) ? parseFloat(valor) : 0);
+  return filho.getBoundingClientRect().height + margem(estilo.marginTop) + margem(estilo.marginBottom);
+}
+
 /**
  * Medida real no navegador. O contêiner invisível tem a largura e a altura de uma página, e cada filho é um bloco
  * (nome do livro ou versículo): lê tudo numa só passada, sem alterar o DOM entre uma leitura e outra.
@@ -30,7 +37,7 @@ export function medirNoDom(contenedor: HTMLElement): Medidas {
   const estilo = getComputedStyle(contenedor);
   const letra = parseFloat(estilo.fontSize) || 16;
   return {
-    alturas: Array.from(contenedor.children, (filho) => filho.getBoundingClientRect().height),
+    alturas: Array.from(contenedor.children, (filho) => alturaComMargens(filho)),
     alturaPagina: contenedor.getBoundingClientRect().height,
     alturaLinha: linhaEmPx(estilo.lineHeight, letra),
   };

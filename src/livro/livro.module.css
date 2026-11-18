@@ -257,3 +257,14 @@
   pointer-events: none;
   width: min(var(--largura-pagina), calc(100vw - 2 * var(--esp-3)));
 }
+/*
+ * Tela larga (FUN-73, FUN-75): a página real tem proporção 3/4 limitada pela altura (`max-height`), então a largura dela
+ * sai da altura. A medida tem a mesma altura e a largura derivada dela, senão o texto quebra em menos linhas que na
+ * página mostrada e versículos ficam escondidos.
+ */
+@media (min-width: 900px) and (orientation: landscape) {
+  .medida {
+    width: auto;
+    height: min(calc(var(--largura-pagina) * 4 / 3), calc(100vh - var(--altura-barra) - 170px));
+  }
+}

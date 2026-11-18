@@ -43,6 +43,12 @@ async function linhasCortadas(page: Page): Promise<string[]> {
         const r = bloco.getBoundingClientRect();
         const linha = parseFloat(getComputedStyle(bloco).lineHeight);
         if (!(linha > 0)) return;
+        if (r.top >= limite.bottom - 1) {
+          problemas.push(
+            `${pagina.getAttribute('aria-label')}: ${(bloco.textContent ?? '').slice(0, 30)} (escondido abaixo da caixa)`,
+          );
+          return;
+        }
         const cortes: number[] = [];
         if (r.bottom > limite.bottom + 1) cortes.push(limite.bottom - r.top);
         if (r.top < limite.top - 1) cortes.push(limite.top - r.top);
@@ -71,6 +77,22 @@ test.describe('duas páginas na tela larga (FUN-73)', () => {
     if (!a || !b) throw new Error('página sem caixa');
     expect(Math.abs(a.y - b.y)).toBeLessThan(1);
     expect(b.x).toBeGreaterThanOrEqual(a.x + a.width - 1);
+  });
+});
+
+test.describe('texto inteiro nas duas páginas (FUN-75)', () => {
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  test('FUN-75: em 1280 × 800 nenhum versículo de Rute fica escondido ou cortado no meio de uma linha', async ({
+    page,
+  }) => {
+    await abrirNoLivro(page, RUTE, 1);
+    for (let i = 0; i < 40; i++) {
+      const rotulo = await rotuloPagina(page);
+      if (rotulo?.endsWith('de 1 Samuel')) break;
+      expect(await linhasCortadas(page), rotulo ?? '').toEqual([]);
+      await passar(page, rotulo);
+    }
   });
 });
 
