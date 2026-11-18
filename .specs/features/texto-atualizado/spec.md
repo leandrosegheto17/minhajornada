@@ -2,7 +2,7 @@
 
 - **Base**: roteiro (`.specs/projeto/roadmap.md`, linha 4; AD-009, AD-010), pesquisa de fontes (`pesquisa.md`), levantamento dos 66 livros (`levantamento/RESUMO.md`, 2026-11-18) e respostas do dono em 2026-11-18
 - **Tamanho**: Large (dados novos de correção, ferramenta de revisão, mudança no build, duas telas alteradas e uma nova; altera FUN-03 e FUN-38)
-- **Aprovação**: pendente
+- **Aprovação**: spec aprovada pelo dono em 2026-11-18, com as premissas da tabela (inclui a mudança dos testes do Sobre, FUN-38, e da capa)
 
 ## Problem Statement
 
