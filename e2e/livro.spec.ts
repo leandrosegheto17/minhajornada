@@ -149,6 +149,15 @@ test.describe('uma página na tela estreita (FUN-74)', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(new RegExp(`^João ${capitulo}\\b`));
   });
 
+  test('FUN-71 (AD-007): João 3 no livro e de volta à rolagem sem passar página abre exatamente João 3', async ({
+    page,
+  }) => {
+    await abrirNoLivro(page, JOAO, 3);
+    await page.getByRole('button', { name: 'Ler em rolagem' }).click();
+    await expect(regiaoLivro(page)).toHaveCount(0);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^João\s3\s*$/);
+  });
+
   test('FUN-83: Salmos 23 pela grade abre a página com Salmos 23:1', async ({ page }) => {
     await abrirNoLivro(page, RUTE, 1);
     await page.getByRole('heading', { level: 1 }).getByRole('button').click();

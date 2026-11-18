@@ -456,3 +456,28 @@ describe('Sobre no formato livro sem leitura (FUN-60)', () => {
     expect(estado.tela).toBe('inicial');
   });
 });
+
+describe('lugar no livro e capítulo na rolagem (FUN-71; AD-007)', () => {
+  it('AD-007: voltar à rolagem abre o capítulo da âncora, mesmo que a página comece no capítulo anterior', () => {
+    const noLivro = aplicar(
+      ESTADO_INICIAL,
+      iniciar({ livro: n('João'), capitulo: 3 }, 3, 'livro'),
+      lerBiblia,
+      { tipo: 'irParaAncora', ancora: { tipo: 'texto', ref: { livro: n('João'), capitulo: 3 }, versiculo: 1 } },
+      trocarFormato,
+    );
+    expect(noLivro.formato).toBe('rolagem');
+    expect(noLivro.ref).toEqual({ livro: n('João'), capitulo: 3 });
+  });
+
+  it('FUN-71: depois de passar páginas, a rolagem abre o capítulo da âncora de agora (primeiro versículo da página)', () => {
+    const estado = aplicar(
+      ESTADO_INICIAL,
+      iniciar({ livro: n('João'), capitulo: 3 }, 3, 'livro'),
+      lerBiblia,
+      { tipo: 'irParaAncora', ancora: { tipo: 'texto', ref: { livro: n('João'), capitulo: 4 }, versiculo: 2 } },
+      trocarFormato,
+    );
+    expect(estado.ref).toEqual({ livro: n('João'), capitulo: 4 });
+  });
+});

@@ -36,6 +36,18 @@ test.describe('capa e plano pago na tela larga (FUN-88, FUN-89)', () => {
     expect(await xDe(page, capa(page))).toBeGreaterThan(await xDe(page, pago(page)));
   });
 
+  test('FUN-88: de Gênesis 1, "anterior" mostra a capa à direita e o plano pago à esquerda', async ({ page }) => {
+    await page.goto('/');
+    await esperarInicial(page);
+    await page.evaluate(() => localStorage.setItem('mj:formato', JSON.stringify('livro')));
+    await abrirGravado(page, 1, 1);
+    await expect(paginas(page).first()).toHaveAttribute('aria-label', /^Página 1 de Gênesis$/);
+    await anterior(page).click();
+    await expect(capa(page)).toBeVisible();
+    await expect(pago(page)).toBeVisible();
+    expect(await xDe(page, capa(page))).toBeGreaterThan(await xDe(page, pago(page)));
+  });
+
   test('FUN-91: na capa, "Página anterior" fica desativada', async ({ page }) => {
     await abrirNaCapa(page);
     await expect(anterior(page)).toBeDisabled();
