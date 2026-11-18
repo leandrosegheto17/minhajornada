@@ -1,5 +1,5 @@
 import { indice } from '../biblia/indice';
-import type { Ref, Tema } from '../biblia/tipos';
+import type { Formato, Ref, Tema } from '../biblia/tipos';
 import { refValida } from '../navegacao/navegacao';
 
 /**
@@ -11,6 +11,7 @@ export const CHAVES = {
   leitura: 'mj:leitura',
   letra: 'mj:letra',
   tema: 'mj:tema',
+  formato: 'mj:formato',
   convite: 'mj:convite-ios',
 } as const;
 
@@ -18,6 +19,7 @@ export const LETRA_PADRAO = 3;
 export const LETRA_MIN = 1;
 export const LETRA_MAX = 5;
 const TEMAS: readonly Tema[] = ['claro', 'escuro', 'sepia'];
+const FORMATOS: readonly Formato[] = ['rolagem', 'livro'];
 
 /** Marca de valor gravado que não é JSON (diferente de "ausente"). */
 const INVALIDO = Symbol('invalido');
@@ -92,6 +94,17 @@ export function lerTema(): Tema | null {
 export function gravarTema(tema: Tema): void {
   if (!TEMAS.includes(tema)) return;
   gravar(CHAVES.tema, tema);
+}
+
+/** Formato de leitura (FUN-66, FUN-69): `rolagem` quando não há escolha ou o valor é ilegível ou desconhecido. */
+export function lerFormato(): Formato {
+  const valor = ler(CHAVES.formato);
+  return FORMATOS.includes(valor as Formato) ? (valor as Formato) : 'rolagem';
+}
+
+export function gravarFormato(formato: Formato): void {
+  if (!FORMATOS.includes(formato)) return;
+  gravar(CHAVES.formato, formato);
 }
 
 /** Convite de instalação do iPhone e iPad dispensado (FUN-47). */
