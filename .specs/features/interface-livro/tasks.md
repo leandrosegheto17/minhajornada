@@ -616,8 +616,8 @@ Gate: pnpm typecheck && pnpm test @ 6e8a87166874646f98332aa0148ccc9e5323c8f6 = v
 
 **Done when**:
 
-- [ ] Teste em `src/telas/TelaSobre.test.tsx`: o Sobre cita a foto, o autor e a licença Unsplash
-- [ ] Gate quick passa
+- [x] Teste em `src/telas/TelaSobre.test.tsx`: o Sobre cita a foto, o autor e a licença Unsplash
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -639,9 +639,9 @@ Gate: pnpm typecheck && pnpm test @ 6e8a87166874646f98332aa0148ccc9e5323c8f6 = v
 
 **Done when**:
 
-- [ ] Testes em `src/App.test.tsx`: `FUN-51` abre na inicial com e sem leitura; `FUN-54` Romanos 8 gravado e "Ler Bíblia" mostra Romanos 8; `FUN-55` sem leitura mostra "Escolha o livro"; `FUN-57` "Criar conta" e a conta da barra abrem "em breve" e "Voltar" volta; `FUN-62` a marca volta à inicial
-- [ ] Os testes `src/App.test.tsx:46-66` (FUN-20, FUN-21) mudam para a abertura nova (autorizado pela spec)
-- [ ] Gate quick passa
+- [x] Testes em `src/App.test.tsx`: `FUN-51` abre na inicial com e sem leitura; `FUN-54` Romanos 8 gravado e "Ler Bíblia" mostra Romanos 8; `FUN-55` sem leitura mostra "Escolha o livro"; `FUN-57` "Criar conta" e a conta da barra abrem "em breve" e "Voltar" volta; `FUN-62` a marca volta à inicial
+- [x] Os testes `src/App.test.tsx:46-66` (FUN-20, FUN-21) mudam para a abertura nova (autorizado pela spec)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -663,15 +663,17 @@ Gate: pnpm typecheck && pnpm test @ 6e8a87166874646f98332aa0148ccc9e5323c8f6 = v
 
 **Done when**:
 
-- [ ] E2E `FUN-51`/`FUN-54` em `e2e/leitura.spec.ts`: abrir, ver a inicial, "Ler Bíblia", ver Romanos 8 gravado; recarregar e ver a inicial de novo
-- [ ] Mudanças nos testes E2E existentes só no caminho de abertura, asserções iguais (autorizado pela spec)
-- [ ] Gate full passa
+- [x] E2E `FUN-51`/`FUN-54` em `e2e/leitura.spec.ts`: abrir, ver a inicial, "Ler Bíblia", ver Romanos 8 gravado; recarregar e ver a inicial de novo
+- [x] Mudanças nos testes E2E existentes só no caminho de abertura, asserções iguais (autorizado pela spec)
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): jornadas entram pela página inicial`
 
 ---
+
+Gate: pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ f1e572971e2470e688dc5768ffcf644051590daa = verde
 
 ### T24: Página do livro
 
