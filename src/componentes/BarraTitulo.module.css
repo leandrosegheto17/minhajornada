@@ -19,6 +19,14 @@
   padding: var(--esp-1) var(--esp-3);
 }
 
+/* 900 px ou mais (FUN-95, AD-011): a barra vai de borda a borda, com 24 px de margem; abaixo disso, como antes. */
+@media (min-width: 900px) {
+  .barra-titulo__conteudo {
+    max-width: none;
+    padding: var(--esp-1) var(--esp-6);
+  }
+}
+
 .marca {
   font-family: var(--fonte-titulo);
   font-weight: var(--peso-titulo);

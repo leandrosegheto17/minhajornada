@@ -86,3 +86,44 @@ test.describe('tela estreita e retrato como hoje (FUN-102)', () => {
     });
   }
 });
+
+test.describe('barra de borda a borda com 900 px ou mais (FUN-95)', () => {
+  for (const [largura, altura] of [
+    [900, 600],
+    [1280, 800],
+    [1920, 1080],
+  ] as const) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-95: em ${largura} × ${altura} a barra vai de borda a borda em todas as telas`, async ({ page }) => {
+        const conferir = async (onde: string) => {
+          const util = await larguraUtil(page);
+          const m = await caixa(marca(page));
+          const c = await caixa(conta(page));
+          expect(Math.abs(m.x - 24), `${onde}: marca a ${m.x} px da esquerda`).toBeLessThanOrEqual(TOL);
+          expect(
+            Math.abs(c.x + c.width - (util - 24)),
+            `${onde}: conta termina a ${util - (c.x + c.width)} px da direita`,
+          ).toBeLessThanOrEqual(TOL);
+        };
+
+        await page.goto('/');
+        await esperarInicial(page);
+        await conferir('página inicial');
+
+        await abrirGravado(page, 45, 8);
+        await expect(page.getByRole('heading', { level: 1 })).toHaveText(/^Romanos 8\b/);
+        await conferir('leitor em rolagem');
+
+        await page.getByRole('button', { name: 'Ler como livro' }).click();
+        await expect(regiaoLivro(page)).toBeVisible();
+        await conferir('modo livro');
+
+        await page.getByRole('button', { name: 'Sobre o MinhaJornada' }).click();
+        await expect(page.getByRole('heading', { level: 1, name: 'Sobre o MinhaJornada' })).toBeVisible();
+        await conferir('Sobre');
+      });
+    });
+  }
+});
