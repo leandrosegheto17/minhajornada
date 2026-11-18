@@ -40,49 +40,87 @@ afterEach(() => {
   localStorage.clear();
 });
 
+const gravarRomanos8 = () => localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
+const guardarRomanos = () => duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
+const lerBiblia = () => fireEvent.click(screen.getByRole('button', { name: 'Ler Bíblia' }));
+const titulo1 = (nome: string) => screen.getByRole('heading', { level: 1, name: nome });
+
 describe('App', () => {
-  // Ajuste do teste do esqueleto (T31, aprovado pelo usuário em 2026-11-15): o app deixa de abrir num título
-  // "MinhaJornada" e abre na escolha de livro, com o nome na marca da barra.
+  // Ajuste do teste do esqueleto (T31, aprovado em 2026-11-15) e da T22 desta feature: o nome fica na marca da barra.
   it('abre no app e mostra o nome', () => {
     render(<App />);
     expect(screen.getByText('MinhaJornada')).toBeVisible();
-    expect(screen.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    expect(titulo1('A Palavra perto de você, onde estiver')).toBeInTheDocument();
   });
 
-  it('FUN-21: sem leitura gravada, abre a escolha de livro', () => {
+  it('FUN-51: abre na página inicial sem leitura gravada', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    expect(titulo1('A Palavra perto de você, onde estiver')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ler Bíblia' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeNull();
+  });
+
+  it('FUN-51: abre na página inicial também com leitura gravada (não abre o capítulo)', () => {
+    gravarRomanos8();
+    render(<App />);
+    expect(titulo1('A Palavra perto de você, onde estiver')).toBeInTheDocument();
+    expect(screen.queryByText('Romanos 8')).toBeNull();
+  });
+
+  it('FUN-55: sem leitura gravada, "Ler Bíblia" mostra a escolha de livro', () => {
+    render(<App />);
+    lerBiblia();
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
     expect(screen.getByRole('region', { name: /Antigo Testamento/ })).toBeInTheDocument();
   });
 
-  it('FUN-20: com Romanos 8 gravado e o livro no dublê de cache, abre "Romanos 8"', async () => {
-    localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
-    await duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
-
+  it('FUN-54: com Romanos 8 gravado e o livro no dublê de cache, "Ler Bíblia" abre "Romanos 8"', async () => {
+    gravarRomanos8();
+    await guardarRomanos();
     render(<App />);
+    lerBiblia();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 8');
     expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
     expect(screen.getByText('Romanos 8:2')).toBeInTheDocument();
   });
 
-  it('do leitor, "Sobre" abre a tela Sobre e voltar retorna ao capítulo', async () => {
-    localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
-    await duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
+  it('FUN-57: "Criar conta" abre a tela em breve e "Voltar" volta à inicial', () => {
     render(<App />);
-    await screen.findByText('Romanos 8:1');
+    fireEvent.click(screen.getByRole('button', { name: 'Criar conta' }));
+    expect(titulo1('Conta e plano de estudo: em breve')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar' }));
+    expect(titulo1('A Palavra perto de você, onde estiver')).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Sobre o MinhaJornada' })).toBeInTheDocument();
+  it('FUN-57: a conta da barra abre a tela em breve e "Voltar" volta à tela de onde veio', () => {
+    render(<App />);
+    lerBiblia();
+    fireEvent.click(screen.getByRole('button', { name: 'Entrar ou criar conta' }));
+    expect(titulo1('Conta e plano de estudo: em breve')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar' }));
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Romanos 8' }));
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 8');
-    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+  it('FUN-57: "Ler Bíblia" da tela em breve segue como na inicial', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: 'Criar conta' }));
+    lerBiblia();
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
+  });
+
+  it('FUN-62: a marca da barra volta à página inicial', () => {
+    render(<App />);
+    lerBiblia();
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'MinhaJornada, página inicial' }));
+    expect(titulo1('A Palavra perto de você, onde estiver')).toBeInTheDocument();
   });
 
   it('FUN-60: a barra de título aparece uma vez só na escolha de livro, na grade, no leitor e no Sobre', async () => {
-    await duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
+    await guardarRomanos();
     render(<App />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    lerBiblia();
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
     expect(screen.getAllByRole('banner')).toHaveLength(1);
 
     fireEvent.click(screen.getByRole('button', { name: 'Romanos, 16 capítulos' }));
@@ -94,27 +132,44 @@ describe('App', () => {
     expect(screen.getAllByRole('banner')).toHaveLength(1);
 
     fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Sobre o MinhaJornada' })).toBeInTheDocument();
+    expect(titulo1('Sobre o MinhaJornada')).toBeInTheDocument();
     expect(screen.getAllByRole('banner')).toHaveLength(1);
   });
 
-  it('FUN-36: livro fora do cache e sem rede mostra o aviso e "Escolher outro livro" volta à escolha', async () => {
-    localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
+  it('do leitor, "Sobre" abre a tela Sobre e voltar retorna ao capítulo', async () => {
+    gravarRomanos8();
+    await guardarRomanos();
     render(<App />);
+    lerBiblia();
+    await screen.findByText('Romanos 8:1');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
+    expect(titulo1('Sobre o MinhaJornada')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Romanos 8' }));
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 8');
+    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+  });
+
+  it('FUN-36: livro fora do cache e sem rede mostra o aviso e "Escolher outro livro" volta à escolha', async () => {
+    gravarRomanos8();
+    render(<App />);
+    lerBiblia();
     expect(
       await screen.findByText('Este livro ainda não foi baixado. Conecte-se à internet para lê-lo.'),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Escolher outro livro' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
   });
 
   it('FUN-49: do leitor, o título abre a grade e "Trocar livro" abre a escolha de livro', async () => {
-    localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
-    await duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
+    gravarRomanos8();
+    await guardarRomanos();
     render(<App />);
+    lerBiblia();
     fireEvent.click(screen.getByRole('button', { name: 'Romanos 8. Escolher outro capítulo' }));
     expect(screen.getByRole('list', { name: 'Capítulos de Romanos' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Trocar livro' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    expect(titulo1('Escolha o livro')).toBeInTheDocument();
   });
 });

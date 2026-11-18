@@ -3,15 +3,16 @@ import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
 import { useLeitor } from './estado/useLeitor';
 import { TelaCapitulos } from './telas/TelaCapitulos';
+import { TelaEmBreve } from './telas/TelaEmBreve';
+import { TelaInicial } from './telas/TelaInicial';
 import { TelaLeitor } from './telas/TelaLeitor';
 import { TelaLivros } from './telas/TelaLivros';
 import { TelaSobre } from './telas/TelaSobre';
 
 /**
  * Composição do app (design: "Telas", sem rotas): a barra de título (FUN-60), a tela do estado do leitor e o convite
- * de instalação. Na primeira visita (FUN-21), a própria escolha de livro é o estado vazio.
- * SPEC_DEVIATION: o vazio "Comece a ler" do guia não vira uma tela à parte antes da escolha de livro: a spec (FUN-21)
- * manda mostrar a escolha direto, e a tela intermediária acrescentaria um toque.
+ * de instalação. O app abre na página inicial (FUN-51); sem leitura gravada, "Ler Bíblia" mostra a escolha de livro
+ * (FUN-55).
  */
 export function App() {
   const leitor = useLeitor();
@@ -22,7 +23,12 @@ export function App() {
   const abrirSobre = () => leitor.irPara('sobre');
 
   let tela;
-  if (estado.tela === 'leitor' && ref && carga) {
+  if (estado.tela === 'inicial') {
+    // FUN-51: o app abre sempre na página inicial, com ou sem leitura gravada.
+    tela = <TelaInicial aoLerBiblia={leitor.lerBiblia} aoCriarConta={leitor.abrirEmBreve} />;
+  } else if (estado.tela === 'emBreve') {
+    tela = <TelaEmBreve aoVoltar={leitor.voltar} aoLerBiblia={leitor.lerBiblia} />;
+  } else if (estado.tela === 'leitor' && ref && carga) {
     tela = (
       <TelaLeitor
         referencia={ref}
