@@ -302,7 +302,7 @@ test.describe('"Anterior" e "Seguinte" nos cantos de baixo (FUN-99)', () => {
     test.describe(`${largura} × ${altura}`, () => {
       test.use({ viewport: { width: largura, height: altura } });
 
-      const conferirCantos = async (page: Page, esquerda: Locator, direita: Locator, pertoDoPe: boolean) => {
+      const conferirCantos = async (page: Page, esquerda: Locator, direita: Locator) => {
         const a = await caixa(esquerda);
         const b = await caixa(direita);
         const ant = await caixa(anterior(page));
@@ -315,22 +315,27 @@ test.describe('"Anterior" e "Seguinte" nos cantos de baixo (FUN-99)', () => {
         ).toBeLessThanOrEqual(TOL);
         expect(Math.abs(ant.y - seg.y)).toBeLessThanOrEqual(TOL);
         expect(ant.y).toBeGreaterThanOrEqual(a.y + a.height - TOL);
-        // A capa não tem linha de título, então o conjunto fica centrado na altura: a distância do pé só vale em Rute.
-        if (pertoDoPe) expect(pe - (ant.y + ant.height), 'distância do pé da tela').toBeLessThanOrEqual(16 + TOL);
+        expect(pe - (ant.y + ant.height), 'distância do pé da tela').toBeLessThanOrEqual(16 + TOL);
       };
 
       test(`FUN-99: em ${largura} × ${altura} "Anterior" e "Seguinte" ficam nos cantos de baixo, em Rute 1`, async ({
         page,
       }) => {
         await abrirNoLivro(page, RUTE, 1);
-        await conferirCantos(page, paginas(page).nth(0), paginas(page).nth(1), true);
+        await conferirCantos(page, paginas(page).nth(0), paginas(page).nth(1));
       });
 
       test(`FUN-99: em ${largura} × ${altura} "Anterior" e "Seguinte" ficam nos cantos de baixo, na capa`, async ({
         page,
       }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const yTexto = (await caixa(paginas(page).first())).y;
+        const yBotoes = (await caixa(anterior(page))).y;
         await abrirNaCapa(page);
-        await conferirCantos(page, planoPago(page), capaLivro(page), false);
+        await conferirCantos(page, planoPago(page), capaLivro(page));
+        // A capa reserva a linha do título (A-01): páginas e botões na mesma altura que em Rute, sem salto ao passar.
+        expect(Math.abs((await caixa(planoPago(page))).y - yTexto), 'topo das páginas').toBeLessThanOrEqual(TOL);
+        expect(Math.abs((await caixa(anterior(page))).y - yBotoes), 'topo dos botões').toBeLessThanOrEqual(TOL);
       });
     });
   }

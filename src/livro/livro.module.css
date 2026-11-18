@@ -276,6 +276,10 @@
   .livro__aberto {
     grid-template-columns: repeat(2, var(--largura-pagina-larga));
   }
+  /* A capa e o plano pago não têm linha de título: reservam a altura dela, para páginas e botões ficarem onde estão em Rute (A-01). */
+  .livro__aberto:has(.pagina--capa) {
+    margin-top: calc(var(--alvo-toque) + var(--esp-4));
+  }
   .livro__cabeca {
     max-width: calc(2 * var(--largura-pagina-larga));
   }
