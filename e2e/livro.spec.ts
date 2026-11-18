@@ -9,7 +9,6 @@ const JOAO = 43;
 
 const regiaoLivro = (page: Page) => page.getByRole('main', { name: 'Leitura em formato livro' });
 const paginas = (page: Page) => regiaoLivro(page).getByRole('article');
-const seguinte = (page: Page) => page.getByRole('button', { name: 'Página seguinte' });
 
 /** Grava o formato livro e a leitura no aparelho e abre o livro pela página inicial ("Ler Bíblia"). */
 async function abrirNoLivro(page: Page, livro: number, capitulo: number): Promise<void> {
