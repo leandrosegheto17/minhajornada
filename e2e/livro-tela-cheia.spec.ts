@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { linhasCortadas, passar, rotuloPagina } from './apoio/livro';
-import { abrirGravado, esperarInicial } from './apoio/navegar';
+import { abrirGravado, esperarInicial, lerBiblia } from './apoio/navegar';
 
 // Modo livro em tela cheia no PC (FUN-95 a FUN-102), no build servido por `vite preview`.
 
@@ -251,4 +251,120 @@ test.describe('medida do tamanho da página mostrada (FUN-100)', () => {
       await lerRuteInteira(page);
     });
   });
+});
+
+const capaLivro = (page: Page) => page.getByRole('article', { name: 'Capa' });
+const planoPago = (page: Page) => page.getByRole('article', { name: 'Plano de estudo' });
+
+async function abrirNaCapa(page: Page): Promise<void> {
+  await page.goto('/');
+  await esperarInicial(page);
+  await page.evaluate(() => {
+    localStorage.removeItem('mj:leitura');
+    localStorage.setItem('mj:formato', JSON.stringify('livro'));
+  });
+  await page.reload();
+  await esperarInicial(page);
+  await lerBiblia(page);
+  await expect(capaLivro(page)).toBeVisible();
+}
+
+const TAMANHOS_ALINHAMENTO = [
+  [1280, 800],
+  [1920, 1080],
+] as const;
+
+test.describe('título e posição alinhados às páginas (FUN-98)', () => {
+  for (const [largura, altura] of TAMANHOS_ALINHAMENTO) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-98: em ${largura} × ${altura} o título e a posição alinham com as bordas das páginas`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const a = await caixa(paginas(page).nth(0));
+        const b = await caixa(paginas(page).nth(1));
+        const botaoTitulo = await caixa(titulo(page).getByRole('button'));
+        const posicao = await caixa(posicaoTexto(page).first());
+        expect(Math.abs(botaoTitulo.x - a.x), `título a ${botaoTitulo.x}, página a ${a.x}`).toBeLessThanOrEqual(TOL);
+        expect(
+          Math.abs(posicao.x + posicao.width - (b.x + b.width)),
+          `posição termina a ${posicao.x + posicao.width}, página a ${b.x + b.width}`,
+        ).toBeLessThanOrEqual(TOL);
+      });
+    });
+  }
+});
+
+test.describe('"Anterior" e "Seguinte" nos cantos de baixo (FUN-99)', () => {
+  for (const [largura, altura] of TAMANHOS_ALINHAMENTO) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      const conferirCantos = async (page: Page, esquerda: Locator, direita: Locator, pertoDoPe: boolean) => {
+        const a = await caixa(esquerda);
+        const b = await caixa(direita);
+        const ant = await caixa(anterior(page));
+        const seg = await caixa(seguinte(page));
+        const pe = await alturaJanela(page);
+        expect(Math.abs(ant.x - a.x), `anterior a ${ant.x}, página a ${a.x}`).toBeLessThanOrEqual(TOL);
+        expect(
+          Math.abs(seg.x + seg.width - (b.x + b.width)),
+          `seguinte termina a ${seg.x + seg.width}`,
+        ).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(ant.y - seg.y)).toBeLessThanOrEqual(TOL);
+        expect(ant.y).toBeGreaterThanOrEqual(a.y + a.height - TOL);
+        // A capa não tem linha de título, então o conjunto fica centrado na altura: a distância do pé só vale em Rute.
+        if (pertoDoPe) expect(pe - (ant.y + ant.height), 'distância do pé da tela').toBeLessThanOrEqual(16 + TOL);
+      };
+
+      test(`FUN-99: em ${largura} × ${altura} "Anterior" e "Seguinte" ficam nos cantos de baixo, em Rute 1`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        await conferirCantos(page, paginas(page).nth(0), paginas(page).nth(1), true);
+      });
+
+      test(`FUN-99: em ${largura} × ${altura} "Anterior" e "Seguinte" ficam nos cantos de baixo, na capa`, async ({
+        page,
+      }) => {
+        await abrirNaCapa(page);
+        await conferirCantos(page, planoPago(page), capaLivro(page), false);
+      });
+    });
+  }
+});
+
+test.describe('capa e plano pago do tamanho das páginas de texto (FUN-101)', () => {
+  for (const [largura, altura] of TAMANHOS_ALINHAMENTO) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-101: em ${largura} × ${altura} a capa e o plano pago têm o tamanho das páginas de texto`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const texto = await caixa(paginas(page).first());
+        await abrirNaCapa(page);
+        const util = await larguraUtil(page);
+        const pago = await caixa(planoPago(page));
+        const capa = await caixa(capaLivro(page));
+        for (const [nome, c] of [
+          ['plano pago', pago],
+          ['capa', capa],
+        ] as const) {
+          expect(Math.abs(c.width - texto.width), `${nome}: largura ${c.width} × ${texto.width}`).toBeLessThanOrEqual(
+            TOL,
+          );
+          expect(
+            Math.abs(c.height - texto.height),
+            `${nome}: altura ${c.height} × ${texto.height}`,
+          ).toBeLessThanOrEqual(TOL);
+        }
+        expect(Math.abs(pago.x - 24)).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(capa.x + capa.width - (util - 24))).toBeLessThanOrEqual(TOL);
+      });
+    });
+  }
 });
