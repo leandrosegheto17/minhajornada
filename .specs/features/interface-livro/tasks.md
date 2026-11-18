@@ -1109,7 +1109,7 @@ Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 77a67
 **Tests**: `leitor.test.ts`: `FUN-77` `irParaAncora` com `fatia: 1` guarda `ancora.fatia === 1` e muda o estado; fatia 0 e ausente são a mesma âncora; `App.test.tsx`: `FUN-77` versículo dividido em 3 páginas, "seguinte" passa pelas três fatias. Cada teste falha com o reducer descartando a fatia ou com `mesmaAncora` ignorando-a
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1127,9 +1127,11 @@ Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 77a67
 **Tests**: `TelaLivro.test.tsx`: `FUN-89` na tela larga, "seguinte" a partir da capa chama `aoIrParaAncora` com Gênesis 1:1; falha com `larga` → `false` em `destinoDaCapa`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ ebe702b630761b1f0e68d964d21378418c43cb2d = verde
 
 ## Requirement Coverage
 
