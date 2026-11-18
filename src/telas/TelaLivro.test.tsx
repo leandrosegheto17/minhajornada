@@ -277,6 +277,42 @@ describe('lugar no livro e capa (FUN-82, FUN-85, FUN-86, FUN-89, FUN-90)', () =>
   });
 });
 
+describe('letra nova repagina (FUN-86; AD-008)', () => {
+  it('FUN-86: ao mudar a letra a tela remede e repagina, mantendo a página do versículo da âncora', () => {
+    // Mesma função `medir` nos dois renders: só a letra muda. Na segunda medida os versículos ficam mais altos.
+    let chamadas = 0;
+    const medirPorLetra: Medir = (contenedor) => {
+      chamadas += 1;
+      const alto = chamadas > 1;
+      return {
+        alturas: Array.from(contenedor.children, (_, i) => (i === 0 ? 40 : alto ? 40 : 20)),
+        alturaPagina: 100,
+        alturaLinha: 20,
+      };
+    };
+    const props: Props = {
+      ancora: texto(RUTE, 4),
+      carga: pronto(RUTE),
+      larga: false,
+      letra: 3,
+      aoIrParaAncora: vi.fn(),
+      aoTocarTitulo: vi.fn(),
+      aoEscolherOutroLivro: vi.fn(),
+      aoQueroSaber: vi.fn(),
+      medir: medirPorLetra,
+    };
+    const { rerender } = render(<TelaLivro {...props} />);
+    // Letra 3: páginas [nome, 1, 2, 3] e [4, 5, 6]; o versículo 4 está na página 2 de 2.
+    expect(chamadas).toBe(1);
+    expect(screen.getByRole('article', { name: 'Página 2 de Rute' })).toBeInTheDocument();
+
+    rerender(<TelaLivro {...props} letra={4} />);
+    // Letra 4: [nome, 1], [2, 3], [4, 5] e [6]; o versículo 4 passa para a página 3.
+    expect(chamadas).toBe(2);
+    expect(screen.getByRole('article', { name: 'Página 3 de Rute' })).toBeInTheDocument();
+  });
+});
+
 describe('versículo maior que a página (FUN-75, FUN-77, FUN-78, FUN-85)', () => {
   // Páginas: P1 [nome, v1, v2], P2 [v3 fatia 0], P3 [v3 fatia 1], P4 [v3 fatia 2, v4, v5], P5 [v6].
   const medirDividido: Medir = (contenedor) => ({
