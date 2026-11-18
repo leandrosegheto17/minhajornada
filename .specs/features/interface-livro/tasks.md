@@ -377,9 +377,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Casos limite e estados listados antes de codar: livro de 1 página, número ímpar de páginas em tela larga, última página de Apocalipse (larga e estreita), primeira de Gênesis, capa, pago; se a spec não define algum, parar e perguntar
-- [ ] Testes com os IDs em `src/livro/folhear.test.ts`: par 0–1 e 2–3 na larga, página única na estreita; seguinte na última de Rute vai a 1 Samuel 1:1; anterior na primeira de 1 Samuel vai a `fim` de Rute; Apocalipse sem seguinte; capa sem anterior; Gênesis → capa (larga) e → pago → capa (estreita, AD-005); capa → pago → Gênesis (estreita) e capa → Gênesis (larga)
-- [ ] Gate quick passa
+- [x] Casos limite e estados listados antes de codar: livro de 1 página, número ímpar de páginas em tela larga, última página de Apocalipse (larga e estreita), primeira de Gênesis, capa, pago; se a spec não define algum, parar e perguntar
+- [x] Testes com os IDs em `src/livro/folhear.test.ts`: par 0–1 e 2–3 na larga, página única na estreita; seguinte na última de Rute vai a 1 Samuel 1:1; anterior na primeira de 1 Samuel vai a `fim` de Rute; Apocalipse sem seguinte; capa sem anterior; Gênesis → capa (larga) e → pago → capa (estreita, AD-005); capa → pago → Gênesis (estreita) e capa → Gênesis (larga)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -401,8 +401,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Testes `FUN-73`, `FUN-74` em `src/livro/useTelaLarga.test.ts`: consulta exata; verdadeiro e falso; muda quando a consulta muda; remove o ouvinte ao desmontar
-- [ ] Gate quick passa
+- [x] Testes `FUN-73`, `FUN-74` em `src/livro/useTelaLarga.test.ts`: consulta exata; verdadeiro e falso; muda quando a consulta muda; remove o ouvinte ao desmontar
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -424,14 +424,16 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Testes `FUN-86` em `src/livro/useMedidas.test.ts` com `medir` e `ResizeObserver` dublês: mede ao montar; remede quando a chave (letra, tema, livro) muda; remede no aviso de outro tamanho e não no aviso do mesmo tamanho; desconecta o observador ao desmontar; `medidas` é `null` até a primeira medida
-- [ ] Gate quick passa
+- [x] Testes `FUN-86` em `src/livro/useMedidas.test.ts` com `medir` e `ResizeObserver` dublês: mede ao montar; remede quando a chave (letra, tema, livro) muda; remede no aviso de outro tamanho e não no aviso do mesmo tamanho; desconecta o observador ao desmontar; `medidas` é `null` até a primeira medida
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(livro): mede os versículos na largura da página`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/navegacao src/biblia --reporter=dot @ b16156b337be807eeab17bf41e036291be58d662 = verde
 
 ### T14: Ícones da barra
 
