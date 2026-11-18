@@ -10,8 +10,16 @@ interface Acao {
 }
 
 type Props =
-  /** Vazio: primeira visita (FUN-21). A ação é o botão primário. */
-  | { variante: 'vazio'; titulo: string; texto: string; acao?: Acao; icone?: ReactNode }
+  /** Vazio: primeira visita (FUN-21). A ação é o botão primário; `lista` e `nivelTitulo` servem à tela "em breve" (FUN-57). */
+  | {
+      variante: 'vazio';
+      titulo: string;
+      texto: string;
+      acao?: Acao;
+      icone?: ReactNode;
+      lista?: string[];
+      nivelTitulo?: 1 | 2;
+    }
   /** Carregando: esqueleto com `aria-busy`. `rotulo` nomeia o que carrega. */
   | { variante: 'carregando'; rotulo?: string }
   /** Erro: ex.: livro não baixado (FUN-36). A ação é o botão secundário. */
@@ -33,12 +41,21 @@ export function Estado(props: Props) {
   }
 
   const { variante, titulo, texto, acao, icone } = props;
+  const lista = props.variante === 'vazio' ? props.lista : undefined;
+  const Titulo = props.variante === 'vazio' && props.nivelTitulo === 1 ? 'h1' : 'h2';
   const Botao = variante === 'erro' ? BotaoSecundario : BotaoPrimario;
   return (
     <div className={estilo.estado}>
       {icone}
-      <h2>{titulo}</h2>
+      <Titulo>{titulo}</Titulo>
       <p>{texto}</p>
+      {lista ? (
+        <ul>
+          {lista.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
       {acao ? (
         <Botao icone={acao.icone} onClick={acao.aoAcionar}>
           {acao.rotulo}

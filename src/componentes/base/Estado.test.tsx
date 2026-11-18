@@ -69,4 +69,14 @@ describe('Estado', () => {
     const { container } = render(<Estado variante="erro" titulo="<b>x</b>" texto="<img src=x onerror=alert(1)>" />);
     expect(container.querySelector('img, b')).toBeNull();
   });
+
+  it('FUN-57: o vazio aceita lista de itens e título de nível 1; sem eles, é h2 e sem lista', () => {
+    const { unmount } = render(<Estado variante="vazio" titulo="T" texto="x" lista={['a;', 'b.']} nivelTitulo={1} />);
+    expect(screen.getByRole('heading', { level: 1, name: 'T' })).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem').map((i) => i.textContent)).toEqual(['a;', 'b.']);
+    unmount();
+    render(<Estado variante="vazio" titulo="T" texto="x" />);
+    expect(screen.getByRole('heading', { level: 2, name: 'T' })).toBeInTheDocument();
+    expect(screen.queryByRole('list')).toBeNull();
+  });
 });

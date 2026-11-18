@@ -1,0 +1,100 @@
+/* Página inicial (.specs/features/interface-livro/mockup/componentes.css, ".inicial"; FUN-51 a FUN-53, FUN-59). */
+
+.inicial {
+  position: relative;
+  display: grid;
+  align-items: center;
+  justify-items: end;
+  padding: var(--esp-8) clamp(var(--esp-5), 6vw, var(--esp-12));
+  min-height: calc(100vh - var(--altura-barra));
+  background-color: var(--cor-realce);
+  overflow: hidden;
+}
+
+.inicial__imagem {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 80%;
+}
+
+.inicial::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--veu-imagem);
+  pointer-events: none;
+}
+
+.inicial--sem-imagem::after {
+  display: none;
+}
+
+.cartao-inicial {
+  position: relative;
+  z-index: 1;
+  width: min(var(--largura-cartao-inicial), 100%);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+  box-shadow: var(--sombra-2);
+  padding: var(--esp-8) var(--esp-6);
+  display: grid;
+  gap: var(--esp-4);
+}
+
+.cartao-inicial h1 {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-titulo-tela);
+  line-height: 1.15;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.cartao-inicial p {
+  margin: 0;
+  color: var(--cor-suave);
+  line-height: var(--altura-linha-texto);
+}
+
+.cartao-inicial__acoes {
+  display: grid;
+  gap: var(--esp-3);
+  margin-top: var(--esp-2);
+}
+
+.cartao-inicial__acoes > * {
+  width: 100%;
+}
+
+.credito-imagem {
+  position: absolute;
+  left: var(--esp-3);
+  bottom: var(--esp-3);
+  z-index: 1;
+  font-size: var(--texto-p);
+  background: var(--cor-superficie);
+  color: var(--cor-suave);
+  border-radius: var(--raio-total);
+  padding: var(--esp-1) var(--esp-3);
+}
+
+/* Tela estreita (FUN-53): o cartão fica sobre a imagem, centralizado. */
+@media (max-width: 639px) {
+  .inicial {
+    justify-items: center;
+    align-items: end;
+    padding: var(--esp-5) var(--esp-3) var(--esp-12);
+  }
+
+  .inicial::after {
+    background: var(--veu-imagem-celular);
+  }
+
+  .cartao-inicial {
+    padding: var(--esp-6) var(--esp-5);
+  }
+}
