@@ -132,6 +132,12 @@ T34 → T35 → T36 → T37 → T38 → T39 → T40 → T41 → T42
 T43 → T44
 ```
 
+### Phase 14: Retrabalho R3
+
+```
+T45
+```
+
 ---
 
 ## Task Breakdown
@@ -1132,6 +1138,26 @@ Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 77a67
 ---
 
 Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ ebe702b630761b1f0e68d964d21378418c43cb2d = verde
+
+## Phase 14: Retrabalho R3
+
+### T45: Letra nova repagina na tela do livro (A-17)
+
+**What**: Teste de `TelaLivro` que prova a ligação `letra → chave` de `useMedidas` (AD-008): ao mudar a letra, a tela remede e repagina, mantendo a página do versículo da âncora.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `src/telas/TelaLivro.test.tsx`
+**Depends on**: None
+**Reuses**: chamada `useMedidas(blocos, letra, medir)` em `src/telas/TelaLivro.tsx:82`; teste da chave em `src/livro/useMedidas.test.ts:97`; AD-008
+**Requirement**: FUN-86 · Achado: A-17 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-86` `rerender` com `letra` 3 → 4 e o mesmo `medir` (identidade estável), que conta chamadas e devolve alturas maiores na segunda: `medir` chamado de novo e o total de páginas muda, com a página do versículo da âncora à mostra. Falha com `useMedidas(blocos, 0, medir)`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
 
 ## Requirement Coverage
 
