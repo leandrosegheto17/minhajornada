@@ -1155,9 +1155,11 @@ Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ ebe70
 **Tests**: `TelaLivro.test.tsx`: `FUN-86` `rerender` com `letra` 3 → 4 e o mesmo `medir` (identidade estável), que conta chamadas e devolve alturas maiores na segunda: `medir` chamado de novo e o total de páginas muda, com a página do versículo da âncora à mostra. Falha com `useMedidas(blocos, 0, medir)`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 8245516cef09f5281fdee0b112afab3f39446d61 = verde
 
 ## Requirement Coverage
 
