@@ -5,7 +5,8 @@
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
 - **Item**: `.specs/features/texto-atualizado/`
 - **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
-- **Próxima fase**: 2, Reconhecimento (skill `inventario`, depois `reconhecimento`) — modelo indicado: opus
+- **Fase aprovada também**: 2, Reconhecimento (`reconhecimento.md`, inventário em d93f7e8) em 2026-11-18
+- **Próxima fase**: 2b, Mockup (`mockup-visual` em modo módulo: `TelaCorrecoes`, `TelaSobre`, `CapaLivro`) — modelo indicado: opus
 - **Serviços no ar**: nenhum
 - **Progresso**: Produto: Faltam 3 de 6 features: 50% concluído; texto-atualizado sem tarefas ainda, conferida em 2026-11-18
 - **Combinado na conversa e não registrado em artefato**:
@@ -45,6 +46,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-15 | Feature `leitor`, `/validar` rodada 5 | A-16 (comum: valor errado de `referrer-policy` e `x-content-type-options` sem prova por execução) aceito como lacuna, sem retrabalho; feature segue para a integração. Decisão do dono. |
 | 2026-11-18 | Feature `interface-livro`, T16 e T17 | Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172` e `:261-280`, `src/telas/TelaLivros.test.tsx:64-75`) passam para `src/componentes/BarraTitulo.test.tsx`, com as mesmas asserções. Aprovada pelo dono. |
 | 2026-11-18 | Feature `livro-tela-cheia` | Testes do desenho antigo da tela larga (proporção 3 × 4, `--largura-pagina`, `--largura-barra`, posição da barra e dos botões nos e2e de tela larga) podem ser trocados por testes do desenho novo, tão fortes quanto antes. Aprovada pelo dono. |
+| 2026-11-18 | Feature `texto-atualizado`, `test/arquivos/converter-biblia.test.ts:52-64` (FUN-03) | O teste que compara os 31.102 versículos com `.biblia/` passa a comparar com a fonte mais as correções aprovadas e a provar também que `.biblia/` não muda; tão forte quanto antes. Aprovada pelo dono. |
 
 ## Decisions
 
