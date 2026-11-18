@@ -175,6 +175,146 @@ describe('trocar formato (FUN-67, FUN-70, FUN-71)', () => {
   });
 });
 
+describe('em breve, voltar e inicial (FUN-57, FUN-62)', () => {
+  it('FUN-57: em breve a partir da inicial volta à inicial', () => {
+    const naInicial = aplicar(ESTADO_INICIAL, iniciar(null));
+    const emBreve = aplicar(naInicial, { tipo: 'abrirEmBreve' });
+    expect(emBreve.tela).toBe('emBreve');
+    expect(aplicar(emBreve, { tipo: 'voltar' }).tela).toBe('inicial');
+  });
+
+  it('FUN-57: em breve a partir do leitor volta ao mesmo capítulo', () => {
+    const emBreve = aplicar(noLeitor('Romanos', 8), { tipo: 'abrirEmBreve' });
+    expect(emBreve.tela).toBe('emBreve');
+    const volta = aplicar(emBreve, { tipo: 'voltar' });
+    expect(volta.tela).toBe('leitor');
+    expect(volta.ref).toEqual({ livro: n('Romanos'), capitulo: 8 });
+  });
+
+  it('FUN-57: em breve a partir da grade volta à grade do mesmo livro', () => {
+    const naGrade = aplicar(ESTADO_INICIAL, iniciar(null), { tipo: 'escolherLivro', livro: n('Salmos') });
+    const volta = aplicar(naGrade, { tipo: 'abrirEmBreve' }, { tipo: 'voltar' });
+    expect(volta.tela).toBe('capitulos');
+    expect(volta.livroGrade).toBe(n('Salmos'));
+  });
+
+  it('FUN-57: abrir "em breve" estando nela não perde a origem', () => {
+    const emBreve = aplicar(ESTADO_INICIAL, iniciar(null), { tipo: 'abrirEmBreve' });
+    expect(reduzirLeitor(emBreve, { tipo: 'abrirEmBreve' }, indice)).toBe(emBreve);
+    expect(aplicar(emBreve, { tipo: 'voltar' }).tela).toBe('inicial');
+  });
+
+  it('FUN-57: "voltar" sem origem vai à inicial; fora de "em breve" não muda o estado', () => {
+    const semOrigem: EstadoLeitor = { ...ESTADO_INICIAL, tela: 'emBreve' };
+    expect(aplicar(semOrigem, { tipo: 'voltar' }).tela).toBe('inicial');
+    const noLeitorAgora = noLeitor('Romanos', 8);
+    expect(reduzirLeitor(noLeitorAgora, { tipo: 'voltar' }, indice)).toBe(noLeitorAgora);
+  });
+
+  it.each([
+    ['do leitor', () => noLeitor('Romanos', 8)],
+    ['da grade', () => aplicar(ESTADO_INICIAL, iniciar(null), { tipo: 'escolherLivro', livro: n('Salmos') })],
+    ['do Sobre', () => aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'sobre' })],
+  ])('FUN-62: irPara inicial %s, mantendo a leitura para o "Ler Bíblia"', (_origem, montar) => {
+    const origem = montar();
+    const estado = aplicar(origem, { tipo: 'irPara', tela: 'inicial' });
+    expect(estado.tela).toBe('inicial');
+    expect(estado.ref).toEqual(origem.ref);
+  });
+
+  it('irPara emBreve guarda a origem, como abrirEmBreve', () => {
+    const emBreve = aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'emBreve' });
+    expect(emBreve.tela).toBe('emBreve');
+    expect(aplicar(emBreve, { tipo: 'voltar' }).tela).toBe('leitor');
+  });
+});
+
+describe('âncora do modo livro (FUN-83, FUN-84, FUN-85, FUN-88)', () => {
+  const salmos23 = { livro: n('Salmos'), capitulo: 23 };
+  const rute2 = { livro: n('Rute'), capitulo: 2 };
+
+  it('FUN-83: Salmos 23 pela grade, no formato livro, dá âncora Salmos 23:1', () => {
+    const estado = aplicar(
+      ESTADO_INICIAL,
+      iniciar(null, 3, 'livro'),
+      lerBiblia,
+      { tipo: 'escolherLivro', livro: n('Salmos') },
+      { tipo: 'abrirCapitulo', ref: salmos23 },
+    );
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual(salmos23);
+    expect(estado.ancora).toEqual({ tipo: 'texto', ref: salmos23, versiculo: 1 });
+  });
+
+  it('FUN-83: livro de capítulo único escolhido no formato livro abre com âncora no versículo 1', () => {
+    const judas1 = { livro: n('Judas'), capitulo: 1 };
+    const estado = aplicar(ESTADO_INICIAL, iniciar(null, 3, 'livro'), { tipo: 'escolherLivro', livro: n('Judas') });
+    expect(estado.ref).toEqual(judas1);
+    expect(estado.ancora).toEqual({ tipo: 'texto', ref: judas1, versiculo: 1 });
+  });
+
+  it('FUN-83: na rolagem a âncora não é tocada ao abrir um capítulo', () => {
+    const antes = aplicar(ESTADO_INICIAL, iniciar(null));
+    const estado = aplicar(antes, { tipo: 'abrirCapitulo', ref: salmos23 });
+    expect(estado.ancora).toEqual(antes.ancora);
+  });
+
+  it('FUN-85: a âncora Rute 2:5 deixa ref em Rute 2', () => {
+    const estado = aplicar(noLivro('Rute', 1), {
+      tipo: 'irParaAncora',
+      ancora: { tipo: 'texto', ref: rute2, versiculo: 5 },
+    });
+    expect(estado.ref).toEqual(rute2);
+    expect(estado.ancora).toEqual({ tipo: 'texto', ref: rute2, versiculo: 5 });
+    expect(estado.tela).toBe('leitor');
+  });
+
+  it('FUN-84: a âncora de texto vale também em outro livro (passar de Rute para 1 Samuel)', () => {
+    const samuel = { livro: n('1 Samuel'), capitulo: 1 };
+    const estado = aplicar(noLivro('Rute', 4), {
+      tipo: 'irParaAncora',
+      ancora: { tipo: 'texto', ref: samuel, versiculo: 1 },
+    });
+    expect(estado.ref).toEqual(samuel);
+  });
+
+  it.each([
+    ['capa', { tipo: 'capa' } as const],
+    ['pago', { tipo: 'pago' } as const],
+    ['fim', { tipo: 'fim', livro: n('Rute') } as const],
+  ])('FUN-88: a âncora %s muda só a âncora, não o ref', (_nome, ancora) => {
+    const antes = noLivro('Rute', 2);
+    const estado = aplicar(antes, { tipo: 'irParaAncora', ancora });
+    expect(estado.ancora).toEqual(ancora);
+    expect(estado.ref).toEqual(antes.ref);
+  });
+
+  it('FUN-88: âncora igual à atual devolve o mesmo objeto', () => {
+    const antes = aplicar(noLivro('Rute', 2), { tipo: 'irParaAncora', ancora: { tipo: 'capa' } });
+    expect(reduzirLeitor(antes, { tipo: 'irParaAncora', ancora: { tipo: 'capa' } }, indice)).toBe(antes);
+  });
+
+  it.each([
+    ['capítulo fora do índice', { tipo: 'texto', ref: { livro: n('Rute'), capitulo: 5 }, versiculo: 1 } as const],
+    ['livro fora do índice', { tipo: 'texto', ref: { livro: 67, capitulo: 1 }, versiculo: 1 } as const],
+    ['versículo zero', { tipo: 'texto', ref: { livro: n('Rute'), capitulo: 1 }, versiculo: 0 } as const],
+    ['versículo negativo', { tipo: 'texto', ref: { livro: n('Rute'), capitulo: 1 }, versiculo: -3 } as const],
+    ['versículo fracionário', { tipo: 'texto', ref: { livro: n('Rute'), capitulo: 1 }, versiculo: 1.5 } as const],
+    ['fim de livro fora do índice', { tipo: 'fim', livro: 67 } as const],
+  ])('FUN-85: âncora com %s é ignorada (mesmo objeto)', (_caso, ancora) => {
+    const antes = noLivro('Rute', 2);
+    expect(reduzirLeitor(antes, { tipo: 'irParaAncora', ancora }, indice)).toBe(antes);
+  });
+
+  it('FUN-85: fora do formato livro ou fora do leitor, a âncora é ignorada', () => {
+    const naRolagem = noLeitor('Rute', 2);
+    const ancora = { tipo: 'texto', ref: rute2, versiculo: 5 } as const;
+    expect(reduzirLeitor(naRolagem, { tipo: 'irParaAncora', ancora }, indice)).toBe(naRolagem);
+    const noSobre = aplicar(noLivro('Rute', 2), { tipo: 'irPara', tela: 'sobre' });
+    expect(reduzirLeitor(noSobre, { tipo: 'irParaAncora', ancora }, indice)).toBe(noSobre);
+  });
+});
+
 describe('escolher livro e capítulo (FUN-07, FUN-08, FUN-09)', () => {
   it('FUN-09: escolher Judas (capítulo único) abre o leitor em Judas 1, sem a grade', () => {
     const estado = aplicar(ESTADO_INICIAL, iniciar(null), { tipo: 'escolherLivro', livro: n('Judas') });

@@ -29,12 +29,17 @@ export interface EstadoLeitor {
   formato: Formato;
   /** Lugar no formato livro; vale quando `formato` é `livro` e a tela é `leitor`. */
   ancora: Ancora;
+  /** Tela de onde se abriu a "em breve", para o "Voltar" dela (FUN-57). */
+  voltarPara: Tela;
 }
 
 export type AcaoLeitor =
   | { tipo: 'iniciar'; ref: Ref | null; letra: number; tema: Tema | null; formato: Formato }
   | { tipo: 'lerBiblia' }
   | { tipo: 'trocarFormato' }
+  | { tipo: 'abrirEmBreve' }
+  | { tipo: 'voltar' }
+  | { tipo: 'irParaAncora'; ancora: Ancora }
   | { tipo: 'escolherLivro'; livro: number }
   | { tipo: 'abrirCapitulo'; ref: Ref }
   | { tipo: 'tocarTitulo' }
@@ -53,6 +58,7 @@ export const ESTADO_INICIAL: EstadoLeitor = {
   tema: null,
   formato: 'rolagem',
   ancora: { tipo: 'capa' },
+  voltarPara: 'inicial',
 };
 
 function capitulosDo(livro: number, indice: Indice): number | null {
@@ -66,6 +72,27 @@ function letraValida(n: number): boolean {
 
 function abrirNoLeitor(estado: EstadoLeitor, ref: Ref): EstadoLeitor {
   return { ...estado, tela: 'leitor', ref, livroGrade: null };
+}
+
+/** Abre o capítulo e, no formato livro, põe a âncora no versículo 1 dele (FUN-83). */
+function abrirCapituloNoFormato(estado: EstadoLeitor, ref: Ref): EstadoLeitor {
+  const aberto = abrirNoLeitor(estado, ref);
+  return estado.formato === 'livro' ? { ...aberto, ancora: comecoDoCapitulo(ref) } : aberto;
+}
+
+function mesmaAncora(a: Ancora, b: Ancora): boolean {
+  if (a.tipo !== b.tipo) return false;
+  if (a.tipo === 'texto' && b.tipo === 'texto') {
+    return a.ref.livro === b.ref.livro && a.ref.capitulo === b.ref.capitulo && a.versiculo === b.versiculo;
+  }
+  if (a.tipo === 'fim' && b.tipo === 'fim') return a.livro === b.livro;
+  return true;
+}
+
+function abrirEmBreve(estado: EstadoLeitor): EstadoLeitor {
+  // Já em "em breve": mantém a origem guardada.
+  if (estado.tela === 'emBreve') return estado;
+  return { ...estado, tela: 'emBreve', voltarPara: estado.tela };
 }
 
 function comecoDoCapitulo(ref: Ref): Ancora {
@@ -128,14 +155,36 @@ export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: In
       const total = capitulosDo(acao.livro, indice);
       if (total === null) return estado;
       // FUN-09: livro de capítulo único abre direto no capítulo 1, sem a grade; FUN-07: os outros mostram a grade.
-      if (total === 1) return abrirNoLeitor(estado, { livro: acao.livro, capitulo: 1 });
+      if (total === 1) return abrirCapituloNoFormato(estado, { livro: acao.livro, capitulo: 1 });
       return { ...estado, tela: 'capitulos', livroGrade: acao.livro };
     }
 
     case 'abrirCapitulo': {
       // FUN-08.
       const ref = refValida(acao.ref, indice);
-      return ref ? abrirNoLeitor(estado, ref) : estado;
+      return ref ? abrirCapituloNoFormato(estado, ref) : estado;
+    }
+
+    case 'abrirEmBreve':
+      return abrirEmBreve(estado);
+
+    case 'voltar':
+      // FUN-57: sem origem guardada (ou fora de "em breve"), a ação não inventa destino.
+      if (estado.tela !== 'emBreve') return estado;
+      return { ...estado, tela: estado.voltarPara === 'emBreve' ? 'inicial' : estado.voltarPara };
+
+    case 'irParaAncora': {
+      // FUN-84, FUN-85, FUN-88: só no leitor em formato livro; a âncora de texto leva o `ref` junto, as demais não.
+      if (estado.formato !== 'livro' || estado.tela !== 'leitor') return estado;
+      const ancora = acao.ancora;
+      if (mesmaAncora(ancora, estado.ancora)) return estado;
+      if (ancora.tipo === 'texto') {
+        const ref = refValida(ancora.ref, indice);
+        if (!ref || !Number.isInteger(ancora.versiculo) || ancora.versiculo < 1) return estado;
+        return { ...estado, ref, ancora: { tipo: 'texto', ref, versiculo: ancora.versiculo } };
+      }
+      if (ancora.tipo === 'fim' && capitulosDo(ancora.livro, indice) === null) return estado;
+      return { ...estado, ancora };
     }
 
     case 'tocarTitulo': {
@@ -171,6 +220,7 @@ export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: In
 
     case 'irPara': {
       if (acao.tela === estado.tela) return estado;
+      if (acao.tela === 'emBreve') return abrirEmBreve(estado);
       // Leitor sem capítulo e grade sem livro não existem: a ação é ignorada.
       if (acao.tela === 'leitor' && !estado.ref) return estado;
       if (acao.tela === 'capitulos') {
