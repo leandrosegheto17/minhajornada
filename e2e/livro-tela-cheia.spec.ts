@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
+import { linhasCortadas, passar, rotuloPagina } from './apoio/livro';
 import { abrirGravado, esperarInicial } from './apoio/navegar';
 
 // Modo livro em tela cheia no PC (FUN-95 a FUN-102), no build servido por `vite preview`.
@@ -126,4 +127,128 @@ test.describe('barra de borda a borda com 900 px ou mais (FUN-95)', () => {
       });
     });
   }
+});
+
+const TAMANHOS_LARGOS = [
+  [900, 600],
+  [1280, 800],
+  [1920, 1080],
+  [1920, 1200],
+] as const;
+
+const titulo = (page: Page) => regiaoLivro(page).locator('h1');
+const posicaoTexto = (page: Page) => regiaoLivro(page).getByText(/, páginas? \d+/);
+const medida = (page: Page) => regiaoLivro(page).locator(':scope > div[aria-hidden="true"]');
+
+test.describe('páginas que preenchem a área (FUN-96, FUN-97)', () => {
+  for (const [largura, altura] of TAMANHOS_LARGOS) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-96: em ${largura} × ${altura} as duas páginas ocupam a largura menos as margens, metade cada`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        await expect(paginas(page)).toHaveCount(2);
+        const util = await larguraUtil(page);
+        const a = await caixa(paginas(page).nth(0));
+        const b = await caixa(paginas(page).nth(1));
+        const vao = b.x - (a.x + a.width);
+        expect(Math.abs(a.x - 24), `esquerda a ${a.x} px`).toBeLessThanOrEqual(TOL);
+        expect(
+          Math.abs(b.x + b.width - (util - 24)),
+          `direita termina a ${util - (b.x + b.width)} px`,
+        ).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(a.width - b.width)).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(a.width - (util - 48 - vao) / 2), `largura ${a.width}`).toBeLessThanOrEqual(TOL);
+      });
+
+      test(`FUN-97: em ${largura} × ${altura} as páginas ficam entre o título e os botões, sem rolagem vertical`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const t = await caixa(titulo(page));
+        const p = await caixa(paginas(page).first());
+        const ant = await caixa(anterior(page));
+        expect(p.y, 'topo da página abaixo do título').toBeGreaterThanOrEqual(t.y + t.height - TOL);
+        expect(p.y + p.height, 'fundo da página acima dos botões').toBeLessThanOrEqual(ant.y + TOL);
+        expect(Math.abs(p.height - (ant.y - (t.y + t.height) - 32)), `altura ${p.height}`).toBeLessThanOrEqual(TOL);
+        const rolagem = await page.evaluate(() => [document.documentElement.scrollHeight, window.innerHeight]);
+        expect(rolagem[0], 'rolagem vertical').toBeLessThanOrEqual(rolagem[1] ?? 0);
+      });
+    });
+  }
+});
+
+/** Percorre Rute inteira (até 1 Samuel) sem linha cortada nem bloco escondido. */
+async function lerRuteInteira(page: Page): Promise<void> {
+  for (let i = 0; i < 80; i++) {
+    const rotulo = await rotuloPagina(page);
+    if (rotulo?.endsWith('de 1 Samuel')) return;
+    expect(await linhasCortadas(page), rotulo ?? '').toEqual([]);
+    await passar(page, rotulo);
+  }
+}
+
+/** A medida tem o tamanho da página mostrada (espera a repaginação assentar). */
+async function conferirMedida(page: Page): Promise<void> {
+  await expect
+    .poll(async () => {
+      const m = await caixa(medida(page));
+      const p = await caixa(paginas(page).first());
+      return Math.abs(m.width - p.width) <= TOL && Math.abs(m.height - p.height) <= TOL;
+    })
+    .toBe(true);
+}
+
+test.describe('medida do tamanho da página mostrada (FUN-100)', () => {
+  for (const [largura, altura] of [
+    [1280, 800],
+    [1920, 1080],
+  ] as const) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-100: em ${largura} × ${altura} a medida tem o tamanho da página mostrada`, async ({ page }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const m = await caixa(medida(page));
+        const p = await caixa(paginas(page).first());
+        expect(Math.abs(m.width - p.width), `largura ${m.width} × ${p.width}`).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(m.height - p.height), `altura ${m.height} × ${p.height}`).toBeLessThanOrEqual(TOL);
+      });
+
+      test(`FUN-100: em ${largura} × ${altura} nenhum versículo de Rute fica escondido ou cortado`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        await lerRuteInteira(page);
+      });
+    });
+  }
+
+  test.describe('troca de tamanho', () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test('FUN-100: de 1280 × 800 para 1920 × 1080 o livro repagina sem versículo escondido', async ({ page }) => {
+      const posicao = async () => (await posicaoTexto(page).first().textContent()) ?? '';
+
+      await abrirNoLivro(page, RUTE, 1);
+      const pequena = await posicao();
+      expect(await linhasCortadas(page)).toEqual([]);
+
+      await page.setViewportSize({ width: 1920, height: 1080 });
+      await expect.poll(posicao).not.toBe(pequena);
+      await conferirMedida(page);
+      expect(await linhasCortadas(page)).toEqual([]);
+      await lerRuteInteira(page);
+
+      await abrirNoLivro(page, RUTE, 1);
+      const grande = await posicao();
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await expect.poll(posicao).not.toBe(grande);
+      await conferirMedida(page);
+      expect(await linhasCortadas(page)).toEqual([]);
+      await lerRuteInteira(page);
+    });
+  });
 });
