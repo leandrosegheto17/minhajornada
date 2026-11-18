@@ -1,0 +1,249 @@
+/* Modo livro, páginas, capa e plano pago (.specs/features/interface-livro/mockup/componentes.css; FUN-73 a FUN-92). */
+.livro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-4);
+  padding: var(--esp-5) var(--esp-3) var(--esp-4);
+  background: var(--cor-superficie);
+}
+.livro__cabeca {
+  width: 100%;
+  max-width: calc(2 * var(--largura-pagina));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+}
+.titulo-capitulo {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-g);
+  font-weight: var(--peso-titulo);
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  min-height: var(--alvo-toque);
+  padding: 0 var(--esp-2);
+  border-radius: var(--raio-p);
+  margin: 0;
+}
+.titulo-capitulo:hover {
+  color: var(--cor-acento);
+  background: var(--cor-realce);
+}
+.titulo-capitulo .icone {
+  color: var(--cor-suave);
+}
+.livro__posicao {
+  font-size: var(--texto-p);
+  color: var(--cor-suave);
+  font-variant-numeric: tabular-nums;
+}
+.livro__aberto {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, var(--largura-pagina)));
+  justify-content: center;
+  width: 100%;
+  touch-action: pan-y;
+}
+.pagina {
+  background: var(--cor-fundo);
+  box-shadow: var(--sombra-pagina);
+  padding: var(--respiro-pagina);
+  aspect-ratio: 3 / 4;
+  max-height: calc(100vh - var(--altura-barra) - 170px);
+  min-height: 420px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fonte-texto);
+  font-size: var(--letra);
+  line-height: var(--altura-linha-texto);
+}
+.pagina--esquerda {
+  border-radius: var(--raio-m) 0 0 var(--raio-m);
+  box-shadow: var(--sombra-pagina), var(--sombra-lombada);
+}
+.pagina--direita {
+  border-radius: 0 var(--raio-m) var(--raio-m) 0;
+  box-shadow: var(--sombra-pagina), var(--sombra-lombada-direita);
+}
+.pagina__texto {
+  flex: 1;
+  overflow: hidden;
+}
+.pagina__rodape {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--fonte-ui);
+  font-size: var(--texto-p);
+  color: var(--cor-suave);
+  padding-top: var(--esp-3);
+  font-variant-numeric: tabular-nums;
+}
+.pagina__livro {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-titulo-livro);
+  text-align: center;
+  margin: 0 0 var(--esp-4);
+  line-height: 1.1;
+}
+.pagina p {
+  margin: 0 0 0.35em;
+  text-align: left;
+  hyphens: auto;
+}
+.pagina--pago p {
+  hyphens: manual;
+}
+.numero-capitulo {
+  float: left;
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-numero-capitulo);
+  line-height: 0.95;
+  color: var(--cor-acento);
+  margin: 0.05em var(--esp-2) 0 0;
+}
+.numero-versiculo {
+  font-size: 0.62em;
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  vertical-align: 0.45em;
+  margin-right: 0.2em;
+  font-variant-numeric: tabular-nums;
+}
+.pagina em {
+  font-style: italic;
+}
+.navegacao-pagina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-4);
+}
+.navegacao-pagina .botao-secundario {
+  min-width: 140px;
+}
+
+/* capa (NOVO, FUN-88 a FUN-92) */
+.pagina--pago {
+  hyphens: manual;
+  justify-content: center;
+  gap: var(--esp-4);
+  font-size: var(--texto-m);
+}
+.pagina--pago h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-titulo-tela);
+  line-height: 1.15;
+  margin: 0;
+}
+.pagina--pago ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--esp-3);
+}
+.pagina--pago li {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: flex-start;
+  line-height: var(--altura-linha-ui);
+}
+.pagina--pago li .icone {
+  color: var(--cor-acento);
+  margin-top: 1px;
+}
+.selo-em-breve {
+  justify-self: start;
+  align-self: flex-start;
+  font-size: var(--texto-p);
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  background: var(--cor-realce);
+  border-radius: var(--raio-total);
+  padding: var(--esp-1) var(--esp-3);
+}
+.pagina--pago p {
+  color: var(--cor-suave);
+  margin: 0;
+}
+.pagina--capa {
+  background: var(--cor-capa);
+  color: var(--cor-capa-texto);
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding: var(--esp-12) var(--respiro-pagina);
+}
+.capa__filete {
+  width: 56px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.capa__titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-capa);
+  line-height: 1.05;
+  margin: 0;
+}
+.capa__traducao {
+  font-size: var(--texto-g);
+  margin: var(--esp-3) 0 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.capa__marca {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-g);
+}
+
+/* tela estreita, ou mais alta que larga: uma página (FUN-74) */
+@media (max-width: 899px), (orientation: portrait) {
+  .livro {
+    padding: var(--esp-3) var(--esp-3) var(--esp-3);
+  }
+  .livro__aberto {
+    grid-template-columns: minmax(0, var(--largura-pagina));
+  }
+  .livro__aberto .pagina + .pagina {
+    display: none;
+  }
+  .livro__aberto[data-celular-mostra='direita'] .pagina:first-child {
+    display: none;
+  }
+  .livro__aberto[data-celular-mostra='direita'] .pagina + .pagina {
+    display: flex;
+  }
+  .pagina,
+  .pagina--esquerda,
+  .pagina--direita {
+    border-radius: var(--raio-m);
+    box-shadow: var(--sombra-pagina);
+    aspect-ratio: auto;
+    height: calc(100vh - var(--altura-barra) - 150px);
+    max-height: none;
+    min-height: 0;
+    padding: var(--respiro-pagina-celular);
+  }
+  .pagina--capa {
+    padding: var(--esp-12) var(--respiro-pagina-celular);
+  }
+  .navegacao-pagina .botao-secundario {
+    min-width: 0;
+    padding: 0 var(--esp-4);
+  }
+  .so-pagina-larga {
+    display: none;
+  }
+}
