@@ -24,6 +24,16 @@
 | 2026-11-18 | 3 | interface-livro | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /validar | Sonnet | Opus (escolha do usuário) |
 
+## Próximas features (pedido de 2026-11-18)
+
+Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integrar a interface-livro). Decisões já tomadas:
+
+- **Forma**: roteiro com 3 features; só a primeira recebe spec e tarefas.
+- **Texto bíblico atualizado**: só fontes livres ou em domínio público (revisões da Bíblia Livre, Tradução Brasileira de 1917 etc.); versões protegidas (NVI, NAA, NVT, ARA) nunca são fonte de texto. Ajustes registrados e aviso de alteração no Sobre (CC BY 4.0).
+- **Resumo por livro**: texto original escrito com IA, linguagem simples.
+- **Estudo bíblico por livro**: original escrito com IA, apoiado em comentários de domínio público (ex.: Matthew Henry, Spurgeon); nada copiado de sites.
+- **Revisão**: o usuário revisa cada livro (resumo e estudo) antes de entrar no app.
+
 ## Autorizações
 
 | Data | Escopo | Autorização |

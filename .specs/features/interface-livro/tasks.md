@@ -138,6 +138,12 @@ T43 → T44
 T45
 ```
 
+### Phase 15: Retrabalho R4
+
+```
+T46
+```
+
 ---
 
 ## Task Breakdown
@@ -1160,6 +1166,26 @@ Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ ebe70
 ---
 
 Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 8245516cef09f5281fdee0b112afab3f39446d61 = verde
+
+## Phase 15: Retrabalho R4
+
+### T46: Título da página da esquerda na tela larga (A-18)
+
+**What**: Teste de `TelaLivro` com `larga: true` num par que cruza capítulos: o título é o do primeiro versículo da página da esquerda.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: crítica
+**Where**: `src/telas/TelaLivro.test.tsx`
+**Depends on**: None
+**Reuses**: `doisCapitulos` e `medirDois` em `src/telas/TelaLivro.test.tsx` (describe "tela larga e lugar da âncora"); `primeira` em `src/telas/TelaLivro.tsx:206`
+**Requirement**: FUN-84 · Achado: A-18 (validation.md)
+**Tests**: `TelaLivro.test.tsx`: `FUN-84` com `larga: true`, `doisCapitulos(RUTE)` e `medirDois` (P1 `[nome, 1:1, 1:2, 1:3, 2:1]`, P2 `[2:2, 2:3]`): botão "Rute 1. Escolher outro capítulo" à mostra e nenhum "Rute 2. …". Falha com `paginas[mostradas[mostradas.length - 1] ?? 0]` na linha 206
+**Gate**: quick
+
+- [ ] Concluída
+
+---
 
 ## Requirement Coverage
 
