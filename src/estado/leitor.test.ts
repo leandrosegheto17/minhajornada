@@ -481,3 +481,35 @@ describe('lugar no livro e capítulo na rolagem (FUN-71; AD-007)', () => {
     expect(estado.ref).toEqual({ livro: n('João'), capitulo: 4 });
   });
 });
+
+describe('fatia da âncora num versículo maior que a página (FUN-77, FUN-78, FUN-85)', () => {
+  const rute = { livro: n('Rute'), capitulo: 1 };
+  const versiculo = (v: number, fatia?: number) =>
+    ({ tipo: 'texto', ref: rute, versiculo: v, ...(fatia === undefined ? {} : { fatia }) }) as const;
+  const noRute = () => noLivro('Rute', 1);
+
+  it('FUN-77: irParaAncora com fatia 1 guarda a fatia na âncora e muda o estado', () => {
+    const antes = aplicar(noRute(), { tipo: 'irParaAncora', ancora: versiculo(3) });
+    const depois = aplicar(antes, { tipo: 'irParaAncora', ancora: versiculo(3, 1) });
+    expect(depois).not.toBe(antes);
+    expect(depois.ancora).toEqual(versiculo(3, 1));
+  });
+
+  it('FUN-77: da fatia 1 para a 2 do mesmo versículo, a âncora muda (as fatias não são a mesma âncora)', () => {
+    const f1 = aplicar(noRute(), { tipo: 'irParaAncora', ancora: versiculo(3, 1) });
+    const f2 = aplicar(f1, { tipo: 'irParaAncora', ancora: versiculo(3, 2) });
+    expect(f2.ancora).toEqual(versiculo(3, 2));
+  });
+
+  it('FUN-78: voltar da fatia 1 ao versículo sem fatia muda a âncora e tira a fatia', () => {
+    const f1 = aplicar(noRute(), { tipo: 'irParaAncora', ancora: versiculo(3, 1) });
+    const volta = aplicar(f1, { tipo: 'irParaAncora', ancora: versiculo(3) });
+    expect(volta.ancora).toEqual(versiculo(3));
+    expect(volta.ancora).not.toHaveProperty('fatia');
+  });
+
+  it('FUN-85: fatia 0 e fatia ausente são a mesma âncora (o estado não muda)', () => {
+    const sem = aplicar(noRute(), { tipo: 'irParaAncora', ancora: versiculo(3) });
+    expect(reduzirLeitor(sem, { tipo: 'irParaAncora', ancora: versiculo(3, 0) }, indice)).toBe(sem);
+  });
+});

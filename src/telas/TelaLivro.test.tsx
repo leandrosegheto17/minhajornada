@@ -1,7 +1,9 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { useReducer } from 'react';
 import { indice } from '../biblia/indice';
+import { ESTADO_INICIAL, reduzirLeitor, type AcaoLeitor } from '../estado/leitor';
 import type { Livro } from '../biblia/tipos';
 import type { CargaLivro } from '../estado/useLeitor';
 import type { Medir } from '../livro/useMedidas';
@@ -315,6 +317,40 @@ describe('versículo maior que a página (FUN-75, FUN-77, FUN-78, FUN-85)', () =
     expect(p3.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE, 3));
   });
 
+  it('FUN-77: ligado ao estado do leitor, "seguinte" passa pelas três fatias e chega ao versículo 6', () => {
+    const inicial = [
+      { tipo: 'iniciar', ref: { livro: RUTE, capitulo: 1 }, letra: 3, tema: null, formato: 'livro' },
+      { tipo: 'lerBiblia' },
+      { tipo: 'irParaAncora', ancora: texto(RUTE, 3) },
+    ].reduce((e, a) => reduzirLeitor(e, a as AcaoLeitor, indice), ESTADO_INICIAL);
+    function Ligado() {
+      const [estado, despachar] = useReducer(
+        (e: typeof inicial, a: AcaoLeitor) => reduzirLeitor(e, a, indice),
+        inicial,
+      );
+      return (
+        <TelaLivro
+          ancora={estado.ancora}
+          carga={pronto(RUTE)}
+          larga={false}
+          letra={3}
+          aoIrParaAncora={(ancora) => despachar({ tipo: 'irParaAncora', ancora })}
+          aoTocarTitulo={vi.fn()}
+          aoEscolherOutroLivro={vi.fn()}
+          aoQueroSaber={vi.fn()}
+          medir={medirDividido}
+        />
+      );
+    }
+    render(<Ligado />);
+    const pagina = (n: number) => screen.getByRole('article', { name: `Página ${n} de Rute` });
+    expect(pagina(2)).toBeInTheDocument();
+    for (const n of [3, 4, 5]) {
+      fireEvent.click(seguinte());
+      expect(pagina(n)).toBeInTheDocument();
+    }
+  });
+
   it('FUN-85: a âncora com fatia mostra a página da fatia (página 3 de Rute)', () => {
     dividido(comFatia(3, 1));
     expect(screen.getByRole('article', { name: 'Página 3 de Rute' })).toBeInTheDocument();
@@ -369,6 +405,18 @@ describe('tela larga e lugar da âncora (FUN-71, FUN-77, FUN-84, FUN-85, FUN-88;
       ref: { livro: RUTE, capitulo: 2 },
       versiculo: 2,
     });
+  });
+
+  it('FUN-89: na tela larga, "seguinte" a partir da capa vai direto a Gênesis 1:1 (sem passar pelo plano pago)', () => {
+    const props = renderizar({ ancora: { tipo: 'capa' }, carga: pronto(1), larga: true });
+    fireEvent.click(seguinte());
+    expect(props.aoIrParaAncora).toHaveBeenCalledWith(texto(1, 1));
+  });
+
+  it('FUN-89: na tela estreita, "seguinte" a partir da capa vai ao plano pago', () => {
+    const props = renderizar({ ancora: { tipo: 'capa' }, carga: pronto(1), larga: false });
+    fireEvent.click(seguinte());
+    expect(props.aoIrParaAncora).toHaveBeenCalledWith({ tipo: 'pago' });
   });
 
   it('FUN-88: na tela larga, "anterior" em Gênesis 1 vai à capa (AD-005)', () => {
