@@ -105,6 +105,12 @@ T4 → T5 → T6
 T7
 ```
 
+### Phase 6: Retrabalho R2 (comum)
+
+```
+T8
+```
+
 ---
 
 ## Task Breakdown
@@ -305,3 +311,27 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 **Commit**: `fix(livro): capa e plano pago reservam a linha do título na tela larga`
 
 Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/capa.spec.ts @ 7b1a84687b4a89f27f63433ad909c095def28654 = verde
+
+---
+
+### T8: Caracterizar a capa na tela estreita e no retrato (A-02)
+
+**What**: Acrescentar a FUN-102 testes que abrem a capa em 375 × 812, 899 × 800 e 1024 × 1366 e fixam a posição de hoje, para que a reserva da linha do título (T7) nunca vaze da tela larga.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `e2e/livro-tela-cheia.spec.ts`
+**Depends on**: None
+**Reuses**: `abrirNaCapa` e `capaLivro` do mesmo arquivo; laço de tamanhos de FUN-102 em `e2e/livro-tela-cheia.spec.ts:52-65`
+**Requirement**: FUN-102 · Achado: A-02 (validation.md)
+
+**Done when**:
+
+- [ ] Em 375 × 812, 899 × 800 e 1024 × 1366, na capa: topo da página = o de hoje (y = 69, ±1 px) e o fundo dos botões a 77 px do pé da tela (±1 px), valores medidos no HEAD antes da mudança
+- [ ] Vermelho: com a regra `.livro__aberto:has(.pagina--capa)` movida para fora do `@media` da tela larga (numa cópia), o teste falha; restaurada, passa
+- [ ] Os demais testes de `e2e/livro-tela-cheia.spec.ts` e `e2e/capa.spec.ts` continuam verdes
+
+**Tests**: e2e, nomes com `FUN-102` (ex.: `FUN-102: em 375 × 812 a capa fica como hoje`)
+**Gate**: full
+**Commit**: `test(e2e): caracteriza a capa na tela estreita e no retrato`

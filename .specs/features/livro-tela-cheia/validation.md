@@ -1,56 +1,48 @@
-# Validação: livro-tela-cheia — FAIL ❌ (rodada 1)
+# Validação: livro-tela-cheia — FAIL ❌ (rodada 2)
 
-- **Data**: 2026-11-18 · **Branch**: feature/livro-tela-cheia @ 92344c2 · **Árvore**: 7f5b3bb9e48377c96e6bf864331071ce3bc6e612
-- **Critérios**: 8/8 com asserção (FUN-95 a FUN-102) · **Gate**: `Gate:` de T4 a T6 (árvore do commit de código 99e9faa, `36e3d70`) reaproveitado: HEAD só difere por `tasks.md`. Refeito numa cópia limpa do HEAD: typecheck verde, Vitest 42 arquivos / 631 testes passaram, 0 falharam, lint e prettier verdes, build verde, e2e completo 82 passaram, 0 falharam
-- **Sensor**: 13 mutações, 12 mortas, 1 sobreviveu (equivalente: 1)
-- **Revisão de código**: `revisao-codigo`, modo curto: bloqueios 0, sugestões 1 (condição da barra só por largura e do livro por largura e paisagem: coerente com AD-011)
-- **Segurança**: não se aplica: só CSS e testes, sem `style` inline nem servidor (`tasks.md`, seção Segurança padrão)
+- **Data**: 2026-11-18 · **Branch**: feature/livro-tela-cheia @ c01f34b · **Árvore**: f94f8d1a074e3bbcc28636be97cf21b780d1584f (código = árvore `7b1a846` do commit 4b256d2; HEAD só difere por `tasks.md`)
+- **Escopo**: diff do retrabalho R1 (`4b256d2`: `livro.module.css` +4, `livro-tela-cheia.spec.ts` +10/-5) mais regressão. Critérios, mutações e revisão da rodada 1 valem para o resto (nada mais mudou em `src` nem `e2e`).
+- **Critérios**: 8/8 com asserção (FUN-95 a FUN-102) · **Gate**: `Gate:` de T7 reaproveitado (mesma árvore de código) e refeito inteiro numa cópia limpa do HEAD: typecheck (2 tsconfig), eslint e prettier verdes, Vitest 42 arquivos / 631 testes passaram, 0 falharam, build verde, e2e completo 82 passaram, 0 falharam
+- **Sensor**: 4 mutações novas, 3 mortas, 1 sobreviveu (equivalentes: 0); da rodada 1: 12 de 13 mortas, 1 equivalente
+- **Revisão de código**: diff de 4 linhas de CSS e testes lido por mim; sem bloqueio (a rodada 1 já fez a revisão da feature)
+- **Segurança**: não se aplica: só CSS e testes, sem servidor nem `style` inline
 
-## Critérios
+## Critérios alterados pelo retrabalho
 
 | Critério | `arquivo:linha` e asserção | Resultado |
 |---|---|---|
-| FUN-95 | `e2e/livro-tela-cheia.spec.ts:105-109` — `marca.x ≈ 24` e `conta.x + width ≈ util - 24` em 900×600, 1280×800, 1920×1080, em 4 telas | ✅ |
-| FUN-96 | `:157-163` — `a.x ≈ 24`, `b.x + b.width ≈ util - 24`, larguras iguais, `a.width ≈ (util - 48 - vão) / 2` (4 tamanhos); invariante em `test/arquivos/livro-css.test.ts:35-49` | ✅ |
-| FUN-97 | `:173-177` — topo da página ≥ fundo do título, fundo ≤ topo dos botões, `p.height ≈ ant.y - fundo do título - 32`, `scrollHeight <= innerHeight` | ✅ |
-| FUN-98 | `:290-294` — `botaoTitulo.x ≈ a.x` e `posição.x + width ≈ b.x + b.width` (1280×800, 1920×1080) | ✅ |
-| FUN-99 | `:311-319` — `ant.x ≈ a.x`, `seg.x + width ≈ b.x + b.width`, mesmo `y`, abaixo das páginas, em Rute e na capa; `pe - fundo <= 17` só em Rute (`:319`) | ✅ (ver A-01) |
-| FUN-100 | `:216-217` medida = página (±1 px); `:188` `linhasCortadas == []` em Rute inteira; `:232-252` troca 1280↔1920 muda a posição, medida = página, sem corte | ✅ |
-| FUN-101 | `:357-366` — largura e altura de capa e plano pago ≈ página de Rute; `pago.x ≈ 24`, `capa.x + width ≈ util - 24` | ✅ |
-| FUN-102 | `:45-50` (375×812, 899×800, 1024×1366: largura, centro, altura = `innerHeight - 206`, botões em par) e `:84-85` (marca a 8/12 px, conta a 8/12 px) | ✅ |
+| FUN-99 | `e2e/livro-tela-cheia.spec.ts:318` — `pe - (ant.y + ant.height) <= 16 + TOL`, agora incondicional (Rute e capa); `:337-338` na capa `|planoPago.y - yTexto| <= TOL` e `|anterior.y - yBotoes| <= TOL` (y medido em Rute 1 do mesmo tamanho) | ✅ |
+| FUN-101 | `:357-366` inalterado (largura e altura da capa e do plano pago = página de Rute), verde na suíte | ✅ |
+| FUN-102 | `:45-50` inalterado, verde; medido na capa em 375×812, 899×800, 1024×1366: `pagY=69`, botões a 77 px do pé, idêntico ao da rodada 1 (a regra está dentro do `@media`) | ✅ |
 
-Critérios de posição ("alinhado", "canto", "abaixo") são provados por `boundingBox` (±1 px), não por texto. Valores conferem com a Base.
+Os demais (FUN-95, 96, 97, 98, 100) seguem como na rodada 1: mesmas asserções, e2e completo verde. Sem enfraquecimento: no diff de `livro-tela-cheia.spec.ts` só saiu o parâmetro `pertoDoPe` (a asserção do pé virou incondicional) e entraram 2 asserções novas; nenhum teste removido ou pulado.
 
-## Sensor (cópia isolada de HEAD, `node_modules` por junção)
+## Verificação fora da amostra do e2e (medido num spec descartável, build limpo)
 
-| Mutação | Morta por |
+| Tamanho | Rute 1: pág y / botões y / pé | Capa: pág y / botões y / pé |
+|---|---|---|
+| 900×600 | 137 / 540 / 16 | 137 / 540 / 16 |
+| 1280×800 | 137 / 740 / 16 | 137 / 740 / 16 |
+| 1920×1080 | 137 / 1020 / 16 | 137 / 1020 / 16 |
+| 1920×1200 | 137 / 1140 / 16 | 137 / 1140 / 16 |
+
+## Sensor (cópia isolada de HEAD, `node_modules` por junção; e2e `livro-tela-cheia`, `capa`, `livro`)
+
+| Mutação | Resultado |
 |---|---|
-| U1 `.medida` volta à conta antiga (170 px) | `livro-css.test.ts` (2) e e2e FUN-100 (medida 1280×616; versículo escondido) |
-| U2 `.pagina` volta a `aspect-ratio: 3 / 4` | `livro-css.test.ts` FUN-100 |
-| U3 `.medida` com `--largura-pagina` | `livro-css.test.ts` FUN-96 |
-| U4 largura `/ 3` | `livro-css.test.ts` FUN-96 |
-| E1 padding direito da barra 12 px | e2e FUN-95 (3 tamanhos) |
-| E2 tira `padding: 0` do título | e2e FUN-98 (título a 32 px, página a 24) |
-| E3 `.navegacao-pagina` com `center` | e2e FUN-99 (4 casos; anterior a 525 px) |
-| E4 tira `min-height: 0` de `.pagina` | e2e FUN-97 900×600 (rolagem 633 > 600) |
-| E5 tira o `- 1px` da altura | e2e FUN-97 em 4 tamanhos (801 > 800) |
-| E6 tira `orientation: landscape` do @media | e2e FUN-102 1024×1366 |
-| E8 `.livro__cabeca` com 1 página de largura | e2e FUN-98 (título a 340 px) |
-| E9 barra a partir de 1000 px | e2e FUN-95 900×600 |
-| E7 padding lateral de `.livro` 24→12 px | sobreviveu, **equivalente**: `.livro` centraliza o grid (`align-items: center`), então as páginas ficam a 24 px de qualquer jeito |
-
-## Checagens de processo
-
-(a) `testes.json` roda a raiz, único pacote (`pnpm-workspace.yaml`); o e2e só roda no CI e foi refeito aqui. (b) `tsc` verde em 256be37, 2f0b34b e 99e9faa. (c) `e2e/livro.spec.ts`: só os helpers saíram para `e2e/apoio/livro.ts`, corpo idêntico, asserções intactas; `estilo.test.ts`, `capa.spec.ts` e `entrada.spec.ts` não mudaram; troca autorizada em `STATE.md` (2026-11-18). (d) nomes de teste citam FUN-95 a FUN-102, batem com o pedido. (e) sem banco no projeto. (f) sem policy. (g) conflito FUN-95 × FUN-102 tem AD-011, aplicada em `BarraTitulo.module.css:22-28`. Reuses seguidos: `@media` da medida estendido, variáveis locais `--largura-pagina-larga` e `--altura-pagina-larga` lidas por `.pagina` e `.medida`, nenhum `style` inline, `tokens.css` intacto. Acréscimo não nomeado, sem efeito: `.livro__cabeca > .titulo-capitulo { padding: 0 }` (`livro.module.css:283`).
+| M1 remove a regra `.livro__aberto:has(.pagina--capa)` | morta: FUN-99 capa 1280×800 e 1920×1080 |
+| M2 `margin-top` só `var(--alvo-toque)` (sem o `gap`) | morta: FUN-99 capa 1280×800 e 1920×1080 |
+| M3 move a regra para fora do `@media` (vale também na tela estreita) | **sobreviveu**: 43 passaram. Medido: capa em 375×812, 899×800 e 1024×1366 desce de `pagY=69` para 129 e os botões de 77 para 17 px do pé; FUN-102 pede "como estão hoje" |
+| M4 `margin-bottom` no lugar de `margin-top` | morta: FUN-99 capa 1280×800 e 1920×1080 |
 
 ## Achados
 
 | ID | `arquivo:linha` | Achado e evidência | Correção sugerida | Criticidade | Situação |
 |---|---|---|---|---|---|
-| A-01 | `src/livro/livro.module.css:272-296`; `e2e/livro-tela-cheia.spec.ts:318-319` | Na capa e no plano pago não há linha de título e `.livro` centraliza o conjunto: medido em 1280×800, 1920×1080 e 900×600, os botões ficam a 76 px do pé da tela (Rute: 16 px) e as páginas começam em y=77 (Rute: 137). Ao passar da capa para Gênesis, os botões saltam 60 px. FUN-99 só diz "canto inferior" e "alinhado às páginas", então o teste não assevera o pé na capa; lacuna de precisão da spec, não violação | Decidido pelo usuário em 2026-11-18: reservar a altura da linha de título na capa e no plano pago e asserir `pertoDoPe` também na capa (Retrabalho R1, T7) | comum | aberto |
+| A-01 | `src/livro/livro.module.css:279-282`; `e2e/livro-tela-cheia.spec.ts:318,337-338` | Fechado: capa e plano pago reservam a linha do título; botões a 16 px do pé e mesmo `y` que em Rute nos 4 tamanhos largos (tabela acima); M1, M2 e M4 matam o teste | — | comum | fechado |
+| A-02 | `e2e/livro-tela-cheia.spec.ts:45-50`; `src/livro/livro.module.css:279` | Nenhum teste mede a capa na tela estreita ou em retrato (FUN-102 só abre Rute 1, `conferirUmaPagina`). O mutante M3 (regra da capa sem o `@media`) mexe 60 px na capa dos celulares e todos os 43 testes passam | Em FUN-102, abrir a capa (`abrirNaCapa`) em 375×812, 899×800 e 1024×1366 e afirmar `pagY` = Rute 1 menos 60 px, ou botões a 77 px do pé; a asserção deve falhar com M3 | comum | aberto |
 
 ## Lacunas e o que não foi validado
 
-- Lacuna de precisão: FUN-99 e FUN-97 não definem a posição vertical na capa e no plano pago (A-01).
-- Alturas abaixo de 600 px em tela larga ficam fora do critério (FUN-97 vai de 900×600 a 1920×1200); páginas de 279 px de altura em 900×500 não foram vistas.
-- Revisão visual no navegador não feita (só asserções espaciais automatizadas).
+- Alturas abaixo de 600 px em tela larga seguem fora do critério (FUN-97 vai de 900×600 a 1920×1200).
+- Revisão visual no navegador não feita (só `boundingBox`). A falha do `atualizacao.spec.ts` na primeira rodada da cópia veio de `pnpm exec` recusar a junção de `node_modules`; refeito com atalho para o `vite` local e passou.
