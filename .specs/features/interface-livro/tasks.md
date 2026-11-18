@@ -449,8 +449,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Ícones com `aria-hidden` e `viewBox` 24, no molde dos existentes
-- [ ] Gate quick passa
+- [x] Ícones com `aria-hidden` e `viewBox` 24, no molde dos existentes
+- [x] Gate quick passa
 
 **Tests**: none
 **Gate**: quick
@@ -472,8 +472,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Teste em `src/estilo/estilo.test.ts`: cada token novo existe; `--cor-capa` e `--cor-capa-texto` apontam para o acento e o texto do acento (contraste já conferido, FUN-59); `--quebra-livro-duplo` é 900px
-- [ ] Gate quick passa
+- [x] Teste em `src/estilo/estilo.test.ts`: cada token novo existe; `--cor-capa` e `--cor-capa-texto` apontam para o acento e o texto do acento (contraste já conferido, FUN-59); `--quebra-livro-duplo` é 900px
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -495,9 +495,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Testes em `src/componentes/BarraTitulo.test.tsx`: `FUN-61` ordem marca, formato, Aa, Sobre, conta; `FUN-62` marca dispara a ida à inicial; `FUN-63` Aa abre o painel com letra e tema; `FUN-72` rótulo "Ler como livro" na rolagem e "Ler em rolagem" no livro; `FUN-64` rótulo acessível "Entrar ou criar conta"; `FUN-65` classe de barra presa (posição `sticky` no CSS, conferida no E2E de T32)
-- [ ] Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172`, `:261-280`) passam para este arquivo, com as mesmas asserções
-- [ ] Gate quick passa
+- [x] Testes em `src/componentes/BarraTitulo.test.tsx`: `FUN-61` ordem marca, formato, Aa, Sobre, conta; `FUN-62` marca dispara a ida à inicial; `FUN-63` Aa abre o painel com letra e tema; `FUN-72` rótulo "Ler como livro" na rolagem e "Ler em rolagem" no livro; `FUN-64` rótulo acessível "Entrar ou criar conta"; `FUN-65` classe de barra presa (posição `sticky` no CSS, conferida no E2E de T32)
+- [x] Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172`, `:261-280`) passam para este arquivo, com as mesmas asserções
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -519,15 +519,17 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/
 
 **Done when**:
 
-- [ ] Teste `FUN-60` em `src/App.test.tsx`: a barra aparece na escolha de livro, na grade, no leitor e no Sobre, uma vez só
-- [ ] Testes das telas ajustados: `TelaLivros.test.tsx:64-75` (marca e Sobre saem da tela; "voltar à leitura" continua), `TelaLeitor.test.tsx` sem a barra (já movida em T16)
-- [ ] Gate quick passa
+- [x] Teste `FUN-60` em `src/App.test.tsx`: a barra aparece na escolha de livro, na grade, no leitor e no Sobre, uma vez só
+- [x] Testes das telas ajustados: `TelaLivros.test.tsx:64-75` (marca e Sobre saem da tela; "voltar à leitura" continua), `TelaLeitor.test.tsx` sem a barra (já movida em T16)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `refactor(telas): a barra de título sai das telas e vai para o app`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/componentes src/telas src/estilo src/estado src/livro src/dados src/navegacao src/biblia --reporter=dot @ f610f26ecf1d08f57227372b5a1fecf19e0d8e67 = verde
 
 ### T18: Foto da página inicial
 
