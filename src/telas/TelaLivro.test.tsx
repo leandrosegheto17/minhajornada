@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { indice } from '../biblia/indice';
@@ -183,5 +183,94 @@ describe('título, páginas visíveis e estados (FUN-73, FUN-84, FUN-87)', () =>
     renderizar({ ancora: { tipo: 'capa' }, carga: null, larga: true });
     expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
     expect(screen.getByRole('article', { name: 'Plano de estudo' })).toBeInTheDocument();
+  });
+});
+
+describe('lugar no livro e capa (FUN-82, FUN-85, FUN-86, FUN-89, FUN-90)', () => {
+  /** Livro de mentira com um capítulo de 12 versículos de uma linha cada. */
+  const livroLongo = (n: number): CargaLivro => ({
+    situacao: 'pronto',
+    numero: n,
+    livro: {
+      numero: n,
+      nome: indice.livros[n - 1]!.nome,
+      capitulos: [Array.from({ length: 12 }, (_, v) => `Texto de ${indice.livros[n - 1]!.nome} 1:${v + 1}`)],
+    },
+  });
+  const medirComPagina =
+    (alturaPagina: number): Medir =>
+    (contenedor) => ({
+      alturas: Array.from(contenedor.children, (_, i) => (i === 0 ? 40 : 20)),
+      alturaPagina,
+      alturaLinha: 20,
+    });
+
+  it('FUN-86: com a medida nova, o versículo da âncora (Rute 1:12) continua visível', () => {
+    const ancora = texto(RUTE, 12);
+    const props: Props = {
+      ancora,
+      carga: livroLongo(RUTE),
+      larga: false,
+      letra: 3,
+      aoIrParaAncora: vi.fn(),
+      aoTocarTitulo: vi.fn(),
+      aoEscolherOutroLivro: vi.fn(),
+      aoQueroSaber: vi.fn(),
+      medir: medirComPagina(100),
+    };
+    const { rerender } = render(<TelaLivro {...props} />);
+    // Página de 100: [nome, 1-3], [4-8], [9-12].
+    expect(
+      within(screen.getByRole('article', { name: 'Página 3 de Rute' })).getByText('Texto de Rute 1:12'),
+    ).toBeVisible();
+    rerender(<TelaLivro {...props} letra={1} medir={medirComPagina(200)} />);
+    // Página de 200: [nome, 1-8], [9-12]: o 1:12 está agora na página 2.
+    expect(
+      within(screen.getByRole('article', { name: 'Página 2 de Rute' })).getByText('Texto de Rute 1:12'),
+    ).toBeVisible();
+    expect(props.aoIrParaAncora).not.toHaveBeenCalled();
+  });
+
+  it('FUN-82: a âncora "fim" de Rute mostra a última página', () => {
+    const props = renderizar({ ancora: { tipo: 'fim', livro: RUTE } });
+    expect(screen.getByRole('article', { name: 'Página 2 de Rute' })).toBeInTheDocument();
+    expect(props.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE, 4));
+  });
+
+  it('âncora "fim" com o livro ainda carregando: espera, sem despachar nada', () => {
+    const props = renderizar({ ancora: { tipo: 'fim', livro: RUTE }, carga: { situacao: 'carregando', numero: RUTE } });
+    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(props.aoIrParaAncora).not.toHaveBeenCalled();
+  });
+
+  it('FUN-85: mudar de página despacha a âncora do primeiro versículo da página nova', () => {
+    const props = renderizar({ carga: livroLongo(RUTE) });
+    fireEvent.click(seguinte());
+    expect(props.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE, 4));
+  });
+
+  it('FUN-90: na tela estreita, a capa aparece sozinha (sem o plano pago)', () => {
+    renderizar({ ancora: { tipo: 'capa' }, carga: null, larga: false });
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: 'Plano de estudo' })).toBeNull();
+  });
+
+  it('FUN-89: ao passar da larga para a estreita na capa, o plano pago sai e fica só a capa', () => {
+    const props: Props = {
+      ancora: { tipo: 'capa' },
+      carga: null,
+      larga: true,
+      letra: 3,
+      aoIrParaAncora: vi.fn(),
+      aoTocarTitulo: vi.fn(),
+      aoEscolherOutroLivro: vi.fn(),
+      aoQueroSaber: vi.fn(),
+      medir,
+    };
+    const { rerender } = render(<TelaLivro {...props} />);
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+    rerender(<TelaLivro {...props} larga={false} />);
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
   });
 });
