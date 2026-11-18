@@ -117,3 +117,12 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Scope**: Roteiro do produto, features 3 a 5.
 - **Date**: 2026-11-18
 - **Status**: active
+
+### AD-010
+- **Decision**: A feature `livro-tela-cheia` (modo livro ocupando a tela no PC) entra no roteiro antes da `texto-atualizado`, que volta a `Não começada`.
+- **Reason**: Pedido do usuário em 2026-11-18, com o print do tst; é pequena e melhora o que já está publicado. A pesquisa da `texto-atualizado` fica em `.specs/features/texto-atualizado/pesquisa.md`.
+- **Trade-off**: A spec da `texto-atualizado` espera; os requisitos dela passam a começar em FUN-103.
+- **Scope**: Roteiro, features 3 e 4.
+- **Date**: 2026-11-18
+- **Status**: active
+
