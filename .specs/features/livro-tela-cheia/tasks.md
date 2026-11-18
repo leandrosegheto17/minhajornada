@@ -219,8 +219,8 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080 (Rute 1): caixa do botão do título (`button` dentro do `h1`) com `x` = `x` da página da esquerda, e caixa de "páginas X e Y de N" com `x + width` = `x + width` da página da direita (±1 px)
-- [ ] Os testes de T0 (tela estreita e retrato) continuam verdes
+- [x] Em 1280 × 800 e 1920 × 1080 (Rute 1): caixa do botão do título (`button` dentro do `h1`) com `x` = `x` da página da esquerda, e caixa de "páginas X e Y de N" com `x + width` = `x + width` da página da direita (±1 px)
+- [x] Os testes de T0 (tela estreita e retrato) continuam verdes
 
 **Tests**: e2e, nomes com `FUN-98` (ex.: `FUN-98: em 1920 × 1080 o título e a posição alinham com as bordas das páginas`)
 **Gate**: full
@@ -242,8 +242,8 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080, em Rute 1 e na capa: caixa de "Página anterior" com `x` = `x` da página da esquerda e caixa de "Página seguinte" com `x + width` = `x + width` da página da direita (±1 px); as duas com o mesmo `y`, abaixo do fundo das páginas, e o fundo delas a até 16 px do pé da tela (`innerHeight`)
-- [ ] Os testes de T0 (botões centrados na tela estreita e no retrato) continuam verdes
+- [x] Em 1280 × 800 e 1920 × 1080, em Rute 1 e na capa: caixa de "Página anterior" com `x` = `x` da página da esquerda e caixa de "Página seguinte" com `x + width` = `x + width` da página da direita (±1 px); as duas com o mesmo `y`, abaixo do fundo das páginas, e o fundo delas a até 16 px do pé da tela (`innerHeight`)
+- [x] Os testes de T0 (botões centrados na tela estreita e no retrato) continuam verdes
 
 **Tests**: e2e, nomes com `FUN-99` (ex.: `FUN-99: em 1280 × 800 "Anterior" e "Seguinte" ficam nos cantos de baixo`)
 **Gate**: full
@@ -265,9 +265,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080: caixas da capa e do plano pago com largura e altura iguais às das páginas de Rute 1 no mesmo tamanho (±1 px), e o plano pago com `x` = 24 e a capa com `x + width` = `innerWidth - 24`
-- [ ] Os testes de `e2e/capa.spec.ts` (FUN-88, FUN-89, FUN-91) continuam verdes
+- [x] Em 1280 × 800 e 1920 × 1080: caixas da capa e do plano pago com largura e altura iguais às das páginas de Rute 1 no mesmo tamanho (±1 px), e o plano pago com `x` = 24 e a capa com `x + width` = `innerWidth - 24`
+- [x] Os testes de `e2e/capa.spec.ts` (FUN-88, FUN-89, FUN-91) continuam verdes
 
 **Tests**: e2e, nomes com `FUN-101` (ex.: `FUN-101: em 1920 × 1080 a capa e o plano pago têm o tamanho das páginas de texto`)
 **Gate**: full
 **Commit**: `test(e2e): capa e plano pago do tamanho das páginas na tela larga`
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/livro.spec.ts e2e/capa.spec.ts e2e/entrada.spec.ts @ 36e3d70b64d2079ca7574d7d173648b53074a5c6 = verde
