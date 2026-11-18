@@ -127,3 +127,11 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Date**: 2026-11-18
 - **Status**: active
 
+### AD-011
+- **Decision**: A barra de título de borda a borda (margem de 24 px, FUN-95) vale para toda tela com 900 px ou mais de largura, em pé ou deitada; FUN-102 ("como está hoje" quando a tela não é larga) vale para a barra só abaixo de 900 px. O modo livro em pé continua como hoje.
+- **Reason**: O pedido manda FUN-95 por largura e FUN-102 também no retrato; o dono escolheu a largura (2026-11-18).
+- **Trade-off**: Tablet em pé ganha margem de 24 px na barra, diferente do retrato abaixo de 900 px.
+- **Scope**: Feature `livro-tela-cheia`, T1 (`src/componentes/BarraTitulo.module.css`).
+- **Date**: 2026-11-18
+- **Status**: active
+
