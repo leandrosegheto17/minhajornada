@@ -138,8 +138,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-66`, `FUN-68`, `FUN-69` em `src/dados/preferencias.test.ts`: sem valor dá `rolagem`; grava e lê `livro`; JSON ilegível, `"pagina"` e número dão `rolagem`; sem `localStorage` não lança
-- [ ] Gate quick passa
+- [x] Testes `FUN-66`, `FUN-68`, `FUN-69` em `src/dados/preferencias.test.ts`: sem valor dá `rolagem`; grava e lê `livro`; JSON ilegível, `"pagina"` e número dão `rolagem`; sem `localStorage` não lança
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -161,9 +161,9 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-51` em `src/estado/leitor.test.ts`: com leitura válida, sem leitura e com leitura inválida, a tela é `inicial`; `ref` guarda só a leitura válida; formato gravado `livro` vira `estado.formato`
-- [ ] Os testes de `iniciar` de FUN-20/FUN-21 (`src/estado/leitor.test.ts:19-36`) passam a esperar `inicial`, com o motivo no commit (mudança autorizada pela spec)
-- [ ] Gate quick passa
+- [x] Testes `FUN-51` em `src/estado/leitor.test.ts`: com leitura válida, sem leitura e com leitura inválida, a tela é `inicial`; `ref` guarda só a leitura válida; formato gravado `livro` vira `estado.formato`
+- [x] Os testes de `iniciar` de FUN-20/FUN-21 (`src/estado/leitor.test.ts:19-36`) passam a esperar `inicial`, com o motivo no commit (mudança autorizada pela spec)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -185,8 +185,8 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-54`, `FUN-55`, `FUN-56` em `src/estado/leitor.test.ts`: Romanos 8 gravado abre Romanos 8 na rolagem e a âncora Romanos 8:1 no livro; sem leitura abre `livros` (rolagem) e a âncora `capa` (livro); leitura inválida na abertura (AD-006) age como sem leitura
-- [ ] Gate quick passa
+- [x] Testes `FUN-54`, `FUN-55`, `FUN-56` em `src/estado/leitor.test.ts`: Romanos 8 gravado abre Romanos 8 na rolagem e a âncora Romanos 8:1 no livro; sem leitura abre `livros` (rolagem) e a âncora `capa` (livro); leitura inválida na abertura (AD-006) age como sem leitura
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -208,14 +208,16 @@ T32 → T33
 
 **Done when**:
 
-- [ ] Testes `FUN-67`, `FUN-70`, `FUN-71` em `src/estado/leitor.test.ts`: João 3 na rolagem vira âncora João 3:1; âncora Rute 1:12 vira rolagem em Rute 1; âncora `capa` e `pago` viram a tela `livros`; fora do leitor (inicial, sobre) só troca o formato, sem mudar a tela
-- [ ] Gate quick passa
+- [x] Testes `FUN-67`, `FUN-70`, `FUN-71` em `src/estado/leitor.test.ts`: João 3 na rolagem vira âncora João 3:1; âncora Rute 1:12 vira rolagem em Rute 1; âncora `capa` e `pago` viram a tela `livros`; fora do leitor (inicial, sobre) só troca o formato, sem mudar a tela
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(estado): troca entre rolagem e livro sem perder o capítulo`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado/leitor.test.ts src/navegacao src/biblia --reporter=dot @ 5f3580d3b88987e3004ad091285e6db064936b1c = verde
 
 ### T5: Em breve, voltar e inicial
 
