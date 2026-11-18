@@ -937,7 +937,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `e2e/livro.spec.ts`: `FUN-75` em 1280 × 800, Rute inteira sem bloco que comece abaixo da caixa do texto ou fique escondido; `useMedidas.test.ts`: a altura medida inclui a margem do bloco. Vermelho antes da correção
 **Gate**: full
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -955,7 +955,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `TelaLivro.test.tsx`: `FUN-77` versículo dividido em 3 páginas, "seguinte" passa pelas três e chega ao versículo seguinte; `FUN-78` "anterior" volta pelas fatias. Vermelho antes
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -973,7 +973,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `test/arquivos/paginacao-66.test.ts` (projeto `arquivos`): `FUN-75` nos 66 livros, cada versículo uma vez e em ordem
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -991,7 +991,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `useMedidas.test.ts` ou `TelaLivro.test.tsx`: `FUN-86` a letra muda com a capa à mostra e, ao voltar ao mesmo livro, a medida é a nova. Vermelho antes
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1009,7 +1009,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `App.test.tsx`: formato livro, capa → Sobre → voltar mostra a capa. Vermelho antes
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1027,7 +1027,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `TelaLivro.test.tsx` com `larga: true`: `FUN-77` "seguinte" vai ao primeiro versículo do par seguinte, `FUN-88` "anterior" em Gênesis 1 vai à capa; `FUN-71` página que começa no capítulo anterior ao da âncora, rolagem no capítulo da âncora (AD-007); e2e 1280 px: Gênesis 1 → anterior → capa à direita; e2e João 3 com título e rolagem exatos
 **Gate**: full
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1045,7 +1045,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `estilo.test.ts`: `FUN-59` par suave × superfície ≥ 4,5:1 nos temas; `icones-png.test.ts`: `FUN-93` pixel do desenho (página clara) no centro dos três PNGs
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1063,7 +1063,7 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: `entrada.spec.ts`: `FUN-52` foto cobre a área abaixo da barra; `FUN-64` 479 px só ícone, 480 px com texto; sem rolagem lateral em 320 e 1920 px nas 4 telas novas
 **Gate**: full
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -1081,9 +1081,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ a059ac12e26a9178b8e7d5b
 **Tests**: o próprio gate completo
 **Gate**: build
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ 77a673a8562860fc521a3415355f823e5875e671 = verde
 
 ## Requirement Coverage
 
