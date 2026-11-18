@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { TelaSobre } from './TelaSobre';
+import { LINK_UNSPLASH, TelaSobre } from './TelaSobre';
 
 function renderizar() {
   const aoVoltar = vi.fn();
@@ -58,6 +58,16 @@ describe('privacidade (FUN-40)', () => {
     const { texto } = renderizar();
     expect(texto).toMatch(/não tem conta/);
     expect(texto).toMatch(/ficam só neste aparelho/);
+  });
+});
+
+describe('crédito da foto da página inicial (FUN-58)', () => {
+  it('FUN-58: cita a foto, o autor e a licença Unsplash, com link para a licença', () => {
+    const { texto } = renderizar();
+    expect(texto).toContain('A foto da página inicial');
+    expect(texto).toContain('Aaron Burden');
+    expect(texto).toContain('licença Unsplash');
+    expect(screen.getByRole('link', { name: 'Unsplash' })).toHaveAttribute('href', LINK_UNSPLASH);
   });
 });
 
