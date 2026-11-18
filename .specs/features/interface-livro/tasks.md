@@ -305,8 +305,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado src/navegacao 
 
 **Done when**:
 
-- [ ] Testes `FUN-76` em `src/livro/paginacao.test.ts`: Rute dá 1 + 85 blocos, com o nome primeiro e `abreCapitulo` nos versículos 1 dos capítulos 1 a 4; livro de capítulo único (Judas) marca só o versículo 1
-- [ ] Gate quick passa
+- [x] Testes `FUN-76` em `src/livro/paginacao.test.ts`: Rute dá 1 + 85 blocos, com o nome primeiro e `abreCapitulo` nos versículos 1 dos capítulos 1 a 4; livro de capítulo único (Judas) marca só o versículo 1
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -328,9 +328,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado src/navegacao 
 
 **Done when**:
 
-- [ ] Casos limite e estados listados antes de codar (Domínio: sim): bloco que cabe exato, bloco 1 px maior, bloco maior que 2 páginas, página menor que uma linha, lista vazia, alturas zero
-- [ ] Testes `FUN-75` em `src/livro/paginacao.test.ts`: cada bloco aparece uma vez e em ordem; nenhuma página passa da altura; bloco maior que a página ocupa páginas seguidas com `recorte` múltiplo da linha; nenhum bloco que cabe é dividido; entradas inválidas terminam
-- [ ] Gate quick passa
+- [x] Casos limite e estados listados antes de codar (Domínio: sim): bloco que cabe exato, bloco 1 px maior, bloco maior que 2 páginas, página menor que uma linha, lista vazia, alturas zero
+- [x] Testes `FUN-75` em `src/livro/paginacao.test.ts`: cada bloco aparece uma vez e em ordem; nenhuma página passa da altura; bloco maior que a página ocupa páginas seguidas com `recorte` múltiplo da linha; nenhum bloco que cabe é dividido; entradas inválidas terminam
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -352,14 +352,16 @@ Gate: pnpm typecheck && pnpm exec vitest run src/dados src/estado src/navegacao 
 
 **Done when**:
 
-- [ ] Testes `FUN-70`, `FUN-83`, `FUN-85`, `FUN-86` em `src/livro/paginacao.test.ts`: versículo no meio, no início e na fatia seguinte de um versículo dividido; primeiro versículo de página que começa com o nome do livro; alvo inexistente cai no capítulo ou no livro
-- [ ] Gate quick passa
+- [x] Testes `FUN-70`, `FUN-83`, `FUN-85`, `FUN-86` em `src/livro/paginacao.test.ts`: versículo no meio, no início e na fatia seguinte de um versículo dividido; primeiro versículo de página que começa com o nome do livro; alvo inexistente cai no capítulo ou no livro
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(livro): acha a página de um versículo`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/livro src/estado src/dados src/navegacao src/biblia --reporter=dot @ 748995df7dd69e82972139d857ef4232f86519e0 = verde
 
 ### T11: Folhear
 
