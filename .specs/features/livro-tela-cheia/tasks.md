@@ -296,10 +296,12 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080, na capa: os botões a até 16 px do pé da tela (±1 px) e com o mesmo `y` que em Rute 1 no mesmo tamanho; as páginas da capa com o mesmo `y` das de Rute 1
-- [ ] Os testes de FUN-99 e FUN-101 continuam verdes, e os de T0 (tela estreita e retrato) também
-- [ ] Vermelho: no HEAD atual, a asserção do pé na capa falha (76 px)
+- [x] Em 1280 × 800 e 1920 × 1080, na capa: os botões a até 16 px do pé da tela (±1 px) e com o mesmo `y` que em Rute 1 no mesmo tamanho; as páginas da capa com o mesmo `y` das de Rute 1
+- [x] Os testes de FUN-99 e FUN-101 continuam verdes, e os de T0 (tela estreita e retrato) também
+- [x] Vermelho: no HEAD atual, a asserção do pé na capa falha (76 px)
 
 **Tests**: e2e, nomes com `FUN-99` (ex.: `FUN-99: em 1280 × 800 "Anterior" e "Seguinte" ficam nos cantos de baixo, na capa`)
 **Gate**: full
 **Commit**: `fix(livro): capa e plano pago reservam a linha do título na tela larga`
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/capa.spec.ts @ 7b1a84687b4a89f27f63433ad909c095def28654 = verde
