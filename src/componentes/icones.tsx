@@ -77,3 +77,34 @@ export function IconeSemRede() {
     </svg>
   );
 }
+
+export function IconeLivroAberto() {
+  return (
+    <svg className="icone" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5Zm0 0V19.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function IconeRolagem() {
+  return (
+    <svg className="icone" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 4h10M7 20h10M5 8h14M5 12h14M5 16h14" {...traco} strokeWidth="1.9" />
+    </svg>
+  );
+}
+
+export function IconeConta() {
+  return (
+    <svg className="icone" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="8.5" r="3.8" fill="none" stroke="currentColor" strokeWidth="1.9" />
+      <path d="M4.5 20c.8-3.8 3.8-5.8 7.5-5.8s6.7 2 7.5 5.8" {...traco} strokeWidth="1.9" />
+    </svg>
+  );
+}

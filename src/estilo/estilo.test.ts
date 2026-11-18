@@ -68,6 +68,38 @@ describe('tokens.css', () => {
   it('declara a cor de fundo do tema claro', () => {
     expect(lerToken(tokens, '--cor-fundo')).toBe('#FFFFFF');
   });
+
+  it.each([
+    '--altura-barra',
+    '--largura-barra',
+    '--largura-cartao-inicial',
+    '--veu-imagem',
+    '--veu-imagem-celular',
+    '--largura-pagina',
+    '--respiro-pagina',
+    '--respiro-pagina-celular',
+    '--sombra-pagina',
+    '--sombra-lombada',
+    '--sombra-lombada-direita',
+    '--texto-titulo-livro',
+    '--texto-numero-capitulo',
+    '--cor-capa',
+    '--cor-capa-texto',
+    '--texto-capa',
+    '--quebra-barra-compacta',
+    '--quebra-livro-duplo',
+  ])('FUN-59 e FUN-73: o token novo %s existe', (nome) => {
+    expect(lerToken(tokens, nome)).toBeTruthy();
+  });
+
+  it('FUN-59: a capa usa o acento e o texto do acento (contraste já conferido)', () => {
+    expect(lerToken(tokens, '--cor-capa')).toBe('var(--cor-acento)');
+    expect(lerToken(tokens, '--cor-capa-texto')).toBe('var(--cor-acento-texto)');
+  });
+
+  it('FUN-73: a quebra do livro em duas páginas é 900px', () => {
+    expect(lerToken(tokens, '--quebra-livro-duplo')).toBe('900px');
+  });
 });
 
 describe('contraste do texto (FUN-32)', () => {
