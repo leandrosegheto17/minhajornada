@@ -3,8 +3,10 @@ import {
   abrirGravado,
   abrirPelaEscolha,
   esperarCapitulo,
+  esperarInicial,
   esperarSwAtivo,
   irParaEscolhaDeLivro,
+  lerBiblia,
   livrosGuardados,
   versiculos,
 } from './apoio/navegar';
@@ -54,6 +56,8 @@ test.describe('ler sem internet (J-03)', () => {
     await context.setOffline(true);
     try {
       await page.reload();
+      await esperarInicial(page);
+      await lerBiblia(page);
       await esperarCapitulo(page, 'Romanos', 8);
       await irParaEscolhaDeLivro(page);
       await abrirPelaEscolha(page, 'Apocalipse', 22);

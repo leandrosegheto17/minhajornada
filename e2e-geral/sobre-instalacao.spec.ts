@@ -19,7 +19,7 @@ test('FUN-46/FUN-47/FUN-37 a FUN-40 (staging): o convite aparece, é dispensado 
   await expect(convite).toHaveCount(0);
 
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'A Palavra perto de você, onde estiver' })).toBeVisible();
   await expect(convite).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Sobre o MinhaJornada' }).click();

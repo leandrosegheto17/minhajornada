@@ -1,12 +1,24 @@
 import { expect, type Page } from '@playwright/test';
 
-/** Grava a leitura no aparelho e reabre o app nela (FUN-20). A página precisa já estar no app. */
+/** A página inicial está aberta (FUN-51): o app sempre abre nela. */
+export async function esperarInicial(page: Page): Promise<void> {
+  await expect(page.getByRole('heading', { level: 1, name: 'A Palavra perto de você, onde estiver' })).toBeVisible();
+}
+
+/** Na página inicial, toca em "Ler Bíblia" (FUN-54, FUN-55). */
+export async function lerBiblia(page: Page): Promise<void> {
+  await page.getByRole('button', { name: 'Ler Bíblia', exact: true }).click();
+}
+
+/** Grava a leitura no aparelho e reabre o app nela: recarrega, vê a inicial e toca em "Ler Bíblia" (FUN-54). */
 export async function abrirGravado(page: Page, livro: number, capitulo: number): Promise<void> {
   await page.evaluate(([l, c]) => localStorage.setItem('mj:leitura', JSON.stringify({ livro: l, capitulo: c })), [
     livro,
     capitulo,
   ] as const);
   await page.reload();
+  await esperarInicial(page);
+  await lerBiblia(page);
 }
 
 /** Grava a letra (1 a 5) no aparelho; vale a partir da próxima abertura. */
@@ -19,8 +31,13 @@ export async function escolherLivro(page: Page, nome: string): Promise<void> {
   await page.getByRole('button', { name: new RegExp(`^${nome}, \\d+ cap`) }).click();
 }
 
-/** Da escolha de livro, abre `nome` `capitulo` (pela grade, ou direto em livro de capítulo único). */
+/**
+ * Abre `nome` `capitulo` pela escolha de livro (pela grade, ou direto em livro de capítulo único). Se a página
+ * inicial está aberta, passa antes por "Ler Bíblia" (FUN-55).
+ */
 export async function abrirPelaEscolha(page: Page, nome: string, capitulo: number): Promise<void> {
+  const inicial = page.getByRole('heading', { level: 1, name: 'A Palavra perto de você, onde estiver' });
+  if (await inicial.isVisible().catch(() => false)) await lerBiblia(page);
   await escolherLivro(page, nome);
   const grade = page.getByRole('list', { name: `Capítulos de ${nome}` });
   if (await grade.isVisible().catch(() => false)) {

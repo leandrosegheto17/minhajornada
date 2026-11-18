@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { abrirGravado, abrirPelaEscolha, esperarCapitulo, gravarLetra } from './apoio/navegar';
+import { abrirGravado, abrirPelaEscolha, esperarCapitulo, esperarInicial, gravarLetra, lerBiblia } from './apoio/navegar';
 
 // J-04 de .specs/projeto/jornadas.md, no build servido por `vite preview`.
 
@@ -68,6 +68,8 @@ test.describe('letra e tema gravados (FUN-30)', () => {
     await expect(page.getByText('Letra 5 de 5')).toBeVisible();
 
     await page.reload();
+    await esperarInicial(page);
+    await lerBiblia(page);
     await esperarCapitulo(page, 'Filemom', 1);
     await expect(page.locator('html')).toHaveAttribute('data-tema', 'sepia');
     await expect(page.locator('html')).toHaveAttribute('data-letra', '5');
@@ -98,6 +100,10 @@ for (const largura of [320, 1920]) {
       page,
     }) => {
       await page.goto('/');
+      await esperarInicial(page);
+      await semRolagemLateral(page, 'página inicial');
+      await botoesComRotulo(page, 'página inicial');
+      await lerBiblia(page);
       await semRolagemLateral(page, 'escolha de livro');
       await botoesComRotulo(page, 'escolha de livro');
 
