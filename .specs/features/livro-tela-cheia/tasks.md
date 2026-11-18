@@ -117,10 +117,10 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 375 × 812 e 899 × 800 (Rute 1, modo livro): uma página; largura = `min(520, innerWidth - 24)` e centrada (meio da caixa a 1 px do meio da tela); altura = `innerHeight - 56 - 150` (±1 px, `livro.module.css:234`); "Anterior" e "Seguinte" centrados como par (meio entre os dois a 1 px do meio da tela)
-- [ ] Em 1024 × 1366 (retrato): as mesmas asserções de página e botões
-- [ ] Em 375 × 812 e 899 × 800: marca começa a 12 px da esquerda e a conta termina a 12 px da direita (±1 px; `BarraTitulo.module.css:19`)
-- [ ] Os testes passam no HEAD, antes de T1 (registre a rodada no commit)
+- [x] Em 375 × 812 e 899 × 800 (Rute 1, modo livro): uma página; largura = `min(520, innerWidth - 24)` e centrada (meio da caixa a 1 px do meio da tela); altura = `innerHeight - 56 - 150` (±1 px, `livro.module.css:234`); "Anterior" e "Seguinte" centrados como par (meio entre os dois a 1 px do meio da tela)
+- [x] Em 1024 × 1366 (retrato): as mesmas asserções de página e botões
+- [x] Em 375 × 812 e 899 × 800: marca começa a 12 px da esquerda e a conta termina a 12 px da direita (±1 px; `BarraTitulo.module.css:19`)
+- [x] Os testes passam no HEAD, antes de T1 (registre a rodada no commit)
 
 **Tests**: e2e, nomes com `FUN-102` (ex.: `FUN-102: em 375 × 812 a página e os botões ficam como hoje`)
 **Gate**: full
@@ -142,14 +142,16 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 1280 × 800, 1920 × 1080 e 900 × 600, na página inicial, no leitor em rolagem, no modo livro e no Sobre: caixa da marca (`MinhaJornada, página inicial`) com `x` = 24 e caixa do botão da conta com `x + width` = `innerWidth - 24` (±1 px)
-- [ ] Os testes de T0 da barra (375 e 899 px) continuam verdes; os de `e2e/entrada.spec.ts` (FUN-64, FUN-65, FUN-43) também
+- [x] Em 1280 × 800, 1920 × 1080 e 900 × 600, na página inicial, no leitor em rolagem, no modo livro e no Sobre: caixa da marca (`MinhaJornada, página inicial`) com `x` = 24 e caixa do botão da conta com `x + width` = `innerWidth - 24` (±1 px)
+- [x] Os testes de T0 da barra (375 e 899 px) continuam verdes; os de `e2e/entrada.spec.ts` (FUN-64, FUN-65, FUN-43) também
 
 **Tests**: e2e, nomes com `FUN-95` (ex.: `FUN-95: em 1920 × 1080 a barra vai de borda a borda em todas as telas`)
 **Gate**: full
 **Commit**: `feat(barra): barra de borda a borda no pc`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/entrada.spec.ts @ 9590326455fc462bef02cea6a265812e8eaa3e14 = verde
 
 ### T2: Páginas que preenchem a área, com a medida do mesmo tamanho (FUN-96, FUN-97, FUN-100)
 
