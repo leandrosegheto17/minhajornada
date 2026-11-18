@@ -99,6 +99,12 @@ T2 → T3
 T4 → T5 → T6
 ```
 
+### Phase 5: Retrabalho R1 (comum)
+
+```
+T7
+```
+
 ---
 
 ## Task Breakdown
@@ -273,3 +279,27 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 **Commit**: `test(e2e): capa e plano pago do tamanho das páginas na tela larga`
 
 Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/livro.spec.ts e2e/capa.spec.ts e2e/entrada.spec.ts @ 36e3d70b64d2079ca7574d7d173648b53074a5c6 = verde
+
+---
+
+### T7: Reservar a linha do título na capa e no plano pago (A-01)
+
+**What**: Na tela larga, a capa e o plano pago reservam a altura da linha do título (`--alvo-toque` mais o `gap`), para os botões ficarem a até 16 px do pé da tela, como em Rute, e não saltarem ao passar da capa para Gênesis.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/livro/livro.module.css`, `e2e/livro-tela-cheia.spec.ts`
+**Depends on**: None
+**Reuses**: Bloco da tela larga de `src/livro/livro.module.css:272-296` (o mesmo de T2 a T5); sem `style` inline (AD-003) e sem mudar a marcação, se o CSS bastar. Em `e2e/livro-tela-cheia.spec.ts:333`, passar `pertoDoPe` a `true` na capa
+**Requirement**: FUN-99, FUN-101 · Achado: A-01 (validation.md)
+
+**Done when**:
+
+- [ ] Em 1280 × 800 e 1920 × 1080, na capa: os botões a até 16 px do pé da tela (±1 px) e com o mesmo `y` que em Rute 1 no mesmo tamanho; as páginas da capa com o mesmo `y` das de Rute 1
+- [ ] Os testes de FUN-99 e FUN-101 continuam verdes, e os de T0 (tela estreita e retrato) também
+- [ ] Vermelho: no HEAD atual, a asserção do pé na capa falha (76 px)
+
+**Tests**: e2e, nomes com `FUN-99` (ex.: `FUN-99: em 1280 × 800 "Anterior" e "Seguinte" ficam nos cantos de baixo, na capa`)
+**Gate**: full
+**Commit**: `fix(livro): capa e plano pago reservam a linha do título na tela larga`
