@@ -6,7 +6,7 @@
 - **Arquitetura**: cabe. A paginação entra como camada nova (função pura + componente que mede), sem mudar dados nem contratos
 - **Telas**: cria página inicial, tela "em breve", leitor em formato livro e capa; muda a barra de todas as telas (leitor, livros, capítulos, Sobre)
 - **Mockup**: aprovado em 2026-11-17 (`mockup/`, imagem de fundo A: Bíblia aberta na luz, Aaron Burden / Unsplash; ícone 2a, `mockup/icones/2a-vinho-caminho-largo.svg`)
-- **Plano aprovado em**: pendente
+- **Plano aprovado em**: 2026-11-18 (design.md e tasks.md, com AD-005 e AD-006)
 
 ## Onde entra
 

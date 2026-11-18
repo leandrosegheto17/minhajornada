@@ -14,6 +14,16 @@
 
 ---
 
+## Linha de base
+
+- **Comando**: `pnpm typecheck && pnpm test` (`.specs/projeto/testes.json`), rodado em 2026-11-18 no commit `9a02c38` (branch `desenvolvimento`)
+- **Resultado**: typecheck verde; Vitest 28 arquivos, 369 testes, todos passando (21 s). E2E não rodado na linha de base (roda no CI e no gate completo da feature)
+- **Falhas preexistentes**: nenhuma. Aviso de ambiente: Node 26.13 local fora de `engines` (`>=24 <25`); o CI usa o Node do `.nvmrc`
+- **T0 (rede de proteção)**: não se aplica. Todo comportamento existente que a feature toca já tem teste: abertura e retomada (`src/estado/leitor.test.ts:19-36`, `src/estado/useLeitor.test.ts:59-74`, `src/App.test.tsx:46-66`), barra com "Aa", painel e Sobre (`src/telas/TelaLeitor.test.tsx:165-172`, `:261-280`, `src/telas/TelaLivros.test.tsx:64-75`), "voltar à leitura" (`src/telas/TelaLivros.test.tsx:64-67`, `src/telas/TelaCapitulos.test.tsx:63-71`), deslize (`src/telas/TelaLeitor.test.tsx`), preferências (`src/dados/preferencias.test.ts`), pré-cache sem livros (`e2e/sw.spec.ts:31-45`) e manifesto com os ícones (`e2e/manifesto.spec.ts`). O único comportamento sem teste, o favicon SVG (inválido hoje), é substituído com teste em T30
+- **Regra do /executar**: nenhuma falha nova além das preexistentes; a suíte inteira e o E2E rodam ao fim da feature
+
+---
+
 ## Test Coverage Matrix
 
 > Gerada do código e da spec. Guidelines encontradas: `CLAUDE.md` (Execução, Testes), `vite.config.ts:65-84` (projetos `componentes` e `arquivos`), `.specs/projeto/testes.json`; amostras: `src/estado/leitor.test.ts`, `src/estado/useLeitor.test.ts`, `src/telas/TelaLeitor.test.tsx`, `src/dados/preferencias.test.ts`, `e2e/leitura.spec.ts`, `src/estilo/estilo.test.ts`.

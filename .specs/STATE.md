@@ -2,20 +2,17 @@
 
 ## Retomada
 
-- **Fluxo**: 1, Projeto novo — skill `projeto-novo`
-- **Item**: `.specs/features/leitor/` (avaliação em `.specs/produto/`)
-- **Fase aprovada**: 8, Quebra em tarefas e lotes, concluída em 2026-11-14 (sem aprovação, regra do fluxo): `features/leitor/tasks.md` (35 tarefas, 10 lotes, `**Passada**: rascunho`) e `.specs/projeto/jornadas.md` (J-01 a J-05). Fase 7 aprovada antes: `design.md` (AD-001 a AD-003) e mockup `.specs/mockup/` (direção C)
-- **Próxima fase**: planejamento concluído; seguem os comandos `/preparar` (Nível 1 antes de tudo), `/rascunho` (Opus), `/executar` e `/validar` (Sonnet)
-- **Execução**: feature `leitor` executada, validada (rodada 5, com ressalva A-16) e integrada em `desenvolvimento` por merge local em 2026-11-15 (`features/leitor/integracao.md`); push pendente
+- **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
+- **Item**: `.specs/features/interface-livro/`
+- **Fase aprovada**: 3, Plano, em 2026-11-18; fase 4 (rede de proteção planejada) concluída em 2026-11-18, sem T0 (`tasks.md`, `## Linha de base`)
+- **Próxima fase**: planejamento concluído; seguem `/executar` e `/validar` (Sonnet). A feature anterior, `leitor`, está integrada em `desenvolvimento` (push pendente)
 - **Serviços no ar**: nenhum
-- **Progresso**: 50 de 50 tarefas concluídas (100%), conferida em 2026-11-15
+- **Progresso**: Feature atual (.specs/features/interface-livro): Faltam 33 de 33 tarefas: 0% concluído, conferida em 2026-11-18
 - **Combinado na conversa e não registrado em artefato**:
-  - Branches: `desenvolvimento` faz o papel da main e é a branch padrão no GitHub (repositório privado `minhajornada`). Toda feature nasce de `desenvolvimento` e volta para ela, então a **Branch pai** dos `tasks.md` é `desenvolvimento`. A `main` só recebe a integração de `desenvolvimento` quando o usuário pedir.
-  - Publicação: Cloudflare. `desenvolvimento` → `minhajornada-tst.ljssoftware.com.br`; `main` → `minhajornada.ljssoftware.com.br`. O leitor free não usa Neon (`solucao.md`).
-  - Molde de código: `c:/Leandro/Projetos/ControleEmCasa_LJS/frontend/web` (mapa resumido em `design.md`, Code Reuse Analysis).
-  - `.specs/projeto/testes.json` está com `dispensado: true` (projeto sem código, aprovado em 2026-11-14). Trocar pelo comando real da suíte no `/preparar`.
-  - O texto bíblico já está em `.biblia/` (Bíblia Livre, 66 arquivos Markdown e `README.md` com créditos CC BY 4.0 Brasil). A fonte tem pequenos erros de digitação (ex.: Salmos 27:8 "face.Eu"); FUN-03 manda manter igual.
-- **Gravada em**: 2026-11-14
+  - Branches: `desenvolvimento` faz o papel da main e é a branch padrão no GitHub (repositório privado `minhajornada`). Toda feature nasce de `desenvolvimento` e volta para ela (**Branch pai** = `desenvolvimento`). A `main` só recebe a integração de `desenvolvimento` quando o usuário pedir.
+  - Publicação: Cloudflare. `desenvolvimento` → `minhajornada-tst.ljssoftware.com.br`; `main` → `minhajornada.ljssoftware.com.br`.
+  - Galeria do mockup publicada como artifact privado: https://claude.ai/artifact/PLyzqUYu82F25xHSfwQp2o (telas e modelos de ícone).
+- **Gravada em**: 2026-11-18
 
 ## Modelo
 
@@ -32,6 +29,7 @@
 | 2026-11-15 | Feature `leitor`, `e2e/aparencia.spec.ts` | Passo de fechar o painel de Aparência antes de abrir a grade em 320 px; asserções iguais. Aprovada pelo dono. |
 | 2026-11-15 | Feature `leitor`, retrabalho R1 (T36, T41, T42) | Helper `deslizar` de `TelaLeitor.test.tsx` com `pointerType: 'touch'` (T36); `afterEach` de `ConviteInstalacao.test.tsx` apaga `maxTouchPoints` (T41); uma asserção a mais no e2e de 320 px (T42). Nenhum teste enfraquecido. Aprovada pelo dono. |
 | 2026-11-15 | Feature `leitor`, `/validar` rodada 5 | A-16 (comum: valor errado de `referrer-policy` e `x-content-type-options` sem prova por execução) aceito como lacuna, sem retrabalho; feature segue para a integração. Decisão do dono. |
+| 2026-11-18 | Feature `interface-livro`, T16 e T17 | Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172` e `:261-280`, `src/telas/TelaLivros.test.tsx:64-75`) passam para `src/componentes/BarraTitulo.test.tsx`, com as mesmas asserções. Aprovada pelo dono. |
 
 ## Decisions
 
