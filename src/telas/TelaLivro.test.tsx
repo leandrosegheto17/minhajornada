@@ -274,3 +274,49 @@ describe('lugar no livro e capa (FUN-82, FUN-85, FUN-86, FUN-89, FUN-90)', () =>
     expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
   });
 });
+
+describe('versículo maior que a página (FUN-75, FUN-77, FUN-78, FUN-85)', () => {
+  // Páginas: P1 [nome, v1, v2], P2 [v3 fatia 0], P3 [v3 fatia 1], P4 [v3 fatia 2, v4, v5], P5 [v6].
+  const medirDividido: Medir = (contenedor) => ({
+    alturas: Array.from(contenedor.children, (_, i) => (i === 0 ? 40 : i === 3 ? 250 : 20)),
+    alturaPagina: 100,
+    alturaLinha: 20,
+  });
+  const comFatia = (versiculo: number, fatia: number) => ({ ...texto(RUTE, versiculo), fatia });
+  const dividido = (ancora: Props['ancora']) => renderizar({ ancora, medir: medirDividido });
+
+  it('FUN-77: "seguinte" passa pelas três fatias do versículo e chega ao versículo seguinte', () => {
+    const p2 = dividido(texto(RUTE, 3));
+    fireEvent.click(seguinte());
+    expect(p2.aoIrParaAncora).toHaveBeenCalledWith(comFatia(3, 1));
+  });
+
+  it('FUN-77: da segunda fatia, "seguinte" vai à terceira', () => {
+    const p3 = dividido(comFatia(3, 1));
+    fireEvent.click(seguinte());
+    expect(p3.aoIrParaAncora).toHaveBeenCalledWith(comFatia(3, 2));
+  });
+
+  it('FUN-77: da última fatia, "seguinte" vai ao primeiro versículo da página seguinte', () => {
+    const p4 = dividido(comFatia(3, 2));
+    fireEvent.click(seguinte());
+    expect(p4.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE, 6));
+  });
+
+  it('FUN-78: "anterior" volta pelas fatias, e da primeira volta ao versículo sem fatia', () => {
+    const p4 = dividido(comFatia(3, 2));
+    fireEvent.click(anterior());
+    expect(p4.aoIrParaAncora).toHaveBeenCalledWith(comFatia(3, 1));
+  });
+
+  it('FUN-78: "anterior" da segunda fatia vai à primeira (âncora sem o campo de fatia)', () => {
+    const p3 = dividido(comFatia(3, 1));
+    fireEvent.click(anterior());
+    expect(p3.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE, 3));
+  });
+
+  it('FUN-85: a âncora com fatia mostra a página da fatia (página 3 de Rute)', () => {
+    dividido(comFatia(3, 1));
+    expect(screen.getByRole('article', { name: 'Página 3 de Rute' })).toBeInTheDocument();
+  });
+});

@@ -10,6 +10,7 @@ import { CapaLivro, PaginaPago } from '../livro/CapaLivro';
 import { destinoAnterior, destinoDaCapa, destinoSeguinte, visiveis, type Destino } from '../livro/folhear';
 import estilo from '../livro/livro.module.css';
 import {
+  alvoDaPagina,
   blocosDoLivro,
   paginaDoVersiculo,
   paginar,
@@ -43,17 +44,22 @@ interface Props {
 
 const SEM_BLOCOS: Bloco[] = [];
 
-/** Âncora de texto do primeiro versículo da página (FUN-85); sem versículo, o começo do livro. */
-function ancoraDaPagina(pagina: Pagina | undefined, blocos: Bloco[], livro: number): Ancora {
-  const alvo = pagina ? primeiroVersiculo(pagina, blocos) : null;
-  return alvo ? { tipo: 'texto', ...alvo } : { tipo: 'texto', ref: { livro, capitulo: 1 }, versiculo: 1 };
+/**
+ * Âncora de texto do primeiro versículo da página `indice` (FUN-85); a continuação de um versículo dividido leva o
+ * número da fatia, para "seguinte" e "anterior" passarem por todas as páginas dele. Sem versículo, o começo do livro.
+ */
+function ancoraDaPagina(paginas: Pagina[], blocos: Bloco[], indice: number, livro: number): Ancora {
+  const alvo = alvoDaPagina(paginas, blocos, indice);
+  if (!alvo) return { tipo: 'texto', ref: { livro, capitulo: 1 }, versiculo: 1 };
+  const { fatia, ...base } = alvo;
+  return { tipo: 'texto', ...base, ...(fatia > 0 ? { fatia } : {}) };
 }
 
 /** O destino como âncora: a página vira o primeiro versículo dela; `null` onde não há para onde ir. */
 function comoAncora(destino: Destino, paginas: Pagina[], blocos: Bloco[], livro: number): Ancora | null {
   if (!destino) return null;
   if ('ancora' in destino) return destino.ancora;
-  return ancoraDaPagina(paginas[destino.pagina], blocos, livro);
+  return ancoraDaPagina(paginas, blocos, destino.pagina, livro);
 }
 
 /**
@@ -87,12 +93,12 @@ export function TelaLivro({
     : ancora.tipo === 'fim'
       ? total - 1
       : ancora.tipo === 'texto'
-        ? paginaDoVersiculo(paginas, blocos, { ref: ancora.ref, versiculo: ancora.versiculo })
+        ? paginaDoVersiculo(paginas, blocos, { ref: ancora.ref, versiculo: ancora.versiculo, fatia: ancora.fatia })
         : 0;
 
   // "fim" é resolvida depois de paginar: o primeiro versículo da última página vira a âncora de texto (FUN-85).
   useEffect(() => {
-    if (ancora.tipo === 'fim' && paginas) aoIrParaAncora(ancoraDaPagina(paginas[total - 1], blocos, ancora.livro));
+    if (ancora.tipo === 'fim' && paginas) aoIrParaAncora(ancoraDaPagina(paginas, blocos, total - 1, ancora.livro));
   }, [ancora, paginas, total, blocos, aoIrParaAncora]);
 
   function destino(sentido: 'seguinte' | 'anterior'): Ancora | null {

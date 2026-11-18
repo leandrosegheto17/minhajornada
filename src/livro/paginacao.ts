@@ -16,6 +16,11 @@ export interface Pagina {
 export interface AlvoVersiculo {
   ref: Ref;
   versiculo: number;
+  /**
+   * Fatia do versículo dividido entre páginas (0 = a primeira, que é a padrão). Não é número de página: só distingue,
+   * entre as páginas do mesmo versículo, qual é a que a âncora mostra (FUN-77, FUN-78, FUN-85).
+   */
+  fatia?: number;
 }
 
 /**
@@ -124,10 +129,28 @@ export function paginaDoVersiculo(paginas: Pagina[], blocos: Bloco[], alvo: Alvo
       b.versiculo === alvo.versiculo,
   );
   if (indice >= 0) {
-    const pagina = paginas.findIndex((p) => p.partes.some((parte) => parte.bloco === indice));
-    if (pagina >= 0) return pagina;
+    const doBloco = paginas.flatMap((p, i) => (p.partes.some((parte) => parte.bloco === indice) ? [i] : []));
+    // Fatia que não existe mais (a paginação mudou): a última do versículo (FUN-86).
+    const alvoFatia = Math.min(Math.max(alvo.fatia ?? 0, 0), doBloco.length - 1);
+    if (doBloco.length > 0) return doBloco[alvoFatia]!;
   }
   return paginaDoCapitulo(paginas, blocos, alvo.ref) ?? 0;
+}
+
+/**
+ * O primeiro versículo da página `indice` com o número da fatia (0 se a página traz o começo do versículo, 1 ou mais se
+ * traz uma continuação); `null` se a página não tem versículo (FUN-85).
+ */
+export function alvoDaPagina(paginas: Pagina[], blocos: Bloco[], indice: number): Required<AlvoVersiculo> | null {
+  const pagina = paginas[indice];
+  if (!pagina) return null;
+  const parte = pagina.partes.find((p) => blocos[p.bloco]?.tipo === 'versiculo');
+  const bloco = parte ? blocos[parte.bloco] : undefined;
+  if (!parte || bloco?.tipo !== 'versiculo') return null;
+  const fatia = paginas
+    .slice(0, indice)
+    .filter((anterior) => anterior.partes.some((p) => p.bloco === parte.bloco)).length;
+  return { ref: bloco.ref, versiculo: bloco.versiculo, fatia };
 }
 
 /**

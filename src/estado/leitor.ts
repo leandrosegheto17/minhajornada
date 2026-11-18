@@ -13,7 +13,10 @@ export type Tela = 'inicial' | 'livros' | 'capitulos' | 'leitor' | 'sobre' | 'em
  * para sobreviver à troca de letra, tela e formato. `fim` é "a última página deste livro", resolvida depois de paginar.
  */
 export type Ancora =
-  { tipo: 'capa' } | { tipo: 'pago' } | { tipo: 'texto'; ref: Ref; versiculo: number } | { tipo: 'fim'; livro: number };
+  | { tipo: 'capa' }
+  | { tipo: 'pago' }
+  | { tipo: 'texto'; ref: Ref; versiculo: number; fatia?: number }
+  | { tipo: 'fim'; livro: number };
 
 export interface EstadoLeitor {
   tela: Tela;
@@ -83,7 +86,12 @@ function abrirCapituloNoFormato(estado: EstadoLeitor, ref: Ref): EstadoLeitor {
 function mesmaAncora(a: Ancora, b: Ancora): boolean {
   if (a.tipo !== b.tipo) return false;
   if (a.tipo === 'texto' && b.tipo === 'texto') {
-    return a.ref.livro === b.ref.livro && a.ref.capitulo === b.ref.capitulo && a.versiculo === b.versiculo;
+    return (
+      a.ref.livro === b.ref.livro &&
+      a.ref.capitulo === b.ref.capitulo &&
+      a.versiculo === b.versiculo &&
+      (a.fatia ?? 0) === (b.fatia ?? 0)
+    );
   }
   if (a.tipo === 'fim' && b.tipo === 'fim') return a.livro === b.livro;
   return true;
@@ -181,7 +189,8 @@ export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: In
       if (ancora.tipo === 'texto') {
         const ref = refValida(ancora.ref, indice);
         if (!ref || !Number.isInteger(ancora.versiculo) || ancora.versiculo < 1) return estado;
-        return { ...estado, ref, ancora: { tipo: 'texto', ref, versiculo: ancora.versiculo } };
+        const fatia = ancora.fatia !== undefined && ancora.fatia > 0 ? { fatia: ancora.fatia } : {};
+        return { ...estado, ref, ancora: { tipo: 'texto', ref, versiculo: ancora.versiculo, ...fatia } };
       }
       if (ancora.tipo === 'fim' && capitulosDo(ancora.livro, indice) === null) return estado;
       return { ...estado, ancora };

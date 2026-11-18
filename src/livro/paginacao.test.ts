@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { Livro } from '../biblia/tipos';
-import { blocosDoLivro, paginar, paginaDoVersiculo, primeiroVersiculo, type Bloco, type Pagina } from './paginacao';
+import {
+  alvoDaPagina,
+  blocosDoLivro,
+  paginar,
+  paginaDoVersiculo,
+  primeiroVersiculo,
+  type Bloco,
+  type Pagina,
+} from './paginacao';
 
 /** Livro com a forma de Rute (4 capítulos: 22, 23, 18 e 22 versículos = 85) e texto de mentira. */
 function livroComVersiculos(numero: number, nome: string, versiculosPorCapitulo: number[]): Livro {
@@ -285,5 +293,42 @@ describe('localizar na paginação (FUN-70, FUN-83, FUN-85, FUN-86)', () => {
 
   it('FUN-83: livro sem páginas ou sem blocos devolve a página 0', () => {
     expect(paginaDoVersiculo([{ partes: [] }], [], alvo(1, 1))).toBe(0);
+  });
+});
+
+describe('versículo dividido em fatias (FUN-75, FUN-77, FUN-78, FUN-85)', () => {
+  // Rute 1 de 6 versículos; o v. 3 mede 250 e a página 100 (linha de 20): o nome 40, v1 e v2 em P1; v3 em P2, P3 e P4
+  // (fatias 0, 1 e 2, a última com v4 e v5); v6 em P5.
+  const blocos = blocosDoLivro(livroComVersiculos(8, 'Rute', [6]));
+  const alturas = [40, 20, 20, 250, 20, 20, 20];
+  const paginas = paginar(alturas, 100, 20);
+
+  it('a paginação de partida: cinco páginas, o v. 3 nas páginas 2, 3 e 4', () => {
+    expect(paginas).toHaveLength(5);
+    expect(paginas[1]!.partes.map((p) => p.bloco)).toEqual([3]);
+    expect(paginas[2]!.partes.map((p) => p.bloco)).toEqual([3]);
+    expect(paginas[3]!.partes.map((p) => p.bloco)).toEqual([3, 4, 5]);
+  });
+
+  it('alvoDaPagina: a primeira fatia não leva fatia; as de continuação levam o número da fatia', () => {
+    const alvo = (i: number) => alvoDaPagina(paginas, blocos, i);
+    expect(alvo(0)).toEqual({ ref: { livro: 8, capitulo: 1 }, versiculo: 1, fatia: 0 });
+    expect(alvo(1)).toEqual({ ref: { livro: 8, capitulo: 1 }, versiculo: 3, fatia: 0 });
+    expect(alvo(2)).toEqual({ ref: { livro: 8, capitulo: 1 }, versiculo: 3, fatia: 1 });
+    expect(alvo(3)).toEqual({ ref: { livro: 8, capitulo: 1 }, versiculo: 3, fatia: 2 });
+    expect(alvo(4)).toEqual({ ref: { livro: 8, capitulo: 1 }, versiculo: 6, fatia: 0 });
+  });
+
+  it('paginaDoVersiculo com fatia vai à página da fatia; sem fatia, à primeira', () => {
+    const v3 = { ref: { livro: 8, capitulo: 1 }, versiculo: 3 };
+    expect(paginaDoVersiculo(paginas, blocos, v3)).toBe(1);
+    expect(paginaDoVersiculo(paginas, blocos, { ...v3, fatia: 1 })).toBe(2);
+    expect(paginaDoVersiculo(paginas, blocos, { ...v3, fatia: 2 })).toBe(3);
+  });
+
+  it('FUN-86: fatia que não existe mais depois de repaginar cai na última fatia do versículo', () => {
+    const v3 = { ref: { livro: 8, capitulo: 1 }, versiculo: 3, fatia: 2 };
+    const larga = paginar(alturas, 300, 20); // o v. 3 (250) cabe inteiro: uma só fatia
+    expect(paginaDoVersiculo(larga, blocos, v3)).toBe(paginaDoVersiculo(larga, blocos, { ...v3, fatia: 0 }));
   });
 });
