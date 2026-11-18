@@ -99,6 +99,18 @@ T2 → T3
 T4 → T5 → T6
 ```
 
+### Phase 5: Retrabalho R1 (comum)
+
+```
+T7
+```
+
+### Phase 6: Retrabalho R2 (comum)
+
+```
+T8
+```
+
 ---
 
 ## Task Breakdown
@@ -117,10 +129,10 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 375 × 812 e 899 × 800 (Rute 1, modo livro): uma página; largura = `min(520, innerWidth - 24)` e centrada (meio da caixa a 1 px do meio da tela); altura = `innerHeight - 56 - 150` (±1 px, `livro.module.css:234`); "Anterior" e "Seguinte" centrados como par (meio entre os dois a 1 px do meio da tela)
-- [ ] Em 1024 × 1366 (retrato): as mesmas asserções de página e botões
-- [ ] Em 375 × 812 e 899 × 800: marca começa a 12 px da esquerda e a conta termina a 12 px da direita (±1 px; `BarraTitulo.module.css:19`)
-- [ ] Os testes passam no HEAD, antes de T1 (registre a rodada no commit)
+- [x] Em 375 × 812 e 899 × 800 (Rute 1, modo livro): uma página; largura = `min(520, innerWidth - 24)` e centrada (meio da caixa a 1 px do meio da tela); altura = `innerHeight - 56 - 150` (±1 px, `livro.module.css:234`); "Anterior" e "Seguinte" centrados como par (meio entre os dois a 1 px do meio da tela)
+- [x] Em 1024 × 1366 (retrato): as mesmas asserções de página e botões
+- [x] Em 375 × 812 e 899 × 800: marca começa a 12 px da esquerda e a conta termina a 12 px da direita (±1 px; `BarraTitulo.module.css:19`)
+- [x] Os testes passam no HEAD, antes de T1 (registre a rodada no commit)
 
 **Tests**: e2e, nomes com `FUN-102` (ex.: `FUN-102: em 375 × 812 a página e os botões ficam como hoje`)
 **Gate**: full
@@ -142,14 +154,16 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 1280 × 800, 1920 × 1080 e 900 × 600, na página inicial, no leitor em rolagem, no modo livro e no Sobre: caixa da marca (`MinhaJornada, página inicial`) com `x` = 24 e caixa do botão da conta com `x + width` = `innerWidth - 24` (±1 px)
-- [ ] Os testes de T0 da barra (375 e 899 px) continuam verdes; os de `e2e/entrada.spec.ts` (FUN-64, FUN-65, FUN-43) também
+- [x] Em 1280 × 800, 1920 × 1080 e 900 × 600, na página inicial, no leitor em rolagem, no modo livro e no Sobre: caixa da marca (`MinhaJornada, página inicial`) com `x` = 24 e caixa do botão da conta com `x + width` = `innerWidth - 24` (±1 px)
+- [x] Os testes de T0 da barra (375 e 899 px) continuam verdes; os de `e2e/entrada.spec.ts` (FUN-64, FUN-65, FUN-43) também
 
 **Tests**: e2e, nomes com `FUN-95` (ex.: `FUN-95: em 1920 × 1080 a barra vai de borda a borda em todas as telas`)
 **Gate**: full
 **Commit**: `feat(barra): barra de borda a borda no pc`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/entrada.spec.ts @ 9590326455fc462bef02cea6a265812e8eaa3e14 = verde
 
 ### T2: Páginas que preenchem a área, com a medida do mesmo tamanho (FUN-96, FUN-97, FUN-100)
 
@@ -165,11 +179,11 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Teste de arquivo (`test/arquivos/livro-css.test.ts`, molde de `bloco()` em `src/estilo/estilo.test.ts:15-22`): no bloco da tela larga, `.pagina` e `.medida` usam `var(--largura-pagina-larga)` e `var(--altura-pagina-larga)`; nenhum dos dois tem `aspect-ratio: 3 / 4` nem `170px`
-- [ ] e2e em 900 × 600, 1280 × 800, 1920 × 1080 e 1920 × 1200 (Rute 1): página da esquerda com `x` = 24, página da direita com `x + width` = `innerWidth - 24`, larguras iguais e = `(innerWidth - 48 - vão) / 2` com o vão medido (±1 px)
-- [ ] Nos mesmos tamanhos: topo da página abaixo do fundo da linha do título, fundo da página acima do topo da linha dos botões, a altura da página = topo dos botões − fundo do título − 2 × 16 (±1 px), e `document.documentElement.scrollHeight <= innerHeight` (sem rolagem vertical)
-- [ ] Em 1280 × 800 e 1920 × 1080: a caixa da `.medida` (`[aria-hidden="true"]` com a classe da página, dentro da região do livro) tem a mesma largura e altura da página da esquerda (±1 px)
-- [ ] Vermelho registrado: no HEAD de T1, o teste de largura e o de medida igual à página falham pelo motivo certo (página de 3 × 4 estreita)
+- [x] Teste de arquivo (`test/arquivos/livro-css.test.ts`, molde de `bloco()` em `src/estilo/estilo.test.ts:15-22`): no bloco da tela larga, `.pagina` e `.medida` usam `var(--largura-pagina-larga)` e `var(--altura-pagina-larga)`; nenhum dos dois tem `aspect-ratio: 3 / 4` nem `170px`
+- [x] e2e em 900 × 600, 1280 × 800, 1920 × 1080 e 1920 × 1200 (Rute 1): página da esquerda com `x` = 24, página da direita com `x + width` = `innerWidth - 24`, larguras iguais e = `(innerWidth - 48 - vão) / 2` com o vão medido (±1 px)
+- [x] Nos mesmos tamanhos: topo da página abaixo do fundo da linha do título, fundo da página acima do topo da linha dos botões, a altura da página = topo dos botões − fundo do título − 2 × 16 (±1 px), e `document.documentElement.scrollHeight <= innerHeight` (sem rolagem vertical)
+- [x] Em 1280 × 800 e 1920 × 1080: a caixa da `.medida` (`[aria-hidden="true"]` com a classe da página, dentro da região do livro) tem a mesma largura e altura da página da esquerda (±1 px)
+- [x] Vermelho registrado: no HEAD de T1, o teste de largura e o de medida igual à página falham pelo motivo certo (página de 3 × 4 estreita)
 
 **Tests**: unit (arquivo) e e2e, nomes com `FUN-96`, `FUN-97` e `FUN-100` (ex.: `FUN-100: em 1920 × 1080 a medida tem o tamanho da página mostrada`)
 **Gate**: full
@@ -191,15 +205,17 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e em 1920 × 1080, Rute inteira (até chegar a 1 Samuel): `linhasCortadas` vazio em toda página
-- [ ] Rute aberta em 1280 × 800, janela trocada para 1920 × 1080 (`page.setViewportSize`) e depois de volta: o total de páginas (`páginas X e Y de N`) muda, a medida volta a ter o tamanho da página (±1 px) e `linhasCortadas` fica vazio nas páginas mostradas e ao passar Rute até o fim
-- [ ] Vermelho registrado: com a `.medida` presa à conta antiga (`livro.module.css:268`, revertida numa cópia), o teste de 1920 × 1080 acha versículo escondido
+- [x] Em 1280 × 800 e em 1920 × 1080, Rute inteira (até chegar a 1 Samuel): `linhasCortadas` vazio em toda página
+- [x] Rute aberta em 1280 × 800, janela trocada para 1920 × 1080 (`page.setViewportSize`) e depois de volta: o total de páginas (`páginas X e Y de N`) muda, a medida volta a ter o tamanho da página (±1 px) e `linhasCortadas` fica vazio nas páginas mostradas e ao passar Rute até o fim
+- [x] Vermelho registrado: com a `.medida` presa à conta antiga (`livro.module.css:268`, revertida numa cópia), o teste de 1920 × 1080 acha versículo escondido
 
 **Tests**: e2e, nomes com `FUN-100` (ex.: `FUN-100: de 1280 × 800 para 1920 × 1080 o livro repagina sem versículo escondido`)
 **Gate**: full
 **Commit**: `test(e2e): repaginação do livro ao mudar o tamanho da janela`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/livro.spec.ts @ 8b0fd47be07ed19a62812e863a978fc014f9ab4b = verde
 
 ### T4: Título e posição alinhados às bordas das páginas (FUN-98)
 
@@ -215,8 +231,8 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080 (Rute 1): caixa do botão do título (`button` dentro do `h1`) com `x` = `x` da página da esquerda, e caixa de "páginas X e Y de N" com `x + width` = `x + width` da página da direita (±1 px)
-- [ ] Os testes de T0 (tela estreita e retrato) continuam verdes
+- [x] Em 1280 × 800 e 1920 × 1080 (Rute 1): caixa do botão do título (`button` dentro do `h1`) com `x` = `x` da página da esquerda, e caixa de "páginas X e Y de N" com `x + width` = `x + width` da página da direita (±1 px)
+- [x] Os testes de T0 (tela estreita e retrato) continuam verdes
 
 **Tests**: e2e, nomes com `FUN-98` (ex.: `FUN-98: em 1920 × 1080 o título e a posição alinham com as bordas das páginas`)
 **Gate**: full
@@ -238,8 +254,8 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080, em Rute 1 e na capa: caixa de "Página anterior" com `x` = `x` da página da esquerda e caixa de "Página seguinte" com `x + width` = `x + width` da página da direita (±1 px); as duas com o mesmo `y`, abaixo do fundo das páginas, e o fundo delas a até 16 px do pé da tela (`innerHeight`)
-- [ ] Os testes de T0 (botões centrados na tela estreita e no retrato) continuam verdes
+- [x] Em 1280 × 800 e 1920 × 1080, em Rute 1 e na capa: caixa de "Página anterior" com `x` = `x` da página da esquerda e caixa de "Página seguinte" com `x + width` = `x + width` da página da direita (±1 px); as duas com o mesmo `y`, abaixo do fundo das páginas, e o fundo delas a até 16 px do pé da tela (`innerHeight`)
+- [x] Os testes de T0 (botões centrados na tela estreita e no retrato) continuam verdes
 
 **Tests**: e2e, nomes com `FUN-99` (ex.: `FUN-99: em 1280 × 800 "Anterior" e "Seguinte" ficam nos cantos de baixo`)
 **Gate**: full
@@ -261,9 +277,63 @@ T4 → T5 → T6
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e 1920 × 1080: caixas da capa e do plano pago com largura e altura iguais às das páginas de Rute 1 no mesmo tamanho (±1 px), e o plano pago com `x` = 24 e a capa com `x + width` = `innerWidth - 24`
-- [ ] Os testes de `e2e/capa.spec.ts` (FUN-88, FUN-89, FUN-91) continuam verdes
+- [x] Em 1280 × 800 e 1920 × 1080: caixas da capa e do plano pago com largura e altura iguais às das páginas de Rute 1 no mesmo tamanho (±1 px), e o plano pago com `x` = 24 e a capa com `x + width` = `innerWidth - 24`
+- [x] Os testes de `e2e/capa.spec.ts` (FUN-88, FUN-89, FUN-91) continuam verdes
 
 **Tests**: e2e, nomes com `FUN-101` (ex.: `FUN-101: em 1920 × 1080 a capa e o plano pago têm o tamanho das páginas de texto`)
 **Gate**: full
 **Commit**: `test(e2e): capa e plano pago do tamanho das páginas na tela larga`
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/livro.spec.ts e2e/capa.spec.ts e2e/entrada.spec.ts @ 36e3d70b64d2079ca7574d7d173648b53074a5c6 = verde
+
+---
+
+### T7: Reservar a linha do título na capa e no plano pago (A-01)
+
+**What**: Na tela larga, a capa e o plano pago reservam a altura da linha do título (`--alvo-toque` mais o `gap`), para os botões ficarem a até 16 px do pé da tela, como em Rute, e não saltarem ao passar da capa para Gênesis.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `src/livro/livro.module.css`, `e2e/livro-tela-cheia.spec.ts`
+**Depends on**: None
+**Reuses**: Bloco da tela larga de `src/livro/livro.module.css:272-296` (o mesmo de T2 a T5); sem `style` inline (AD-003) e sem mudar a marcação, se o CSS bastar. Em `e2e/livro-tela-cheia.spec.ts:333`, passar `pertoDoPe` a `true` na capa
+**Requirement**: FUN-99, FUN-101 · Achado: A-01 (validation.md)
+
+**Done when**:
+
+- [x] Em 1280 × 800 e 1920 × 1080, na capa: os botões a até 16 px do pé da tela (±1 px) e com o mesmo `y` que em Rute 1 no mesmo tamanho; as páginas da capa com o mesmo `y` das de Rute 1
+- [x] Os testes de FUN-99 e FUN-101 continuam verdes, e os de T0 (tela estreita e retrato) também
+- [x] Vermelho: no HEAD atual, a asserção do pé na capa falha (76 px)
+
+**Tests**: e2e, nomes com `FUN-99` (ex.: `FUN-99: em 1280 × 800 "Anterior" e "Seguinte" ficam nos cantos de baixo, na capa`)
+**Gate**: full
+**Commit**: `fix(livro): capa e plano pago reservam a linha do título na tela larga`
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/capa.spec.ts @ 7b1a84687b4a89f27f63433ad909c095def28654 = verde
+
+---
+
+### T8: Caracterizar a capa na tela estreita e no retrato (A-02)
+
+**What**: Acrescentar a FUN-102 testes que abrem a capa em 375 × 812, 899 × 800 e 1024 × 1366 e fixam a posição de hoje, para que a reserva da linha do título (T7) nunca vaze da tela larga.
+**Estimativa**: 45 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `e2e/livro-tela-cheia.spec.ts`
+**Depends on**: None
+**Reuses**: `abrirNaCapa` e `capaLivro` do mesmo arquivo; laço de tamanhos de FUN-102 em `e2e/livro-tela-cheia.spec.ts:52-65`
+**Requirement**: FUN-102 · Achado: A-02 (validation.md)
+
+**Done when**:
+
+- [x] Em 375 × 812, 899 × 800 e 1024 × 1366, na capa: topo da página = o de hoje (y = 69, ±1 px) e o fundo dos botões a 77 px do pé da tela (±1 px), valores medidos no HEAD antes da mudança
+- [x] Vermelho: com a regra `.livro__aberto:has(.pagina--capa)` movida para fora do `@media` da tela larga (numa cópia), o teste falha; restaurada, passa
+- [x] Os demais testes de `e2e/livro-tela-cheia.spec.ts` e `e2e/capa.spec.ts` continuam verdes
+
+**Tests**: e2e, nomes com `FUN-102` (ex.: `FUN-102: em 375 × 812 a capa fica como hoje`)
+**Gate**: full
+**Commit**: `test(e2e): caracteriza a capa na tela estreita e no retrato`
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/capa.spec.ts @ 42ecb7105fe4663ba011e7d72b0b70d79cd0debb = verde

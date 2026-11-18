@@ -258,13 +258,48 @@
   width: min(var(--largura-pagina), calc(100vw - 2 * var(--esp-3)));
 }
 /*
- * Tela larga (FUN-73, FUN-75): a página real tem proporção 3/4 limitada pela altura (`max-height`), então a largura dela
- * sai da altura. A medida tem a mesma altura e a largura derivada dela, senão o texto quebra em menos linhas que na
- * página mostrada e versículos ficam escondidos.
+ * Tela larga (FUN-96, FUN-97, FUN-100): as duas páginas preenchem a área, sem proporção fixa. A largura de cada uma é
+ * metade da tela menos as margens (vão 0, as páginas encostam pela lombada); a altura é o que sobra entre a linha do
+ * título e a dos botões. A página e a medida leem as mesmas duas variáveis, então não divergem (senão o texto quebra
+ * em menos linhas que na página mostrada e versículos ficam escondidos). Variáveis locais: nada novo em tokens.css.
+ * Altura: 100vh menos a barra (56 + 1 px de borda), o padding de cima (20) e o de baixo (16) de `.livro`, as linhas
+ * do título e dos botões (`--alvo-toque` cada) e os dois `gap` (`--esp-4`).
  */
 @media (min-width: 900px) and (orientation: landscape) {
+  .livro {
+    --largura-pagina-larga: calc((100vw - 2 * var(--esp-6)) / 2);
+    --altura-pagina-larga: calc(
+      100vh - var(--altura-barra) - 1px - var(--esp-5) - var(--esp-4) - 2 * var(--alvo-toque) - 2 * var(--esp-4)
+    );
+    padding: var(--esp-5) var(--esp-6) var(--esp-4);
+  }
+  .livro__aberto {
+    grid-template-columns: repeat(2, var(--largura-pagina-larga));
+  }
+  /* A capa e o plano pago não têm linha de título: reservam a altura dela, para páginas e botões ficarem onde estão em Rute (A-01). */
+  .livro__aberto:has(.pagina--capa) {
+    margin-top: calc(var(--alvo-toque) + var(--esp-4));
+  }
+  .livro__cabeca {
+    max-width: calc(2 * var(--largura-pagina-larga));
+  }
+  /* O título leva o próprio respiro no botão; o `h1` externo não soma outro, senão o texto não encosta na página. */
+  .livro__cabeca > .titulo-capitulo {
+    padding: 0;
+  }
+  .navegacao-pagina {
+    width: 100%;
+    max-width: calc(2 * var(--largura-pagina-larga));
+    justify-content: space-between;
+  }
+  .pagina {
+    aspect-ratio: auto;
+    height: var(--altura-pagina-larga);
+    max-height: none;
+    min-height: 0;
+  }
   .medida {
-    width: auto;
-    height: min(calc(var(--largura-pagina) * 4 / 3), calc(100vh - var(--altura-barra) - 170px));
+    width: var(--largura-pagina-larga);
+    height: var(--altura-pagina-larga);
   }
 }
