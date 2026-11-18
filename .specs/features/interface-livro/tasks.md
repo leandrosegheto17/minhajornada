@@ -760,9 +760,9 @@ Gate: pnpm typecheck && pnpm test @ d7cef5b22f524855ee915617bde98c532374e109 = v
 
 **Done when**:
 
-- [ ] Casos limite listados antes de codar: âncora `fim` com livro ainda carregando, repaginar com âncora num versículo dividido, troca de larga para estreita na capa
-- [ ] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-86` medida nova mantém Rute 1:12 visível; `FUN-82` fim de Rute vai à última página; `FUN-85` mudar de página despacha a âncora do primeiro versículo; `FUN-89` capa e pago lado a lado na larga; `FUN-90` capa sozinha na estreita
-- [ ] Gate quick passa
+- [x] Casos limite listados antes de codar: âncora `fim` com livro ainda carregando, repaginar com âncora num versículo dividido, troca de larga para estreita na capa
+- [x] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-86` medida nova mantém Rute 1:12 visível; `FUN-82` fim de Rute vai à última página; `FUN-85` mudar de página despacha a âncora do primeiro versículo; `FUN-89` capa e pago lado a lado na larga; `FUN-90` capa sozinha na estreita
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -784,8 +784,8 @@ Gate: pnpm typecheck && pnpm test @ d7cef5b22f524855ee915617bde98c532374e109 = v
 
 **Done when**:
 
-- [ ] Testes em `src/App.test.tsx`: `FUN-67` o botão de formato troca de `TelaLeitor` para `TelaLivro` e volta; `FUN-70`/`FUN-71` o título continua no mesmo capítulo; `FUN-66` sem formato gravado, rolagem
-- [ ] Gate quick passa
+- [x] Testes em `src/App.test.tsx`: `FUN-67` o botão de formato troca de `TelaLeitor` para `TelaLivro` e volta; `FUN-70`/`FUN-71` o título continua no mesmo capítulo; `FUN-66` sem formato gravado, rolagem
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -807,15 +807,17 @@ Gate: pnpm typecheck && pnpm test @ d7cef5b22f524855ee915617bde98c532374e109 = v
 
 **Done when**:
 
-- [ ] E2E com os IDs: `FUN-73` duas páginas lado a lado (mesmo `y`, `x` crescente); `FUN-74` uma página; `FUN-75` todo versículo visível cabe na caixa da página (`boundingBox`); `FUN-76`/`FUN-82` "1 Samuel" no topo da página depois da última de Rute; `FUN-70`/`FUN-71` João 3 → livro → passar páginas → rolagem no capítulo da página; `FUN-83` Salmos 23 pela grade abre a página com Salmos 23:1
-- [ ] E2E rodado sem a mudança (vermelho) e com ela (verde), uma vez ao fim do lote
-- [ ] Gate full passa
+- [x] E2E com os IDs: `FUN-73` duas páginas lado a lado (mesmo `y`, `x` crescente); `FUN-74` uma página; `FUN-75` todo versículo visível cabe na caixa da página (`boundingBox`); `FUN-76`/`FUN-82` "1 Samuel" no topo da página depois da última de Rute; `FUN-70`/`FUN-71` João 3 → livro → passar páginas → rolagem no capítulo da página; `FUN-83` Salmos 23 pela grade abre a página com Salmos 23:1
+- [x] E2E rodado sem a mudança (vermelho) e com ela (verde), uma vez ao fim do lote
+- [x] Gate full passa
 
 **Tests**: e2e
 **Gate**: full
 **Commit**: `test(e2e): jornadas do modo livro`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 4f574b730581f529f5f55b2357e613f5ca75ae4b = verde
 
 ### T30: Ícone SVG
 
