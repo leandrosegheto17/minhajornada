@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import type { Livro, Ref, Tema } from '../biblia/tipos';
 import { baixarFaltantes, carregarLivro, limparAntigos } from '../dados/livros';
-import { gravarLeitura, gravarLetra, gravarTema, lerLeitura, lerLetra, lerTema } from '../dados/preferencias';
+import {
+  gravarLeitura,
+  gravarLetra,
+  gravarTema,
+  lerFormato,
+  lerLeitura,
+  lerLetra,
+  lerTema,
+} from '../dados/preferencias';
 import { ESTADO_INICIAL, reduzirLeitor, type AcaoLeitor, type EstadoLeitor, type Tela } from './leitor';
 
 /** Situação do livro da `Ref` aberta. */
@@ -32,7 +40,13 @@ function reduzir(estado: EstadoLeitor, acao: AcaoLeitor): EstadoLeitor {
 
 /** Estado da primeira renderização: o que está gravado no aparelho (FUN-20 a FUN-23, FUN-30). */
 function estadoGravado(): EstadoLeitor {
-  return reduzirLeitor(ESTADO_INICIAL, { tipo: 'iniciar', ref: lerLeitura(), letra: lerLetra(), tema: lerTema() });
+  return reduzirLeitor(ESTADO_INICIAL, {
+    tipo: 'iniciar',
+    ref: lerLeitura(),
+    letra: lerLetra(),
+    tema: lerTema(),
+    formato: lerFormato(),
+  });
 }
 
 /**

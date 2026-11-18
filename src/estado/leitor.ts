@@ -1,10 +1,19 @@
 import { indice as indiceGerado } from '../biblia/indice';
-import type { Indice, Ref, Tema } from '../biblia/tipos';
+import type { Formato, Indice, Ref, Tema } from '../biblia/tipos';
 import { LETRA_MAX, LETRA_MIN, LETRA_PADRAO } from '../dados/preferencias';
 import { anterior, refValida, seguinte } from '../navegacao/navegacao';
 
+export type { Formato };
+
 /** Telas do app, sem rotas de URL (design: "Telas"). */
-export type Tela = 'livros' | 'capitulos' | 'leitor' | 'sobre';
+export type Tela = 'inicial' | 'livros' | 'capitulos' | 'leitor' | 'sobre' | 'emBreve';
+
+/**
+ * Lugar no formato livro (design: "Estado do lugar no livro"): o primeiro versículo visível, nunca um número de página,
+ * para sobreviver à troca de letra, tela e formato. `fim` é "a última página deste livro", resolvida depois de paginar.
+ */
+export type Ancora =
+  { tipo: 'capa' } | { tipo: 'pago' } | { tipo: 'texto'; ref: Ref; versiculo: number } | { tipo: 'fim'; livro: number };
 
 export interface EstadoLeitor {
   tela: Tela;
@@ -16,10 +25,16 @@ export interface EstadoLeitor {
   letra: number;
   /** Tema escolhido; `null` = o do sistema (FUN-29). */
   tema: Tema | null;
+  /** Formato de leitura (FUN-66); padrão `rolagem`. */
+  formato: Formato;
+  /** Lugar no formato livro; vale quando `formato` é `livro` e a tela é `leitor`. */
+  ancora: Ancora;
 }
 
 export type AcaoLeitor =
-  | { tipo: 'iniciar'; ref: Ref | null; letra: number; tema: Tema | null }
+  | { tipo: 'iniciar'; ref: Ref | null; letra: number; tema: Tema | null; formato: Formato }
+  | { tipo: 'lerBiblia' }
+  | { tipo: 'trocarFormato' }
   | { tipo: 'escolherLivro'; livro: number }
   | { tipo: 'abrirCapitulo'; ref: Ref }
   | { tipo: 'tocarTitulo' }
@@ -31,11 +46,13 @@ export type AcaoLeitor =
   | { tipo: 'irPara'; tela: Tela };
 
 export const ESTADO_INICIAL: EstadoLeitor = {
-  tela: 'livros',
+  tela: 'inicial',
   ref: null,
   livroGrade: null,
   letra: LETRA_PADRAO,
   tema: null,
+  formato: 'rolagem',
+  ancora: { tipo: 'capa' },
 };
 
 function capitulosDo(livro: number, indice: Indice): number | null {
@@ -51,6 +68,20 @@ function abrirNoLeitor(estado: EstadoLeitor, ref: Ref): EstadoLeitor {
   return { ...estado, tela: 'leitor', ref, livroGrade: null };
 }
 
+function comecoDoCapitulo(ref: Ref): Ancora {
+  return { tipo: 'texto', ref, versiculo: 1 };
+}
+
+/** Capítulo onde a âncora cai na rolagem (FUN-71); `null` na capa e no texto do plano pago, que não têm capítulo. */
+function capituloDaAncora(ancora: Ancora, indice: Indice): Ref | null {
+  if (ancora.tipo === 'texto') return refValida(ancora.ref, indice);
+  if (ancora.tipo === 'fim') {
+    const total = capitulosDo(ancora.livro, indice);
+    return total === null ? null : { livro: ancora.livro, capitulo: total };
+  }
+  return null;
+}
+
 /**
  * Reducer puro do leitor. Ação que não muda nada (limite da letra, Gênesis 1 para trás, Apocalipse 22 para a frente,
  * livro ou capítulo fora do índice) devolve o mesmo objeto, para o React não renderizar de novo.
@@ -58,14 +89,39 @@ function abrirNoLeitor(estado: EstadoLeitor, ref: Ref): EstadoLeitor {
 export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: Indice = indiceGerado): EstadoLeitor {
   switch (acao.tipo) {
     case 'iniciar': {
-      // FUN-20: leitura gravada e válida abre o leitor nela; FUN-21/FUN-22: sem ela, a escolha de livro.
-      const ref = refValida(acao.ref, indice);
-      const base: EstadoLeitor = {
+      // FUN-51: o app abre sempre na página inicial; a leitura válida fica em `ref` para o "Ler Bíblia" (FUN-54), e a
+      // inválida não entra (AD-006: quem lê o aparelho já a apagou).
+      return {
         ...ESTADO_INICIAL,
+        ref: refValida(acao.ref, indice),
         letra: letraValida(acao.letra) ? acao.letra : LETRA_PADRAO,
         tema: acao.tema,
+        formato: acao.formato,
       };
-      return ref ? abrirNoLeitor(base, ref) : base;
+    }
+
+    case 'lerBiblia': {
+      // FUN-54: com leitura, abre o capítulo no formato atual (no livro, no versículo 1); FUN-55: sem ela, a escolha
+      // de livro (rolagem) ou a capa (livro).
+      if (estado.ref) {
+        const aberto = abrirNoLeitor(estado, estado.ref);
+        return estado.formato === 'livro' ? { ...aberto, ancora: comecoDoCapitulo(estado.ref) } : aberto;
+      }
+      if (estado.formato === 'livro') return { ...estado, tela: 'leitor', livroGrade: null, ancora: { tipo: 'capa' } };
+      return { ...estado, tela: 'livros', livroGrade: null };
+    }
+
+    case 'trocarFormato': {
+      // FUN-67: fora do leitor só o formato muda; no leitor o capítulo se mantém (FUN-70, FUN-71).
+      if (estado.formato === 'rolagem') {
+        const livro: EstadoLeitor = { ...estado, formato: 'livro' };
+        return estado.tela === 'leitor' && estado.ref ? { ...livro, ancora: comecoDoCapitulo(estado.ref) } : livro;
+      }
+      const rolagem: EstadoLeitor = { ...estado, formato: 'rolagem' };
+      if (estado.tela !== 'leitor') return rolagem;
+      const destino = capituloDaAncora(estado.ancora, indice);
+      if (destino) return abrirNoLeitor(rolagem, destino);
+      return { ...rolagem, tela: 'livros', livroGrade: null };
     }
 
     case 'escolherLivro': {

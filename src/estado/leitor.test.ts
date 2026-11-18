@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { indice } from '../biblia/indice';
-import { ESTADO_INICIAL, reduzirLeitor, type AcaoLeitor, type EstadoLeitor } from './leitor';
+import { ESTADO_INICIAL, reduzirLeitor, type AcaoLeitor, type EstadoLeitor, type Formato } from './leitor';
 
 /** Número do livro pelo nome, no índice real gerado de `.biblia/`. */
 const n = (nome: string) => {
@@ -12,27 +12,48 @@ const n = (nome: string) => {
 const aplicar = (estado: EstadoLeitor, ...acoes: AcaoLeitor[]) =>
   acoes.reduce((atual, acao) => reduzirLeitor(atual, acao, indice), estado);
 
-const iniciar = (ref: EstadoLeitor['ref'], letra = 3): AcaoLeitor => ({ tipo: 'iniciar', ref, letra, tema: null });
+const iniciar = (ref: EstadoLeitor['ref'], letra = 3, formato: Formato = 'rolagem'): AcaoLeitor => ({
+  tipo: 'iniciar',
+  ref,
+  letra,
+  tema: null,
+  formato,
+});
 
-const noLeitor = (livro: string, capitulo: number) => aplicar(ESTADO_INICIAL, iniciar({ livro: n(livro), capitulo }));
+const lerBiblia: AcaoLeitor = { tipo: 'lerBiblia' };
+const trocarFormato: AcaoLeitor = { tipo: 'trocarFormato' };
 
-describe('iniciar (FUN-20, FUN-21, FUN-22)', () => {
-  it('FUN-20: com Ref válida, abre o leitor nela', () => {
+/** Capítulo aberto no leitor, na rolagem: abre a inicial com a leitura gravada e aciona "Ler Bíblia". */
+const noLeitor = (livro: string, capitulo: number) =>
+  aplicar(ESTADO_INICIAL, iniciar({ livro: n(livro), capitulo }), lerBiblia);
+
+/** Capítulo aberto no leitor, no formato livro. */
+const noLivro = (livro: string, capitulo: number) =>
+  aplicar(ESTADO_INICIAL, iniciar({ livro: n(livro), capitulo }, 3, 'livro'), lerBiblia);
+
+describe('iniciar (FUN-51, FUN-66; substitui FUN-20, FUN-21 e FUN-22)', () => {
+  it('FUN-51: com leitura gravada válida, abre a página inicial e guarda a leitura em ref', () => {
     const estado = aplicar(ESTADO_INICIAL, iniciar({ livro: n('Romanos'), capitulo: 8 }));
-    expect(estado.tela).toBe('leitor');
+    expect(estado.tela).toBe('inicial');
     expect(estado.ref).toEqual({ livro: n('Romanos'), capitulo: 8 });
   });
 
-  it('FUN-21: sem Ref, abre a escolha de livro', () => {
+  it('FUN-51: sem leitura gravada, abre a página inicial', () => {
     const estado = aplicar(ESTADO_INICIAL, iniciar(null));
-    expect(estado.tela).toBe('livros');
+    expect(estado.tela).toBe('inicial');
     expect(estado.ref).toBeNull();
   });
 
-  it('FUN-22: Ref fora do índice (Judas 2) abre a escolha de livro', () => {
+  it('FUN-51: leitura fora do índice (Judas 2) abre a página inicial e não guarda a leitura', () => {
     const estado = aplicar(ESTADO_INICIAL, iniciar({ livro: n('Judas'), capitulo: 2 }));
-    expect(estado.tela).toBe('livros');
+    expect(estado.tela).toBe('inicial');
     expect(estado.ref).toBeNull();
+  });
+
+  it('FUN-66: o formato gravado vira estado.formato; o padrão é rolagem', () => {
+    expect(aplicar(ESTADO_INICIAL, iniciar(null, 3, 'livro')).formato).toBe('livro');
+    expect(aplicar(ESTADO_INICIAL, iniciar(null, 3, 'rolagem')).formato).toBe('rolagem');
+    expect(ESTADO_INICIAL.formato).toBe('rolagem');
   });
 
   it('FUN-23: letra inválida na inicialização vira 3; a válida é mantida', () => {
@@ -41,8 +62,116 @@ describe('iniciar (FUN-20, FUN-21, FUN-22)', () => {
   });
 
   it('o tema gravado é mantido; sem tema, segue o sistema (null)', () => {
-    expect(aplicar(ESTADO_INICIAL, { tipo: 'iniciar', ref: null, letra: 3, tema: 'sepia' }).tema).toBe('sepia');
+    expect(
+      aplicar(ESTADO_INICIAL, { tipo: 'iniciar', ref: null, letra: 3, tema: 'sepia', formato: 'rolagem' }).tema,
+    ).toBe('sepia');
     expect(aplicar(ESTADO_INICIAL, iniciar(null)).tema).toBeNull();
+  });
+});
+
+describe('Ler Bíblia (FUN-54, FUN-55, FUN-56)', () => {
+  const romanos8 = { livro: n('Romanos'), capitulo: 8 };
+
+  it('FUN-54: Romanos 8 gravado abre Romanos 8 na rolagem', () => {
+    const estado = aplicar(ESTADO_INICIAL, iniciar(romanos8), lerBiblia);
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual(romanos8);
+  });
+
+  it('FUN-54: Romanos 8 gravado abre a âncora Romanos 8:1 no formato livro', () => {
+    const estado = aplicar(ESTADO_INICIAL, iniciar(romanos8, 3, 'livro'), lerBiblia);
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual(romanos8);
+    expect(estado.ancora).toEqual({ tipo: 'texto', ref: romanos8, versiculo: 1 });
+  });
+
+  it('FUN-55: sem leitura gravada, a rolagem abre a escolha de livro', () => {
+    const estado = aplicar(ESTADO_INICIAL, iniciar(null), lerBiblia);
+    expect(estado.tela).toBe('livros');
+    expect(estado.ref).toBeNull();
+  });
+
+  it('FUN-55: sem leitura gravada, o formato livro abre a capa', () => {
+    const estado = aplicar(ESTADO_INICIAL, iniciar(null, 3, 'livro'), lerBiblia);
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toBeNull();
+    expect(estado.ancora).toEqual({ tipo: 'capa' });
+  });
+
+  it('FUN-56 (AD-006): leitura inválida na abertura age como sem leitura, nos dois formatos', () => {
+    const invalida = { livro: n('Judas'), capitulo: 2 };
+    expect(aplicar(ESTADO_INICIAL, iniciar(invalida), lerBiblia).tela).toBe('livros');
+    const livro = aplicar(ESTADO_INICIAL, iniciar(invalida, 3, 'livro'), lerBiblia);
+    expect(livro.ancora).toEqual({ tipo: 'capa' });
+    expect(livro.ref).toBeNull();
+  });
+
+  it('FUN-54: voltando à inicial e acionando de novo, retoma o mesmo capítulo', () => {
+    const estado = aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'inicial' }, lerBiblia);
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual(romanos8);
+  });
+});
+
+describe('trocar formato (FUN-67, FUN-70, FUN-71)', () => {
+  it('FUN-67: João 3 na rolagem vira o formato livro, com âncora João 3:1', () => {
+    const joao3 = { livro: n('João'), capitulo: 3 };
+    const estado = aplicar(noLeitor('João', 3), trocarFormato);
+    expect(estado.formato).toBe('livro');
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual(joao3);
+    expect(estado.ancora).toEqual({ tipo: 'texto', ref: joao3, versiculo: 1 });
+  });
+
+  it('FUN-70: a âncora Rute 1:12 vira rolagem em Rute 1', () => {
+    const rute1 = { livro: n('Rute'), capitulo: 1 };
+    const noRute = aplicar(noLivro('Rute', 1), {
+      tipo: 'trocarFormato',
+    });
+    expect(noRute.formato).toBe('rolagem');
+    const comAncora: EstadoLeitor = {
+      ...noLivro('Rute', 1),
+      ancora: { tipo: 'texto', ref: rute1, versiculo: 12 },
+    };
+    const estado = aplicar(comAncora, trocarFormato);
+    expect(estado.formato).toBe('rolagem');
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual(rute1);
+  });
+
+  it('FUN-71: com a capa ou o texto do plano pago abertos, voltar à rolagem abre a escolha de livro', () => {
+    const naCapa = aplicar(ESTADO_INICIAL, iniciar(null, 3, 'livro'), lerBiblia);
+    expect(naCapa.ancora).toEqual({ tipo: 'capa' });
+    const daCapa = aplicar(naCapa, trocarFormato);
+    expect(daCapa.formato).toBe('rolagem');
+    expect(daCapa.tela).toBe('livros');
+    const noPago: EstadoLeitor = { ...naCapa, ancora: { tipo: 'pago' } };
+    const doPago = aplicar(noPago, trocarFormato);
+    expect(doPago.formato).toBe('rolagem');
+    expect(doPago.tela).toBe('livros');
+  });
+
+  it('FUN-71: a âncora "fim" de um livro vira rolagem no último capítulo dele', () => {
+    const noFim: EstadoLeitor = { ...noLivro('Rute', 1), ancora: { tipo: 'fim', livro: n('Rute') } };
+    const estado = aplicar(noFim, trocarFormato);
+    expect(estado.tela).toBe('leitor');
+    expect(estado.ref).toEqual({ livro: n('Rute'), capitulo: 4 });
+  });
+
+  it('FUN-67: fora do leitor (inicial, Sobre) só troca o formato, sem mudar a tela nem o capítulo', () => {
+    const naInicial = aplicar(ESTADO_INICIAL, iniciar({ livro: n('Romanos'), capitulo: 8 }));
+    const trocada = aplicar(naInicial, trocarFormato);
+    expect(trocada.formato).toBe('livro');
+    expect(trocada.tela).toBe('inicial');
+    expect(trocada.ref).toEqual(naInicial.ref);
+    const noSobre = aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'sobre' }, trocarFormato);
+    expect(noSobre.formato).toBe('livro');
+    expect(noSobre.tela).toBe('sobre');
+  });
+
+  it('FUN-67: trocar duas vezes volta ao formato original', () => {
+    const estado = aplicar(ESTADO_INICIAL, iniciar(null), trocarFormato, trocarFormato);
+    expect(estado.formato).toBe('rolagem');
   });
 });
 
