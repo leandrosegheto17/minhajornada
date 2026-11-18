@@ -121,6 +121,14 @@ describe('contraste do texto (FUN-32)', () => {
     expect(contraste(lerToken(css, '--cor-texto'), lerToken(css, '--cor-superficie'))).toBeGreaterThanOrEqual(4.5);
   });
 
+  it.each(temas)(
+    'FUN-59: no tema %s, o texto suave sobre a superfície do cartão tem pelo menos 4,5:1',
+    (_tema, corpo) => {
+      const css = corpo();
+      expect(contraste(lerToken(css, '--cor-suave'), lerToken(css, '--cor-superficie'))).toBeGreaterThanOrEqual(4.5);
+    },
+  );
+
   it('a conta de contraste reconhece um par ruim (cinza claro sobre branco)', () => {
     expect(contraste('#CCCCCC', '#FFFFFF')).toBeLessThan(4.5);
     expect(contraste('#000000', '#FFFFFF')).toBeCloseTo(21, 5);
