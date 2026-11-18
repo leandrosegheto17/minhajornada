@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Página inicial · MinhaJornada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../componentes.css">
+</head>
+<!-- Página inicial (FUN-51 a FUN-59). Variações pelo endereço:
+     ?img=a|b|c  imagem de fundo; ?img=nenhuma  imagem que não carregou (cor do tema)
+     ?retomada=1 mostra "Continuar em Romanos 8" (há leitura gravada)
+     #claro | #escuro | #sepia  tema -->
+<body data-formato="rolagem" data-destino-formato="inicial.html">
+<main class="inicial" id="inicial">
+  <img class="inicial__imagem" id="imagem-fundo" src="../imagens/a-biblia-luz.jpg" alt="Bíblia aberta sobre uma pedra, iluminada pela luz da tarde">
+  <section class="cartao-inicial" aria-labelledby="titulo-inicial">
+    <h1 id="titulo-inicial">A Palavra perto de você, onde estiver</h1>
+    <p>Leia a Bíblia no celular ou no computador, sem anúncios, sem cadastro e até sem internet.</p>
+    <div class="cartao-inicial__acoes">
+      <a class="botao-primario" href="leitor.html" id="ler-biblia"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5Zm0 0V19.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>Ler Bíblia</a>
+      <a class="botao-secundario" href="em-breve.html">Criar conta</a>
+    </div>
+    <p class="cartao-inicial__retomada" id="retomada" hidden>Você parou em <strong>Romanos 8</strong>. “Ler Bíblia” continua de lá.</p>
+  </section>
+  <span class="credito-imagem" id="credito">Foto: Aaron Burden / Unsplash</span>
+</main>
+<script src="../barra.js"></script>
+<script>
+(function () {
+  var imagens = {
+    a: { src: '../imagens/a-biblia-luz.jpg', alt: 'Bíblia aberta sobre uma pedra, iluminada pela luz da tarde', credito: 'Foto: Aaron Burden / Unsplash', foco: 'center 80%' },
+    b: { src: '../imagens/b-pessoas-por-do-sol.jpg', alt: 'Silhuetas de pessoas com as mãos erguidas ao pôr do sol', credito: 'Foto: Rajesh Rajput / Unsplash', foco: '35% center' },
+    c: { src: '../imagens/c-bracos-abertos.jpg', alt: 'Silhueta de um homem de braços abertos no alto de um morro, ao entardecer', credito: 'Foto: Jonny Gios / Unsplash', foco: 'center 40%' }
+  };
+  var q = new URLSearchParams(location.search);
+  var escolha = q.get('img') || 'a';
+  var img = document.getElementById('imagem-fundo'), credito = document.getElementById('credito'), area = document.getElementById('inicial');
+  if (escolha === 'nenhuma') {
+    img.remove(); credito.remove(); area.classList.add('inicial--sem-imagem');
+  } else if (imagens[escolha]) {
+    var i = imagens[escolha];
+    img.src = i.src; img.alt = i.alt; credito.textContent = i.credito;
+    area.style.setProperty('--foco-imagem', i.foco);
+  }
+  if (q.get('retomada') === '1') document.getElementById('retomada').hidden = false;
+})();
+</script>
+</body>
+</html>

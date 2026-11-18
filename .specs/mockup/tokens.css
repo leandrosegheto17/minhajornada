@@ -185,3 +185,35 @@
   --quebra-barra-compacta: 480px; /* "Entrar / Criar conta" vira ícone (FUN-64) */
   --quebra-livro-duplo: 900px;    /* duas páginas, se também for mais larga que alta (FUN-73) */
 }
+
+/* Promovido da feature interface-livro em 2026-11-18 (antes tokens-novos.css). */
+
+:root {
+  /* barra de título */
+  --altura-barra: 56px;
+  --largura-barra: 1240px;        /* conteúdo da barra no PC */
+
+  /* página inicial */
+  --largura-cartao-inicial: 400px;
+  --veu-imagem: linear-gradient(90deg, rgba(20, 16, 24, .10) 0%, rgba(20, 16, 24, .25) 45%, rgba(20, 16, 24, .62) 100%);
+  --veu-imagem-celular: linear-gradient(180deg, rgba(20, 16, 24, .10) 0%, rgba(20, 16, 24, .55) 100%);
+
+  /* modo livro */
+  --largura-pagina: 520px;        /* página no PC; no celular, a largura da tela */
+  --respiro-pagina: 40px;         /* margem interna da página no PC */
+  --respiro-pagina-celular: 20px;
+  --sombra-pagina: 0 1px 2px rgba(20, 16, 24, .06), 0 10px 30px rgba(20, 16, 24, .12);
+  --sombra-lombada: inset -14px 0 18px -16px rgba(20, 16, 24, .35);
+  --sombra-lombada-direita: inset 14px 0 18px -16px rgba(20, 16, 24, .35);
+  --texto-titulo-livro: clamp(30px, 4vw, 40px);  /* nome do livro no topo da página */
+  --texto-numero-capitulo: 1.9em;                /* número do capítulo, relativo à letra */
+
+  /* capa */
+  --cor-capa: var(--cor-acento);
+  --cor-capa-texto: var(--cor-acento-texto);
+  --texto-capa: clamp(38px, 5vw, 56px);
+
+  /* quebras (referência; as media queries usam o valor) */
+  --quebra-barra-compacta: 480px; /* "Entrar / Criar conta" vira ícone (FUN-64) */
+  --quebra-livro-duplo: 900px;    /* duas páginas, se também for mais larga que alta (FUN-73) */
+}

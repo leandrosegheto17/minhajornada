@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capa · MinhaJornada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../componentes.css">
+</head>
+<!-- Capa (FUN-88 a FUN-92). Tela larga: texto do plano pago à esquerda, capa à direita.
+     Estreita: a capa primeiro; ?pagina=pago mostra o texto do pago (o "seguinte" da capa).
+     #claro | #escuro | #sepia  tema -->
+<body data-formato="livro" data-destino-formato="leitor.html">
+<main class="livro" aria-label="Leitura em formato de livro">
+  <div class="livro__cabeca">
+    <h1 class="titulo-capitulo"><button class="titulo-capitulo" aria-label="Capa. Escolher um livro">Capa <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h1>
+    <span class="livro__posicao">Antes de Gênesis</span>
+  </div>
+
+  <div class="livro__aberto" id="aberto" data-celular-mostra="direita">
+    <article class="pagina pagina--esquerda pagina--pago" aria-labelledby="titulo-pago">
+      <span class="selo-em-breve">Em breve</span>
+      <h2 id="titulo-pago">Plano de estudo</h2>
+      <p>Para quem estuda, ensina e prega, o MinhaJornada vai ganhar uma área paga:</p>
+      <ul>
+        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19h4L19.5 8.5a2.1 2.1 0 0 0-3-3L6 16l-1 3ZM14.5 7.5l2 2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Anotações ao lado do texto, ligadas ao versículo</span></li>
+        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5V4Zm10 0v4h4M8 12h8M8 16h6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Preparo de pregações e aulas, do esboço ao texto final</span></li>
+        <li><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 18 9.5a4 4 0 0 1-.5 8.5H7Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Tudo guardado na sua conta, no celular e no computador</span></li>
+      </ul>
+      <p>A leitura continua grátis, sem conta e sem anúncios.</p>
+      <a class="botao-primario" href="em-breve.html">Quero saber</a>
+    </article>
+    <article class="pagina pagina--direita pagina--capa" aria-label="Capa">
+      <span class="capa__filete" aria-hidden="true"></span>
+      <div>
+        <h2 class="capa__titulo">Bíblia Sagrada</h2>
+        <p class="capa__traducao">Bíblia Livre</p>
+      </div>
+      <span class="capa__marca">MinhaJornada</span>
+    </article>
+  </div>
+
+  <nav class="navegacao-pagina" aria-label="Páginas">
+    <button class="botao-secundario" aria-label="Página anterior" disabled><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Anterior</button>
+    <a class="botao-secundario" href="livro.html" aria-label="Página seguinte">Seguinte<svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </nav>
+</main>
+<script src="../barra.js"></script>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('pagina') === 'pago') {
+    document.getElementById('aberto').removeAttribute('data-celular-mostra');
+    document.querySelector('.livro__posicao').textContent = 'Plano de estudo';
+    document.querySelector('[aria-label="Página anterior"]').disabled = false;
+  }
+})();
+</script>
+</body>
+</html>

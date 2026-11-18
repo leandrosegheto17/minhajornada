@@ -3,191 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leitor · Salmos 27</title>
+<title>Leitor em rolagem · Romanos 8 · MinhaJornada</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../tokens.css">
-<style>
-*{box-sizing:border-box}
-html,body{margin:0}
-body{background:var(--cor-fundo);color:var(--cor-texto);font-family:var(--fonte-ui);font-size:var(--texto-m);line-height:var(--altura-linha-ui);-webkit-text-size-adjust:100%}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
-:focus-visible{outline:var(--largura-foco) solid var(--cor-acento);outline-offset:2px}
-a{color:var(--cor-acento)}
-.icone{width:var(--icone-m);height:var(--icone-m);flex:none}
-.icone-p{width:var(--icone-p);height:var(--icone-p);flex:none}
-
-/* barra do topo */
-.barra-topo{display:flex;justify-content:space-between;align-items:center;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);max-width:var(--largura-leitura);margin:0 auto}
-.barra-topo--larga{max-width:var(--largura-tela)}
-.marca{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);color:var(--cor-acento);padding-left:var(--esp-2)}
-.grupo-acoes{display:flex;gap:var(--esp-1)}
-
-/* botões */
-.botao-icone{width:var(--alvo-toque);height:var(--alvo-toque);display:inline-grid;place-items:center;border-radius:var(--raio-p);color:var(--cor-suave)}
-.botao-icone:hover{color:var(--cor-texto);background:var(--cor-realce)}
-.botao-icone:disabled{opacity:.4;cursor:default;background:none;color:var(--cor-suave)}
-.botao-primario,.botao-secundario{min-height:var(--alvo-toque);display:inline-flex;align-items:center;justify-content:center;gap:var(--esp-2);padding:0 var(--esp-5);border-radius:var(--raio-total);font-weight:var(--peso-forte)}
-.botao-primario{background:var(--cor-acento);color:var(--cor-acento-texto)}
-.botao-primario:hover{filter:brightness(1.08)}
-.botao-secundario{border:1px solid var(--cor-contorno);color:var(--cor-texto)}
-.botao-secundario:hover{background:var(--cor-realce)}
-.botao-primario:disabled,.botao-secundario:disabled{opacity:.4;cursor:default;filter:none;background-clip:padding-box}
-.botao-voltar{display:inline-flex;align-items:center;gap:var(--esp-1);min-height:var(--alvo-toque);padding:0 var(--esp-3) 0 var(--esp-1);border-radius:var(--raio-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
-.botao-voltar:hover{background:var(--cor-realce);color:var(--cor-texto)}
-
-/* leitor */
-.cabeca-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-4) var(--esp-5) var(--esp-2)}
-.titulo-capitulo{font-family:var(--fonte-titulo);font-size:var(--texto-gg);font-weight:var(--peso-titulo);line-height:1.1;display:inline-flex;align-items:center;gap:var(--esp-2);padding:var(--esp-1) var(--esp-2) var(--esp-1) 0;border-radius:var(--raio-m);text-align:left;margin:0}
-.titulo-capitulo:hover{color:var(--cor-acento)}
-.titulo-capitulo .icone{width:var(--icone-g);height:var(--icone-g);color:var(--cor-suave)}
-.texto-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-6);font-family:var(--fonte-texto);font-size:var(--letra);line-height:var(--altura-linha-texto);touch-action:pan-y}
-.versiculos{list-style:none;margin:0;padding:0}
-.versiculo{display:grid;grid-template-columns:var(--coluna-numero) 1fr;align-items:baseline;margin:0 0 .7em}
-.versiculo-numero{justify-self:start;font-size:.68em;font-weight:var(--peso-forte);color:var(--cor-acento);background:var(--cor-realce);border-radius:var(--raio-total);min-width:1.9em;text-align:center;padding:.1em .4em;font-variant-numeric:tabular-nums}
-.versiculo-texto em{font-style:italic}
-.navegacao-capitulo{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-12);display:grid;grid-template-columns:1fr 1fr;gap:var(--esp-3)}
-.cartao-nav{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);padding:var(--esp-3) var(--esp-4);min-height:var(--altura-cartao-nav);display:flex;flex-direction:column;justify-content:center;gap:2px;text-align:left}
-.cartao-nav--seguinte{text-align:right;align-items:flex-end}
-.cartao-nav:hover{border-color:var(--cor-acento)}
-.cartao-nav small{color:var(--cor-suave);font-size:var(--texto-p)}
-.cartao-nav strong{font-size:var(--texto-g)}
-.cartao-nav:disabled{opacity:.45;cursor:default;border-color:var(--cor-borda)}
-
-/* painel de aparência */
-.painel-aparencia{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-4);display:grid;gap:var(--esp-4);width:min(var(--largura-painel),calc(100vw - 2 * var(--esp-3)))}
-.painel-aparencia h2{font-size:var(--texto-m);margin:0}
-.painel-linha{display:grid;gap:var(--esp-2)}
-.painel-rotulo{font-size:var(--texto-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
-.controle-letra{display:grid;grid-template-columns:var(--alvo-toque) 1fr var(--alvo-toque);align-items:center;border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:2px}
-.controle-letra .botao-icone{border-radius:var(--raio-total);color:var(--cor-texto)}
-.controle-letra output{text-align:center;font-weight:var(--peso-forte)}
-.seletor-tema{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--esp-1);border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:3px}
-.opcao-tema{min-height:calc(var(--alvo-toque) - 4px);border-radius:var(--raio-total);font-weight:var(--peso-forte);color:var(--cor-suave)}
-.opcao-tema[aria-pressed="true"]{background:var(--cor-acento);color:var(--cor-acento-texto)}
-.opcao-tema:not([aria-pressed="true"]):hover{background:var(--cor-realce);color:var(--cor-texto)}
-.ancora-painel{position:relative}
-.ancora-painel .painel-aparencia{position:absolute;right:0;top:calc(100% + var(--esp-2));z-index:2}
-
-/* escolha de livro */
-.tela-escolha{max-width:var(--largura-tela);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
-.titulo-tela{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);margin:var(--esp-2) 0 var(--esp-4);line-height:1.15;text-wrap:balance}
-.grupo-livros{margin:0 0 var(--esp-8)}
-.grupo-livros h2{font-size:var(--texto-p);text-transform:uppercase;letter-spacing:.08em;color:var(--cor-suave);margin:0 0 var(--esp-3);display:flex;gap:var(--esp-2);align-items:baseline}
-.grupo-livros h2 span{font-weight:var(--peso-normal);letter-spacing:0;text-transform:none}
-.lista-livros{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--coluna-livro),1fr));gap:var(--esp-2)}
-.item-livro{width:100%;min-height:var(--alvo-toque);display:flex;align-items:center;justify-content:space-between;gap:var(--esp-2);padding:var(--esp-2) var(--esp-3);border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);text-align:left;font-size:var(--texto-m)}
-.item-livro small{color:var(--cor-suave);font-size:var(--texto-p);font-variant-numeric:tabular-nums}
-.item-livro:hover{border-color:var(--cor-acento)}
-.item-livro[aria-current="true"]{border-color:var(--cor-acento);box-shadow:inset 0 0 0 1px var(--cor-acento)}
-
-/* grade de capítulos */
-.cabeca-grade{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--esp-3);margin:var(--esp-2) 0 var(--esp-4)}
-.cabeca-grade .titulo-tela{margin:0}
-.grade-capitulos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--celula-capitulo),1fr));gap:var(--esp-2)}
-.botao-capitulo{width:100%;aspect-ratio:1;min-height:var(--alvo-toque);display:grid;place-items:center;border-radius:var(--raio-p);background:var(--cor-superficie);border:1px solid var(--cor-borda);font-weight:var(--peso-forte);font-variant-numeric:tabular-nums}
-.botao-capitulo:hover{border-color:var(--cor-acento);color:var(--cor-acento)}
-.botao-capitulo[aria-current="true"]{background:var(--cor-acento);color:var(--cor-acento-texto);border-color:var(--cor-acento)}
-
-/* avisos */
-.aviso{display:flex;gap:var(--esp-3);align-items:flex-start;padding:var(--esp-3) var(--esp-4);border-radius:var(--raio-m);background:var(--cor-aviso-fundo);color:var(--cor-texto)}
-.aviso p{margin:0}
-.aviso--erro{background:var(--cor-erro-fundo);color:var(--cor-erro)}
-.aviso .icone{margin-top:1px}
-.convite-instalacao{position:fixed;left:50%;transform:translateX(-50%);bottom:max(var(--esp-3),env(safe-area-inset-bottom));width:min(var(--largura-aviso),calc(100% - 2 * var(--esp-3)));display:flex;align-items:center;gap:var(--esp-3);background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-3) var(--esp-2) var(--esp-3) var(--esp-4)}
-.convite-instalacao p{margin:0;flex:1;font-size:var(--texto-m)}
-.convite-instalacao--estatico{position:static;transform:none;width:100%;max-width:var(--largura-aviso)}
-
-/* estados */
-.estado{display:grid;justify-items:center;text-align:center;gap:var(--esp-3);padding:var(--esp-8) var(--esp-5);max-width:var(--largura-estado);margin:0 auto}
-.estado .icone{width:var(--icone-gg);height:var(--icone-gg);color:var(--cor-acento)}
-.estado h2{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);margin:0}
-.estado p{margin:0;color:var(--cor-suave)}
-.esqueleto{display:grid;gap:var(--esp-3);max-width:var(--largura-leitura);width:100%}
-.esqueleto span{display:block;height:1em;border-radius:var(--raio-p);background:var(--cor-realce);animation:pulso 1.4s ease-in-out infinite}
-.esqueleto span:nth-child(3n){width:70%} .esqueleto span:nth-child(3n+1){width:92%}
-@keyframes pulso{50%{opacity:.5}}
-@media (prefers-reduced-motion:reduce){.esqueleto span{animation:none}}
-
-/* sobre */
-.texto-sobre{max-width:var(--largura-leitura);margin:0 auto;padding:var(--esp-2) var(--esp-5) var(--esp-12)}
-.texto-sobre h2{font-size:var(--texto-g);margin:var(--esp-6) 0 var(--esp-2)}
-.texto-sobre p{margin:0 0 var(--esp-3);line-height:var(--altura-linha-texto)}
-</style>
+<link rel="stylesheet" href="../componentes.css">
 </head>
-<body>
-<header class="barra-topo">
-  <span class="marca">MinhaJornada</span>
-  <div class="grupo-acoes">
-    <div class="ancora-painel">
-      <button class="botao-icone" data-acao="aparencia" aria-label="Aparência: letra e tema" aria-expanded="false" aria-controls="painel-aparencia"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 8.5 5h1L15 18M5 14h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 18v-5.2a2.4 2.4 0 0 1 4.6-.9M16.5 15.5h4.5V18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <section class="painel-aparencia" id="painel-aparencia" aria-label="Aparência" hidden>
-  <h2>Aparência</h2>
-  <div class="painel-linha">
-    <span class="painel-rotulo" id="rotulo-letra">Tamanho da letra</span>
-    <div class="controle-letra" role="group" aria-labelledby="rotulo-letra">
-      <button class="botao-icone" data-acao="menos" aria-label="Diminuir letra"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
-      <output aria-live="polite">Letra 3 de 5</output>
-      <button class="botao-icone" data-acao="mais" aria-label="Aumentar letra"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
-    </div>
-  </div>
-  <div class="painel-linha">
-    <span class="painel-rotulo" id="rotulo-tema">Tema</span>
-    <div class="seletor-tema" role="group" aria-labelledby="rotulo-tema">
-      <button class="opcao-tema" data-tema="claro" aria-pressed="true">Claro</button>
-      <button class="opcao-tema" data-tema="escuro" aria-pressed="false">Escuro</button>
-      <button class="opcao-tema" data-tema="sepia" aria-pressed="false">Sépia</button>
-    </div>
-  </div>
-</section>
-    </div>
-    <button class="botao-icone" aria-label="Sobre o MinhaJornada"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
-  </div>
-</header>
-<div class="cabeca-capitulo"><h1 class="titulo-capitulo"><button class="titulo-capitulo" aria-label="Salmos 27. Escolher outro capítulo">Salmos 27 <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h1></div>
+<!-- Tela que MUDA: o leitor em rolagem de hoje (.specs/mockup/telas/leitor.html) só troca a barra
+     pela barra de título comum. O resto fica igual. #claro | #escuro | #sepia  tema -->
+<body data-formato="rolagem" data-destino-formato="livro.html">
+<div class="cabeca-capitulo"><h1 class="titulo-capitulo"><button class="titulo-capitulo" aria-label="Romanos 8. Escolher outro capítulo">Romanos 8 <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h1></div>
 <main class="texto-capitulo"><ol class="versiculos">
-<li class="versiculo"><span class="versiculo-numero">1</span><span class="versiculo-texto">Salmo de Davi: O SENHOR é minha luz e minha salvação; a quem temerei? O SENHOR é a força da minha vida; de quem terei medo?</span></li>
-<li class="versiculo"><span class="versiculo-numero">2</span><span class="versiculo-texto">Quando os maus chegaram perto de mim, meus adversários e meus inimigos contra mim, para devorarem minha carne; eles mesmos tropeçaram e caíram.</span></li>
-<li class="versiculo"><span class="versiculo-numero">3</span><span class="versiculo-texto">Ainda que um exército me cercasse, eu não temeria; ainda que uma guerra se levantasse contra mim, nisto mantenho confiança.</span></li>
-<li class="versiculo"><span class="versiculo-numero">4</span><span class="versiculo-texto">Pedi uma coisa ao SENHOR, <em>e</em> a ela buscarei: que eu possa morar na casa do SENHOR todos os dias de minha vida, para ver a beleza do SENHOR, e consultá-lo em seu Templo.</span></li>
-<li class="versiculo"><span class="versiculo-numero">5</span><span class="versiculo-texto">Porque no dia mal ele me esconderá em seu abrigo; ele me encobrirá no oculto de sua tenda; <em>e</em> me porá sobre as rochas.</span></li>
-<li class="versiculo"><span class="versiculo-numero">6</span><span class="versiculo-texto">E minha cabeça será exaltada acima de meus inimigos, que estão ao redor de mim; e eu sacrificarei na tenda dele sacrifícios com alta voz; cantarei e louvarei ao SENHOR.</span></li>
-<li class="versiculo"><span class="versiculo-numero">7</span><span class="versiculo-texto">Ouve, SENHOR, minha voz, <em>quando</em> eu clamo; tem piedade de mim, e responde-me.</span></li>
-<li class="versiculo"><span class="versiculo-numero">8</span><span class="versiculo-texto">Ele diz a ti, meu coração: Buscai a minha face.Eu busco a tua face, SENHOR.</span></li>
-<li class="versiculo"><span class="versiculo-numero">9</span><span class="versiculo-texto">Não escondas de mim a tua face, nem rejeites a teu servo com ira; tu tens sido meu socorro; não me deixes, nem me desampares, ó Deus de minha salvação.</span></li>
-<li class="versiculo"><span class="versiculo-numero">10</span><span class="versiculo-texto">Porque meu pai e minha mãe me abandonaram, mas o SENHOR me recolherá.</span></li>
-<li class="versiculo"><span class="versiculo-numero">11</span><span class="versiculo-texto">Ensina-me, SENHOR, o teu caminho; e guia-me pela via correta, por causa dos meus inimigos.</span></li>
-<li class="versiculo"><span class="versiculo-numero">12</span><span class="versiculo-texto">Não me entregues à vontade dos meus adversários, porque se levantaram contra mim falsas testemunhas, e também ao que sopra violência.</span></li>
-<li class="versiculo"><span class="versiculo-numero">13</span><span class="versiculo-texto">Se eu não tivesse crido que veria a bondade do SENHOR na terra dos viventes, <em>certamente já teria perecido</em> .</span></li>
-<li class="versiculo"><span class="versiculo-numero">14</span><span class="versiculo-texto">Espera no SENHOR, esforça-te, e ele fortalecerá o teu coração; espera pois ao SENHOR.</span></li>
+<li class="versiculo"><span class="versiculo-numero">1</span><span>Portanto, agora, nenhuma condenação há para os que estão em Cristo Jesus, que não andam segundo a carne, mas sim segundo o Espírito.</span></li>
+<li class="versiculo"><span class="versiculo-numero">2</span><span>Porque a Lei do Espírito de vida, em Cristo Jesus, me livrou da lei do pecado e da morte.</span></li>
+<li class="versiculo"><span class="versiculo-numero">3</span><span>Pois o que era impossível para a lei, porque estava enferma pela carne, Deus, ao enviar o seu próprio Filho em semelhança da carne pecadora, e por causa do pecado, condenou o pecado na carne,</span></li>
+<li class="versiculo"><span class="versiculo-numero">4</span><span>para que a exigência da lei se cumprisse em nós, que andamos, não segundo a carne, mas sim, segundo o Espírito.</span></li>
+<li class="versiculo"><span class="versiculo-numero">5</span><span>Pois os que são segundo a carne voltam sua mentalidade para as coisas da carne, mas os que são segundo o Espírito, para as coisas do Espírito.</span></li>
+<li class="versiculo"><span class="versiculo-numero">6</span><span>Pois a mentalidade da carne é morte, mas a mentalidade do Espírito é vida e paz.</span></li>
 </ol></main>
 <nav class="navegacao-capitulo" aria-label="Capítulos">
-  <button class="cartao-nav" aria-label="Capítulo anterior: Salmos 26"><small>Anterior</small><strong>Salmos 26</strong></button>
-  <button class="cartao-nav cartao-nav--seguinte" aria-label="Capítulo seguinte: Salmos 28"><small>Seguinte</small><strong>Salmos 28</strong></button>
+  <button class="cartao-nav" aria-label="Capítulo anterior: Romanos 7"><small>Anterior</small><strong>Romanos 7</strong></button>
+  <button class="cartao-nav cartao-nav--seguinte" aria-label="Capítulo seguinte: Romanos 9"><small>Seguinte</small><strong>Romanos 9</strong></button>
 </nav>
-<script>
-(function () {
-  var r = document.documentElement, temas = ['claro', 'escuro', 'sepia'];
-  var h = location.hash.replace('#', '');
-  if (temas.indexOf(h) >= 0) r.setAttribute('data-tema', h);
-  document.querySelectorAll('.opcao-tema').forEach(function (b) {
-    b.setAttribute('aria-pressed', String(b.dataset.tema === (r.getAttribute('data-tema') || 'claro')));
-    b.addEventListener('click', function () {
-      r.setAttribute('data-tema', b.dataset.tema);
-      document.querySelectorAll('.opcao-tema').forEach(function (o) { o.setAttribute('aria-pressed', String(o.dataset.tema === b.dataset.tema)); });
-    });
-  });
-  var menos = document.querySelector('[data-acao=menos]'), mais = document.querySelector('[data-acao=mais]'), saida = document.querySelector('.controle-letra output');
-  function letra(d) {
-    var n = Math.min(5, Math.max(1, (+r.getAttribute('data-letra') || 3) + d));
-    r.setAttribute('data-letra', n);
-    if (menos) menos.disabled = n === 1;
-    if (mais) mais.disabled = n === 5;
-    if (saida) saida.textContent = 'Letra ' + n + ' de 5';
-  }
-  if (menos) { menos.onclick = function () { letra(-1); }; mais.onclick = function () { letra(1); }; letra(0); }
-  var abre = document.querySelector('[data-acao=aparencia]'), painel = document.getElementById('painel-aparencia');
-  if (abre && painel) abre.onclick = function () { var v = painel.hidden; painel.hidden = !v; abre.setAttribute('aria-expanded', String(v)); };
-})();
-</script>
+<script src="../barra.js"></script>
 </body>
 </html>
