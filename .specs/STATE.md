@@ -110,3 +110,10 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Date**: 2026-11-18
 - **Status**: active
 
+### AD-009
+- **Decision**: As três features pedidas em 2026-11-18 entram no roteiro (`.specs/projeto/roadmap.md`) na ordem `texto-atualizado` → `resumo-livro` → `estudo-livro`.
+- **Reason**: O texto é a maior incerteza (a pesquisa pode concluir que não há ajuste) e resumo e estudo citam versículos, que devem sair do texto final; o resumo cria o armazenamento por livro, a revisão do dono e o ponto de entrada no leitor que o estudo reaproveita.
+- **Trade-off**: Alternativa descartada: resumo primeiro (valor visível antes), com risco de revisar citações depois de mudar o texto.
+- **Scope**: Roteiro do produto, features 3 a 5.
+- **Date**: 2026-11-18
+- **Status**: active
