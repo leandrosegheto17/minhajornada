@@ -247,3 +247,13 @@
     display: none;
   }
 }
+
+/* Contêiner invisível de medida (FUN-75, FUN-86): mesma largura e proporção de uma página, fora do fluxo. */
+.medida {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+  width: min(var(--largura-pagina), calc(100vw - 2 * var(--esp-3)));
+}
