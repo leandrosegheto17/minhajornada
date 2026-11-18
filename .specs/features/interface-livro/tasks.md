@@ -545,8 +545,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/componentes src/telas src/estil
 
 **Done when**:
 
-- [ ] Teste `FUN-58` (projeto `arquivos`): o `globPatterns` inclui `webp`; `inicial.webp` existe, tem mais de 4 KiB (não vira `data:`) e menos de 2 MiB (cabe no pré-cache)
-- [ ] Gate quick passa
+- [x] Teste `FUN-58` (projeto `arquivos`): o `globPatterns` inclui `webp`; `inicial.webp` existe, tem mais de 4 KiB (não vira `data:`) e menos de 2 MiB (cabe no pré-cache)
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -568,8 +568,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/componentes src/telas src/estil
 
 **Done when**:
 
-- [ ] Testes em `src/telas/TelaInicial.test.tsx`: `FUN-52` foto e cartão com os dois botões; `FUN-59` texto alternativo em português; "Ler Bíblia" e "Criar conta" disparam as ações; o erro da foto a esconde e mantém o cartão; crédito "Foto: Aaron Burden / Unsplash"
-- [ ] Gate quick passa
+- [x] Testes em `src/telas/TelaInicial.test.tsx`: `FUN-52` foto e cartão com os dois botões; `FUN-59` texto alternativo em português; "Ler Bíblia" e "Criar conta" disparam as ações; o erro da foto a esconde e mantém o cartão; crédito "Foto: Aaron Burden / Unsplash"
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -591,14 +591,16 @@ Gate: pnpm typecheck && pnpm exec vitest run src/componentes src/telas src/estil
 
 **Done when**:
 
-- [ ] Testes `FUN-57` em `src/telas/TelaEmBreve.test.tsx`: informa que conta e plano não estão disponíveis; "Voltar" e "Ler Bíblia" disparam as ações
-- [ ] Gate quick passa
+- [x] Testes `FUN-57` em `src/telas/TelaEmBreve.test.tsx`: informa que conta e plano não estão disponíveis; "Voltar" e "Ler Bíblia" disparam as ações
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(telas): tela em breve da conta e do plano de estudo`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 6e8a87166874646f98332aa0148ccc9e5323c8f6 = verde
 
 ### T21: Crédito da foto no Sobre
 
