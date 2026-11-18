@@ -689,8 +689,8 @@ Gate: pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ f1e572971e2470e688
 
 **Done when**:
 
-- [ ] Testes em `src/livro/PaginaLivro.test.tsx`: `FUN-76` nome do livro e número do capítulo; versículo com "[que está]" em itálico sem colchetes; texto como texto (`<img onerror>` não vira elemento, FUN-04); `FUN-75` parte recortada desloca pelo `recorte`; rodapé "Rute 1" e número da página
-- [ ] Gate quick passa
+- [x] Testes em `src/livro/PaginaLivro.test.tsx`: `FUN-76` nome do livro e número do capítulo; versículo com "[que está]" em itálico sem colchetes; texto como texto (`<img onerror>` não vira elemento, FUN-04); `FUN-75` parte recortada desloca pelo `recorte`; rodapé "Rute 1" e número da página
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -712,8 +712,8 @@ Gate: pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ f1e572971e2470e688
 
 **Done when**:
 
-- [ ] Testes em `src/livro/CapaLivro.test.tsx`: `FUN-89` textos da capa; `FUN-92` o pago diz que não está disponível e "Quero saber" dispara a ação
-- [ ] Gate quick passa
+- [x] Testes em `src/livro/CapaLivro.test.tsx`: `FUN-89` textos da capa; `FUN-92` o pago diz que não está disponível e "Quero saber" dispara a ação
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
@@ -735,14 +735,16 @@ Gate: pnpm typecheck && pnpm test && pnpm build && pnpm e2e @ f1e572971e2470e688
 
 **Done when**:
 
-- [ ] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-77`/`FUN-78` setas despacham a âncora certa; `FUN-79`/`FUN-80` deslize de 60 px passa e de 59 px não; `FUN-81` seguinte desativado na última de Apocalipse; `FUN-91` anterior desativado na capa; `FUN-84` título "Rute 1" e toque dispara a grade; `FUN-87` mensagem de não baixado e "Escolher outro livro"; carregando enquanto não há medida
-- [ ] Gate quick passa
+- [x] Testes em `src/telas/TelaLivro.test.tsx`: `FUN-77`/`FUN-78` setas despacham a âncora certa; `FUN-79`/`FUN-80` deslize de 60 px passa e de 59 px não; `FUN-81` seguinte desativado na última de Apocalipse; `FUN-91` anterior desativado na capa; `FUN-84` título "Rute 1" e toque dispara a grade; `FUN-87` mensagem de não baixado e "Escolher outro livro"; carregando enquanto não há medida
+- [x] Gate quick passa
 
 **Tests**: unit
 **Gate**: quick
 **Commit**: `feat(telas): folhear o livro com setas e deslize`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ d7cef5b22f524855ee915617bde98c532374e109 = verde
 
 ### T27: Tela do livro: lugar e capa
 
