@@ -15,7 +15,6 @@ function renderizar(extra: Partial<Props> = {}) {
     aoAbrirCapitulo: vi.fn(),
     aoTrocarLivro: vi.fn(),
     aoVoltarALeitura: vi.fn(),
-    aoAbrirSobre: vi.fn(),
     ...extra,
   };
   render(<TelaCapitulos {...props} />);

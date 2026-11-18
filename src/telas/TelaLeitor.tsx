@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react';
+import { useEffect, useRef, type PointerEvent } from 'react';
 import { indice } from '../biblia/indice';
-import type { Ref, Tema } from '../biblia/tipos';
-import { BotaoIcone } from '../componentes/base/Botoes';
+import type { Ref } from '../biblia/tipos';
 import { Estado } from '../componentes/base/Estado';
-import { IconeAbaixo, IconeAparencia, IconeLivro, IconeSemRede, IconeSobre } from '../componentes/icones';
-import { ID_PAINEL_APARENCIA, PainelAparencia } from '../componentes/PainelAparencia';
+import { IconeAbaixo, IconeLivro, IconeSemRede } from '../componentes/icones';
 import { Versiculo } from '../componentes/Versiculo';
 import type { CargaLivro } from '../estado/useLeitor';
 import { classificarDeslize } from '../navegacao/deslize';
 import { anterior, seguinte } from '../navegacao/navegacao';
-import comum from './comum.module.css';
 import estilo from './TelaLeitor.module.css';
 
 interface Props {
@@ -19,11 +16,6 @@ interface Props {
   aoTocarTitulo: () => void;
   aoAnterior: () => void;
   aoSeguinte: () => void;
-  aoAbrirSobre: () => void;
-  letra: number;
-  tema: Tema | null;
-  aoMudarLetra: (delta: 1 | -1) => void;
-  aoEscolherTema: (tema: Tema) => void;
   /** Ação do estado "não baixado" (FUN-36): abre a escolha de livro. */
   aoEscolherOutroLivro: () => void;
 }
@@ -39,8 +31,8 @@ function rotulo(ref: Ref): string {
 }
 
 /**
- * Leitura de um capítulo (.specs/mockup/telas/leitor.html): barra com a marca, "Aa" e Sobre; o título como botão
- * (FUN-49, FUN-50); os versículos (FUN-01); os cartões anterior e seguinte, desativados nos limites (FUN-10 a FUN-15).
+ * Leitura de um capítulo (.specs/mockup/telas/leitor.html): o título como botão (FUN-49, FUN-50); a barra é a
+ * `BarraTitulo` do app (FUN-60); os versículos (FUN-01); os cartões anterior e seguinte, desativados nos limites (FUN-10 a FUN-15).
  */
 export function TelaLeitor({
   referencia,
@@ -48,14 +40,8 @@ export function TelaLeitor({
   aoTocarTitulo,
   aoAnterior,
   aoSeguinte,
-  aoAbrirSobre,
-  letra,
-  tema,
-  aoMudarLetra,
-  aoEscolherTema,
   aoEscolherOutroLivro,
 }: Props) {
-  const [painelAberto, setPainelAberto] = useState(false);
   const { livro, capitulo } = referencia;
 
   // FUN-05: cada capítulo aberto começa do início.
@@ -90,32 +76,6 @@ export function TelaLeitor({
 
   return (
     <>
-      <header className={comum['barra-topo']}>
-        <span className={comum.marca}>MinhaJornada</span>
-        <div className={comum['grupo-acoes']}>
-          <div className={estilo['ancora-painel']}>
-            <BotaoIcone
-              rotulo="Aparência: letra e tema"
-              aria-expanded={painelAberto}
-              aria-controls={ID_PAINEL_APARENCIA}
-              onClick={() => setPainelAberto((aberto) => !aberto)}
-            >
-              <IconeAparencia />
-            </BotaoIcone>
-            <PainelAparencia
-              aberto={painelAberto}
-              letra={letra}
-              tema={tema}
-              aoMudarLetra={aoMudarLetra}
-              aoEscolherTema={aoEscolherTema}
-            />
-          </div>
-          <BotaoIcone rotulo="Sobre o MinhaJornada" onClick={aoAbrirSobre}>
-            <IconeSobre />
-          </BotaoIcone>
-        </div>
-      </header>
-
       <div className={estilo['cabeca-capitulo']}>
         <h1>
           <button

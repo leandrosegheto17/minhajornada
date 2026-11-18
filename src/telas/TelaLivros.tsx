@@ -1,8 +1,6 @@
 import { indice } from '../biblia/indice';
 import type { Ref, Testamento } from '../biblia/tipos';
-import { BotaoIcone, BotaoVoltar } from '../componentes/base/Botoes';
-import { IconeSobre } from '../componentes/icones';
-import comum from './comum.module.css';
+import { BotaoVoltar } from '../componentes/base/Botoes';
 import estilo from './Escolha.module.css';
 
 interface Props {
@@ -10,7 +8,6 @@ interface Props {
   referencia: Ref | null;
   aoEscolherLivro: (livro: number) => void;
   aoVoltarALeitura: () => void;
-  aoAbrirSobre: () => void;
 }
 
 const GRUPOS: { testamento: Testamento; id: string; titulo: string }[] = [
@@ -22,24 +19,17 @@ const GRUPOS: { testamento: Testamento; id: string; titulo: string }[] = [
  * Escolha de livro (FUN-06; .specs/mockup/telas/livros.html): os 66 livros na ordem do índice, em Antigo (39) e Novo
  * Testamento (27), com o número de capítulos; o livro atual fica marcado.
  */
-export function TelaLivros({ referencia, aoEscolherLivro, aoVoltarALeitura, aoAbrirSobre }: Props) {
+export function TelaLivros({ referencia, aoEscolherLivro, aoVoltarALeitura }: Props) {
   const nomeAtual = referencia ? indice.livros[referencia.livro - 1]?.nome : undefined;
 
   return (
     <>
-      <header className={`${comum['barra-topo']} ${comum['barra-topo--larga']}`}>
+      <main className={estilo['tela-escolha']}>
         {referencia && nomeAtual ? (
           <BotaoVoltar onClick={aoVoltarALeitura}>
             {nomeAtual} {referencia.capitulo}
           </BotaoVoltar>
-        ) : (
-          <span className={comum.marca}>MinhaJornada</span>
-        )}
-        <BotaoIcone rotulo="Sobre o MinhaJornada" onClick={aoAbrirSobre}>
-          <IconeSobre />
-        </BotaoIcone>
-      </header>
-      <main className={estilo['tela-escolha']}>
+        ) : null}
         <h1 className={estilo['titulo-tela']}>Escolha o livro</h1>
         {GRUPOS.map((grupo) => {
           const livros = indice.livros.filter((l) => l.testamento === grupo.testamento);

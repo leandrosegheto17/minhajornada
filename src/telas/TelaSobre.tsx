@@ -1,5 +1,4 @@
 import { BotaoVoltar } from '../componentes/base/Botoes';
-import comum from './comum.module.css';
 import escolha from './Escolha.module.css';
 import estilo from './TelaSobre.module.css';
 
@@ -19,10 +18,8 @@ interface Props {
 export function TelaSobre({ rotuloVoltar, aoVoltar }: Props) {
   return (
     <>
-      <header className={comum['barra-topo']}>
-        <BotaoVoltar onClick={aoVoltar}>{rotuloVoltar}</BotaoVoltar>
-      </header>
       <main className={estilo['texto-sobre']}>
+        <BotaoVoltar onClick={aoVoltar}>{rotuloVoltar}</BotaoVoltar>
         <h1 className={escolha['titulo-tela']}>Sobre o MinhaJornada</h1>
 
         <h2>O texto bíblico</h2>

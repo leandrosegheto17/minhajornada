@@ -79,6 +79,25 @@ describe('App', () => {
     expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
   });
 
+  it('FUN-60: a barra de título aparece uma vez só na escolha de livro, na grade, no leitor e no Sobre', async () => {
+    await duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
+    render(<App />);
+    expect(screen.getByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    expect(screen.getAllByRole('banner')).toHaveLength(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Romanos, 16 capítulos' }));
+    expect(screen.getByRole('list', { name: 'Capítulos de Romanos' })).toBeInTheDocument();
+    expect(screen.getAllByRole('banner')).toHaveLength(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Capítulo 8' }));
+    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+    expect(screen.getAllByRole('banner')).toHaveLength(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
+    expect(screen.getByRole('heading', { level: 1, name: 'Sobre o MinhaJornada' })).toBeInTheDocument();
+    expect(screen.getAllByRole('banner')).toHaveLength(1);
+  });
+
   it('FUN-36: livro fora do cache e sem rede mostra o aviso e "Escolher outro livro" volta à escolha', async () => {
     localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
     render(<App />);

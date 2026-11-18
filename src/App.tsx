@@ -1,4 +1,5 @@
 import { indice } from './biblia/indice';
+import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
 import { useLeitor } from './estado/useLeitor';
 import { TelaCapitulos } from './telas/TelaCapitulos';
@@ -7,7 +8,7 @@ import { TelaLivros } from './telas/TelaLivros';
 import { TelaSobre } from './telas/TelaSobre';
 
 /**
- * Composição do app (design: "Telas", sem rotas): a tela do estado do leitor, o painel (dentro do leitor) e o convite
+ * Composição do app (design: "Telas", sem rotas): a barra de título (FUN-60), a tela do estado do leitor e o convite
  * de instalação. Na primeira visita (FUN-21), a própria escolha de livro é o estado vazio.
  * SPEC_DEVIATION: o vazio "Comece a ler" do guia não vira uma tela à parte antes da escolha de livro: a spec (FUN-21)
  * manda mostrar a escolha direto, e a tela intermediária acrescentaria um toque.
@@ -29,11 +30,6 @@ export function App() {
         aoTocarTitulo={leitor.tocarTitulo}
         aoAnterior={leitor.anterior}
         aoSeguinte={leitor.seguinte}
-        aoAbrirSobre={abrirSobre}
-        letra={estado.letra}
-        tema={estado.tema}
-        aoMudarLetra={leitor.mudarLetra}
-        aoEscolherTema={leitor.escolherTema}
         aoEscolherOutroLivro={leitor.trocarLivro}
       />
     );
@@ -45,7 +41,6 @@ export function App() {
         aoAbrirCapitulo={leitor.abrirCapitulo}
         aoTrocarLivro={leitor.trocarLivro}
         aoVoltarALeitura={voltarALeitura}
-        aoAbrirSobre={abrirSobre}
       />
     );
   } else if (estado.tela === 'sobre') {
@@ -62,13 +57,23 @@ export function App() {
         referencia={ref}
         aoEscolherLivro={leitor.escolherLivro}
         aoVoltarALeitura={voltarALeitura}
-        aoAbrirSobre={abrirSobre}
       />
     );
   }
 
   return (
     <>
+      <BarraTitulo
+        formato={estado.formato}
+        letra={estado.letra}
+        tema={estado.tema}
+        aoIrParaInicial={() => leitor.irPara('inicial')}
+        aoTrocarFormato={leitor.trocarFormato}
+        aoAbrirSobre={abrirSobre}
+        aoAbrirConta={leitor.abrirEmBreve}
+        aoMudarLetra={leitor.mudarLetra}
+        aoEscolherTema={leitor.escolherTema}
+      />
       {tela}
       <ConviteInstalacao />
     </>
