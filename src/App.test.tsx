@@ -41,7 +41,8 @@ afterEach(() => {
 });
 
 const gravarRomanos8 = () => localStorage.setItem(CHAVES.leitura, JSON.stringify({ livro: ROMANOS, capitulo: 8 }));
-const guardarRomanos = () => duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
+const guardarRomanos = () =>
+  duble.cache(CACHE_LIVROS).put(indice.livros[ROMANOS - 1]!.arquivo, new Response(romanos()));
 const lerBiblia = () => fireEvent.click(screen.getByRole('button', { name: 'Ler Bíblia' }));
 const titulo1 = (nome: string) => screen.getByRole('heading', { level: 1, name: nome });
 
@@ -171,5 +172,59 @@ describe('App', () => {
     expect(screen.getByRole('list', { name: 'Capítulos de Romanos' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Trocar livro' }));
     expect(titulo1('Escolha o livro')).toBeInTheDocument();
+  });
+
+  const regiaoLivro = () => screen.queryByRole('main', { name: 'Leitura em formato livro' });
+  const paraLivro = () => fireEvent.click(screen.getByRole('button', { name: 'Ler como livro' }));
+  const paraRolagem = () => fireEvent.click(screen.getByRole('button', { name: 'Ler em rolagem' }));
+
+  it('FUN-66: sem formato gravado, o leitor abre em rolagem', async () => {
+    gravarRomanos8();
+    await guardarRomanos();
+    render(<App />);
+    lerBiblia();
+    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+    expect(regiaoLivro()).toBeNull();
+  });
+
+  it('FUN-67, FUN-70, FUN-71: o botão de formato troca a rolagem pelo livro e volta, no mesmo capítulo', async () => {
+    gravarRomanos8();
+    await guardarRomanos();
+    render(<App />);
+    lerBiblia();
+    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+
+    paraLivro();
+    expect(regiaoLivro()).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Romanos 8\./ })).toBeInTheDocument();
+
+    paraRolagem();
+    expect(regiaoLivro()).toBeNull();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 8');
+    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+  });
+
+  it('FUN-67: sem leitura gravada e no formato livro, "Ler Bíblia" abre a capa', () => {
+    localStorage.setItem(CHAVES.formato, JSON.stringify('livro'));
+    render(<App />);
+    lerBiblia();
+    expect(regiaoLivro()).toBeInTheDocument();
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+  });
+
+  it('FUN-71: no livro, passar página muda o lugar e voltar à rolagem abre o capítulo da página', async () => {
+    gravarRomanos8();
+    await guardarRomanos();
+    localStorage.setItem(CHAVES.formato, JSON.stringify('livro'));
+    render(<App />);
+    lerBiblia();
+    expect(await screen.findByRole('button', { name: /^Romanos 8\./ })).toBeInTheDocument();
+    // No jsdom cada versículo é uma página (sem layout): duas páginas à frente já é o capítulo 9.
+    const seguinte = () => fireEvent.click(screen.getByRole('button', { name: 'Página seguinte' }));
+    seguinte();
+    seguinte();
+    expect(screen.getByRole('button', { name: /^Romanos 9\./ })).toBeInTheDocument();
+    paraRolagem();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 9');
   });
 });

@@ -2,6 +2,8 @@ import { indice } from './biblia/indice';
 import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
 import { useLeitor } from './estado/useLeitor';
+import { useTelaLarga } from './livro/useTelaLarga';
+import { TelaLivro } from './telas/TelaLivro';
 import { TelaCapitulos } from './telas/TelaCapitulos';
 import { TelaEmBreve } from './telas/TelaEmBreve';
 import { TelaInicial } from './telas/TelaInicial';
@@ -16,6 +18,7 @@ import { TelaSobre } from './telas/TelaSobre';
  */
 export function App() {
   const leitor = useLeitor();
+  const larga = useTelaLarga();
   const { estado, carga } = leitor;
   const ref = estado.ref;
 
@@ -28,6 +31,20 @@ export function App() {
     tela = <TelaInicial aoLerBiblia={leitor.lerBiblia} aoCriarConta={leitor.abrirEmBreve} />;
   } else if (estado.tela === 'emBreve') {
     tela = <TelaEmBreve aoVoltar={leitor.voltar} aoLerBiblia={leitor.lerBiblia} />;
+  } else if (estado.tela === 'leitor' && estado.formato === 'livro') {
+    // FUN-66, FUN-67: no formato livro a tela é a do livro, com a âncora; a capa e o plano pago não têm livro (carga nula).
+    tela = (
+      <TelaLivro
+        ancora={estado.ancora}
+        carga={carga}
+        larga={larga}
+        letra={estado.letra}
+        aoIrParaAncora={leitor.irParaAncora}
+        aoTocarTitulo={leitor.tocarTitulo}
+        aoEscolherOutroLivro={leitor.trocarLivro}
+        aoQueroSaber={leitor.abrirEmBreve}
+      />
+    );
   } else if (estado.tela === 'leitor' && ref && carga) {
     tela = (
       <TelaLeitor
@@ -58,13 +75,7 @@ export function App() {
       />
     );
   } else {
-    tela = (
-      <TelaLivros
-        referencia={ref}
-        aoEscolherLivro={leitor.escolherLivro}
-        aoVoltarALeitura={voltarALeitura}
-      />
-    );
+    tela = <TelaLivros referencia={ref} aoEscolherLivro={leitor.escolherLivro} aoVoltarALeitura={voltarALeitura} />;
   }
 
   return (
