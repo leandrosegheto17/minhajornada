@@ -106,6 +106,21 @@ describe('useMedidas (FUN-75, FUN-86)', () => {
     expect(medir).toHaveBeenCalledTimes(3);
   });
 
+  it('FUN-86: o contêiner volta depois de sumir (capa): remede com a chave de agora e observa o nó novo', () => {
+    const medir = medirContando();
+    const tela = montar({ blocos: LIVRO_A, chave: 'letra-3', medir });
+    expect(medir).toHaveBeenCalledTimes(1);
+    // Na capa o contêiner some; a letra muda por lá e os blocos (o livro) continuam os mesmos.
+    tela.mudar({ chave: 'letra-5', comContenedor: false });
+    expect(tela.contenedor()).toBeNull();
+    expect(medir).toHaveBeenCalledTimes(1);
+    tela.mudar({ chave: 'letra-5', comContenedor: true });
+    expect(medir).toHaveBeenCalledTimes(2);
+    expect(medir).toHaveBeenLastCalledWith(tela.contenedor());
+    expect(tela.ultimo()?.alturaPagina).toBe(200);
+    expect(ObservadorFalso.todos.at(-1)!.observe).toHaveBeenCalledWith(tela.contenedor());
+  });
+
   it('FUN-86: remede quando o livro (os blocos) muda e nunca entrega medidas do livro anterior', () => {
     const medir = medirContando();
     const tela = montar({ blocos: LIVRO_A, chave: 1, medir });

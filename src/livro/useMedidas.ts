@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Bloco } from './paginacao';
 
 /** Medidas que `paginar` usa: a altura de cada bloco, a da página e a da linha (FUN-75). */
@@ -59,8 +59,10 @@ export function useMedidas(
   blocos: Bloco[],
   chave: string | number,
   medir: Medir = medirNoDom,
-): { ref: RefObject<HTMLDivElement | null>; medidas: Medidas | null } {
-  const ref = useRef<HTMLDivElement | null>(null);
+): { ref: (no: HTMLDivElement | null) => void; medidas: Medidas | null } {
+  // O contêiner some (capa, plano pago, sem rede) e volta: o ref de função guarda o nó em estado, e o efeito refaz a
+  // medida e a observação toda vez que o nó é outro (FUN-86).
+  const [contenedor, ref] = useState<HTMLDivElement | null>(null);
   const [medicao, setMedicao] = useState<Medicao | null>(null);
   const medirAtual = useRef(medir);
 
@@ -70,13 +72,12 @@ export function useMedidas(
 
   // Antes da pintura, para a página nunca aparecer com a medida velha.
   useLayoutEffect(() => {
-    const contenedor = ref.current;
-    if (!contenedor) return;
+    // Nó já solto do documento (o contêiner sumiu neste mesmo quadro): não há o que medir.
+    if (!contenedor?.isConnected) return;
     setMedicao({ blocos, medidas: medir(contenedor) });
-  }, [blocos, chave, medir]);
+  }, [blocos, chave, medir, contenedor]);
 
   useEffect(() => {
-    const contenedor = ref.current;
     if (!contenedor || typeof ResizeObserver === 'undefined') return;
     let ultimo: string | null = null;
     const observador = new ResizeObserver((entradas) => {
@@ -90,7 +91,7 @@ export function useMedidas(
     });
     observador.observe(contenedor);
     return () => observador.disconnect();
-  }, [blocos]);
+  }, [blocos, contenedor]);
 
   return { ref, medidas: medicao && medicao.blocos === blocos ? medicao.medidas : null };
 }
