@@ -328,10 +328,12 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Em 375 × 812, 899 × 800 e 1024 × 1366, na capa: topo da página = o de hoje (y = 69, ±1 px) e o fundo dos botões a 77 px do pé da tela (±1 px), valores medidos no HEAD antes da mudança
-- [ ] Vermelho: com a regra `.livro__aberto:has(.pagina--capa)` movida para fora do `@media` da tela larga (numa cópia), o teste falha; restaurada, passa
-- [ ] Os demais testes de `e2e/livro-tela-cheia.spec.ts` e `e2e/capa.spec.ts` continuam verdes
+- [x] Em 375 × 812, 899 × 800 e 1024 × 1366, na capa: topo da página = o de hoje (y = 69, ±1 px) e o fundo dos botões a 77 px do pé da tela (±1 px), valores medidos no HEAD antes da mudança
+- [x] Vermelho: com a regra `.livro__aberto:has(.pagina--capa)` movida para fora do `@media` da tela larga (numa cópia), o teste falha; restaurada, passa
+- [x] Os demais testes de `e2e/livro-tela-cheia.spec.ts` e `e2e/capa.spec.ts` continuam verdes
 
 **Tests**: e2e, nomes com `FUN-102` (ex.: `FUN-102: em 375 × 812 a capa fica como hoje`)
 **Gate**: full
 **Commit**: `test(e2e): caracteriza a capa na tela estreita e no retrato`
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/capa.spec.ts @ 42ecb7105fe4663ba011e7d72b0b70d79cd0debb = verde
