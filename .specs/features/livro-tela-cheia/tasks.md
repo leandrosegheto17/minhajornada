@@ -167,11 +167,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Teste de arquivo (`test/arquivos/livro-css.test.ts`, molde de `bloco()` em `src/estilo/estilo.test.ts:15-22`): no bloco da tela larga, `.pagina` e `.medida` usam `var(--largura-pagina-larga)` e `var(--altura-pagina-larga)`; nenhum dos dois tem `aspect-ratio: 3 / 4` nem `170px`
-- [ ] e2e em 900 × 600, 1280 × 800, 1920 × 1080 e 1920 × 1200 (Rute 1): página da esquerda com `x` = 24, página da direita com `x + width` = `innerWidth - 24`, larguras iguais e = `(innerWidth - 48 - vão) / 2` com o vão medido (±1 px)
-- [ ] Nos mesmos tamanhos: topo da página abaixo do fundo da linha do título, fundo da página acima do topo da linha dos botões, a altura da página = topo dos botões − fundo do título − 2 × 16 (±1 px), e `document.documentElement.scrollHeight <= innerHeight` (sem rolagem vertical)
-- [ ] Em 1280 × 800 e 1920 × 1080: a caixa da `.medida` (`[aria-hidden="true"]` com a classe da página, dentro da região do livro) tem a mesma largura e altura da página da esquerda (±1 px)
-- [ ] Vermelho registrado: no HEAD de T1, o teste de largura e o de medida igual à página falham pelo motivo certo (página de 3 × 4 estreita)
+- [x] Teste de arquivo (`test/arquivos/livro-css.test.ts`, molde de `bloco()` em `src/estilo/estilo.test.ts:15-22`): no bloco da tela larga, `.pagina` e `.medida` usam `var(--largura-pagina-larga)` e `var(--altura-pagina-larga)`; nenhum dos dois tem `aspect-ratio: 3 / 4` nem `170px`
+- [x] e2e em 900 × 600, 1280 × 800, 1920 × 1080 e 1920 × 1200 (Rute 1): página da esquerda com `x` = 24, página da direita com `x + width` = `innerWidth - 24`, larguras iguais e = `(innerWidth - 48 - vão) / 2` com o vão medido (±1 px)
+- [x] Nos mesmos tamanhos: topo da página abaixo do fundo da linha do título, fundo da página acima do topo da linha dos botões, a altura da página = topo dos botões − fundo do título − 2 × 16 (±1 px), e `document.documentElement.scrollHeight <= innerHeight` (sem rolagem vertical)
+- [x] Em 1280 × 800 e 1920 × 1080: a caixa da `.medida` (`[aria-hidden="true"]` com a classe da página, dentro da região do livro) tem a mesma largura e altura da página da esquerda (±1 px)
+- [x] Vermelho registrado: no HEAD de T1, o teste de largura e o de medida igual à página falham pelo motivo certo (página de 3 × 4 estreita)
 
 **Tests**: unit (arquivo) e e2e, nomes com `FUN-96`, `FUN-97` e `FUN-100` (ex.: `FUN-100: em 1920 × 1080 a medida tem o tamanho da página mostrada`)
 **Gate**: full
@@ -193,15 +193,17 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e
 
 **Done when**:
 
-- [ ] Em 1280 × 800 e em 1920 × 1080, Rute inteira (até chegar a 1 Samuel): `linhasCortadas` vazio em toda página
-- [ ] Rute aberta em 1280 × 800, janela trocada para 1920 × 1080 (`page.setViewportSize`) e depois de volta: o total de páginas (`páginas X e Y de N`) muda, a medida volta a ter o tamanho da página (±1 px) e `linhasCortadas` fica vazio nas páginas mostradas e ao passar Rute até o fim
-- [ ] Vermelho registrado: com a `.medida` presa à conta antiga (`livro.module.css:268`, revertida numa cópia), o teste de 1920 × 1080 acha versículo escondido
+- [x] Em 1280 × 800 e em 1920 × 1080, Rute inteira (até chegar a 1 Samuel): `linhasCortadas` vazio em toda página
+- [x] Rute aberta em 1280 × 800, janela trocada para 1920 × 1080 (`page.setViewportSize`) e depois de volta: o total de páginas (`páginas X e Y de N`) muda, a medida volta a ter o tamanho da página (±1 px) e `linhasCortadas` fica vazio nas páginas mostradas e ao passar Rute até o fim
+- [x] Vermelho registrado: com a `.medida` presa à conta antiga (`livro.module.css:268`, revertida numa cópia), o teste de 1920 × 1080 acha versículo escondido
 
 **Tests**: e2e, nomes com `FUN-100` (ex.: `FUN-100: de 1280 × 800 para 1920 × 1080 o livro repagina sem versículo escondido`)
 **Gate**: full
 **Commit**: `test(e2e): repaginação do livro ao mudar o tamanho da janela`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot && pnpm build && pnpm e2e e2e/livro-tela-cheia.spec.ts e2e/livro.spec.ts @ 8b0fd47be07ed19a62812e863a978fc014f9ab4b = verde
 
 ### T4: Título e posição alinhados às bordas das páginas (FUN-98)
 
