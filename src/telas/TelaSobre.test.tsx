@@ -2,10 +2,18 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { LINK_UNSPLASH, TelaSobre } from './TelaSobre';
 
-function renderizar() {
+function renderizar(totalCorrecoes = 0) {
   const aoVoltar = vi.fn();
-  render(<TelaSobre rotuloVoltar="Salmos 27" aoVoltar={aoVoltar} />);
-  return { aoVoltar, texto: screen.getByRole('main').textContent ?? '' };
+  const aoVerCorrecoes = vi.fn();
+  render(
+    <TelaSobre
+      rotuloVoltar="Salmos 27"
+      aoVoltar={aoVoltar}
+      totalCorrecoes={totalCorrecoes}
+      aoVerCorrecoes={aoVerCorrecoes}
+    />,
+  );
+  return { aoVoltar, aoVerCorrecoes, texto: screen.getByRole('main').textContent ?? '' };
 }
 
 describe('crédito da Bíblia Livre (FUN-38)', () => {
@@ -30,7 +38,7 @@ describe('crédito da Bíblia Livre (FUN-38)', () => {
     );
   });
 
-  it('FUN-38: diz que só o formato foi convertido e que os autores não endossam o app', () => {
+  it('FUN-38: sem correções, diz que só o formato foi convertido e que os autores não endossam o app', () => {
     const { texto } = renderizar();
     expect(texto).toMatch(/Só o formato do arquivo foi convertido/);
     expect(texto).toMatch(/o texto não foi modificado/);
@@ -43,6 +51,37 @@ describe('crédito da Bíblia Livre (FUN-38)', () => {
       expect(link.getAttribute('rel')).toMatch(/noopener/);
       expect(link.getAttribute('rel')).toMatch(/noreferrer/);
     }
+  });
+});
+
+describe('crédito com as correções (FUN-119, FUN-120)', () => {
+  it('FUN-119: com correções, diz "baseado na Bíblia Livre (BLIVRE)" e que houve correções de digitação, ortografia e sentido', () => {
+    const { texto } = renderizar(12);
+    expect(texto).toContain('baseado na Bíblia Livre (BLIVRE)');
+    expect(texto).toContain('Diego Santos, Mario Sérgio e Marco Teles');
+    expect(texto).toContain('fevereiro de 2018');
+    expect(texto).toMatch(/correções de digitação, ortografia e sentido/);
+  });
+
+  it('FUN-119: com correções, os autores não endossam as mudanças nem o app', () => {
+    const { texto } = renderizar(12);
+    expect(texto).toMatch(/não endossam estas mudanças nem este app/);
+    expect(texto).not.toMatch(/o texto não foi modificado/);
+  });
+
+  it('FUN-119: com correções, mantém os links da licença e da fonte e mostra "Ver as correções no texto", que chama a ação', () => {
+    const { aoVerCorrecoes } = renderizar(12);
+    expect(screen.getByRole('link', { name: 'Creative Commons Atribuição 4.0 Brasil' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'site da Bíblia Livre' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Ver as correções no texto' }));
+    expect(aoVerCorrecoes).toHaveBeenCalledTimes(1);
+  });
+
+  it('FUN-120: com 0 correções, mantém o texto de hoje e não mostra o link das correções', () => {
+    const { texto } = renderizar(0);
+    expect(texto).toMatch(/Só o formato do arquivo foi convertido para o app; o texto não foi modificado/);
+    expect(texto).not.toMatch(/baseado na Bíblia Livre/);
+    expect(screen.queryByRole('button', { name: 'Ver as correções no texto' })).toBeNull();
   });
 });
 

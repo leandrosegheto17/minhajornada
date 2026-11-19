@@ -436,6 +436,17 @@ describe('irPara', () => {
     expect(volta.ref).toEqual({ livro: n('Romanos'), capitulo: 8 });
   });
 
+  it('FUN-122: do Sobre abre as correções e volta ao Sobre mantendo capítulo, formato e âncora', () => {
+    const sobre = aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'sobre' });
+    const correcoes = aplicar(sobre, { tipo: 'irPara', tela: 'correcoes' });
+    expect(correcoes.tela).toBe('correcoes');
+    expect(correcoes.ref).toEqual(sobre.ref);
+    expect(correcoes.formato).toBe(sobre.formato);
+    expect(correcoes.ancora).toEqual(sobre.ancora);
+    const volta = aplicar(correcoes, { tipo: 'irPara', tela: 'sobre' });
+    expect(volta).toEqual(sobre);
+  });
+
   it('não abre o leitor sem capítulo', () => {
     const antes = aplicar(ESTADO_INICIAL, iniciar(null));
     expect(reduzirLeitor(antes, { tipo: 'irPara', tela: 'leitor' }, indice)).toBe(antes);

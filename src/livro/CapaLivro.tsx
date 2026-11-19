@@ -1,8 +1,15 @@
+import { resumoCorrecoes } from '../biblia/correcoesAplicadas';
 import { BotaoPrimario } from '../componentes/base/Botoes';
 import estilo from './livro.module.css';
 
-/** Capa do livro (FUN-89; mockup `telas/capa.html`, `.pagina--capa`): "Bíblia Sagrada", a tradução e a marca. */
-export function CapaLivro({ lado = 'unica' }: { lado?: 'direita' | 'unica' }) {
+interface PropsCapa {
+  lado?: 'direita' | 'unica';
+  /** Com correções aplicadas a tradução aparece como "Baseado na Bíblia Livre" (FUN-121); padrão: o resumo do build. */
+  baseado?: boolean;
+}
+
+/** Capa do livro (FUN-89, FUN-121; mockup `telas/capa.html`, `.pagina--capa`): "Bíblia Sagrada", a tradução e a marca. */
+export function CapaLivro({ lado = 'unica', baseado = resumoCorrecoes.total > 0 }: PropsCapa) {
   return (
     <article
       className={`${estilo.pagina} ${estilo['pagina--capa']} ${lado === 'direita' ? estilo['pagina--direita'] : ''}`}
@@ -11,7 +18,7 @@ export function CapaLivro({ lado = 'unica' }: { lado?: 'direita' | 'unica' }) {
       <span className={estilo['capa__filete']} aria-hidden="true" />
       <div>
         <h2 className={estilo['capa__titulo']}>Bíblia Sagrada</h2>
-        <p className={estilo['capa__traducao']}>Bíblia Livre</p>
+        <p className={estilo['capa__traducao']}>{baseado ? 'Baseado na Bíblia Livre' : 'Bíblia Livre'}</p>
       </div>
       <span className={estilo['capa__marca']}>MinhaJornada</span>
     </article>

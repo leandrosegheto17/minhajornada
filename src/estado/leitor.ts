@@ -6,7 +6,7 @@ import { anterior, refValida, seguinte } from '../navegacao/navegacao';
 export type { Formato };
 
 /** Telas do app, sem rotas de URL (design: "Telas"). */
-export type Tela = 'inicial' | 'livros' | 'capitulos' | 'leitor' | 'sobre' | 'emBreve';
+export type Tela = 'inicial' | 'livros' | 'capitulos' | 'leitor' | 'sobre' | 'correcoes' | 'emBreve';
 
 /**
  * Lugar no formato livro (design: "Estado do lugar no livro"): o primeiro versículo visível, nunca um número de página,
