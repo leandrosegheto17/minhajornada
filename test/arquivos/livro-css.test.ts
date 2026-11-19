@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-// Invariante do modo livro na tela larga (FUN-96, FUN-97, FUN-100): a página e o contêiner de medida leem as mesmas
+// Invariante do modo livro na tela larga (FUN-96, FUN-97, FUN-100, FUN-133, FUN-135): a página e o contêiner de medida leem as mesmas
 // variáveis de largura e altura; se divergirem, o texto quebra em menos linhas que na página mostrada e versículos somem.
 
 const css = readFileSync(new URL('../../src/livro/livro.module.css', import.meta.url), 'utf8').replace(
@@ -42,9 +42,19 @@ describe('modo livro, tela larga: página e medida do mesmo tamanho', () => {
     });
   }
 
-  it('FUN-96: a largura da página larga sai da largura da tela menos as margens, dividida por dois', () => {
-    expect(larga).toMatch(/--largura-pagina-larga:\s*calc\(\(100vw - 2 \* var\(--esp-6\)\) \/ 2\)/);
+  it('FUN-135 (antes FUN-96): a largura da página larga sai da largura da tela menos as margens e o vão, dividida por dois', () => {
+    expect(larga).toMatch(/--vao-paginas:\s*var\(--esp-8\)/);
+    expect(larga).toMatch(
+      /--largura-pagina-larga:\s*calc\(\(100vw - 2 \* var\(--esp-6\) - var\(--vao-paginas\)\) \/ 2\)/,
+    );
     expect(bloco(larga, '.livro__aberto')).toContain('var(--largura-pagina-larga)');
     expect(bloco(larga, '.medida')).toContain('var(--largura-pagina-larga)');
+  });
+
+  it('FUN-133: o vão entra como column-gap do par de páginas e na largura da cabeça e da navegação', () => {
+    expect(bloco(larga, '.livro__aberto')).toContain('column-gap: var(--vao-paginas)');
+    for (const seletor of ['.livro__cabeca', '.navegacao-pagina']) {
+      expect(bloco(larga, seletor), seletor).toContain('calc(2 * var(--largura-pagina-larga) + var(--vao-paginas))');
+    }
   });
 });

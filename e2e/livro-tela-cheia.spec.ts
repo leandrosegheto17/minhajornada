@@ -396,3 +396,158 @@ test.describe('capa e plano pago do tamanho das páginas de texto (FUN-101)', ()
     });
   }
 });
+
+// Páginas separadas em tela larga (FUN-133 a FUN-136): vão de 32 px, linha de 1 px no centro, cantos e tela estreita.
+
+const VAO = 32;
+const TEMAS = ['claro', 'escuro', 'sepia'] as const;
+
+/** Cor (rgb) de `--cor-borda` no tema atual, resolvida pelo navegador. */
+const corDaBorda = (page: Page) =>
+  page.evaluate(() => {
+    const sonda = document.createElement('span');
+    sonda.style.color = getComputedStyle(document.documentElement).getPropertyValue('--cor-borda');
+    document.body.append(sonda);
+    const cor = getComputedStyle(sonda).color;
+    sonda.remove();
+    return cor;
+  });
+
+/** A linha do centro do vão: o `::before` do par de páginas (largura, posição, altura e cor usadas). */
+const linhaDoVao = (page: Page) =>
+  page.evaluate(() => {
+    // O par de páginas é o ancestral em grade da primeira página.
+    let alvo: HTMLElement | null | undefined = document.querySelector<HTMLElement>(
+      'main[aria-label="Leitura em formato livro"] article',
+    );
+    while (alvo && getComputedStyle(alvo).display !== 'grid') alvo = alvo.parentElement;
+    if (!alvo) throw new Error('par de páginas não encontrado');
+    const css = getComputedStyle(alvo, '::before');
+    return {
+      content: css.content,
+      width: parseFloat(css.width),
+      left: parseFloat(css.left),
+      top: parseFloat(css.top),
+      height: parseFloat(css.height),
+      cor: css.backgroundColor,
+    };
+  });
+
+test.describe('vão de 32 px entre as páginas (FUN-133, FUN-135)', () => {
+  for (const [largura, altura] of TAMANHOS_LARGOS) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-133: em ${largura} × ${altura} há 32 px entre a página da esquerda e a da direita`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const a = await caixa(paginas(page).nth(0));
+        const b = await caixa(paginas(page).nth(1));
+        expect(Math.abs(b.x - (a.x + a.width) - VAO), `vão ${b.x - (a.x + a.width)}`).toBeLessThanOrEqual(TOL);
+      });
+
+      test(`FUN-135: em ${largura} × ${altura} as duas páginas têm a mesma largura, sem rolagem horizontal`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        const util = await larguraUtil(page);
+        const a = await caixa(paginas(page).nth(0));
+        const b = await caixa(paginas(page).nth(1));
+        expect(Math.abs(a.width - b.width), `larguras ${a.width} e ${b.width}`).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(a.width - (util - 48 - VAO) / 2), `largura ${a.width}`).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(a.x - 24), `esquerda a ${a.x}`).toBeLessThanOrEqual(TOL);
+        expect(Math.abs(b.x + b.width - (util - 24)), `direita a ${util - (b.x + b.width)}`).toBeLessThanOrEqual(TOL);
+        const rolagem = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
+        expect(rolagem[0], 'rolagem horizontal').toBeLessThanOrEqual(rolagem[1] ?? 0);
+      });
+    });
+  }
+});
+
+test.describe('linha no centro do vão (FUN-134)', () => {
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  for (const tema of TEMAS) {
+    test(`FUN-134: no tema ${tema} a linha tem 1 px, a cor da borda, o centro do vão e a altura das páginas`, async ({
+      page,
+    }) => {
+      await abrirNoLivro(page, RUTE, 1);
+      await page.evaluate((t) => (document.documentElement.dataset.tema = t), tema);
+      const a = await caixa(paginas(page).nth(0));
+      const b = await caixa(paginas(page).nth(1));
+      const linha = await linhaDoVao(page);
+      expect(linha.content).not.toBe('none');
+      expect(linha.width).toBe(1);
+      expect(linha.cor).toBe(await corDaBorda(page));
+      // O contêiner do par começa na borda esquerda da primeira página; a linha fica no meio do vão.
+      const centroDoVao = (a.x + a.width + b.x) / 2 - a.x;
+      expect(Math.abs(linha.left + linha.width / 2 - centroDoVao), `linha em ${linha.left}`).toBeLessThanOrEqual(TOL);
+      expect(Math.abs(linha.top), 'topo da linha').toBeLessThanOrEqual(TOL);
+      expect(Math.abs(linha.height - a.height), `altura ${linha.height} × ${a.height}`).toBeLessThanOrEqual(TOL);
+    });
+  }
+});
+
+test.describe('cantos, capa e tela estreita com as páginas separadas (FUN-133, FUN-134, FUN-136)', () => {
+  const raios = (alvo: Locator) =>
+    alvo.evaluate((no) => {
+      const css = getComputedStyle(no);
+      return [
+        css.borderTopLeftRadius,
+        css.borderTopRightRadius,
+        css.borderBottomRightRadius,
+        css.borderBottomLeftRadius,
+      ];
+    });
+
+  test.describe('1280 × 800', () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test('FUN-133: as duas páginas de texto têm os quatro cantos arredondados com --raio-m', async ({ page }) => {
+      await abrirNoLivro(page, RUTE, 1);
+      const raio = await page.evaluate(() =>
+        getComputedStyle(document.documentElement).getPropertyValue('--raio-m').trim(),
+      );
+      expect(raio).not.toBe('');
+      for (const indice of [0, 1]) {
+        expect(await raios(paginas(page).nth(indice)), `página ${indice}`).toEqual([raio, raio, raio, raio]);
+      }
+    });
+
+    test('FUN-133, FUN-134: na capa, o plano pago e a capa ficam a 32 px um do outro, com a linha no meio', async ({
+      page,
+    }) => {
+      await abrirNaCapa(page);
+      const a = await caixa(planoPago(page));
+      const b = await caixa(capaLivro(page));
+      expect(Math.abs(b.x - (a.x + a.width) - VAO), `vão ${b.x - (a.x + a.width)}`).toBeLessThanOrEqual(TOL);
+      const linha = await linhaDoVao(page);
+      expect(linha.content).not.toBe('none');
+      expect(linha.width).toBe(1);
+      expect(Math.abs(linha.left + linha.width / 2 - ((a.x + a.width + b.x) / 2 - a.x))).toBeLessThanOrEqual(TOL);
+    });
+  });
+
+  for (const [largura, altura] of [
+    [390, 844],
+    [1024, 1366],
+  ] as const) {
+    test.describe(`${largura} × ${altura}`, () => {
+      test.use({ viewport: { width: largura, height: altura } });
+
+      test(`FUN-136: em ${largura} × ${altura} há uma página só, sem linha e com os cantos de hoje`, async ({
+        page,
+      }) => {
+        await abrirNoLivro(page, RUTE, 1);
+        await expect(paginas(page)).toHaveCount(1);
+        const linha = await linhaDoVao(page);
+        expect(linha.content, 'sem linha na tela estreita').toBe('none');
+        const raio = await page.evaluate(() =>
+          getComputedStyle(document.documentElement).getPropertyValue('--raio-m').trim(),
+        );
+        expect(await raios(paginas(page).first())).toEqual([raio, raio, raio, raio]);
+      });
+    });
+  }
+});
