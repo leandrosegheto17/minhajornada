@@ -429,10 +429,10 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 821b6e98e28295525727aa4
 
 **Done when**:
 
-- [ ] Para Apocalipse 6:1, o versículo "antes" é o da fonte e o "depois" tem "Cordeiro" no lugar de "Coreiro"
-- [ ] Item que não confere leva o versículo inteiro e `depois` igual ao antes (FUN-105)
-- [ ] `revisao/dados.json` fora do git (gerado)
-- [ ] Gate quick verde
+- [x] Para Apocalipse 6:1, o versículo "antes" é o da fonte e o "depois" tem "Cordeiro" no lugar de "Coreiro"
+- [x] Item que não confere leva o versículo inteiro e `depois` igual ao antes (FUN-105)
+- [x] `revisao/dados.json` fora do git (gerado)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-109`, em `test/arquivos/montar-revisao.test.ts`
 **Gate**: quick
@@ -454,11 +454,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 821b6e98e28295525727aa4
 
 **Done when**:
 
-- [ ] Com um banco dublê: aprovar uma regra, recusar um item de sentido e editar um de digitação gravam três linhas; reabrir a página mostra as três decisões e começa no primeiro pendente (Independent Test da spec, parte da página)
-- [ ] Item de sentido sem fonte mostra "Falta a fonte" e o Aprovar desativado
-- [ ] Nenhum texto entra por `innerHTML` (teste: trecho com `<b>` aparece como texto)
-- [ ] `pnpm revisao:montar` gera o JS; `revisao/index.html` só carrega arquivos relativos
-- [ ] Gate quick verde
+- [x] Com um banco dublê: aprovar uma regra, recusar um item de sentido e editar um de digitação gravam três linhas; reabrir a página mostra as três decisões e começa no primeiro pendente (Independent Test da spec, parte da página)
+- [x] Item de sentido sem fonte mostra "Falta a fonte" e o Aprovar desativado
+- [x] Nenhum texto entra por `innerHTML` (teste: trecho com `<b>` aparece como texto)
+- [x] `pnpm revisao:montar` gera o JS; `revisao/index.html` só carrega arquivos relativos
+- [x] Gate quick verde
 
 **Tests**: unit (jsdom), nomes com o FUN de cada comportamento, em `src/revisao/pagina.test.ts`
 **Gate**: quick
@@ -480,15 +480,17 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 821b6e98e28295525727aa4
 
 **Done when**:
 
-- [ ] Teste de arquivo: o LEIA-ME cita os três comandos (`pnpm revisao:montar`, `node scripts/montar-revisao.ts`, `node scripts/aplicar-decisoes.ts`) e eles existem no repositório
-- [ ] Publicada (se o dono confirmar): link e slug no LEIA-ME e na seção `## Retomada` do `STATE.md`; recusada: registrado "publicação pendente" no LEIA-ME
-- [ ] Gate quick verde
+- [x] Teste de arquivo: o LEIA-ME cita os três comandos (`pnpm revisao:montar`, `node scripts/montar-revisao.ts`, `node scripts/aplicar-decisoes.ts`) e eles existem no repositório
+- [x] Publicada (se o dono confirmar): link e slug no LEIA-ME e na seção `## Retomada` do `STATE.md`; recusada: registrado "publicação pendente" no LEIA-ME
+- [x] Gate quick verde
 
 **Tests**: unit (arquivo), nomes com `FUN-113`, em `test/arquivos/revisao-leia-me.test.ts`
 **Gate**: quick
 **Commit**: `docs(revisao): roteiro de publicação e exportação da revisão`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cdf9d290da5702a89ea = verde
 
 ### T16: Resumo e carga da lista no app (FUN-123, FUN-124)
 
