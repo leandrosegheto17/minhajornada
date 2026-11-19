@@ -662,7 +662,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `test/arquivos/aplicar-decisoes.test.ts`: `node scripts/aplicar-decisoes.ts <decisoes>` em `tmpdir` regrava o arquivo; decisão recusada sai com erro e não grava; falha antes da correção com `ERR_MODULE_NOT_FOUND`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -679,7 +679,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `src/biblia/correcoes/aplicar.test.ts`, nome com `FUN-127`; falha com a ordem de `aplicar.ts:44` invertida
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -696,7 +696,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `src/revisao/mesclar.test.ts`: par sobreposto aprovado é recusado com os dois ids; encostados passam
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -713,7 +713,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `src/revisao/logica.test.ts`: dois itens sobrepostos de confiança alta não entram no bloco
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -730,7 +730,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `test/arquivos/correcoes-pedaco.test.ts`, nome com `FUN-124`; pula com aviso se `dist-e2e` não existe ou roda após `pnpm build:e2e`, conforme o molde do projeto
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -747,7 +747,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `src/revisao/pagina.test.ts`: editar e aprovar, voltar ao item (ou recarregar do banco dublê) mostra o texto editado e reaprovar grava o mesmo `depois`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -764,7 +764,7 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `src/biblia/correcoes/aplicar.test.ts`, nome com `FUN-123`: regra aprovada sem efeito não aparece; total 0 quando nada muda
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -781,9 +781,11 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 **Tests**: `test/arquivos/aplicar-decisoes.test.ts`: a saída lista o item editado e não lista o aprovado sem edição
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = verde
 
 ## Critérios
 
