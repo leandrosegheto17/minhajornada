@@ -72,3 +72,48 @@ export function livrosReais(): Livro[] {
   reais = fontes.map((nome) => converterLivro(readFileSync(join(pasta, nome), 'utf8'), Number(nome.slice(0, 2))));
   return reais;
 }
+
+/**
+ * Caracteres que um "depois" não pode ter (AD-018): controle (C0, DEL, C1, U+2028, U+2029) e formatação (bidi e
+ * largura zero). Um por ramo e nos limites de cada faixa; escritos por código de ponto, nunca como caractere literal.
+ */
+export const CARACTERES_PROIBIDOS: readonly (readonly [nome: string, codigo: number])[] = [
+  ['NUL', 0x00],
+  ['TAB', 0x09],
+  ['LF', 0x0a],
+  ['CR', 0x0d],
+  ['ESC', 0x1b],
+  ['US, o último do C0', 0x1f],
+  ['DEL', 0x7f],
+  ['o primeiro do C1', 0x80],
+  ['NEL', 0x85],
+  ['CSI, o último do C1', 0x9b],
+  ['APC, o último do C1', 0x9f],
+  ['separador de linha U+2028', 0x2028],
+  ['separador de parágrafo U+2029', 0x2029],
+  ['hífen opcional U+00AD', 0x00ad],
+  ['marca de letra árabe U+061C', 0x061c],
+  ['espaço de largura zero U+200B', 0x200b],
+  ['junção sem largura U+200C', 0x200c],
+  ['junção de largura zero U+200D', 0x200d],
+  ['marca esquerda-direita U+200E', 0x200e],
+  ['marca direita-esquerda U+200F', 0x200f],
+  ['embutimento U+202A', 0x202a],
+  ['sobreposição direita-esquerda U+202E', 0x202e],
+  ['junção de palavras U+2060', 0x2060],
+  ['isolamento U+2066', 0x2066],
+  ['fim de isolamento U+2069', 0x2069],
+  ['ordem de bytes U+FEFF', 0xfeff],
+];
+
+/** Vizinhos das faixas proibidas que são texto comum e precisam passar. */
+export const CARACTERES_PERMITIDOS: readonly (readonly [nome: string, codigo: number])[] = [
+  ['espaço', 0x20],
+  ['til, o último ASCII', 0x7e],
+  ['espaço inseparável U+00A0', 0x00a0],
+  ['á', 0xe1],
+  ['U+2027', 0x2027],
+  ['U+202F', 0x202f],
+  ['U+2065', 0x2065],
+  ['zero sobrescrito U+2070', 0x2070],
+];

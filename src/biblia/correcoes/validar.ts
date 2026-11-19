@@ -18,9 +18,17 @@ export function posicaoUnica(texto: string, trecho: string): number | null {
 const ehControle = (codigo: number): boolean =>
   codigo <= 0x1f || (codigo >= 0x7f && codigo <= 0x9f) || codigo === 0x2028 || codigo === 0x2029;
 
-/** O texto não traz caractere de controle: ele esconderia ou forjaria linhas onde o dono confere o "depois". */
+/** Caractere de formatação (categoria Cf): bidi (U+202E, U+2066...), largura zero (U+200B, U+FEFF), hífen opcional. */
+const FORMATACAO = /\p{Cf}/u;
+
+/**
+ * O texto não traz caractere de controle nem de formatação (AD-018): eles escondem ou forjam linhas onde o dono confere
+ * o "depois", ou fazem o site mostrar uma frase diferente da que ele leu.
+ */
 export function semControle(texto: string): boolean {
-  for (let i = 0; i < texto.length; i++) if (ehControle(texto.charCodeAt(i))) return false;
+  for (const caractere of texto) {
+    if (ehControle(caractere.codePointAt(0) ?? 0) || FORMATACAO.test(caractere)) return false;
+  }
   return true;
 }
 

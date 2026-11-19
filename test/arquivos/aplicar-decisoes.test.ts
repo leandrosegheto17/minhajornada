@@ -167,6 +167,16 @@ describe('aplicar-decisoes pelo Node (FUN-113)', () => {
     expect(readFileSync(correcoes, 'utf8')).toBe(antes);
   });
 
+  it('FUN-113: "depois" com sobreposição direita-esquerda (bidi) sai com erro e não grava nada (A-12, AD-018)', () => {
+    const antes = readFileSync(correcoes, 'utf8');
+    const bidi = `${String.fromCodePoint(0x202e)}${String.fromCodePoint(0x2066)}Caim${String.fromCodePoint(0x2069)} matou Abel`;
+    escrever([{ id: 'C-0002', estado: 'aprovada', depois: bidi }]);
+    const r = rodar();
+    expect(r.status).not.toBe(0);
+    expect(r.stderr).toMatch(/C-0002.*controle/);
+    expect(readFileSync(correcoes, 'utf8')).toBe(antes);
+  });
+
   it('FUN-113: item recusado com "depois" salvo não entra na lista dos editados, que só traz o que vai ao site (A-07)', () => {
     escrever([
       { id: 'C-0002', estado: 'recusada', depois: 'estava com o próprio Deus' },

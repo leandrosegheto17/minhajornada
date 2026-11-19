@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { arquivo, item, livrosFicticios } from './apoio-teste';
+import { arquivo, CARACTERES_PERMITIDOS, CARACTERES_PROIBIDOS, item, livrosFicticios } from './apoio-teste';
 import { validarCorrecoes } from './validar';
 
 const livros = livrosFicticios();
@@ -10,15 +10,18 @@ const validar =
 
 // Gênesis 1:2 = 'A terra era sem forma e vazia, e o Coreiro abriu o livro.'
 
-describe('validarCorrecoes: caractere de controle no "depois" (FUN-125, A-10)', () => {
-  it.each([['\r'], ['\n'], ['\u001B'], [' '], ['\u0085']])(
-    'FUN-125: "depois" com o caractere de controle %j recusa, cita o id, em qualquer estado',
-    (controle) => {
-      for (const estado of ['proposta', 'aprovada', 'recusada'] as const) {
-        expect(validar(item({ id: 'C-0001', estado, depois: `Cordeiro${controle}x` }))).toThrow(/C-0001.*controle/);
-      }
-    },
-  );
+describe('validarCorrecoes: caractere proibido no "depois" (FUN-113, AD-018)', () => {
+  it.each(CARACTERES_PROIBIDOS)('FUN-113: "depois" com %s recusa, cita o id, em qualquer estado', (_nome, codigo) => {
+    for (const estado of ['proposta', 'aprovada', 'recusada'] as const) {
+      const depois = `Cordeiro${String.fromCodePoint(codigo)}x`;
+      expect(validar(item({ id: 'C-0001', estado, depois }))).toThrow(/C-0001.*caractere de controle/);
+    }
+  });
+
+  it.each(CARACTERES_PERMITIDOS)('FUN-113: "depois" com %s passa', (_nome, codigo) => {
+    const depois = `Cordeiro${String.fromCodePoint(codigo)}x`;
+    expect(validar(item({ id: 'C-0001', estado: 'proposta', depois }))).not.toThrow();
+  });
 });
 
 describe('validarCorrecoes: arquivo válido', () => {
