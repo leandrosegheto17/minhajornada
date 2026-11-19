@@ -5,7 +5,7 @@
 - **Encaixe**: estende padrão (conversor do build, índice gerado, telas com `BotaoVoltar`); padrão novo só na página de revisão (artifact fora do app) e na validação do arquivo de correções
 - **Arquitetura**: cabe. Nenhuma camada nova no app; o build ganha uma etapa entre o parse e a gravação
 - **Telas**: cria `TelaCorrecoes` ("Correções no texto"); muda `TelaSobre` (crédito e link) e `CapaLivro` (nome da tradução); fora do app, a página de revisão do dono (artifact privado)
-- **Mockup**: pendente
+- **Mockup**: aprovado em 2026-11-18 — só a tela nova `TelaCorrecoes` (`mockup/telas/correcoes.html`, galeria https://claude.ai/artifact/JDQfKJYDSEW9XgcKjUvhWR); Sobre e capa só trocam texto, no visual de hoje (decisão do dono)
 - **Plano aprovado em**: pendente
 
 ## Onde entra

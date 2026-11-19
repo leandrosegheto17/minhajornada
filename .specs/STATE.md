@@ -6,7 +6,8 @@
 - **Item**: `.specs/features/texto-atualizado/`
 - **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
 - **Fase aprovada também**: 2, Reconhecimento (`reconhecimento.md`, inventário em d93f7e8) em 2026-11-18
-- **Próxima fase**: 2b, Mockup (`mockup-visual` em modo módulo: `TelaCorrecoes`, `TelaSobre`, `CapaLivro`) — modelo indicado: opus
+- **Fase aprovada também**: 2b, Mockup (só `TelaCorrecoes`, `mockup/`) em 2026-11-18
+- **Próxima fase**: 3, Plano (`tlc-spec-driven`, Design e Tasks) — modelo indicado: opus
 - **Serviços no ar**: nenhum
 - **Progresso**: Produto: Faltam 3 de 6 features: 50% concluído; texto-atualizado sem tarefas ainda, conferida em 2026-11-18
 - **Combinado na conversa e não registrado em artefato**:

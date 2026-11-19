@@ -1,0 +1,153 @@
+/* interface-livro · componentes.css
+   Componentes do guia do projeto (.specs/mockup/guia.html, copiados de telas/leitor.html) e os novos
+   desta feature. Só var(--...): nenhum valor visual solto. */
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cor-fundo);color:var(--cor-texto);font-family:var(--fonte-ui);font-size:var(--texto-m);line-height:var(--altura-linha-ui);-webkit-text-size-adjust:100%;min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:var(--largura-foco) solid var(--cor-acento);outline-offset:2px}
+a{color:var(--cor-acento)}
+.icone{width:var(--icone-m);height:var(--icone-m);flex:none}
+.icone-p{width:var(--icone-p);height:var(--icone-p);flex:none}
+.so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- botões (guia do projeto) ---------- */
+.botao-icone{width:var(--alvo-toque);height:var(--alvo-toque);display:inline-grid;place-items:center;border-radius:var(--raio-p);color:var(--cor-suave)}
+.botao-icone:hover{color:var(--cor-texto);background:var(--cor-realce)}
+.botao-icone:disabled{opacity:.4;cursor:default;background:none;color:var(--cor-suave)}
+.botao-primario,.botao-secundario{min-height:var(--alvo-toque);display:inline-flex;align-items:center;justify-content:center;gap:var(--esp-2);padding:0 var(--esp-5);border-radius:var(--raio-total);font-weight:var(--peso-forte);text-decoration:none}
+.botao-primario{background:var(--cor-acento);color:var(--cor-acento-texto)}
+.botao-primario:hover{filter:brightness(1.08)}
+.botao-secundario{border:1px solid var(--cor-contorno);color:var(--cor-texto)}
+.botao-secundario:hover{background:var(--cor-realce)}
+.botao-primario:disabled,.botao-secundario:disabled{opacity:.4;cursor:default;filter:none}
+.botao-voltar{display:inline-flex;align-items:center;gap:var(--esp-1);min-height:var(--alvo-toque);padding:0 var(--esp-3) 0 var(--esp-1);border-radius:var(--raio-p);color:var(--cor-suave);font-weight:var(--peso-forte);text-decoration:none}
+.botao-voltar:hover{background:var(--cor-realce);color:var(--cor-texto)}
+
+/* ---------- barra de título (NOVO, FUN-60 a FUN-65) ---------- */
+.barra-titulo{position:sticky;top:0;z-index:3;background:var(--cor-fundo);border-bottom:1px solid var(--cor-borda)}
+.barra-titulo__conteudo{display:flex;align-items:center;justify-content:space-between;gap:var(--esp-2);min-height:var(--altura-barra);max-width:var(--largura-barra);margin:0 auto;padding:var(--esp-1) var(--esp-3)}
+.marca{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);color:var(--cor-acento);text-decoration:none;min-height:var(--alvo-toque);display:inline-flex;align-items:center;padding:0 var(--esp-2);border-radius:var(--raio-p)}
+.marca:hover{background:var(--cor-realce)}
+.grupo-acoes{display:flex;align-items:center;gap:var(--esp-1)}
+.botao-formato{min-height:var(--alvo-toque);display:inline-flex;align-items:center;gap:var(--esp-2);padding:0 var(--esp-3);border-radius:var(--raio-total);color:var(--cor-suave);font-weight:var(--peso-forte);font-size:var(--texto-p);text-decoration:none}
+.botao-formato:hover{background:var(--cor-realce);color:var(--cor-texto)}
+.botao-conta{min-height:var(--alvo-toque);display:inline-flex;align-items:center;gap:var(--esp-2);padding:0 var(--esp-4);margin-left:var(--esp-1);border-radius:var(--raio-total);border:1px solid var(--cor-contorno);font-weight:var(--peso-forte);font-size:var(--texto-p);color:var(--cor-texto);text-decoration:none;white-space:nowrap}
+.botao-conta:hover{background:var(--cor-realce)}
+@media (max-width:639px){.botao-formato .rotulo-formato{display:none}.botao-formato{width:var(--alvo-toque);padding:0;justify-content:center}}
+@media (max-width:479px){.botao-conta{width:var(--alvo-toque);padding:0;justify-content:center;margin-left:0;border-color:transparent;color:var(--cor-suave)}.botao-conta .rotulo-conta{display:none}.marca{font-size:var(--texto-m);padding:0 var(--esp-1)}.barra-titulo__conteudo{padding:var(--esp-1) var(--esp-2)}.grupo-acoes{gap:0}}
+
+/* painel de aparência (guia do projeto) */
+.ancora-painel{position:relative}
+.painel-aparencia{position:absolute;right:0;top:calc(100% + var(--esp-2));z-index:4;background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-4);display:grid;gap:var(--esp-4);width:min(var(--largura-painel),calc(100vw - 2 * var(--esp-3)))}
+.painel-aparencia[hidden]{display:none}
+.painel-aparencia h2{font-size:var(--texto-m);margin:0}
+.painel-linha{display:grid;gap:var(--esp-2)}
+.painel-rotulo{font-size:var(--texto-p);color:var(--cor-suave);font-weight:var(--peso-forte)}
+.controle-letra{display:grid;grid-template-columns:var(--alvo-toque) 1fr var(--alvo-toque);align-items:center;border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:2px}
+.controle-letra .botao-icone{border-radius:var(--raio-total);color:var(--cor-texto)}
+.controle-letra output{text-align:center;font-weight:var(--peso-forte)}
+.seletor-tema{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--esp-1);border:1px solid var(--cor-contorno);border-radius:var(--raio-total);padding:3px}
+.opcao-tema{min-height:calc(var(--alvo-toque) - 4px);border-radius:var(--raio-total);font-weight:var(--peso-forte);color:var(--cor-suave)}
+.opcao-tema[aria-pressed="true"]{background:var(--cor-acento);color:var(--cor-acento-texto)}
+
+/* ---------- página inicial (NOVO, FUN-51 a FUN-59) ---------- */
+.inicial{position:relative;flex:1;display:grid;align-items:center;justify-items:end;padding:var(--esp-8) clamp(var(--esp-5),6vw,var(--esp-12));min-height:calc(100vh - var(--altura-barra));background-color:var(--cor-realce);overflow:hidden}
+.inicial__imagem{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--foco-imagem,center)}
+.inicial::after{content:"";position:absolute;inset:0;background:var(--veu-imagem);pointer-events:none}
+.inicial--sem-imagem::after{display:none}
+.cartao-inicial{position:relative;z-index:1;width:min(var(--largura-cartao-inicial),100%);background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);box-shadow:var(--sombra-2);padding:var(--esp-8) var(--esp-6);display:grid;gap:var(--esp-4)}
+.cartao-inicial h1{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);line-height:1.15;margin:0;text-wrap:balance}
+.cartao-inicial p{margin:0;color:var(--cor-suave);line-height:var(--altura-linha-texto)}
+.cartao-inicial__acoes{display:grid;gap:var(--esp-3);margin-top:var(--esp-2)}
+.cartao-inicial__acoes > *{width:100%}
+.cartao-inicial__retomada{font-size:var(--texto-p);color:var(--cor-suave)}
+.cartao-inicial__retomada strong{color:var(--cor-texto)}
+.credito-imagem{position:absolute;left:var(--esp-3);bottom:var(--esp-3);z-index:1;font-size:var(--texto-p);background:var(--cor-superficie);color:var(--cor-suave);border-radius:var(--raio-total);padding:var(--esp-1) var(--esp-3)}
+@media (max-width:639px){
+  .inicial{justify-items:center;align-items:end;padding:var(--esp-5) var(--esp-3) var(--esp-12)}
+  .inicial::after{background:var(--veu-imagem-celular)}
+  .cartao-inicial{padding:var(--esp-6) var(--esp-5)}
+}
+
+/* ---------- tela "em breve" e estados (guia do projeto) ---------- */
+.estado{display:grid;justify-items:center;text-align:center;gap:var(--esp-3);padding:var(--esp-8) var(--esp-5);max-width:var(--largura-estado);margin:0 auto}
+.estado .icone{width:var(--icone-gg);height:var(--icone-gg);color:var(--cor-acento)}
+.estado h1,.estado h2{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g);margin:0}
+.estado p{margin:0;color:var(--cor-suave);line-height:var(--altura-linha-texto)}
+.estado ul{margin:0;padding:0 0 0 var(--esp-5);text-align:left;color:var(--cor-texto);line-height:var(--altura-linha-texto)}
+.tela-estado{flex:1;display:grid;align-content:center;padding:var(--esp-8) var(--esp-3)}
+.tela-estado .botao-voltar{justify-self:start;max-width:var(--largura-estado);width:100%;margin:0 auto}
+.esqueleto{display:grid;gap:var(--esp-3);width:100%}
+.esqueleto span{display:block;height:1em;border-radius:var(--raio-p);background:var(--cor-realce);animation:pulso 1.4s ease-in-out infinite}
+.esqueleto span:nth-child(3n){width:70%} .esqueleto span:nth-child(3n+1){width:92%}
+@keyframes pulso{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.esqueleto span{animation:none}}
+.aviso{display:flex;gap:var(--esp-3);align-items:flex-start;padding:var(--esp-3) var(--esp-4);border-radius:var(--raio-m);background:var(--cor-aviso-fundo);color:var(--cor-texto)}
+.aviso p{margin:0}
+.aviso--erro{background:var(--cor-erro-fundo);color:var(--cor-erro)}
+
+/* ---------- modo livro (NOVO, FUN-73 a FUN-87) ---------- */
+.livro{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--esp-4);padding:var(--esp-5) var(--esp-3) var(--esp-4);background:var(--cor-superficie)}
+.livro__cabeca{width:100%;max-width:calc(2 * var(--largura-pagina));display:flex;align-items:center;justify-content:space-between;gap:var(--esp-3)}
+.titulo-capitulo{font-family:var(--fonte-titulo);font-size:var(--texto-g);font-weight:var(--peso-titulo);line-height:1.1;display:inline-flex;align-items:center;gap:var(--esp-1);min-height:var(--alvo-toque);padding:0 var(--esp-2);border-radius:var(--raio-p);margin:0}
+.titulo-capitulo:hover{color:var(--cor-acento);background:var(--cor-realce)}
+.titulo-capitulo .icone{color:var(--cor-suave)}
+.livro__posicao{font-size:var(--texto-p);color:var(--cor-suave);font-variant-numeric:tabular-nums}
+.livro__aberto{display:grid;grid-template-columns:repeat(2,minmax(0,var(--largura-pagina)));justify-content:center;width:100%;touch-action:pan-y}
+.pagina{background:var(--cor-fundo);box-shadow:var(--sombra-pagina);padding:var(--respiro-pagina);aspect-ratio:3 / 4;max-height:calc(100vh - var(--altura-barra) - 170px);min-height:420px;overflow:hidden;display:flex;flex-direction:column;font-family:var(--fonte-texto);font-size:var(--letra);line-height:var(--altura-linha-texto)}
+.pagina--esquerda{border-radius:var(--raio-m) 0 0 var(--raio-m);box-shadow:var(--sombra-pagina),var(--sombra-lombada)}
+.pagina--direita{border-radius:0 var(--raio-m) var(--raio-m) 0;box-shadow:var(--sombra-pagina),var(--sombra-lombada-direita)}
+.pagina__texto{flex:1;overflow:hidden}
+.pagina__rodape{display:flex;justify-content:space-between;font-family:var(--fonte-ui);font-size:var(--texto-p);color:var(--cor-suave);padding-top:var(--esp-3);font-variant-numeric:tabular-nums}
+.pagina__livro{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-livro);text-align:center;margin:0 0 var(--esp-4);line-height:1.1}
+.pagina p{margin:0 0 .35em;text-align:left;hyphens:auto}
+.pagina--pago p{hyphens:manual}
+.numero-capitulo{float:left;font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-numero-capitulo);line-height:.95;color:var(--cor-acento);margin:.05em var(--esp-2) 0 0}
+.numero-versiculo{font-size:.62em;font-weight:var(--peso-forte);color:var(--cor-acento);vertical-align:.45em;margin-right:.2em;font-variant-numeric:tabular-nums}
+.pagina em{font-style:italic}
+.navegacao-pagina{display:flex;align-items:center;justify-content:center;gap:var(--esp-4)}
+.navegacao-pagina .botao-secundario{min-width:140px}
+
+/* capa (NOVO, FUN-88 a FUN-92) */
+.pagina--pago{hyphens:manual;justify-content:center;gap:var(--esp-4);font-size:var(--texto-m)}
+.pagina--pago h2{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-titulo-tela);line-height:1.15;margin:0}
+.pagina--pago ul{margin:0;padding:0;list-style:none;display:grid;gap:var(--esp-3)}
+.pagina--pago li{display:flex;gap:var(--esp-3);align-items:flex-start;line-height:var(--altura-linha-ui)}
+.pagina--pago li .icone{color:var(--cor-acento);margin-top:1px}
+.selo-em-breve{justify-self:start;align-self:flex-start;font-size:var(--texto-p);font-weight:var(--peso-forte);color:var(--cor-acento);background:var(--cor-realce);border-radius:var(--raio-total);padding:var(--esp-1) var(--esp-3)}
+.pagina--pago p{color:var(--cor-suave);margin:0}
+.pagina--capa{background:var(--cor-capa);color:var(--cor-capa-texto);align-items:center;justify-content:space-between;text-align:center;padding:var(--esp-12) var(--respiro-pagina)}
+.capa__filete{width:56px;height:2px;background:currentColor;opacity:.6}
+.capa__titulo{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-capa);line-height:1.05;margin:0}
+.capa__traducao{font-size:var(--texto-g);margin:var(--esp-3) 0 0;letter-spacing:.06em;text-transform:uppercase}
+.capa__marca{font-family:var(--fonte-titulo);font-weight:var(--peso-titulo);font-size:var(--texto-g)}
+
+/* tela estreita, ou mais alta que larga: uma página (FUN-74) */
+@media (max-width:899px), (orientation:portrait){
+  .livro{padding:var(--esp-3) var(--esp-3) var(--esp-3)}
+  .livro__aberto{grid-template-columns:minmax(0,var(--largura-pagina))}
+  .livro__aberto .pagina + .pagina{display:none}
+  .livro__aberto[data-celular-mostra="direita"] .pagina:first-child{display:none}
+  .livro__aberto[data-celular-mostra="direita"] .pagina + .pagina{display:flex}
+  .pagina,.pagina--esquerda,.pagina--direita{border-radius:var(--raio-m);box-shadow:var(--sombra-pagina);aspect-ratio:auto;height:calc(100vh - var(--altura-barra) - 150px);max-height:none;min-height:0;padding:var(--respiro-pagina-celular)}
+  .pagina--capa{padding:var(--esp-12) var(--respiro-pagina-celular)}
+  .navegacao-pagina .botao-secundario{min-width:0;padding:0 var(--esp-4)}
+  .so-pagina-larga{display:none}
+}
+
+/* ---------- leitor em rolagem (guia do projeto, sem mudança além da barra) ---------- */
+.cabeca-capitulo{max-width:var(--largura-leitura);width:100%;margin:0 auto;padding:var(--esp-4) var(--esp-5) var(--esp-2)}
+.cabeca-capitulo .titulo-capitulo{font-size:var(--texto-gg);padding:var(--esp-1) var(--esp-2) var(--esp-1) 0}
+.cabeca-capitulo .titulo-capitulo .icone{width:var(--icone-g);height:var(--icone-g)}
+.texto-capitulo{max-width:var(--largura-leitura);width:100%;margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-6);font-family:var(--fonte-texto);font-size:var(--letra);line-height:var(--altura-linha-texto);touch-action:pan-y}
+.versiculos{list-style:none;margin:0;padding:0}
+.versiculo{display:grid;grid-template-columns:var(--coluna-numero) 1fr;align-items:baseline;margin:0 0 .7em}
+.versiculo-numero{justify-self:start;font-size:.68em;font-weight:var(--peso-forte);color:var(--cor-acento);background:var(--cor-realce);border-radius:var(--raio-total);min-width:1.9em;text-align:center;padding:.1em .4em;font-variant-numeric:tabular-nums}
+.navegacao-capitulo{max-width:var(--largura-leitura);width:100%;margin:0 auto;padding:var(--esp-3) var(--esp-5) var(--esp-12);display:grid;grid-template-columns:1fr 1fr;gap:var(--esp-3)}
+.cartao-nav{background:var(--cor-superficie);border:1px solid var(--cor-borda);border-radius:var(--raio-m);padding:var(--esp-3) var(--esp-4);min-height:var(--altura-cartao-nav);display:flex;flex-direction:column;justify-content:center;gap:2px;text-align:left}
+.cartao-nav--seguinte{text-align:right;align-items:flex-end}
+.cartao-nav:hover{border-color:var(--cor-acento)}
+.cartao-nav small{color:var(--cor-suave);font-size:var(--texto-p)}
+.cartao-nav strong{font-size:var(--texto-g)}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texto corrigido: mockup da tela "Correções no texto"</title>
+<style>
+:root{--fundo:#F2F3F5;--superficie:#FFFFFF;--texto:#1A1D23;--suave:#5B616E;--acento:#9A3B5B;--borda:#DADDE3;--fonte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root{--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#E39AB5;--borda:#2C313A;color-scheme:dark}}
+*{box-sizing:border-box} body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--fonte);line-height:1.5}
+header{max-width:1240px;margin:0 auto;padding:32px 20px 8px} h1{font-size:28px;margin:0 0 8px} header p{margin:0 0 6px;color:var(--suave);max-width:78ch}
+header a,.temas a{color:var(--acento)}
+section{max-width:1240px;margin:24px auto;padding:20px;background:var(--superficie);border:1px solid var(--borda);border-radius:14px}
+h2{font-size:20px;margin:0 0 4px} .intencao{margin:0 0 6px;color:var(--suave);max-width:90ch}
+.temas{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px} .temas a{font-size:14px;text-decoration:none;border:1px solid var(--borda);border-radius:999px;padding:6px 12px}
+.vistas{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap} .vista{display:flex;flex-direction:column;gap:6px} .vista span{font-size:13px;color:var(--suave)}
+.pc{width:720px;height:450px;overflow:hidden;border:1px solid var(--borda);border-radius:10px;max-width:100%} .pc iframe{width:1440px;height:900px;border:0;transform:scale(.5);transform-origin:0 0}
+.cel{width:390px;height:720px;border:1px solid var(--borda);border-radius:28px;overflow:hidden;max-width:100%} .cel iframe{width:390px;height:720px;border:0}
+.cel-p{height:420px} .cel-p iframe{height:420px}
+ul.decisoes{margin:8px 0 0;padding-left:20px;color:var(--suave)} ul.decisoes li{margin:2px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>Texto corrigido: tela "Correções no texto"</h1>
+<p>Feature <code>texto-atualizado</code> (FUN-122 a FUN-124). A tela usa só o <code>tokens.css</code> e os componentes do guia do projeto: não há token novo. O Sobre e a capa só trocam texto e seguem o visual de hoje.</p>
+<p>Os números e os trechos são exemplos tirados do levantamento de 2026-11-18. No PC a tela aparece no tema claro e no celular, no escuro.</p>
+</header>
+
+<section><h2>Sucesso: a lista</h2>
+<p class="intencao">Aberta por "Ver as correções no texto" no Sobre, com "Voltar" ao Sobre. Primeiro as regras mecânicas, uma por linha com a contagem de versículos (FUN-123). Depois os livros na ordem bíblica, recolhidos: tocar no livro abre as correções dele, cada uma com referência, trecho antes riscado, trecho depois e motivo (FUN-122).</p>
+<div class="temas"><a href="telas/correcoes.html#claro">Claro</a> <a href="telas/correcoes.html#escuro">Escuro</a> <a href="telas/correcoes.html#sepia">Sépia</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (em escala 50%)</span><div class="pc"><iframe src="telas/correcoes.html" title="Correções no texto no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Celular, 390 px</span><div class="cel"><iframe src="telas/correcoes.html#escuro" title="Correções no texto no celular, tema escuro" loading="lazy"></iframe></div></div>
+</div>
+<ul class="decisoes">
+<li>Livros recolhidos por padrão: são mais de 400 trechos e a lista aberta ficaria longa demais no celular.</li>
+<li>O antes vai riscado (<code>&lt;del&gt;</code>) e o depois em negrito (<code>&lt;ins&gt;</code>), na letra do texto bíblico e no tamanho escolhido no "Aa". O leitor de tela ouve "Antes:" e "Depois:".</li>
+<li>Livro sem correção não aparece na lista.</li>
+</ul></section>
+
+<section><h2>Carregando, vazio e erro</h2>
+<p class="intencao">"Carregando" e "erro" só existem se a lista vier num pedaço separado do app, o que o plano decide. "Vazio" é o build sem correção aplicada, em que o Sobre não mostra o link (FUN-120).</p>
+<div class="temas"><a href="telas/correcoes.html?estado=carregando">Carregando</a> <a href="telas/correcoes.html?estado=vazio">Vazio</a> <a href="telas/correcoes.html?estado=erro">Erro</a></div>
+<div class="vistas">
+<div class="vista"><span>Carregando, celular</span><div class="cel cel-p"><iframe src="telas/correcoes.html?estado=carregando" title="Carregando" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Vazio, celular</span><div class="cel cel-p"><iframe src="telas/correcoes.html?estado=vazio#sepia" title="Vazio, tema sépia" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Erro, celular</span><div class="cel cel-p"><iframe src="telas/correcoes.html?estado=erro#escuro" title="Erro, tema escuro" loading="lazy"></iframe></div></div>
+</div></section>
+</body>
+</html>
