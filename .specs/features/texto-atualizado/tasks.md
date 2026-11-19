@@ -11,6 +11,16 @@
 
 **Testes existentes que mudam:** `test/arquivos/converter-biblia.test.ts:52-64` (FUN-03, autorizado em `## Autorizações` de 2026-11-18, T6); `src/telas/TelaSobre.test.tsx:33-36` (FUN-38, aprovado na spec, T17); `src/livro/CapaLivro.test.tsx:6-9` (FUN-89, aprovado na spec, T18). Cada troca fica tão forte quanto antes, com o motivo no commit.
 
+## Linha de base
+
+- **Comando**: `pnpm typecheck && pnpm test` (`.specs/projeto/testes.json`), rodado em 2026-11-18 no commit `b4c7550` (branch `desenvolvimento`)
+- **Resultado**: typecheck verde; Vitest 42 arquivos, 631 testes, todos passando (30 s). E2E não rodado na linha de base (roda no CI e ao fim do lote de interface)
+- **Falhas preexistentes**: nenhuma. **Aviso de ambiente**: rodada pelo PowerShell, `test/arquivos/deploy.test.ts` (A-13, 20 casos) falha porque o `bash` do PATH é o do WSL (saída em UTF-16); pelo Git Bash (`C:/Program Files/Git/usr/bin/bash.exe`) passa 34 de 34. Rode a suíte e os gates pelo Git Bash. Node 26.13 local fora de `engines` (`>=24 <25`)
+- **T0 (rede de proteção)**: não necessária. O comportamento existente que a feature toca já tem teste: conversão e hash (`test/arquivos/converter-biblia.test.ts`, `src/biblia/conversor.test.ts`), crédito do Sobre (`src/telas/TelaSobre.test.tsx`, FUN-38), capa (`src/livro/CapaLivro.test.tsx`, FUN-89), navegação do Sobre (`src/estado/leitor.test.ts`, `src/App.test.tsx`) e troca do livro guardado (`src/dados/limparAntigos.test.ts`). O que muda de comportamento (validar antes de apagar `public/livros`) nasce com teste em T5
+- **Regra do /executar**: nenhuma falha nova; a suíte inteira e o E2E rodam ao fim da feature
+
+---
+
 **Revisão pelo dono:** decidir os ~1.550 itens é trabalho do dono, fora das tarefas. Ela pode começar depois da Phase 5 e seguir depois da integração (spec: "Integração sem todos os itens decididos"); cada exportação é uma nova versão de `correcoes/correcoes.json`.
 
 ---

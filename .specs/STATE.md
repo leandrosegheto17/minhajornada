@@ -7,9 +7,10 @@
 - **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
 - **Fase aprovada também**: 2, Reconhecimento (`reconhecimento.md`, inventário em d93f7e8) em 2026-11-18
 - **Fase aprovada também**: 2b, Mockup (só `TelaCorrecoes`, `mockup/`) em 2026-11-18
-- **Próxima fase**: 3, Plano (`tlc-spec-driven`, Design e Tasks) — modelo indicado: opus
+- **Fase aprovada também**: 3, Plano (`design.md`, `tasks.md`, AD-012 a AD-017) e 4, Rede de proteção (linha de base 631 verdes, sem T0) em 2026-11-18. **Planejamento concluído.**
+- **Próximo passo**: `/executar` (Sonnet), Lote 1 crítico (Phase 1). Rodar suíte e gates pelo Git Bash (o `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`)
 - **Serviços no ar**: nenhum
-- **Progresso**: Produto: Faltam 3 de 6 features: 50% concluído; texto-atualizado sem tarefas ainda, conferida em 2026-11-18
+- **Progresso**: Produto: Faltam 3 de 6 features: 50% concluído; texto-atualizado 0 de 21 tarefas, conferida em 2026-11-18
 - **Combinado na conversa e não registrado em artefato**:
   - Branches: `desenvolvimento` faz o papel da main; toda feature nasce dela e volta para ela (**Branch pai** = `desenvolvimento`). A `main` só recebe `desenvolvimento` quando o usuário pedir.
   - Publicação: `desenvolvimento` → tst (`minhajornada-tst.ljssoftware.com.br`, workflow `deploy` manual depois do CI verde); `main` → produção. O tst foi publicado em 2026-11-18 com a `livro-tela-cheia` (run 44404040537).
