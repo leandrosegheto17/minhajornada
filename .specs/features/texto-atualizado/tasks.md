@@ -98,6 +98,12 @@ T16 → T17 → T18 → T19 → T20
 T21
 ```
 
+### Phase 8: Retrabalho R1
+
+```
+T22 -> T23 -> T24 -> T25 -> T26 -> T27 -> T28 -> T29
+```
+
 ---
 
 ## Task Breakdown
@@ -642,6 +648,142 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 ---
 
 Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = verde
+
+### T22: Comando de exportação roda pelo Node (A-01)
+
+**What**: Imports com extensão `.ts` em `src/revisao/mesclar.ts` e `src/revisao/logica.ts` (e no que o encadeamento de `scripts/aplicar-decisoes.ts` carregar), e teste que roda o comando por processo filho.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: Cabeçalho de `src/biblia/correcoes/arquivo.ts:1-3` (imports relativos com `.ts`); processo filho como em `test/arquivos/converter-biblia.test.ts`
+**Requirement**: FUN-113 · Achado: A-01 (validation.md)
+**Tests**: `test/arquivos/aplicar-decisoes.test.ts`: `node scripts/aplicar-decisoes.ts <decisoes>` em `tmpdir` regrava o arquivo; decisão recusada sai com erro e não grava; falha antes da correção com `ERR_MODULE_NOT_FOUND`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T23: Aplicação com deslocamento de posição (A-02)
+
+**What**: Teste de dois itens aprovados no mesmo versículo em que o primeiro "depois" muda o tamanho do texto, nas duas ordens do arquivo, esperando o versículo exato.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T22
+**Reuses**: `src/biblia/correcoes/aplicar.test.ts:39-45`
+**Requirement**: FUN-114, FUN-127 · Achado: A-02 (validation.md)
+**Tests**: `src/biblia/correcoes/aplicar.test.ts`, nome com `FUN-127`; falha com a ordem de `aplicar.ts:44` invertida
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T24: Exportação recusa aprovadas sobrepostas (A-03)
+
+**What**: `mesclarDecisoes` recusa, antes de gravar, duas aprovadas que se sobrepõem no mesmo versículo, apontando os dois ids (mesma regra de `validarCorrecoes`).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T23
+**Reuses**: Checagem de sobreposição de `src/biblia/correcoes/validar.ts:66-78` (reaproveitar, não duplicar)
+**Requirement**: FUN-107, FUN-113 · Achado: A-03 (validation.md)
+**Tests**: `src/revisao/mesclar.test.ts`: par sobreposto aprovado é recusado com os dois ids; encostados passam
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T25: Item sobreposto vai ao um a um (A-03)
+
+**What**: O agrupamento da revisão manda ao "um a um" todo item cujo trecho se sobrepõe ao de outro item do mesmo versículo, para o bloco nunca aprovar os dois.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T24
+**Reuses**: `src/revisao/logica.ts:97-105` (`ehBloco`/agrupar)
+**Requirement**: FUN-110 · Achado: A-03 (validation.md)
+**Tests**: `src/revisao/logica.test.ts`: dois itens sobrepostos de confiança alta não entram no bloco
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T26: Prova da lista em pedaço separado e no pré-cache (A-04)
+
+**What**: Teste de arquivo sobre o `dist-e2e`: a lista de correções está num JS próprio de `assets/` e o `sw.js` o lista.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T25
+**Reuses**: `test/arquivos/` (testes de arquivo sobre o build); critério da T16
+**Requirement**: FUN-124 · Achado: A-04 (validation.md)
+**Tests**: `test/arquivos/correcoes-pedaco.test.ts`, nome com `FUN-124`; pula com aviso se `dist-e2e` não existe ou roda após `pnpm build:e2e`, conforme o molde do projeto
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T27: Edição salva do "depois" não se perde (A-05)
+
+**What**: O cartão do item parte do `depois` da decisão salva (quando houver) no campo, na prévia e na reaprovação.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T26
+**Reuses**: `src/revisao/pagina.ts:205-230`
+**Requirement**: FUN-112 · Achado: A-05 (validation.md)
+**Tests**: `src/revisao/pagina.test.ts`: editar e aprovar, voltar ao item (ou recarregar do banco dublê) mostra o texto editado e reaprovar grava o mesmo `depois`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T28: Regra sem versículo mudado não conta (A-06)
+
+**What**: Regra aprovada que muda 0 versículos fica fora da lista aplicada e do total do resumo.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T27
+**Reuses**: `src/biblia/correcoes/aplicar.ts:70-78`, `scripts/converter-biblia.ts:65`
+**Requirement**: FUN-123 · Achado: A-06 (validation.md)
+**Tests**: `src/biblia/correcoes/aplicar.test.ts`, nome com `FUN-123`: regra aprovada sem efeito não aparece; total 0 quando nada muda
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T29: Exportação lista os "depois" editados (A-07)
+
+**What**: `scripts/aplicar-decisoes.ts` imprime, antes de gravar, cada item com `depois` editado (id, referência, antes e depois) para o dono conferir.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T28
+**Reuses**: `scripts/aplicar-decisoes.ts:36-39`
+**Requirement**: FUN-113 · Achado: A-07 (validation.md)
+**Tests**: `test/arquivos/aplicar-decisoes.test.ts`: a saída lista o item editado e não lista o aprovado sem edição
+**Gate**: quick
+
+- [ ] Concluída
+
+---
 
 ## Critérios
 
