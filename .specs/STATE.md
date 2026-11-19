@@ -52,6 +52,8 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-18 | Feature `interface-livro`, T16 e T17 | Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172` e `:261-280`, `src/telas/TelaLivros.test.tsx:64-75`) passam para `src/componentes/BarraTitulo.test.tsx`, com as mesmas asserções. Aprovada pelo dono. |
 | 2026-11-18 | Feature `livro-tela-cheia` | Testes do desenho antigo da tela larga (proporção 3 × 4, `--largura-pagina`, `--largura-barra`, posição da barra e dos botões nos e2e de tela larga) podem ser trocados por testes do desenho novo, tão fortes quanto antes. Aprovada pelo dono. |
 | 2026-11-18 | Feature `texto-atualizado`, `test/arquivos/converter-biblia.test.ts:52-64` (FUN-03) | O teste que compara os 31.102 versículos com `.biblia/` passa a comparar com a fonte mais as correções aprovadas e a provar também que `.biblia/` não muda; tão forte quanto antes. Aprovada pelo dono. |
+| 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T28, A-06) | O teste `src/biblia/correcoes/aplicar.test.ts:84` (FUN-123) passa a afirmar que regra aprovada que muda 0 versículos sai da lista e do total, em vez de aparecer com 0; nenhuma outra asserção enfraquecida. Aprovada pelo dono. |
+| 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T25, A-03) | No teste `src/revisao/logica.test.ts:134` (FUN-110) o segundo item passa de `ref(1, 2)` para `ref(1, 3)`: os dois tinham o mesmo trecho no mesmo versículo, o que agora vai ao um a um; asserções iguais. Aprovada pelo dono. |
 
 ## Decisions
 

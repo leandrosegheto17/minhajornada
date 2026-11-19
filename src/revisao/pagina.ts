@@ -212,8 +212,10 @@ export async function iniciar(
     if (item.italicoMuda) cartao.append(el('p', 'Os colchetes de itálico mudam: revise com atenção.'));
     if (!item.confere) cartao.append(el('p', 'Não confere: o trecho "antes" não está no versículo da fonte.'));
     cartao.append(el('h3', 'Antes'), el('p', item.versiculoAntes, { class: 'versiculo' }));
+    // O "depois" que o dono já salvou vale mais que o do arquivo (FUN-112): voltar ao item não perde a edição.
+    const salvo = decisoes.find((d) => d.id === item.id)?.depois ?? item.depois;
     const campo = el('textarea', undefined, { 'data-campo': 'depois', rows: '3' });
-    campo.value = rascunho !== '' ? rascunho : item.depois;
+    campo.value = rascunho !== '' ? rascunho : salvo;
     const depoisTexto = el('p', depoisDe(item, campo.value), { class: 'versiculo', 'data-depois': '' });
     cartao.append(el('h3', 'Depois'), depoisTexto);
     cartao.append(
@@ -224,8 +226,9 @@ export async function iniciar(
     const motivoBloqueio = (): string | true => podeAprovar(item, editando ? campo.value : undefined);
     const bloqueio = el('p', '', { role: 'alert' });
     const aprovar = botao('Aprovar', 'aprovar', () => {
-      const editado = editando && campo.value !== item.depois;
-      void decidir([{ id: item.id, estado: 'aprovada', ...(editado ? { depois: campo.value } : {}) }]).then(
+      const valor = editando ? campo.value : salvo;
+      const editado = valor !== item.depois;
+      void decidir([{ id: item.id, estado: 'aprovada', ...(editado ? { depois: valor } : {}) }]).then(
         (ok) => ok && avancar(),
       );
     });
@@ -245,7 +248,9 @@ export async function iniciar(
     acoes.append(
       aprovar,
       botao('Recusar', 'recusar', () => {
-        void decidir([{ id: item.id, estado: 'recusada' }]).then((ok) => ok && avancar());
+        void decidir([{ id: item.id, estado: 'recusada', ...(salvo !== item.depois ? { depois: salvo } : {}) }]).then(
+          (ok) => ok && avancar(),
+        );
       }),
       botao('Editar', 'editar', () => {
         editando = true;

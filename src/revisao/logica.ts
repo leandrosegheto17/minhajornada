@@ -5,8 +5,8 @@ import type {
   ItemCorrecao,
   RegraNoArquivo,
   TipoCorrecao,
-} from '../biblia/correcoes/arquivo';
-import { colchetesEmPares } from '../biblia/correcoes/validar';
+} from '../biblia/correcoes/arquivo.ts';
+import { colchetesEmPares } from '../biblia/correcoes/validar.ts';
 
 /** Uma decisão do dono, uma linha do banco do artifact. `depois` só em item (edição do trecho). */
 export interface Decisao {
@@ -58,6 +58,42 @@ const pendente = (id: string, estadoNoArquivo: EstadoCorrecao, decisoes: Decisao
 const ehBloco = (item: ItemCorrecao): boolean =>
   item.confianca === 'alta' && item.confere && item.italicoMuda !== true && item.tipo !== 'sentido';
 
+/** Trecho em comum mínimo, nas pontas, para dois "antes" valerem como sobrepostos sem a posição no versículo. */
+const PONTA_MINIMA = 3;
+
+/** Um "antes" contém o outro, ou o fim de um é o começo do outro (pelo menos `PONTA_MINIMA` caracteres). */
+function podemSeSobrepor(a: string, b: string): boolean {
+  if (a.includes(b) || b.includes(a)) return true;
+  const ponta = (x: string, y: string): boolean => {
+    for (let n = Math.min(x.length, y.length) - 1; n >= PONTA_MINIMA; n--) {
+      if (x.endsWith(y.slice(0, n))) return true;
+    }
+    return false;
+  };
+  return ponta(a, b) || ponta(b, a);
+}
+
+/** Ids dos itens que podem se sobrepor a outro item do mesmo versículo: nunca entram em bloco (FUN-107, FUN-110). */
+function sobrepostos(itens: ItemCorrecao[]): Set<string> {
+  const porVersiculo = new Map<string, ItemCorrecao[]>();
+  for (const item of itens) {
+    const chave = `${item.ref.livro}:${item.ref.capitulo}:${item.ref.versiculo}`;
+    porVersiculo.set(chave, [...(porVersiculo.get(chave) ?? []), item]);
+  }
+  const ids = new Set<string>();
+  for (const doVersiculo of porVersiculo.values()) {
+    doVersiculo.forEach((a, i) => {
+      for (const b of doVersiculo.slice(i + 1)) {
+        if (podemSeSobrepor(a.antes, b.antes)) {
+          ids.add(a.id);
+          ids.add(b.id);
+        }
+      }
+    });
+  }
+  return ids;
+}
+
 /** Divide o arquivo nos grupos da revisão, cada um com a contagem de pendentes (cai a cada decisão). */
 export function agrupar(arquivo: ArquivoCorrecoes, decisoes: Decisao[]): Grupos {
   const regras = arquivo.regras.map((regra) => ({
@@ -68,8 +104,9 @@ export function agrupar(arquivo: ArquivoCorrecoes, decisoes: Decisao[]): Grupos 
 
   const porChave = new Map<string, GrupoBloco>();
   const umAUm: ItemCorrecao[] = [];
+  const cruzados = sobrepostos(arquivo.itens);
   for (const item of arquivo.itens) {
-    if (!ehBloco(item)) {
+    if (!ehBloco(item) || cruzados.has(item.id)) {
       umAUm.push(item);
       continue;
     }

@@ -141,6 +141,42 @@ describe('página de revisão (FUN-108, FUN-109, FUN-111, FUN-112)', () => {
     expect(raiz.querySelector('[data-grupo].ativo')?.getAttribute('data-grupo')).toMatch(/^bloco:/);
   });
 
+  it('FUN-112: o "depois" editado e salvo reaparece na prévia e no campo, e reaprovar não perde a edição', async () => {
+    const { banco, gravacoes } = bancoDuble([
+      { id: 'C-0001', estado: 'recusada' },
+      { id: 'C-0002', estado: 'recusada' },
+      { id: 'C-0003', estado: 'aprovada', depois: 'Rute respondeu' },
+    ]);
+    await iniciar(raiz, DADOS(), banco);
+    vai('umAUm');
+    await vi.waitFor(() => expect(texto()).toContain('Item 1 de'));
+    botao('proximo').click();
+    await vi.waitFor(() => expect(texto()).toContain('Rute disse'));
+    expect(texto()).toContain('Rute respondeu');
+    expect(texto()).not.toContain('Rute falou');
+    botao('editar').click();
+    expect(raiz.querySelector<HTMLTextAreaElement>('textarea[data-campo="depois"]')?.value).toBe('Rute respondeu');
+    botao('aprovar').click();
+    await vi.waitFor(() => expect(gravacoes).toHaveLength(1));
+    expect(gravacoes[0]).toEqual({ id: 'C-0003', estado: 'aprovada', depois: 'Rute respondeu' });
+  });
+
+  it('FUN-112: reaprovar sem abrir a edição também mantém o "depois" salvo', async () => {
+    const { banco, gravacoes } = bancoDuble([
+      { id: 'C-0001', estado: 'recusada' },
+      { id: 'C-0002', estado: 'recusada' },
+      { id: 'C-0003', estado: 'recusada', depois: 'Rute respondeu' },
+    ]);
+    await iniciar(raiz, DADOS(), banco);
+    vai('umAUm');
+    await vi.waitFor(() => expect(texto()).toContain('Item 1 de'));
+    botao('proximo').click();
+    await vi.waitFor(() => expect(texto()).toContain('Rute disse'));
+    botao('aprovar').click();
+    await vi.waitFor(() => expect(gravacoes).toHaveLength(1));
+    expect(gravacoes[0]).toEqual({ id: 'C-0003', estado: 'aprovada', depois: 'Rute respondeu' });
+  });
+
   it('FUN-111: item de sentido sem fonte mostra "Falta a fonte" e o Aprovar fica desativado', async () => {
     const { banco, gravacoes } = bancoDuble();
     await iniciar(raiz, DADOS(), banco);

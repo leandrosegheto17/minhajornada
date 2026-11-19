@@ -72,6 +72,44 @@ describe('agrupar (FUN-108)', () => {
   });
 });
 
+describe('agrupar: itens sobrepostos vão ao um a um (FUN-110, FUN-107)', () => {
+  const doVersiculo = (antes: string, n = 1) => it1({ ref: ref(5, n), antes, depois: `${antes}!` });
+
+  it('FUN-110: item cujo trecho contém o de outro item do mesmo versículo sai do bloco, e o outro também', () => {
+    const maior = doVersiculo('Eis que que seus ouvidos');
+    const menor = doVersiculo('Eis que que');
+    const livre = it1({ ref: ref(5, 2), antes: 'Ele disse' });
+    const g = agrupar(arquivo([maior, menor, livre], []), []);
+    expect(g.blocos.flatMap((b) => b.itens.map((i) => i.id))).toEqual([livre.id]);
+    expect(g.umAUm.itens.map((i) => i.id)).toEqual([maior.id, menor.id]);
+  });
+
+  it('FUN-110: trechos que se sobrepõem só pelas pontas (o fim de um é o começo do outro) também vão ao um a um', () => {
+    const a = doVersiculo('o Coreiro abriu');
+    const b = doVersiculo('abriu um dos selos');
+    const g = agrupar(arquivo([a, b], []), []);
+    expect(g.blocos).toEqual([]);
+    expect(g.umAUm.itens.map((i) => i.id)).toEqual([a.id, b.id]);
+  });
+
+  it('FUN-110: trechos separados no mesmo versículo, e trechos iguais em versículos diferentes, ficam no bloco', () => {
+    const a = doVersiculo('forma');
+    const b = doVersiculo('Coreiro');
+    const c = it1({ ref: ref(5, 2), antes: 'forma' });
+    const g = agrupar(arquivo([a, b, c], []), []);
+    expect(g.blocos[0]?.itens.map((i) => i.id)).toEqual([a.id, b.id, c.id]);
+    expect(g.umAUm.itens).toEqual([]);
+  });
+
+  it('FUN-110: aprovar o bloco nunca decide dois itens sobrepostos', () => {
+    const maior = doVersiculo('Eis que que seus ouvidos');
+    const menor = doVersiculo('Eis que que');
+    const g = agrupar(arquivo([maior, menor], []), []);
+    expect(g.blocos.flatMap((b) => aprovarGrupo(b, []))).toEqual([]);
+    expect(aprovarGrupo(g.umAUm, [])).toEqual([]);
+  });
+});
+
 describe('aprovarGrupo (FUN-110)', () => {
   it('FUN-110: aprovar um bloco aprova só os itens dele que conferem, e o bloco vizinho fica intacto', () => {
     const a1 = it1({ ref: ref(1, 1) });
@@ -95,7 +133,9 @@ describe('aprovarGrupo (FUN-110)', () => {
 
   it('FUN-110: item já decidido (recusado à mão) não é ressuscitado pelo bloco', () => {
     const a1 = it1();
-    const a2 = it1({ ref: ref(1, 2) });
+    // T25 (autorizado em 2026-11-18): o segundo item sai do versículo do primeiro, que tinha o mesmo trecho e agora vai
+    // ao um a um; as asserções são as mesmas.
+    const a2 = it1({ ref: ref(1, 3) });
     const g = agrupar(arquivo([a1, a2], []), [{ id: a1.id, estado: 'recusada' }]);
     expect(aprovarGrupo(g.blocos[0]!, [{ id: a1.id, estado: 'recusada' }])).toEqual([
       { id: a2.id, estado: 'aprovada' },
