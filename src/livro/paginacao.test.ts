@@ -235,12 +235,18 @@ describe('paginar com quebras de capítulo (FUN-128, FUN-129, FUN-132)', () => {
 
   it('FUN-128: quebra num bloco que caberia no resto da página abre a página seguinte', () => {
     const paginas = paginar([30, 30, 30, 30], PAGINA, LINHA, [false, false, true, false]);
-    expect(blocosDas(paginas)).toEqual([[0, 1], [2, 3]]);
+    expect(blocosDas(paginas)).toEqual([
+      [0, 1],
+      [2, 3],
+    ]);
   });
 
   it('FUN-129: o resto da página antes da quebra fica em branco, sem bloco do capítulo seguinte', () => {
     const paginas = paginar([10, 10, 10, 10], PAGINA, LINHA, [false, false, true, false]);
-    expect(blocosDas(paginas)).toEqual([[0, 1], [2, 3]]);
+    expect(blocosDas(paginas)).toEqual([
+      [0, 1],
+      [2, 3],
+    ]);
     const usado = paginas[0]!.partes.length * 10;
     expect(usado).toBeLessThan(PAGINA);
   });
@@ -283,7 +289,10 @@ describe('paginar com quebras de capítulo (FUN-128, FUN-129, FUN-132)', () => {
 
   it('FUN-132: depois da quebra os blocos seguintes do capítulo continuam enchendo a página', () => {
     const paginas = paginar([60, 20, 20, 20, 20, 20], PAGINA, LINHA, [false, false, true, false, false, false]);
-    expect(blocosDas(paginas)).toEqual([[0, 1], [2, 3, 4, 5]]);
+    expect(blocosDas(paginas)).toEqual([
+      [0, 1],
+      [2, 3, 4, 5],
+    ]);
   });
 
   it('FUN-129: duas quebras seguidas põem cada bloco numa página, com o resto em branco', () => {
@@ -294,7 +303,14 @@ describe('paginar com quebras de capítulo (FUN-128, FUN-129, FUN-132)', () => {
   it('FUN-128: sem quebras, ou com todas falsas, o resultado é o de sempre', () => {
     const alturas = [20, 35, 90, 10, 260, 45, 0, 100, 5, 330];
     const sem = paginar(alturas, PAGINA, LINHA);
-    expect(paginar(alturas, PAGINA, LINHA, alturas.map(() => false))).toEqual(sem);
+    expect(
+      paginar(
+        alturas,
+        PAGINA,
+        LINHA,
+        alturas.map(() => false),
+      ),
+    ).toEqual(sem);
     expect(paginar(alturas, PAGINA, LINHA, [])).toEqual(sem);
   });
 

@@ -165,7 +165,7 @@ T5 → T6 → T7
 
 - [ ] Em 1920 × 1080, percorrendo Gênesis: há ao menos um par em que a página da esquerda termina um capítulo, e nele a página da direita começa com o número do capítulo seguinte no topo (FUN-131)
 - [ ] Escolher Gênesis 21 pela grade mostra a página que começa com o 21 no topo (FUN-83 com FUN-128)
-- [ ] Trocar a letra para o maior tamanho em Gênesis 21:1 repagina e mantém o 21:1 no topo da página mostrada (FUN-86 com FUN-128)
+- [ ] Trocar a letra para o maior tamanho em Gênesis 21:1 mantém o capítulo 21 no topo da página mostrada (FUN-86 com FUN-128). Não afirma repaginação: o defeito anterior de `.specs/bugs/letra-livro-sem-repaginar/relato.md` fica fora desta feature (decisão do dono na execução, 2026-11-19)
 - [ ] Gate full verde (`e2e/livro.spec.ts`)
 
 **Tests**: e2e em `e2e/livro.spec.ts`, nomes com `FUN-131`, `FUN-83` ou `FUN-86`
