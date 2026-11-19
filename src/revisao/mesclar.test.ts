@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { arquivo, item, regra } from '../biblia/correcoes/apoio-teste';
+import { arquivo, item, livrosFicticios, regra } from '../biblia/correcoes/apoio-teste';
 import { mesclarDecisoes } from './mesclar';
 import type { Decisao } from './logica';
 
@@ -97,5 +97,44 @@ describe('mesclarDecisoes (FUN-113)', () => {
       { id: 'C-0002', estado: 'recusada' },
     ]);
     expect(ok.itens.map((i) => i.estado)).toEqual(['recusada', 'recusada']);
+  });
+
+  it('FUN-107 e FUN-113: duas aprovadas que se sobrepõem no mesmo versículo recusam, com os dois ids, e não gravam', () => {
+    const a = arquivo([
+      item({ id: 'C-0001', antes: 'Coreiro abriu', depois: 'Cordeiro abriu' }),
+      item({ id: 'C-0002', antes: 'o Coreiro', depois: 'o Cordeiro' }),
+    ]);
+    const antes = JSON.stringify(a);
+    expect(() =>
+      mesclarDecisoes(
+        a,
+        [
+          { id: 'C-0001', estado: 'aprovada' },
+          { id: 'C-0002', estado: 'aprovada' },
+        ],
+        livrosFicticios(),
+      ),
+    ).toThrow(/C-0001.*C-0002.*sobrep/);
+    expect(JSON.stringify(a)).toBe(antes);
+  });
+
+  it('FUN-107: aprovadas encostadas, ou só uma delas aprovada, passam', () => {
+    const a = arquivo([
+      item({ id: 'C-0001', antes: 'forma', depois: 'fôrma' }),
+      item({ id: 'C-0002', antes: 'Coreiro', depois: 'Cordeiro' }),
+      item({ id: 'C-0003', antes: 'o Coreiro', depois: 'o Cordeiro' }),
+    ]);
+    const livros = livrosFicticios();
+    expect(() =>
+      mesclarDecisoes(
+        a,
+        [
+          { id: 'C-0001', estado: 'aprovada' },
+          { id: 'C-0002', estado: 'aprovada' },
+        ],
+        livros,
+      ),
+    ).not.toThrow();
+    expect(() => mesclarDecisoes(a, [{ id: 'C-0003', estado: 'aprovada' }], livros)).not.toThrow();
   });
 });

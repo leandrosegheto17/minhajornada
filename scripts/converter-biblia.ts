@@ -32,6 +32,17 @@ export interface OpcoesCorrecoes {
   lista?: string;
 }
 
+/** Lê e converte os 66 livros de `pastaFonte` (`.biblia/`), só leitura. */
+export function lerLivros(pastaFonte: string): Livro[] {
+  const fontes = readdirSync(pastaFonte)
+    .filter((nome) => ARQUIVO_FONTE.test(nome))
+    .sort();
+  if (fontes.length !== 66) throw new Error(`esperados 66 livros em ${pastaFonte}, achados ${fontes.length}`);
+  return fontes.map((fonte) =>
+    converterLivro(readFileSync(join(pastaFonte, fonte), 'utf8'), Number(ARQUIVO_FONTE.exec(fonte)?.[1])),
+  );
+}
+
 /**
  * Converte todos os livros de `pastaFonte`, aplica as correções aprovadas, recria `pastaLivros` e grava o índice em
  * `arquivoIndice` (FUN-03, FUN-114). Tudo é convertido, lido, validado e aplicado em memória antes de apagar
@@ -43,14 +54,7 @@ export function gerar(
   arquivoIndice: string,
   opcoes: OpcoesCorrecoes = {},
 ): Saida {
-  const fontes = readdirSync(pastaFonte)
-    .filter((nome) => ARQUIVO_FONTE.test(nome))
-    .sort();
-  if (fontes.length !== 66) throw new Error(`esperados 66 livros em ${pastaFonte}, achados ${fontes.length}`);
-
-  const convertidos: Livro[] = fontes.map((fonte) =>
-    converterLivro(readFileSync(join(pastaFonte, fonte), 'utf8'), Number(ARQUIVO_FONTE.exec(fonte)?.[1])),
-  );
+  const convertidos = lerLivros(pastaFonte);
 
   let livros = convertidos;
   let resumo: ResumoCorrecoes | undefined;

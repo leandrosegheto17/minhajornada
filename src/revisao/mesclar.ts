@@ -1,18 +1,21 @@
 // Mescla as decisões da revisão no arquivo de correções (FUN-113). Pura: não muda a entrada e, se uma decisão for
 // recusada, lança antes de devolver qualquer coisa, para quem chama não gravar nada pela metade.
-import type { ArquivoCorrecoes } from '../biblia/correcoes/arquivo';
-import { colchetesEmPares } from '../biblia/correcoes/validar';
-import { podeAprovar } from './logica';
-import type { Decisao } from './logica';
+// Node roda este arquivo direto pelo `scripts/aplicar-decisoes.ts`: imports relativos com a extensão `.ts`.
+import type { ArquivoCorrecoes } from '../biblia/correcoes/arquivo.ts';
+import { colchetesEmPares, validarCorrecoes } from '../biblia/correcoes/validar.ts';
+import type { Livro } from '../biblia/tipos.ts';
+import { podeAprovar } from './logica.ts';
+import type { Decisao } from './logica.ts';
 
 const ESTADOS: readonly string[] = ['proposta', 'aprovada', 'recusada'];
 
 /**
  * Muda só o `estado` e, quando veio, o `depois` dos itens e regras decididos; o resto fica igual (mesmas chaves, na
  * mesma ordem). A última decisão do mesmo id vale. Recusa id desconhecido, estado inválido, "depois" com colchete
- * sem par ou numa regra, e aprovação de item que não confere ou de sentido sem fonte.
+ * sem par ou numa regra, e aprovação de item que não confere ou de sentido sem fonte. Com `livros` (a fonte), recusa
+ * também o arquivo que o build recusaria: aprovadas que se sobrepõem no mesmo versículo (FUN-107), antes de gravar.
  */
-export function mesclarDecisoes(arquivo: ArquivoCorrecoes, decisoes: Decisao[]): ArquivoCorrecoes {
+export function mesclarDecisoes(arquivo: ArquivoCorrecoes, decisoes: Decisao[], livros?: Livro[]): ArquivoCorrecoes {
   const porId = new Map<string, Decisao>();
   for (const decisao of decisoes) {
     if (!ESTADOS.includes(decisao.estado)) {
@@ -43,7 +46,7 @@ export function mesclarDecisoes(arquivo: ArquivoCorrecoes, decisoes: Decisao[]):
     }
   }
 
-  return {
+  const mesclado: ArquivoCorrecoes = {
     ...arquivo,
     regras: arquivo.regras.map((regra) => {
       const d = porId.get(regra.id);
@@ -55,4 +58,6 @@ export function mesclarDecisoes(arquivo: ArquivoCorrecoes, decisoes: Decisao[]):
       return d.depois === undefined ? { ...item, estado: d.estado } : { ...item, estado: d.estado, depois: d.depois };
     }),
   };
+  if (livros !== undefined) validarCorrecoes(mesclado, livros);
+  return mesclado;
 }

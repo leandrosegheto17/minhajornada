@@ -1,4 +1,5 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -92,5 +93,75 @@ describe('aplicar-decisoes (FUN-113)', () => {
     escrever({ decisoes: [{ id: 'C-0003', estado: 'recusada' }] });
     aplicarDecisoes(correcoes, decisoes);
     expect(readFileSync(correcoes, 'utf8')).toContain('"estado":"recusada"');
+  });
+});
+
+// O comando de verdade, por processo filho: o Vitest resolve imports sem a extensão `.ts`, o Node não (A-01).
+describe('aplicar-decisoes pelo Node (FUN-113)', () => {
+  const EXEMPLO = join(process.cwd(), 'test', 'arquivos', 'dados', 'correcoes-exemplo.json');
+  const rodar = (...args: string[]) =>
+    spawnSync(process.execPath, ['scripts/aplicar-decisoes.ts', decisoes, '--correcoes', correcoes, ...args], {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+    });
+
+  beforeEach(() => copyFileSync(EXEMPLO, correcoes));
+
+  it('FUN-113: `node scripts/aplicar-decisoes.ts` regrava o arquivo com as decisões', () => {
+    escrever([{ id: 'C-0003', estado: 'recusada' }]);
+    const r = rodar();
+    expect(r.stderr).not.toContain('ERR_MODULE_NOT_FOUND');
+    expect(r.status).toBe(0);
+    const gravado = JSON.parse(readFileSync(correcoes, 'utf8')) as { itens: { id: string; estado: string }[] };
+    expect(gravado.itens.find((i) => i.id === 'C-0003')?.estado).toBe('recusada');
+  });
+
+  it('FUN-113: decisão recusada sai com erro e não grava nada', () => {
+    const antes = readFileSync(correcoes, 'utf8');
+    escrever([{ id: 'C-9999', estado: 'aprovada' }]);
+    const r = rodar();
+    expect(r.status).not.toBe(0);
+    expect(r.stderr).toContain('C-9999');
+    expect(readFileSync(correcoes, 'utf8')).toBe(antes);
+  });
+
+  it('FUN-107: aprovadas que se sobrepõem na fonte real saem com erro, com os dois ids, e não gravam', () => {
+    const arq = JSON.parse(readFileSync(correcoes, 'utf8')) as { itens: Record<string, unknown>[] };
+    // Apocalipse 6:1: "quando o Coreiro abriu" e "o Coreiro" se sobrepõem.
+    const base = arq.itens[0] as Record<string, unknown>;
+    arq.itens = [
+      { ...base, id: 'C-0001', estado: 'proposta', antes: 'o Coreiro', depois: 'o Cordeiro' },
+      { ...base, id: 'C-0002', estado: 'proposta', antes: 'Coreiro abriu', depois: 'Cordeiro abriu' },
+    ];
+    writeFileSync(correcoes, serializar({ versao: 1, regras: [], itens: arq.itens as never }));
+    const antes = readFileSync(correcoes, 'utf8');
+    escrever([
+      { id: 'C-0001', estado: 'aprovada' },
+      { id: 'C-0002', estado: 'aprovada' },
+    ]);
+    const r = rodar();
+    expect(r.status).not.toBe(0);
+    expect(r.stderr).toMatch(/C-0001.*C-0002.*sobrep/);
+    expect(readFileSync(correcoes, 'utf8')).toBe(antes);
+  });
+
+  it('FUN-113: lista, antes de gravar, cada "depois" editado (id, referência, antes e depois) e só esses', () => {
+    escrever([
+      { id: 'C-0002', estado: 'aprovada', depois: 'estava com o próprio Deus' },
+      { id: 'C-0003', estado: 'recusada' },
+    ]);
+    const r = rodar();
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain('C-0002');
+    expect(r.stdout).toContain('estava junto de Deus');
+    expect(r.stdout).toContain('estava com o próprio Deus');
+    expect(r.stdout).not.toContain('C-0003');
+  });
+
+  it('FUN-113: decisão sem "depois" editado não aparece na lista de editados', () => {
+    escrever([{ id: 'C-0002', estado: 'aprovada' }]);
+    const r = rodar();
+    expect(r.status).toBe(0);
+    expect(r.stdout).not.toMatch(/editad/i);
   });
 });

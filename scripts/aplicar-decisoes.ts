@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { lerArquivoCorrecoes } from '../src/biblia/correcoes/arquivo.ts';
 import type { Decisao } from '../src/revisao/logica.ts';
 import { mesclarDecisoes } from '../src/revisao/mesclar.ts';
+import type { Livro } from '../src/biblia/tipos.ts';
+import { lerLivros } from './converter-biblia.ts';
 import { serializar } from './consolidar-correcoes.ts';
 
 /** A lista de decisões, solta ou dentro de `{ decisoes: [...] }`; cada uma com `id` e `estado` em texto. */
@@ -32,17 +34,49 @@ function lerDecisoes(json: unknown): Decisao[] {
   });
 }
 
-/** Mescla as decisões no arquivo de correções e o regrava, uma linha por item. Lança sem gravar se algo for recusado. */
-export function aplicarDecisoes(caminhoCorrecoes: string, caminhoDecisoes: string): void {
+/** Uma decisão que mudou o "depois" do item: o que o dono vai ver no site (FUN-113). */
+export interface Editada {
+  id: string;
+  referencia: string;
+  antes: string;
+  depois: string;
+}
+
+/**
+ * Mescla as decisões no arquivo de correções e o regrava, uma linha por item. Lança sem gravar se algo for recusado;
+ * com `livros` (a fonte), recusa também aprovadas sobrepostas (FUN-107). Devolve os itens com o "depois" editado, que o
+ * comando lista antes de gravar (o texto editado vai ao site no próximo build).
+ */
+export function aplicarDecisoes(caminhoCorrecoes: string, caminhoDecisoes: string, livros?: Livro[]): Editada[] {
   const arquivo = lerArquivoCorrecoes(JSON.parse(readFileSync(caminhoCorrecoes, 'utf8')) as unknown);
   const decisoes = lerDecisoes(JSON.parse(readFileSync(caminhoDecisoes, 'utf8')) as unknown);
-  writeFileSync(caminhoCorrecoes, serializar(mesclarDecisoes(arquivo, decisoes)));
+  const mesclado = mesclarDecisoes(arquivo, decisoes, livros);
+  const editadas = mesclado.itens
+    .filter((novo, i) => novo.depois !== arquivo.itens[i]?.depois)
+    .map(({ id, ref, antes, depois }) => ({
+      id,
+      referencia: `${livros?.[ref.livro - 1]?.nome ?? `livro ${ref.livro}`} ${ref.capitulo}:${ref.versiculo}`,
+      antes,
+      depois,
+    }));
+  writeFileSync(caminhoCorrecoes, serializar(mesclado));
+  return editadas;
 }
 
 const ehPrincipal = process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (ehPrincipal) {
   const raiz = resolve(fileURLToPath(new URL('..', import.meta.url)));
-  const decisoes = process.argv[2] ? resolve(process.argv[2]) : join(raiz, 'revisao', 'decisoes.json');
-  aplicarDecisoes(join(raiz, 'correcoes', 'correcoes.json'), decisoes);
-  console.log(`aplicar-decisoes: decisões de ${decisoes} gravadas em correcoes/correcoes.json`);
+  const args = process.argv.slice(2);
+  const posicao = args.indexOf('--correcoes');
+  const arquivoCorrecoes = posicao >= 0 ? args[posicao + 1] : undefined;
+  if (posicao >= 0 && !arquivoCorrecoes) throw new Error('--correcoes pede o caminho do arquivo de correções');
+  const solto = posicao < 0 ? args : args.filter((_, i) => i !== posicao && i !== posicao + 1);
+  const decisoes = solto[0] ? resolve(solto[0]) : join(raiz, 'revisao', 'decisoes.json');
+  const correcoes = arquivoCorrecoes ? resolve(arquivoCorrecoes) : join(raiz, 'correcoes', 'correcoes.json');
+  const editadas = aplicarDecisoes(correcoes, decisoes, lerLivros(join(raiz, '.biblia')));
+  if (editadas.length > 0) {
+    console.log('aplicar-decisoes: itens com o "depois" editado pelo dono (confira antes do próximo build):');
+    for (const e of editadas) console.log(`  ${e.id} ${e.referencia}: "${e.antes}" → "${e.depois}"`);
+  }
+  console.log(`aplicar-decisoes: decisões de ${decisoes} gravadas em ${correcoes}`);
 }
