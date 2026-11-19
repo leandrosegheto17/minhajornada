@@ -78,7 +78,7 @@ No modo livro, o capítulo seguinte começa logo depois do fim do anterior, no m
 
 ## Edge Cases
 
-- WHEN o tamanho da letra, o tema ou o tamanho da tela muda THEN o sistema SHALL repaginar com a regra de FUN-128 e mostrar a página do primeiro versículo que estava visível (coberto por FUN-86).
+- WHEN o tamanho da letra, o tema ou o tamanho da tela muda THEN o sistema SHALL repaginar com a regra de FUN-128 e mostrar a página do primeiro versículo que estava visível (coberto por FUN-86). **Fora desta feature a troca de letra** (AD-021): o defeito de repaginação é do bug `letra-livro-sem-repaginar`; a feature prova só que o capítulo continua no topo da página mostrada.
 - WHEN o leitor escolhe um capítulo pela grade (FUN-83) THEN o sistema SHALL mostrar a página que começa com esse capítulo (coberto por FUN-83 com FUN-128).
 - IF o capítulo tem um versículo só ou é curto THEN o sistema SHALL mostrá-lo sozinho na página, com o resto em branco (coberto por FUN-129).
 - IF um versículo sozinho não cabe numa página (ex.: letra no maior tamanho) THEN o sistema SHALL dividi-lo como hoje, começando a primeira fatia no topo da página nova (coberto por FUN-128 e FUN-132).

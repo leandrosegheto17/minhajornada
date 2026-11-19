@@ -213,3 +213,11 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Scope**: Features `resumo-livro`, `estudo-livro`, `assinatura` e `editor-estudo`.
 - **Date**: 2026-11-19
 - **Status**: active
+
+### AD-021
+- **Decision**: Fica fora da feature `livro-paginas` o caso limite "trocar a letra repagina com a regra de FUN-128" (`spec.md`, casos limite). O defeito é anterior à feature: a troca de letra no modo livro não repagina até recarregar (`.specs/bugs/letra-livro-sem-repaginar/relato.md`), e a correção é desse bug.
+- **Reason**: Achado na T4 do `/executar`, fora do escopo; decisão do dono em 2026-11-19. O `/validar` (A-01) pediu o registro.
+- **Trade-off**: O e2e de FUN-86 afirma só que o capítulo 21 continua no topo da página mostrada, não que a paginação refaça; a prova da repaginação fica para o teste de reprodução do bug.
+- **Scope**: Feature `livro-paginas`, `e2e/livro.spec.ts:239-252` e a linha de `spec.md` sobre troca de letra, tema e tamanho de tela.
+- **Date**: 2026-11-19
+- **Status**: active
