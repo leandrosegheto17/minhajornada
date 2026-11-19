@@ -6,6 +6,23 @@ import { criarDubleCaches } from './dados/dubleCache';
 import { CACHE_LIVROS } from './dados/livros';
 import { CHAVES } from './dados/preferencias';
 
+// FUN-119, FUN-122: o build local pode ter 0 correções aplicadas; o App é testado com 2 e a lista de exemplo.
+vi.mock('./biblia/correcoesAplicadas', () => ({
+  resumoCorrecoes: { total: 2 },
+  carregarCorrecoes: () =>
+    Promise.resolve({
+      regras: [{ id: 'R-01', descricao: 'Tira o espaço antes da vírgula', versiculos: 3 }],
+      itens: [
+        {
+          ref: { livro: 66, capitulo: 6, versiculo: 1 },
+          antes: 'o Coreiro abriu',
+          depois: 'o Cordeiro abriu',
+          motivo: 'Palavra inexistente.',
+        },
+      ],
+    }),
+}));
+
 const ROMANOS = 45;
 
 /** Corpo JSON de Romanos com 16 capítulos de 2 versículos. */
@@ -149,6 +166,25 @@ describe('App', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Romanos 8' }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 8');
+    expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+  });
+
+  it('FUN-122: no Sobre com correções, "Ver as correções no texto" abre a tela; "Voltar" volta ao Sobre e o Voltar do Sobre ao capítulo', async () => {
+    gravarRomanos8();
+    await guardarRomanos();
+    render(<App />);
+    lerBiblia();
+    await screen.findByText('Romanos 8:1');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sobre o MinhaJornada' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Ver as correções no texto' }));
+    expect(titulo1('Correções no texto')).toBeInTheDocument();
+    expect(await screen.findByText('Apocalipse 6:1')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Sobre' }));
+    expect(titulo1('Sobre o MinhaJornada')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Romanos 8' }));
     expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
   });
 

@@ -98,6 +98,24 @@ T16 → T17 → T18 → T19 → T20
 T21
 ```
 
+### Phase 8: Retrabalho R1
+
+```
+T22 -> T23 -> T24 -> T25 -> T26 -> T27 -> T28 -> T29
+```
+
+### Phase 9: Retrabalho R2
+
+```
+T30 -> T31 -> T32 -> T33
+```
+
+### Phase 10: Retrabalho R3
+
+```
+T34 -> T35
+```
+
 ---
 
 ## Task Breakdown
@@ -116,10 +134,10 @@ T21
 
 **Done when**:
 
-- [ ] Arquivo válido volta tipado; `versao` diferente de 1 é recusado
-- [ ] Um teste por campo obrigatório ausente ou de tipo errado (id, ref com livro/capítulo/versículo inteiros ≥ 1, tipo, antes não vazio, depois, motivo, fonte, confiança, estado, confere), com a mensagem citando o caminho (ex.: `itens[0].estado`)
-- [ ] `tipo` `arcaico` e `estado` fora de proposta/aprovada/recusada são recusados
-- [ ] Gate quick verde
+- [x] Arquivo válido volta tipado; `versao` diferente de 1 é recusado
+- [x] Um teste por campo obrigatório ausente ou de tipo errado (id, ref com livro/capítulo/versículo inteiros ≥ 1, tipo, antes não vazio, depois, motivo, fonte, confiança, estado, confere), com a mensagem citando o caminho (ex.: `itens[0].estado`)
+- [x] `tipo` `arcaico` e `estado` fora de proposta/aprovada/recusada são recusados
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-103` (ex.: `FUN-103: item sem fonte como texto é recusado com o caminho do campo`)
 **Gate**: quick
@@ -141,10 +159,10 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, a lista de casos limite está no corpo do commit: espaço antes de `,.;:?!` com e sem `]` antes (`[dizendo] :`), vários espaços, `”,diz`, `sempre.E`, número com dois-pontos (`3:16`) e com vírgula, reticências, pontuação dupla (`:;`, Js 13:6), fim de versículo, `[` logo depois da pontuação. Caso sem resultado definido pela spec: parar e perguntar (`AskUserQuestion`)
-- [ ] R-01, R-02 e R-03 resolvem cada exemplo da lista; aplicar duas vezes dá o mesmo texto
-- [ ] Nenhuma regra muda letra, número ou a quantidade e a ordem de `[` e `]` (teste de propriedade sobre os 31.102 versículos reais da fonte)
-- [ ] Gate quick verde
+- [x] Antes de codar, a lista de casos limite está no corpo do commit: espaço antes de `,.;:?!` com e sem `]` antes (`[dizendo] :`), vários espaços, `”,diz`, `sempre.E`, número com dois-pontos (`3:16`) e com vírgula, reticências, pontuação dupla (`:;`, Js 13:6), fim de versículo, `[` logo depois da pontuação. Caso sem resultado definido pela spec: parar e perguntar (`AskUserQuestion`)
+- [x] R-01, R-02 e R-03 resolvem cada exemplo da lista; aplicar duas vezes dá o mesmo texto
+- [x] Nenhuma regra muda letra, número ou a quantidade e a ordem de `[` e `]` (teste de propriedade sobre os 31.102 versículos reais da fonte)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-106`/`FUN-117`
 **Gate**: quick
@@ -166,10 +184,10 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, os casos e o resultado de cada um estão no corpo do commit (incluindo: sobreposição parcial, trechos encostados sem sobrepor, mesmo "antes" duas vezes no versículo, item recusado que não confere, proposta com colchete sem par). Caso sem resultado na spec: parar e perguntar
-- [ ] Um teste por ramo, cada um falhando se a guarda sair: id repetido; livro, capítulo e versículo inexistentes (três testes); aprovada com "antes" ausente e com "antes" duas vezes (`correção <id> não confere com <Livro c:v>`); duas aprovadas sobrepostas (cita os dois ids); trechos separados no mesmo versículo passam; "depois" com `[` sem `]` e com `]` sem `[`
-- [ ] Proposta e recusada que não conferem não derrubam (só a aprovada vai ao texto); o colchete sem par vale para todo estado (FUN-125)
-- [ ] Gate quick verde
+- [x] Antes de codar, os casos e o resultado de cada um estão no corpo do commit (incluindo: sobreposição parcial, trechos encostados sem sobrepor, mesmo "antes" duas vezes no versículo, item recusado que não confere, proposta com colchete sem par). Caso sem resultado na spec: parar e perguntar
+- [x] Um teste por ramo, cada um falhando se a guarda sair: id repetido; livro, capítulo e versículo inexistentes (três testes); aprovada com "antes" ausente e com "antes" duas vezes (`correção <id> não confere com <Livro c:v>`); duas aprovadas sobrepostas (cita os dois ids); trechos separados no mesmo versículo passam; "depois" com `[` sem `]` e com `]` sem `[`
+- [x] Proposta e recusada que não conferem não derrubam (só a aprovada vai ao texto); o colchete sem par vale para todo estado (FUN-125)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com o FUN de cada ramo
 **Gate**: quick
@@ -191,17 +209,19 @@ T21
 
 **Done when**:
 
-- [ ] Só aprovadas mudam o texto; proposta e recusada não (um teste para cada estado, item e regra)
-- [ ] Dois itens no mesmo versículo, em trechos separados, entram os dois; item e regra no mesmo versículo: item primeiro, regra depois, e o resultado é igual em duas execuções (FUN-127)
-- [ ] Mesmos 66 livros, mesma contagem de capítulos e versículos, colchetes em pares depois da aplicação (FUN-117); entrada não é modificada
-- [ ] A lista traz só o que mudou de fato; regra que não mudou nenhum versículo aparece com 0
-- [ ] Gate quick verde
+- [x] Só aprovadas mudam o texto; proposta e recusada não (um teste para cada estado, item e regra)
+- [x] Dois itens no mesmo versículo, em trechos separados, entram os dois; item e regra no mesmo versículo: item primeiro, regra depois, e o resultado é igual em duas execuções (FUN-127)
+- [x] Mesmos 66 livros, mesma contagem de capítulos e versículos, colchetes em pares depois da aplicação (FUN-117); entrada não é modificada
+- [x] A lista traz só o que mudou de fato; regra que não mudou nenhum versículo aparece com 0
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-114`/`FUN-117`/`FUN-127`
 **Gate**: quick
 **Commit**: `feat(correcoes): aplica as correções aprovadas ao texto`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 240299940a8cea248072e1c15ee8c5c753beea3b = verde
 
 ### T5: Correções no build (FUN-114, FUN-115, FUN-118)
 
@@ -217,11 +237,11 @@ T21
 
 **Done when**:
 
-- [ ] Com o exemplo, Apocalipse 6:1 gerado diz "Cordeiro" e a lista gerada traz o item; o resumo tem `total` igual ao número de aplicadas
-- [ ] Arquivo com aprovada que não confere: `gerar` lança `correção <id> não confere com <Livro c:v>` **e** `public/livros` anterior continua no lugar (teste em `tmpdir`)
-- [ ] Hash: o livro corrigido ganha nome novo; um livro sem correção mantém o mesmo nome de antes (FUN-118, AD-002)
-- [ ] `pnpm test` e `pnpm typecheck` rodam com o arquivo inicial vazio
-- [ ] Gate quick verde
+- [x] Com o exemplo, Apocalipse 6:1 gerado diz "Cordeiro" e a lista gerada traz o item; o resumo tem `total` igual ao número de aplicadas
+- [x] Arquivo com aprovada que não confere: `gerar` lança `correção <id> não confere com <Livro c:v>` **e** `public/livros` anterior continua no lugar (teste em `tmpdir`)
+- [x] Hash: o livro corrigido ganha nome novo; um livro sem correção mantém o mesmo nome de antes (FUN-118, AD-002)
+- [x] `pnpm test` e `pnpm typecheck` rodam com o arquivo inicial vazio
+- [x] Gate quick verde
 
 **Tests**: integration, nomes com `FUN-114`/`FUN-115`/`FUN-118`, em `test/arquivos/converter-biblia.test.ts`
 **Gate**: quick
@@ -243,17 +263,19 @@ T21
 
 **Done when**:
 
-- [ ] Cada versículo gerado é igual ao da fonte, exceto os das aprovadas do exemplo, que são iguais à fonte com o "antes" trocado pelo "depois" (o teste calcula isso sozinho, sem chamar `aplicarCorrecoes`)
-- [ ] SHA-256 de cada arquivo de `.biblia/` igual antes e depois de `gerar` (FUN-114)
-- [ ] Build com id repetido e com referência inexistente falha com o id e a referência (FUN-126)
-- [ ] O motivo da troca e a autorização (`## Autorizações`, 2026-11-18) estão no corpo do commit
-- [ ] Gate quick verde
+- [x] Cada versículo gerado é igual ao da fonte, exceto os das aprovadas do exemplo, que são iguais à fonte com o "antes" trocado pelo "depois" (o teste calcula isso sozinho, sem chamar `aplicarCorrecoes`)
+- [x] SHA-256 de cada arquivo de `.biblia/` igual antes e depois de `gerar` (FUN-114)
+- [x] Build com id repetido e com referência inexistente falha com o id e a referência (FUN-126)
+- [x] O motivo da troca e a autorização (`## Autorizações`, 2026-11-18) estão no corpo do commit
+- [x] Gate quick verde
 
 **Tests**: integration, nomes com `FUN-03`/`FUN-114`/`FUN-126`
 **Gate**: quick
 **Commit**: `test(build): confere os versículos com as correções e a fonte intocada`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ cbcc535b7b971abbd5de42cb46076041bf4f43c9 = verde
 
 ### T7: Leitura das tabelas do levantamento (FUN-104)
 
@@ -269,10 +291,10 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, os formatos achados nos 15 arquivos estão no corpo do commit (ref "Livro c:v", "N ocorrências (ex.: …)", livro com número ("1 João"), trecho com aspas tipográficas ou com `|` escapado, linha de cabeçalho e de separador). Formato sem leitura definida: vai para `ignoradas`, nunca some
-- [ ] Teste com trechos reais de `g15.md` (Tiago 1:13, Apocalipse 6:1) e uma linha `arcaico`, que sai
-- [ ] Linha "N ocorrências" volta como candidato marcado para expansão (AD-014)
-- [ ] Gate quick verde
+- [x] Antes de codar, os formatos achados nos 15 arquivos estão no corpo do commit (ref "Livro c:v", "N ocorrências (ex.: …)", livro com número ("1 João"), trecho com aspas tipográficas ou com `|` escapado, linha de cabeçalho e de separador). Formato sem leitura definida: vai para `ignoradas`, nunca some
+- [x] Teste com trechos reais de `g15.md` (Tiago 1:13, Apocalipse 6:1) e uma linha `arcaico`, que sai
+- [x] Linha "N ocorrências" volta como candidato marcado para expansão (AD-014)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-104`, em `test/arquivos/consolidacao-levantamento.test.ts`
 **Gate**: quick
@@ -294,10 +316,10 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, a tabela caso → resultado está no corpo do commit (incluindo: trecho que aparece duas vezes, trecho só sem colchetes, colchetes diferentes entre antes e depois, "N ocorrências" com contagem diferente). Caso sem resultado na AD ou na spec: parar e perguntar
-- [ ] Um teste por linha da tabela; o relatório conta conferem, não conferem, recuperados (AD-015), cobertos por regra (AD-013) e expandidos (AD-014)
-- [ ] Teste com o texto real: Apocalipse 6:1 "Coreiro" confere com confiança alta; um "antes" inexistente volta `confere: false` (Independent Test da spec)
-- [ ] Gate quick verde
+- [x] Antes de codar, a tabela caso → resultado está no corpo do commit (incluindo: trecho que aparece duas vezes, trecho só sem colchetes, colchetes diferentes entre antes e depois, "N ocorrências" com contagem diferente). Caso sem resultado na AD ou na spec: parar e perguntar
+- [x] Um teste por linha da tabela; o relatório conta conferem, não conferem, recuperados (AD-015), cobertos por regra (AD-013) e expandidos (AD-014)
+- [x] Teste com o texto real: Apocalipse 6:1 "Coreiro" confere com confiança alta; um "antes" inexistente volta `confere: false` (Independent Test da spec)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-104`/`FUN-105`, em `test/arquivos/consolidacao-conferir.test.ts`
 **Gate**: quick
@@ -319,10 +341,10 @@ T21
 
 **Done when**:
 
-- [ ] Para cada regra, o número de versículos é o de versículos da fonte que a regra muda, e os 5 exemplos são versículos reais com o antes e o depois da regra
-- [ ] O arquivo gravado passa em `lerArquivoCorrecoes` e `validarCorrecoes`; cada item ocupa uma linha
-- [ ] Rodar duas vezes sobre a mesma entrada grava o mesmo arquivo, byte a byte
-- [ ] Gate quick verde
+- [x] Para cada regra, o número de versículos é o de versículos da fonte que a regra muda, e os 5 exemplos são versículos reais com o antes e o depois da regra
+- [x] O arquivo gravado passa em `lerArquivoCorrecoes` e `validarCorrecoes`; cada item ocupa uma linha
+- [x] Rodar duas vezes sobre a mesma entrada grava o mesmo arquivo, byte a byte
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-106`, em `test/arquivos/consolidacao-regras.test.ts`
 **Gate**: quick
@@ -344,16 +366,18 @@ T21
 
 **Done when**:
 
-- [ ] O arquivo real passa na leitura e na validação; nenhum item `arcaico`; tem as 3 regras com contagem e 5 exemplos
-- [ ] Tem o item de Apocalipse 6:1 ("Coreiro" → "Cordeiro", confiança alta, conferindo); o teste não fixa o estado, que muda com a revisão
-- [ ] As contagens do relatório (por tipo, conferem, não conferem, ignoradas) estão no corpo do commit
-- [ ] Gate quick verde
+- [x] O arquivo real passa na leitura e na validação; nenhum item `arcaico`; tem as 3 regras com contagem e 5 exemplos
+- [x] Tem o item de Apocalipse 6:1 ("Coreiro" → "Cordeiro", confiança alta, conferindo); o teste não fixa o estado, que muda com a revisão
+- [x] As contagens do relatório (por tipo, conferem, não conferem, ignoradas) estão no corpo do commit
+- [x] Gate quick verde
 
 **Tests**: integration, nomes com `FUN-104`/`FUN-105`/`FUN-106`
 **Gate**: quick
 **Commit**: `feat(correcoes): arquivo de correções consolidado do levantamento`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 24de835d90a2b393e1811a9e2fc294b5a73f90ab = verde
 
 ### T11: Lógica da revisão (FUN-108, FUN-110, FUN-111, FUN-112)
 
@@ -369,12 +393,12 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, os grupos e as regras de entrada em cada um estão no corpo do commit (bloco = alta, confere, sem `italicoMuda`, por tipo e livro; um a um = média, baixa, todo sentido, não confere, `italicoMuda`). Caso de fronteira sem resposta: parar e perguntar
-- [ ] Cada grupo traz a contagem de pendentes, que cai com cada decisão (FUN-108)
-- [ ] Aprovar um bloco aprova só os itens dele que conferem, e nenhum outro (FUN-110), com um teste em que o grupo vizinho fica intacto
-- [ ] Sentido sem fonte: `podeAprovar` devolve "Falta a fonte" (FUN-111); não confere devolve "Não confere"
-- [ ] `primeiroPendente` segue a ordem regras → blocos → um a um e devolve `null` quando tudo foi decidido (FUN-112)
-- [ ] Gate quick verde
+- [x] Antes de codar, os grupos e as regras de entrada em cada um estão no corpo do commit (bloco = alta, confere, sem `italicoMuda`, por tipo e livro; um a um = média, baixa, todo sentido, não confere, `italicoMuda`). Caso de fronteira sem resposta: parar e perguntar
+- [x] Cada grupo traz a contagem de pendentes, que cai com cada decisão (FUN-108)
+- [x] Aprovar um bloco aprova só os itens dele que conferem, e nenhum outro (FUN-110), com um teste em que o grupo vizinho fica intacto
+- [x] Sentido sem fonte: `podeAprovar` devolve "Falta a fonte" (FUN-111); não confere devolve "Não confere"
+- [x] `primeiroPendente` segue a ordem regras → blocos → um a um e devolve `null` quando tudo foi decidido (FUN-112)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com o FUN de cada regra
 **Gate**: quick
@@ -396,16 +420,18 @@ T21
 
 **Done when**:
 
-- [ ] Muda só `estado` e, quando veio, `depois` dos itens e regras decididos; os não decididos ficam iguais, byte a byte, no arquivo regravado
-- [ ] Id desconhecido, estado inválido ou "depois" com colchete sem par: recusa e não grava nada (um teste por ramo)
-- [ ] Mesclar duas vezes as mesmas decisões dá o mesmo arquivo
-- [ ] Gate quick verde
+- [x] Muda só `estado` e, quando veio, `depois` dos itens e regras decididos; os não decididos ficam iguais, byte a byte, no arquivo regravado
+- [x] Id desconhecido, estado inválido ou "depois" com colchete sem par: recusa e não grava nada (um teste por ramo)
+- [x] Mesclar duas vezes as mesmas decisões dá o mesmo arquivo
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-113`
 **Gate**: quick
 **Commit**: `feat(revisao): grava as decisões da revisão no arquivo de correções`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 821b6e98e28295525727aa489ce653a4bd8bbcf9 = verde
 
 ### T13: Dados da página de revisão (FUN-109)
 
@@ -421,10 +447,10 @@ T21
 
 **Done when**:
 
-- [ ] Para Apocalipse 6:1, o versículo "antes" é o da fonte e o "depois" tem "Cordeiro" no lugar de "Coreiro"
-- [ ] Item que não confere leva o versículo inteiro e `depois` igual ao antes (FUN-105)
-- [ ] `revisao/dados.json` fora do git (gerado)
-- [ ] Gate quick verde
+- [x] Para Apocalipse 6:1, o versículo "antes" é o da fonte e o "depois" tem "Cordeiro" no lugar de "Coreiro"
+- [x] Item que não confere leva o versículo inteiro e `depois` igual ao antes (FUN-105)
+- [x] `revisao/dados.json` fora do git (gerado)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-109`, em `test/arquivos/montar-revisao.test.ts`
 **Gate**: quick
@@ -446,11 +472,11 @@ T21
 
 **Done when**:
 
-- [ ] Com um banco dublê: aprovar uma regra, recusar um item de sentido e editar um de digitação gravam três linhas; reabrir a página mostra as três decisões e começa no primeiro pendente (Independent Test da spec, parte da página)
-- [ ] Item de sentido sem fonte mostra "Falta a fonte" e o Aprovar desativado
-- [ ] Nenhum texto entra por `innerHTML` (teste: trecho com `<b>` aparece como texto)
-- [ ] `pnpm revisao:montar` gera o JS; `revisao/index.html` só carrega arquivos relativos
-- [ ] Gate quick verde
+- [x] Com um banco dublê: aprovar uma regra, recusar um item de sentido e editar um de digitação gravam três linhas; reabrir a página mostra as três decisões e começa no primeiro pendente (Independent Test da spec, parte da página)
+- [x] Item de sentido sem fonte mostra "Falta a fonte" e o Aprovar desativado
+- [x] Nenhum texto entra por `innerHTML` (teste: trecho com `<b>` aparece como texto)
+- [x] `pnpm revisao:montar` gera o JS; `revisao/index.html` só carrega arquivos relativos
+- [x] Gate quick verde
 
 **Tests**: unit (jsdom), nomes com o FUN de cada comportamento, em `src/revisao/pagina.test.ts`
 **Gate**: quick
@@ -472,15 +498,17 @@ T21
 
 **Done when**:
 
-- [ ] Teste de arquivo: o LEIA-ME cita os três comandos (`pnpm revisao:montar`, `node scripts/montar-revisao.ts`, `node scripts/aplicar-decisoes.ts`) e eles existem no repositório
-- [ ] Publicada (se o dono confirmar): link e slug no LEIA-ME e na seção `## Retomada` do `STATE.md`; recusada: registrado "publicação pendente" no LEIA-ME
-- [ ] Gate quick verde
+- [x] Teste de arquivo: o LEIA-ME cita os três comandos (`pnpm revisao:montar`, `node scripts/montar-revisao.ts`, `node scripts/aplicar-decisoes.ts`) e eles existem no repositório
+- [x] Publicada (se o dono confirmar): link e slug no LEIA-ME e na seção `## Retomada` do `STATE.md`; recusada: registrado "publicação pendente" no LEIA-ME
+- [x] Gate quick verde
 
 **Tests**: unit (arquivo), nomes com `FUN-113`, em `test/arquivos/revisao-leia-me.test.ts`
 **Gate**: quick
 **Commit**: `docs(revisao): roteiro de publicação e exportação da revisão`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cdf9d290da5702a89ea = verde
 
 ### T16: Resumo e carga da lista no app (FUN-123, FUN-124)
 
@@ -496,9 +524,9 @@ T21
 
 **Done when**:
 
-- [ ] `carregarCorrecoes()` devolve a lista gerada; `resumoCorrecoes.total` igual ao número de regras aplicadas mais itens aplicados
-- [ ] Depois de `pnpm build`, a lista está num arquivo JS separado de `dist/assets/` e o pré-cache do service worker o lista (teste de arquivo sobre o `dist` do `build:e2e`, junto do e2e em T21, ou conferência registrada no commit)
-- [ ] Gate quick verde
+- [x] `carregarCorrecoes()` devolve a lista gerada; `resumoCorrecoes.total` igual ao número de regras aplicadas mais itens aplicados
+- [x] Depois de `pnpm build`, a lista está num arquivo JS separado de `dist/assets/` e o pré-cache do service worker o lista (teste de arquivo sobre o `dist` do `build:e2e`, junto do e2e em T21, ou conferência registrada no commit)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-123`
 **Gate**: quick
@@ -520,10 +548,10 @@ T21
 
 **Done when**:
 
-- [ ] Com total > 0: "texto baseado na Bíblia Livre (BLIVRE)", os três autores, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, correções de digitação, ortografia e sentido, não endosso das mudanças nem do app, e "Ver as correções no texto", que chama `aoVerCorrecoes` (FUN-119)
-- [ ] Com 0: "Só o formato do arquivo foi convertido para o app; o texto não foi modificado" e nenhum link de correções (FUN-120)
-- [ ] O teste antigo de FUN-38 passa a valer para os dois ramos, tão forte quanto antes; motivo no commit
-- [ ] Gate quick verde
+- [x] Com total > 0: "texto baseado na Bíblia Livre (BLIVRE)", os três autores, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, correções de digitação, ortografia e sentido, não endosso das mudanças nem do app, e "Ver as correções no texto", que chama `aoVerCorrecoes` (FUN-119)
+- [x] Com 0: "Só o formato do arquivo foi convertido para o app; o texto não foi modificado" e nenhum link de correções (FUN-120)
+- [x] O teste antigo de FUN-38 passa a valer para os dois ramos, tão forte quanto antes; motivo no commit
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-119`/`FUN-120`
 **Gate**: quick
@@ -545,8 +573,8 @@ T21
 
 **Done when**:
 
-- [ ] `baseado` verdadeiro: "Baseado na Bíblia Livre"; falso: "Bíblia Livre"; o resto da capa igual (FUN-89 continua)
-- [ ] Gate quick verde
+- [x] `baseado` verdadeiro: "Baseado na Bíblia Livre"; falso: "Bíblia Livre"; o resto da capa igual (FUN-89 continua)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-121`
 **Gate**: quick
@@ -568,9 +596,9 @@ T21
 
 **Done when**:
 
-- [ ] Reducer: `irPara('correcoes')` a partir do Sobre e `irPara('sobre')` de volta mantêm `ref`, formato e âncora
-- [ ] App: no Sobre com correções, tocar "Ver as correções no texto" mostra a tela; "Voltar" volta ao Sobre, e o "Voltar" do Sobre continua levando ao capítulo aberto
-- [ ] Gate quick verde
+- [x] Reducer: `irPara('correcoes')` a partir do Sobre e `irPara('sobre')` de volta mantêm `ref`, formato e âncora
+- [x] App: no Sobre com correções, tocar "Ver as correções no texto" mostra a tela; "Voltar" volta ao Sobre, e o "Voltar" do Sobre continua levando ao capítulo aberto
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-122`, em `src/estado/leitor.test.ts` e `src/App.test.tsx`
 **Gate**: quick
@@ -592,11 +620,11 @@ T21
 
 **Done when**:
 
-- [ ] Com uma lista de exemplo fora de ordem: livros saem na ordem bíblica e os itens por capítulo e versículo; livro sem correção não aparece (FUN-122)
-- [ ] Cada regra aparece numa linha com a descrição e "N versículos" (FUN-123)
-- [ ] Item mostra referência, antes, depois e motivo; colchete nunca aparece, o trecho fica em itálico
-- [ ] Carregando enquanto a promessa não volta; erro com "Tentar de novo", que chama `carregar` de novo; vazio com a mensagem do mockup
-- [ ] Gate quick verde
+- [x] Com uma lista de exemplo fora de ordem: livros saem na ordem bíblica e os itens por capítulo e versículo; livro sem correção não aparece (FUN-122)
+- [x] Cada regra aparece numa linha com a descrição e "N versículos" (FUN-123)
+- [x] Item mostra referência, antes, depois e motivo; colchete nunca aparece, o trecho fica em itálico
+- [x] Carregando enquanto a promessa não volta; erro com "Tentar de novo", que chama `carregar` de novo; vazio com a mensagem do mockup
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-122`/`FUN-123`, em `src/telas/TelaCorrecoes.test.tsx`
 **Gate**: quick
@@ -618,18 +646,266 @@ T21
 
 **Done when**:
 
-- [ ] Apocalipse 6:1 mostra "Cordeiro" (e não "Coreiro") na rolagem e no modo livro (FUN-116)
-- [ ] Sobre → "Ver as correções no texto" → Apocalipse aberto mostra "Coreiro" riscado e "Cordeiro" → "Voltar" volta ao Sobre (FUN-122)
-- [ ] Com o service worker ativo e a rede cortada, a tela abre com a lista completa (FUN-124)
-- [ ] Teste de arquivo: o job de e2e do CI roda `pnpm build:e2e`; o deploy roda `pnpm build` sem `--correcoes`
-- [ ] Rodada sem a mudança (teste vermelho) registrada; teto de 2 tentativas de 5 min
-- [ ] Gate full verde
+- [x] Apocalipse 6:1 mostra "Cordeiro" (e não "Coreiro") na rolagem e no modo livro (FUN-116)
+- [x] Sobre → "Ver as correções no texto" → Apocalipse aberto mostra "Coreiro" riscado e "Cordeiro" → "Voltar" volta ao Sobre (FUN-122)
+- [x] Com o service worker ativo e a rede cortada, a tela abre com a lista completa (FUN-124)
+- [x] Teste de arquivo: o job de e2e do CI roda `pnpm build:e2e`; o deploy roda `pnpm build` sem `--correcoes`
+- [x] Rodada sem a mudança (teste vermelho) registrada; teto de 2 tentativas de 5 min
+- [x] Gate full verde
 
 **Tests**: e2e, nomes com `FUN-116`/`FUN-122`/`FUN-124`
 **Gate**: full
 **Commit**: `test(e2e): jornada das correções com e sem rede`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = verde
+
+### T22: Comando de exportação roda pelo Node (A-01)
+
+**What**: Imports com extensão `.ts` em `src/revisao/mesclar.ts` e `src/revisao/logica.ts` (e no que o encadeamento de `scripts/aplicar-decisoes.ts` carregar), e teste que roda o comando por processo filho.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: Cabeçalho de `src/biblia/correcoes/arquivo.ts:1-3` (imports relativos com `.ts`); processo filho como em `test/arquivos/converter-biblia.test.ts`
+**Requirement**: FUN-113 · Achado: A-01 (validation.md)
+**Tests**: `test/arquivos/aplicar-decisoes.test.ts`: `node scripts/aplicar-decisoes.ts <decisoes>` em `tmpdir` regrava o arquivo; decisão recusada sai com erro e não grava; falha antes da correção com `ERR_MODULE_NOT_FOUND`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T23: Aplicação com deslocamento de posição (A-02)
+
+**What**: Teste de dois itens aprovados no mesmo versículo em que o primeiro "depois" muda o tamanho do texto, nas duas ordens do arquivo, esperando o versículo exato.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T22
+**Reuses**: `src/biblia/correcoes/aplicar.test.ts:39-45`
+**Requirement**: FUN-114, FUN-127 · Achado: A-02 (validation.md)
+**Tests**: `src/biblia/correcoes/aplicar.test.ts`, nome com `FUN-127`; falha com a ordem de `aplicar.ts:44` invertida
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T24: Exportação recusa aprovadas sobrepostas (A-03)
+
+**What**: `mesclarDecisoes` recusa, antes de gravar, duas aprovadas que se sobrepõem no mesmo versículo, apontando os dois ids (mesma regra de `validarCorrecoes`).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T23
+**Reuses**: Checagem de sobreposição de `src/biblia/correcoes/validar.ts:66-78` (reaproveitar, não duplicar)
+**Requirement**: FUN-107, FUN-113 · Achado: A-03 (validation.md)
+**Tests**: `src/revisao/mesclar.test.ts`: par sobreposto aprovado é recusado com os dois ids; encostados passam
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T25: Item sobreposto vai ao um a um (A-03)
+
+**What**: O agrupamento da revisão manda ao "um a um" todo item cujo trecho se sobrepõe ao de outro item do mesmo versículo, para o bloco nunca aprovar os dois.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T24
+**Reuses**: `src/revisao/logica.ts:97-105` (`ehBloco`/agrupar)
+**Requirement**: FUN-110 · Achado: A-03 (validation.md)
+**Tests**: `src/revisao/logica.test.ts`: dois itens sobrepostos de confiança alta não entram no bloco
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T26: Prova da lista em pedaço separado e no pré-cache (A-04)
+
+**What**: Teste de arquivo sobre o `dist-e2e`: a lista de correções está num JS próprio de `assets/` e o `sw.js` o lista.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T25
+**Reuses**: `test/arquivos/` (testes de arquivo sobre o build); critério da T16
+**Requirement**: FUN-124 · Achado: A-04 (validation.md)
+**Tests**: `test/arquivos/correcoes-pedaco.test.ts`, nome com `FUN-124`; pula com aviso se `dist-e2e` não existe ou roda após `pnpm build:e2e`, conforme o molde do projeto
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T27: Edição salva do "depois" não se perde (A-05)
+
+**What**: O cartão do item parte do `depois` da decisão salva (quando houver) no campo, na prévia e na reaprovação.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T26
+**Reuses**: `src/revisao/pagina.ts:205-230`
+**Requirement**: FUN-112 · Achado: A-05 (validation.md)
+**Tests**: `src/revisao/pagina.test.ts`: editar e aprovar, voltar ao item (ou recarregar do banco dublê) mostra o texto editado e reaprovar grava o mesmo `depois`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T28: Regra sem versículo mudado não conta (A-06)
+
+**What**: Regra aprovada que muda 0 versículos fica fora da lista aplicada e do total do resumo.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T27
+**Reuses**: `src/biblia/correcoes/aplicar.ts:70-78`, `scripts/converter-biblia.ts:65`
+**Requirement**: FUN-123 · Achado: A-06 (validation.md)
+**Tests**: `src/biblia/correcoes/aplicar.test.ts`, nome com `FUN-123`: regra aprovada sem efeito não aparece; total 0 quando nada muda
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T29: Exportação lista os "depois" editados (A-07)
+
+**What**: `scripts/aplicar-decisoes.ts` imprime, antes de gravar, cada item com `depois` editado (id, referência, antes e depois) para o dono conferir.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T28
+**Reuses**: `scripts/aplicar-decisoes.ts:36-39`
+**Requirement**: FUN-113 · Achado: A-07 (validation.md)
+**Tests**: `test/arquivos/aplicar-decisoes.test.ts`: a saída lista o item editado e não lista o aprovado sem edição
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = verde
+
+### T30: Recusar caracteres de controle no "depois" (A-10)
+
+**What**: `mesclarDecisoes` e `validarCorrecoes` recusam `depois` com caracteres de controle (`[ --  ]`), com a mensagem citando o id, sem gravar.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: None
+**Reuses**: `src/biblia/correcoes/validar.ts:41-83` (molde da recusa por campo), `src/revisao/mesclar.ts:40-46`
+**Requirement**: FUN-113, FUN-125 · Achado: A-10 (validation.md)
+**Tests**: `src/revisao/mesclar.test.ts` e `src/biblia/correcoes/validar.test.ts`: `depois` com `
+`, `
+`, `` e ` ` é recusado (um teste por variante) e o arquivo de entrada não muda; `test/arquivos/aplicar-decisoes.test.ts`: o comando real sai com erro e não grava
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T31: Lista dos editados antes de gravar e só com aprovados (A-07)
+
+**What**: `scripts/aplicar-decisoes.ts` monta a lista dos `depois` editados antes do `writeFileSync`, imprime com `JSON.stringify` em antes e depois e lista só itens que ficam `aprovada` (recusados não aparecem).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T30
+**Reuses**: `scripts/aplicar-decisoes.ts:50-80`
+**Requirement**: FUN-113 · Achado: A-07 (validation.md, reaberto)
+**Tests**: `test/arquivos/aplicar-decisoes.test.ts`: item recusado com `depois` salvo não aparece na saída; a lista é impressa antes da gravação (ex.: falha de gravação provocada depois da listagem e a saída já traz o item); texto com aspas sai escapado
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T32: Sobreposição por contenção na ordem inversa (A-08)
+
+**What**: Teste de `agrupar` com o item menor listado antes do maior que o contém: os dois vão ao "um a um" e o bloco fica vazio.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T31
+**Reuses**: `src/revisao/logica.test.ts:78-85`
+**Requirement**: FUN-110 · Achado: A-08 (validation.md)
+**Tests**: `src/revisao/logica.test.ts`: `arquivo([menor, maior])`, os dois ids em `umAUm`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T33: Recusar mantém o "depois" salvo (A-09)
+
+**What**: Teste da página de revisão: item com `depois` salvo na decisão, o dono clica Recusar e a gravação leva o `depois` salvo.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T32
+**Reuses**: `src/revisao/pagina.test.ts:144-177`
+**Requirement**: FUN-112 · Achado: A-09 (validation.md)
+**Tests**: `src/revisao/pagina.test.ts`: `gravacoes[0]` igual a `{id, estado: 'recusada', depois: <salvo>}`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+Gate: pnpm typecheck && pnpm test @ 152986c5be85135da0e3ed97b6a43522422e3c10 = verde
+
+### T34: Recusar caracteres de formatação no "depois" (A-12)
+
+**What**: `semControle` (`src/biblia/correcoes/validar.ts:17-25`) passa a recusar também `\p{Cf}` (bidi U+202A-202E, U+2066-2069, U+200E, U+200F, U+061C; largura zero U+200B-200D, U+2060, U+FEFF, U+00AD), o que vale no mesclar e no build (AD-018).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: None
+**Reuses**: `src/biblia/correcoes/validar.ts:17-25` (estender `ehControle`/`semControle`, sem segunda função), AD-018
+**Requirement**: FUN-113, AD-018 · Achado: A-12 (validation.md)
+**Tests**: `src/biblia/correcoes/validar.test.ts` e `src/revisao/mesclar.test.ts`: um caso por grupo (U+202E, U+2066, U+2069, U+200E, U+061C, U+200B, U+200D, U+2060, U+FEFF, U+00AD), escrito como escape, recusa citando o id; `test/arquivos/aplicar-decisoes.test.ts`: o ataque bidi pelo comando real sai com erro e não grava; o `correcoes.json` real continua aceito
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+### T35: Um teste por ramo da guarda de controle (A-11)
+
+**What**: As tabelas `it.each` de `validar.test.ts:13-22` e `mesclar.test.ts:102-114` ganham DEL (`\u007F`) e U+2029, todos os casos ficam escritos como escape (nada de caractere literal invisível) e os nomes dos testes citam FUN-113 e AD-018 no lugar de FUN-125.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T34
+**Reuses**: `src/biblia/correcoes/validar.test.ts:13-22`, `src/revisao/mesclar.test.ts:102-114`
+**Requirement**: FUN-113, AD-018 · Achado: A-11 (validation.md)
+**Tests**: os casos DEL e U+2029 falham se o ramo sair de `ehControle`
+**Gate**: quick
+
+- [x] Concluída
+
+---
+
+Gate: pnpm typecheck && pnpm test @ ddb01c613f6bfd496b0a7c65ead6e39ce5ee33a3 = verde
 
 ## Critérios
 

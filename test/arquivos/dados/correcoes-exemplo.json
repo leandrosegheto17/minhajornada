@@ -1,0 +1,42 @@
+{
+  "versao": 1,
+  "regras": [],
+  "itens": [
+    {
+      "id": "C-0001",
+      "ref": { "livro": 66, "capitulo": 6, "versiculo": 1 },
+      "tipo": "digitacao",
+      "antes": "Coreiro",
+      "depois": "Cordeiro",
+      "motivo": "palavra inexistente",
+      "fonte": "consistência interna",
+      "confianca": "alta",
+      "estado": "aprovada",
+      "confere": true
+    },
+    {
+      "id": "C-0002",
+      "ref": { "livro": 43, "capitulo": 1, "versiculo": 1 },
+      "tipo": "ortografia",
+      "antes": "estava junto de Deus",
+      "depois": "estava com Deus",
+      "motivo": "exemplo de teste em outro livro",
+      "fonte": "",
+      "confianca": "media",
+      "estado": "aprovada",
+      "confere": true
+    },
+    {
+      "id": "C-0003",
+      "ref": { "livro": 1, "capitulo": 1, "versiculo": 1 },
+      "tipo": "sentido",
+      "antes": "No princípio",
+      "depois": "Em princípio",
+      "motivo": "exemplo de proposta, não deve entrar no texto",
+      "fonte": "",
+      "confianca": "baixa",
+      "estado": "proposta",
+      "confere": true
+    }
+  ]
+}

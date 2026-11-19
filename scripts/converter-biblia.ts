@@ -6,6 +6,10 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'nod
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { converterLivro, montarIndice } from '../src/biblia/conversor.ts';
+import { lerArquivoCorrecoes } from '../src/biblia/correcoes/arquivo.ts';
+import type { ResumoCorrecoes } from '../src/biblia/correcoes/arquivo.ts';
+import { aplicarCorrecoes } from '../src/biblia/correcoes/aplicar.ts';
+import { validarCorrecoes } from '../src/biblia/correcoes/validar.ts';
 import type { Indice, Livro } from '../src/biblia/tipos.ts';
 
 const ARQUIVO_FONTE = /^(\d{2})-[a-z0-9-]+\.md$/;
@@ -21,40 +25,96 @@ export interface Saida {
   indice: Indice;
 }
 
-/** Converte todos os livros de `pastaFonte`, recria `pastaLivros` e grava o índice em `arquivoIndice`. */
-export function gerar(pastaFonte: string, pastaLivros: string, arquivoIndice: string): Saida {
+/** Arquivos de correções (entrada) e os dois gerados (saída). Sem `correcoes`, o texto sai como está na fonte. */
+export interface OpcoesCorrecoes {
+  correcoes?: string;
+  resumo?: string;
+  lista?: string;
+}
+
+/** Lê e converte os 66 livros de `pastaFonte` (`.biblia/`), só leitura. */
+export function lerLivros(pastaFonte: string): Livro[] {
   const fontes = readdirSync(pastaFonte)
     .filter((nome) => ARQUIVO_FONTE.test(nome))
     .sort();
   if (fontes.length !== 66) throw new Error(`esperados 66 livros em ${pastaFonte}, achados ${fontes.length}`);
+  return fontes.map((fonte) =>
+    converterLivro(readFileSync(join(pastaFonte, fonte), 'utf8'), Number(ARQUIVO_FONTE.exec(fonte)?.[1])),
+  );
+}
+
+/**
+ * Converte todos os livros de `pastaFonte`, aplica as correções aprovadas, recria `pastaLivros` e grava o índice em
+ * `arquivoIndice` (FUN-03, FUN-114). Tudo é convertido, lido, validado e aplicado em memória antes de apagar
+ * `pastaLivros`: arquivo de correções inválido não deixa o site sem livros (FUN-115). `.biblia/` só é lida.
+ */
+export function gerar(
+  pastaFonte: string,
+  pastaLivros: string,
+  arquivoIndice: string,
+  opcoes: OpcoesCorrecoes = {},
+): Saida {
+  const convertidos = lerLivros(pastaFonte);
+
+  let livros = convertidos;
+  let resumo: ResumoCorrecoes | undefined;
+  let lista: ReturnType<typeof aplicarCorrecoes>['aplicadas'] | undefined;
+  if (opcoes.correcoes !== undefined) {
+    const arquivo = lerArquivoCorrecoes(JSON.parse(readFileSync(opcoes.correcoes, 'utf8')) as unknown);
+    validarCorrecoes(arquivo, convertidos);
+    const aplicado = aplicarCorrecoes(convertidos, arquivo);
+    livros = aplicado.livros;
+    lista = aplicado.aplicadas;
+    // Design: total = regras aprovadas aplicadas + itens aplicados.
+    resumo = { total: lista.itens.length + lista.regras.length };
+  }
 
   rmSync(pastaLivros, { recursive: true, force: true });
   mkdirSync(pastaLivros, { recursive: true });
 
-  const livros: Livro[] = [];
   const arquivos: string[] = [];
-  for (const fonte of fontes) {
-    const numero = Number(ARQUIVO_FONTE.exec(fonte)?.[1]);
-    const livro = converterLivro(readFileSync(join(pastaFonte, fonte), 'utf8'), numero);
+  for (const livro of livros) {
     const json = JSON.stringify(livro);
-    const nome = nomeDoArquivo(numero, json);
+    const nome = nomeDoArquivo(livro.numero, json);
     writeFileSync(join(pastaLivros, nome), json);
-    livros.push(livro);
     arquivos.push(`/livros/${nome}`);
   }
 
   const indice = montarIndice(livros, arquivos);
-  writeFileSync(arquivoIndice, `${JSON.stringify(indice, null, 2)}\n`);
+  writeFileSync(
+    arquivoIndice,
+    `${JSON.stringify(indice, null, 2)}
+`,
+  );
+  if (resumo !== undefined && opcoes.resumo !== undefined)
+    writeFileSync(
+      opcoes.resumo,
+      `${JSON.stringify(resumo)}
+`,
+    );
+  if (lista !== undefined && opcoes.lista !== undefined)
+    writeFileSync(
+      opcoes.lista,
+      `${JSON.stringify(lista)}
+`,
+    );
   return { livros, indice };
 }
 
 const ehPrincipal = process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (ehPrincipal) {
   const raiz = resolve(fileURLToPath(new URL('..', import.meta.url)));
+  const posicao = process.argv.indexOf('--correcoes');
+  const arquivoCorrecoes = posicao > 0 ? process.argv[posicao + 1] : undefined;
   const { indice } = gerar(
     join(raiz, '.biblia'),
     join(raiz, 'public', 'livros'),
     join(raiz, 'src', 'biblia', 'indice.gerado.json'),
+    {
+      correcoes: arquivoCorrecoes ? resolve(arquivoCorrecoes) : join(raiz, 'correcoes', 'correcoes.json'),
+      resumo: join(raiz, 'src', 'biblia', 'correcoes-resumo.gerado.json'),
+      lista: join(raiz, 'src', 'biblia', 'correcoes.gerado.json'),
+    },
   );
   console.log(`converter-biblia: ${indice.livros.length} livros gerados em public/livros/`);
 }

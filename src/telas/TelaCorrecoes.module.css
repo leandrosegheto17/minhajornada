@@ -1,0 +1,178 @@
+/* Tela "Correções no texto" (.specs/features/texto-atualizado/mockup/telas/correcoes.html, FUN-122, FUN-123). Só tokens. */
+
+.texto-correcoes {
+  max-width: var(--largura-leitura);
+  margin: 0 auto;
+  padding: var(--esp-2) var(--esp-5) var(--esp-12);
+}
+
+.texto-correcoes > p {
+  margin: 0 0 var(--esp-3);
+  line-height: var(--altura-linha-texto);
+}
+
+.resumo-correcoes {
+  color: var(--cor-suave);
+}
+
+.grupo-correcoes {
+  margin: var(--esp-8) 0 0;
+}
+
+.grupo-correcoes > h2 {
+  font-size: var(--texto-p);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cor-suave);
+  margin: 0 0 var(--esp-3);
+  display: flex;
+  gap: var(--esp-2);
+  align-items: baseline;
+}
+
+.grupo-correcoes > h2 span {
+  font-weight: var(--peso-normal);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Regra mecânica: uma linha, o que faz e quantos versículos tocou (FUN-123). */
+.lista-regras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.linha-regra {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--raio-m);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+}
+
+.linha-regra small {
+  color: var(--cor-suave);
+  font-size: var(--texto-p);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Livro: recolhido por padrão, na ordem bíblica (FUN-122). */
+.livro-correcoes {
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.livro-correcoes:first-of-type {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.livro-correcoes summary {
+  min-height: var(--alvo-toque);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  padding: var(--esp-2) var(--esp-1);
+  cursor: pointer;
+  list-style: none;
+  font-weight: var(--peso-forte);
+  border-radius: var(--raio-p);
+}
+
+.livro-correcoes summary::-webkit-details-marker {
+  display: none;
+}
+
+.livro-correcoes summary:hover {
+  background: var(--cor-realce);
+}
+
+.livro-correcoes summary small {
+  color: var(--cor-suave);
+  font-weight: var(--peso-normal);
+  font-size: var(--texto-p);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.livro-correcoes summary svg {
+  color: var(--cor-suave);
+  transition: transform 0.15s;
+}
+
+.livro-correcoes[open] summary svg {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .livro-correcoes summary svg {
+    transition: none;
+  }
+}
+
+/* Item: referência, antes, depois e motivo. */
+.lista-itens {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--esp-4);
+}
+
+.item-correcao {
+  display: grid;
+  gap: var(--esp-1);
+  padding: var(--esp-3) var(--esp-1);
+}
+
+.item-correcao + .item-correcao {
+  border-top: 1px dashed var(--cor-borda);
+}
+
+.item-correcao__ref {
+  font-size: var(--texto-p);
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  font-variant-numeric: tabular-nums;
+}
+
+.item-correcao__troca {
+  margin: 0;
+  font-family: var(--fonte-texto);
+  font-size: var(--letra);
+  line-height: var(--altura-linha-texto);
+}
+
+.item-correcao__troca del {
+  color: var(--cor-suave);
+  text-decoration-thickness: 1px;
+}
+
+.item-correcao__troca ins {
+  text-decoration: none;
+  font-weight: var(--peso-forte);
+}
+
+.item-correcao__seta {
+  color: var(--cor-suave);
+  padding: 0 var(--esp-1);
+}
+
+.item-correcao__motivo {
+  margin: 0;
+  color: var(--cor-suave);
+  font-size: var(--texto-p);
+}
+
+.rotulo-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

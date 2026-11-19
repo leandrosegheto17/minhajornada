@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Revisão das correções do texto</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        padding: 1rem;
+        max-width: 60rem;
+        margin-inline: auto;
+        line-height: 1.5;
+      }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+      nav button.ativo {
+        font-weight: bold;
+        outline: 2px solid currentColor;
+      }
+      .versiculo {
+        background: #f3f3f3;
+        padding: 0.5rem;
+        border-radius: 4px;
+        white-space: pre-wrap;
+      }
+      textarea {
+        width: 100%;
+      }
+      [role='alert'] {
+        color: #a00;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="revisao">Carregando…</div>
+    <script src="./dist/pagina.js"></script>
+  </body>
+</html>

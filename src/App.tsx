@@ -1,3 +1,4 @@
+import { resumoCorrecoes } from './biblia/correcoesAplicadas';
 import { indice } from './biblia/indice';
 import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
@@ -5,6 +6,7 @@ import { useLeitor } from './estado/useLeitor';
 import { useTelaLarga } from './livro/useTelaLarga';
 import { TelaLivro } from './telas/TelaLivro';
 import { TelaCapitulos } from './telas/TelaCapitulos';
+import { TelaCorrecoes } from './telas/TelaCorrecoes';
 import { TelaEmBreve } from './telas/TelaEmBreve';
 import { TelaInicial } from './telas/TelaInicial';
 import { TelaLeitor } from './telas/TelaLeitor';
@@ -72,8 +74,12 @@ export function App() {
       <TelaSobre
         rotuloVoltar={ref && nome ? `${nome} ${ref.capitulo}` : estado.formato === 'livro' ? 'Capa' : 'Livros'}
         aoVoltar={() => leitor.irPara(ref || estado.formato === 'livro' ? 'leitor' : 'livros')}
+        totalCorrecoes={resumoCorrecoes.total}
+        aoVerCorrecoes={() => leitor.irPara('correcoes')}
       />
     );
+  } else if (estado.tela === 'correcoes') {
+    tela = <TelaCorrecoes aoVoltar={() => leitor.irPara('sobre')} />;
   } else {
     tela = <TelaLivros referencia={ref} aoEscolherLivro={leitor.escolherLivro} aoVoltarALeitura={voltarALeitura} />;
   }

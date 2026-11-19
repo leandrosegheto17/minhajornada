@@ -8,9 +8,10 @@ export default defineConfig({
   workers: 2,
   use: { baseURL: `http://127.0.0.1:${porta}` },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  // O service worker só existe no build: o e2e serve `dist/` por `vite preview` (rode `pnpm build` antes).
+  // O service worker só existe no build: o e2e serve `dist-e2e/` por `vite preview` (rode `pnpm build:e2e` antes), o
+  // build com o arquivo de correções de exemplo (AD-016).
   webServer: {
-    command: `pnpm exec vite preview --host 127.0.0.1 --port ${porta} --strictPort`,
+    command: `pnpm exec vite preview --outDir dist-e2e --host 127.0.0.1 --port ${porta} --strictPort`,
     url: `http://127.0.0.1:${porta}`,
     reuseExistingServer: !process.env.CI,
   },

@@ -7,6 +7,7 @@
 - **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
 - **Fase aprovada também**: 2, Reconhecimento (`reconhecimento.md`, inventário em d93f7e8) em 2026-11-18
 - **Fase aprovada também**: 2b, Mockup (só `TelaCorrecoes`, `mockup/`) em 2026-11-18
+- **Revisão publicada (T15)**: artifact privado https://claude.ai/artifact/MXhc3ed26tA7VtYZUWa8Kz, slug `a6401c0b-687c-4126-ae72-22de16898aa1`, capacidades `db`, `user` e `downloads` (2026-11-18, confirmado pelo dono). Para republicar após mudar `correcoes/correcoes.json`: `node scripts/montar-revisao.ts`, `pnpm revisao:montar` e `publish_files` de `revisao/index.html`, `dados.json` e `dist/pagina.js`.
 - **Fase aprovada também**: 3, Plano (`design.md`, `tasks.md`, AD-012 a AD-017) e 4, Rede de proteção (linha de base 631 verdes, sem T0) em 2026-11-18. **Planejamento concluído.**
 - **Próximo passo**: `/executar` (Sonnet), Lote 1 crítico (Phase 1). Rodar suíte e gates pelo Git Bash (o `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`)
 - **Serviços no ar**: nenhum
@@ -25,9 +26,11 @@
 | 2026-11-15 | 1 | leitor | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /preparar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-19 | 3 | texto-atualizado | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | livro-tela-cheia | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | texto-atualizado | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-18 | 3 | texto-atualizado | /validar | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
@@ -50,6 +53,8 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-18 | Feature `interface-livro`, T16 e T17 | Os testes da barra antiga (`src/telas/TelaLeitor.test.tsx:165-172` e `:261-280`, `src/telas/TelaLivros.test.tsx:64-75`) passam para `src/componentes/BarraTitulo.test.tsx`, com as mesmas asserções. Aprovada pelo dono. |
 | 2026-11-18 | Feature `livro-tela-cheia` | Testes do desenho antigo da tela larga (proporção 3 × 4, `--largura-pagina`, `--largura-barra`, posição da barra e dos botões nos e2e de tela larga) podem ser trocados por testes do desenho novo, tão fortes quanto antes. Aprovada pelo dono. |
 | 2026-11-18 | Feature `texto-atualizado`, `test/arquivos/converter-biblia.test.ts:52-64` (FUN-03) | O teste que compara os 31.102 versículos com `.biblia/` passa a comparar com a fonte mais as correções aprovadas e a provar também que `.biblia/` não muda; tão forte quanto antes. Aprovada pelo dono. |
+| 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T28, A-06) | O teste `src/biblia/correcoes/aplicar.test.ts:84` (FUN-123) passa a afirmar que regra aprovada que muda 0 versículos sai da lista e do total, em vez de aparecer com 0; nenhuma outra asserção enfraquecida. Aprovada pelo dono. |
+| 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T25, A-03) | No teste `src/revisao/logica.test.ts:134` (FUN-110) o segundo item passa de `ref(1, 2)` para `ref(1, 3)`: os dois tinham o mesmo trecho no mesmo versículo, o que agora vai ao um a um; asserções iguais. Aprovada pelo dono. |
 
 ## Decisions
 
@@ -187,5 +192,13 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Trade-off**: A exportação depende de uma sessão do Claude (ou de baixar o arquivo); a tela de correções ganha os estados carregando e erro.
 - **Scope**: Feature `texto-atualizado`, `src/revisao/`, `revisao/`, `src/biblia/correcoesAplicadas.ts`.
 - **Date**: 2026-11-18
+- **Status**: active
+
+### AD-018
+- **Decision**: O trecho "depois" de uma correção não pode ter caractere de controle (C0, DEL, C1, U+2028, U+2029) nem de formatação (`\p{Cf}`: bidi e largura zero). A regra vale na mescla das decisões (`mesclarDecisoes`) e no build (`validarCorrecoes`), em qualquer estado, e a lista dos editados sai escapada em JSON.
+- **Reason**: A spec não tem requisito para isso; os achados A-10 e A-12 do `/validar` mostraram que esses caracteres deixam o dono conferir um texto no terminal enquanto o site mostra outro. Decisão do dono em 2026-11-19.
+- **Trade-off**: TAB e qualquer caractere invisível legítimo também são recusados; o `correcoes.json` real não tem nenhum (1.400 itens conferidos).
+- **Scope**: Feature `texto-atualizado`, `src/biblia/correcoes/validar.ts`, `src/revisao/mesclar.ts`, `scripts/aplicar-decisoes.ts`. Complementa FUN-113.
+- **Date**: 2026-11-19
 - **Status**: active
 

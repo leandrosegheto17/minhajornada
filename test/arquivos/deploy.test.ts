@@ -31,6 +31,24 @@ function passos(corpo: string): string[] {
     .map((p) => (p.startsWith('      - ') ? p : `      - ${p}`));
 }
 
+/** Texto do `ci.yml` (FUN-116, AD-016): o e2e roda sobre o build com o arquivo de exemplo; o deploy, sobre o real. */
+const ci = readFileSync(join(process.cwd(), '.github', 'workflows', 'ci.yml'), 'utf8').replace(/\r\n/g, '\n');
+
+describe('correções no build do CI e do deploy (FUN-116, AD-016)', () => {
+  it('FUN-116: o job de e2e do CI constrói com `pnpm build:e2e`, não com `pnpm build`', () => {
+    const e2e = ci.split(/\n {2}e2e:\n/)[1] ?? '';
+    expect(e2e).not.toBe('');
+    expect(e2e).toMatch(/run: pnpm build:e2e/);
+    expect(e2e).not.toMatch(/run: pnpm build$/m);
+  });
+
+  it('FUN-116: o deploy constrói com `pnpm build`, sem `--correcoes` nem `build:e2e`', () => {
+    const construir = job('construir');
+    expect(construir).toMatch(/run: pnpm build$/m);
+    expect(construir).not.toMatch(/--correcoes|build:e2e/);
+  });
+});
+
 describe('deploy.yml: o token da Cloudflare só chega ao wrangler (SEC-001, SEC-004)', () => {
   const publicar = job('publicar');
   const construir = job('construir');

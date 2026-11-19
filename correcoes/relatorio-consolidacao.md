@@ -1,0 +1,251 @@
+# Relatório da consolidação
+
+Gerado por `scripts/consolidar-correcoes.ts` a partir de `levantamento/gNN.md`. Não edite à mão.
+
+## Contagens
+
+- Candidatos lidos: 1390
+- Itens no arquivo: 1400
+  - Digitação: 1291
+  - Ortografia: 69
+  - Sentido: 40
+- Conferem: 1356
+  - Recuperados sem colchetes (AD-015): 1
+- Não conferem: 44
+- Expandidos de "N ocorrências" (AD-014): 13
+- Cobertos por regra: 22 (fora da lista, AD-013)
+- Arcaico descartado: 271
+- Linhas repetidas contadas uma vez: 0
+- Fora do arquivo por colchete de itálico sem par (FUN-125): 0
+- Linhas ignoradas: 216
+
+## Regras mecânicas
+
+- R-01: 809 versículos. Tira o espaço antes de vírgula, ponto, ponto e vírgula, dois-pontos, interrogação e exclamação
+- R-02: 391 versículos. Põe espaço depois de vírgula, ponto e vírgula e dois-pontos
+- R-03: 67 versículos. Põe espaço depois do ponto final, entre duas frases
+
+## "N ocorrências" com contagem diferente (AD-014)
+
+- g05.md:61: dizia 4, achadas 6
+- g08.md:107: dizia 138, achadas 0
+- g11.md:101: dizia 2, achadas 1
+
+## Linhas ignoradas (formato sem leitura definida)
+
+- g01.md:10: "depois" não é um único trecho entre aspas
+- g01.md:63: "antes" não é um único trecho entre aspas
+- g01.md:65: "antes" não é um único trecho entre aspas
+- g01.md:84: "antes" não é um único trecho entre aspas
+- g01.md:87: "depois" não é um único trecho entre aspas
+- g01.md:89: "depois" não é um único trecho entre aspas
+- g01.md:91: "depois" não é um único trecho entre aspas
+- g01.md:92: "antes" não é um único trecho entre aspas
+- g01.md:96: "antes" não é um único trecho entre aspas
+- g01.md:97: "antes" não é um único trecho entre aspas
+- g01.md:98: "antes" não é um único trecho entre aspas
+- g01.md:104: "antes" não é um único trecho entre aspas
+- g02.md:14: "antes" não é um único trecho entre aspas
+- g02.md:38: "antes" não é um único trecho entre aspas
+- g02.md:49: "depois" não é um único trecho entre aspas
+- g02.md:64: "antes" não é um único trecho entre aspas
+- g02.md:67: "antes" não é um único trecho entre aspas
+- g02.md:70: "antes" não é um único trecho entre aspas
+- g02.md:77: "depois" não é um único trecho entre aspas
+- g02.md:79: "depois" não é um único trecho entre aspas
+- g02.md:83: "depois" não é um único trecho entre aspas
+- g02.md:91: "depois" não é um único trecho entre aspas
+- g02.md:99: "antes" não é um único trecho entre aspas
+- g02.md:100: "antes" não é um único trecho entre aspas
+- g02.md:102: "depois" não é um único trecho entre aspas
+- g02.md:103: "antes" não é um único trecho entre aspas
+- g02.md:104: "antes" não é um único trecho entre aspas
+- g02.md:148: "antes" não é um único trecho entre aspas
+- g02.md:149: "depois" não é um único trecho entre aspas
+- g03.md:24: "depois" não é um único trecho entre aspas
+- g03.md:27: "antes" não é um único trecho entre aspas
+- g03.md:53: "antes" não é um único trecho entre aspas
+- g03.md:56: "depois" não é um único trecho entre aspas
+- g03.md:59: "antes" não é um único trecho entre aspas
+- g03.md:60: "depois" não é um único trecho entre aspas
+- g03.md:63: "antes" não é um único trecho entre aspas
+- g03.md:66: "antes" não é um único trecho entre aspas
+- g03.md:87: "antes" não é um único trecho entre aspas
+- g03.md:88: "antes" não é um único trecho entre aspas
+- g03.md:93: "antes" não é um único trecho entre aspas
+- g04.md:13: "antes" não é um único trecho entre aspas
+- g04.md:14: "depois" não é um único trecho entre aspas
+- g04.md:16: "depois" não é um único trecho entre aspas
+- g04.md:33: "antes" não é um único trecho entre aspas
+- g04.md:36: "depois" não é um único trecho entre aspas
+- g04.md:38: "depois" não é um único trecho entre aspas
+- g04.md:42: "antes" não é um único trecho entre aspas
+- g04.md:53: "antes" não é um único trecho entre aspas
+- g04.md:55: "depois" não é um único trecho entre aspas
+- g04.md:58: "antes" não é um único trecho entre aspas
+- g04.md:61: "antes" não é um único trecho entre aspas
+- g04.md:64: "antes" não é um único trecho entre aspas
+- g04.md:69: "depois" não é um único trecho entre aspas
+- g04.md:74: "antes" não é um único trecho entre aspas
+- g04.md:88: "antes" não é um único trecho entre aspas
+- g04.md:89: "depois" não é um único trecho entre aspas
+- g04.md:96: "antes" não é um único trecho entre aspas
+- g04.md:97: "antes" não é um único trecho entre aspas
+- g04.md:100: "antes" não é um único trecho entre aspas
+- g04.md:101: "antes" não é um único trecho entre aspas
+- g04.md:144: "depois" não é um único trecho entre aspas
+- g05.md:18: "depois" não é um único trecho entre aspas
+- g05.md:19: "antes" não é um único trecho entre aspas
+- g05.md:36: "antes" não é um único trecho entre aspas
+- g05.md:44: "antes" não é um único trecho entre aspas
+- g05.md:58: "antes" não é um único trecho entre aspas
+- g05.md:59: "antes" não é um único trecho entre aspas
+- g05.md:74: "antes" não é um único trecho entre aspas
+- g05.md:80: "antes" não é um único trecho entre aspas
+- g05.md:81: "antes" não é um único trecho entre aspas
+- g05.md:83: "depois" não é um único trecho entre aspas
+- g05.md:84: "antes" não é um único trecho entre aspas
+- g05.md:87: "antes" não é um único trecho entre aspas
+- g05.md:89: "antes" não é um único trecho entre aspas
+- g05.md:91: "antes" não é um único trecho entre aspas
+- g05.md:113: "antes" não é um único trecho entre aspas
+- g05.md:114: "antes" não é um único trecho entre aspas
+- g05.md:120: "antes" não é um único trecho entre aspas
+- g05.md:125: "depois" não é um único trecho entre aspas
+- g05.md:126: "depois" não é um único trecho entre aspas
+- g06.md:10: "antes" não é um único trecho entre aspas
+- g06.md:37: "antes" não é um único trecho entre aspas
+- g06.md:45: "antes" não é um único trecho entre aspas
+- g06.md:48: "antes" não é um único trecho entre aspas
+- g06.md:52: "antes" não é um único trecho entre aspas
+- g06.md:67: "antes" não é um único trecho entre aspas
+- g06.md:68: "antes" não é um único trecho entre aspas
+- g06.md:81: "antes" não é um único trecho entre aspas
+- g06.md:86: "antes" não é um único trecho entre aspas
+- g06.md:91: "antes" não é um único trecho entre aspas
+- g06.md:95: "antes" não é um único trecho entre aspas
+- g06.md:110: "antes" não é um único trecho entre aspas
+- g06.md:125: "antes" não é um único trecho entre aspas
+- g06.md:130: "antes" não é um único trecho entre aspas
+- g06.md:133: "antes" não é um único trecho entre aspas
+- g06.md:134: "antes" não é um único trecho entre aspas
+- g06.md:141: "antes" não é um único trecho entre aspas
+- g06.md:142: "antes" não é um único trecho entre aspas
+- g06.md:148: "antes" não é um único trecho entre aspas
+- g06.md:149: "antes" não é um único trecho entre aspas
+- g06.md:157: "antes" não é um único trecho entre aspas
+- g06.md:158: "antes" não é um único trecho entre aspas
+- g07.md:9: "antes" não é um único trecho entre aspas
+- g07.md:11: "antes" não é um único trecho entre aspas
+- g07.md:12: "antes" não é um único trecho entre aspas
+- g07.md:15: "antes" não é um único trecho entre aspas
+- g07.md:16: "antes" não é um único trecho entre aspas
+- g07.md:19: "depois" não é um único trecho entre aspas
+- g07.md:24: "depois" não é um único trecho entre aspas
+- g07.md:32: "antes" não é um único trecho entre aspas
+- g07.md:36: "antes" não é um único trecho entre aspas
+- g07.md:45: "depois" não é um único trecho entre aspas
+- g07.md:49: "antes" não é um único trecho entre aspas
+- g07.md:50: "antes" não é um único trecho entre aspas
+- g07.md:53: "antes" não é um único trecho entre aspas
+- g07.md:54: "antes" não é um único trecho entre aspas
+- g07.md:79: "antes" não é um único trecho entre aspas
+- g07.md:100: "antes" não é um único trecho entre aspas
+- g07.md:101: "depois" não é um único trecho entre aspas
+- g07.md:117: "antes" não é um único trecho entre aspas
+- g07.md:118: "antes" não é um único trecho entre aspas
+- g07.md:128: "antes" não é um único trecho entre aspas
+- g07.md:134: "antes" não é um único trecho entre aspas
+- g08.md:8: referência não lida: "Ob 3" (em "Ob 3")
+- g08.md:12: "depois" não é um único trecho entre aspas
+- g08.md:71: "depois" não é um único trecho entre aspas
+- g08.md:88: "antes" não é um único trecho entre aspas
+- g08.md:105: "antes" não é um único trecho entre aspas
+- g08.md:106: "antes" não é um único trecho entre aspas
+- g08.md:108: referência não lida: "~14 ocorrências" (em "~14 ocorrências (ex.: Sl 20:9, 30:10, 68:4, 81:8, 108:6, 135:1; Jn 3:8 "convertam- se")")
+- g08.md:109: "depois" não é um único trecho entre aspas
+- g08.md:110: "antes" não é um único trecho entre aspas
+- g08.md:111: referência não lida: "Sl 119" (em "Sl 119 (14 ocorrências: 119:1, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97, 105, 113)")
+- g08.md:115: "antes" não é um único trecho entre aspas
+- g08.md:119: livro desconhecido: "Sl 55:17 e Sf" (em "Sl 55:17 e Sf 2:4")
+- g08.md:129: "depois" não é um único trecho entre aspas
+- g09.md:14: "depois" não é um único trecho entre aspas
+- g09.md:36: "antes" não é um único trecho entre aspas
+- g09.md:37: "antes" não é um único trecho entre aspas
+- g09.md:54: "depois" não é um único trecho entre aspas
+- g09.md:56: "antes" não é um único trecho entre aspas
+- g09.md:62: "antes" não é um único trecho entre aspas
+- g09.md:83: "depois" não é um único trecho entre aspas
+- g09.md:95: "depois" não é um único trecho entre aspas
+- g09.md:96: "depois" não é um único trecho entre aspas
+- g09.md:113: "antes" não é um único trecho entre aspas
+- g09.md:114: "antes" não é um único trecho entre aspas
+- g09.md:115: "antes" não é um único trecho entre aspas
+- g09.md:118: "antes" não é um único trecho entre aspas
+- g10.md:42: "depois" não é um único trecho entre aspas
+- g10.md:44: "antes" não é um único trecho entre aspas
+- g10.md:60: "depois" não é um único trecho entre aspas
+- g10.md:104: "antes" não é um único trecho entre aspas
+- g10.md:137: "antes" não é um único trecho entre aspas
+- g10.md:138: "antes" não é um único trecho entre aspas
+- g11.md:8: "antes" não é um único trecho entre aspas
+- g11.md:9: "antes" não é um único trecho entre aspas
+- g11.md:19: "antes" não é um único trecho entre aspas
+- g11.md:41: "antes" não é um único trecho entre aspas
+- g11.md:67: "antes" não é um único trecho entre aspas
+- g11.md:80: "antes" não é um único trecho entre aspas
+- g11.md:84: "antes" não é um único trecho entre aspas
+- g11.md:169: "antes" não é um único trecho entre aspas
+- g11.md:173: "antes" não é um único trecho entre aspas
+- g11.md:175: "antes" não é um único trecho entre aspas
+- g11.md:191: "antes" não é um único trecho entre aspas
+- g11.md:193: "depois" não é um único trecho entre aspas
+- g12.md:22: "depois" não é um único trecho entre aspas
+- g12.md:26: "antes" não é um único trecho entre aspas
+- g12.md:27: "antes" não é um único trecho entre aspas
+- g12.md:28: "antes" não é um único trecho entre aspas
+- g12.md:36: "antes" não é um único trecho entre aspas
+- g12.md:51: "antes" não é um único trecho entre aspas
+- g12.md:53: "depois" não é um único trecho entre aspas
+- g12.md:63: "antes" não é um único trecho entre aspas
+- g12.md:64: "antes" não é um único trecho entre aspas
+- g12.md:65: "antes" não é um único trecho entre aspas
+- g12.md:69: "depois" não é um único trecho entre aspas
+- g12.md:101: "antes" não é um único trecho entre aspas
+- g12.md:102: "antes" não é um único trecho entre aspas
+- g12.md:103: "antes" não é um único trecho entre aspas
+- g12.md:105: "antes" não é um único trecho entre aspas
+- g12.md:106: "antes" não é um único trecho entre aspas
+- g12.md:108: "antes" não é um único trecho entre aspas
+- g12.md:109: "antes" não é um único trecho entre aspas
+- g13.md:18: "antes" não é um único trecho entre aspas
+- g13.md:25: "antes" não é um único trecho entre aspas
+- g13.md:48: "depois" não é um único trecho entre aspas
+- g13.md:56: "antes" não é um único trecho entre aspas
+- g13.md:57: "antes" não é um único trecho entre aspas
+- g13.md:72: "antes" não é um único trecho entre aspas
+- g13.md:111: "antes" não é um único trecho entre aspas
+- g13.md:114: "antes" não é um único trecho entre aspas
+- g13.md:115: "antes" não é um único trecho entre aspas
+- g13.md:119: "antes" não é um único trecho entre aspas
+- g13.md:120: "antes" não é um único trecho entre aspas
+- g13.md:123: "antes" não é um único trecho entre aspas
+- g13.md:124: "antes" não é um único trecho entre aspas
+- g13.md:125: referência não lida: "Atos 2:9-11" (em "Atos 2:9-11")
+- g13.md:146: "antes" não é um único trecho entre aspas
+- g14.md:14: "antes" não é um único trecho entre aspas
+- g14.md:18: "antes" não é um único trecho entre aspas
+- g14.md:20: "antes" não é um único trecho entre aspas
+- g14.md:23: "depois" não é um único trecho entre aspas
+- g14.md:45: "antes" não é um único trecho entre aspas
+- g14.md:46: "antes" não é um único trecho entre aspas
+- g14.md:49: "depois" não é um único trecho entre aspas
+- g14.md:68: referência não lida: "Fm 25" (em "Fm 25")
+- g14.md:78: "depois" não é um único trecho entre aspas
+- g14.md:79: "antes" não é um único trecho entre aspas
+- g14.md:80: "antes" não é um único trecho entre aspas
+- g14.md:85: "antes" não é um único trecho entre aspas
+- g14.md:93: "depois" não é um único trecho entre aspas
+- g15.md:50: "depois" não é um único trecho entre aspas
+- g15.md:55: "antes" não é um único trecho entre aspas
+- g15.md:64: "depois" não é um único trecho entre aspas
