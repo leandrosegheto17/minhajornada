@@ -65,10 +65,10 @@ T1 → T2
 
 **Done when**:
 
-- [ ] Em 390 × 664 (iPhone 14), com o convite visível: `elementFromPoint` no centro do botão "Dispensar convite" devolve o botão ou um filho dele, e no centro do texto do convite devolve um elemento dentro do convite (FUN-46)
-- [ ] Tocar em "Dispensar convite" esconde o convite; depois de `reload`, o título "A Palavra perto de você, onde estiver" está visível e o convite não volta (FUN-47)
-- [ ] Sem a correção, o teste falha pela asserção espacial (elemento de cima `cartao-inicial`), não por ambiente; a saída vermelha vai para `causa.md` e para o commit
-- [ ] Nomes dos testes citam `FUN-46` ou `FUN-47`
+- [x] Em 390 × 664 (iPhone 14), com o convite visível: `elementFromPoint` no centro do botão "Dispensar convite" devolve o botão ou um filho dele, e no centro do texto do convite devolve um elemento dentro do convite (FUN-46)
+- [x] Tocar em "Dispensar convite" esconde o convite; depois de `reload`, o título "A Palavra perto de você, onde estiver" está visível e o convite não volta (FUN-47)
+- [x] Sem a correção, o teste falha pela asserção espacial (elemento de cima `cartao-inicial`), não por ambiente; a saída vermelha vai para `causa.md` e para o commit
+- [x] Nomes dos testes citam `FUN-46` ou `FUN-47`
 
 **Tests**: e2e em `e2e/convite-instalacao.spec.ts`
 **Gate**: full
@@ -89,10 +89,12 @@ T1 → T2
 
 **Done when**:
 
-- [ ] O e2e da T1 passa
-- [ ] Os e2e da página inicial e da aparência (`e2e/entrada.spec.ts`, `e2e/aparencia.spec.ts`) continuam verdes
-- [ ] Commit único `fix: convite coberto pela página inicial no iphone (convite-coberto-iphone)` com T1 e T2
-- [ ] Gate full verde
+- [x] O e2e da T1 passa
+- [x] Os e2e da página inicial e da aparência (`e2e/entrada.spec.ts`, `e2e/aparencia.spec.ts`) continuam verdes
+- [x] Commit único `fix: convite coberto pela página inicial no iphone (convite-coberto-iphone)` com T1 e T2
+- [x] Gate full verde
 
 **Tests**: e2e em `e2e/convite-instalacao.spec.ts`
 **Gate**: full
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ e343b43603c900327f6e802778e1e5ebe526adfb = verde
