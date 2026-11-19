@@ -506,9 +506,9 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 
 **Done when**:
 
-- [ ] `carregarCorrecoes()` devolve a lista gerada; `resumoCorrecoes.total` igual ao número de regras aplicadas mais itens aplicados
-- [ ] Depois de `pnpm build`, a lista está num arquivo JS separado de `dist/assets/` e o pré-cache do service worker o lista (teste de arquivo sobre o `dist` do `build:e2e`, junto do e2e em T21, ou conferência registrada no commit)
-- [ ] Gate quick verde
+- [x] `carregarCorrecoes()` devolve a lista gerada; `resumoCorrecoes.total` igual ao número de regras aplicadas mais itens aplicados
+- [x] Depois de `pnpm build`, a lista está num arquivo JS separado de `dist/assets/` e o pré-cache do service worker o lista (teste de arquivo sobre o `dist` do `build:e2e`, junto do e2e em T21, ou conferência registrada no commit)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-123`
 **Gate**: quick
@@ -530,10 +530,10 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 
 **Done when**:
 
-- [ ] Com total > 0: "texto baseado na Bíblia Livre (BLIVRE)", os três autores, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, correções de digitação, ortografia e sentido, não endosso das mudanças nem do app, e "Ver as correções no texto", que chama `aoVerCorrecoes` (FUN-119)
-- [ ] Com 0: "Só o formato do arquivo foi convertido para o app; o texto não foi modificado" e nenhum link de correções (FUN-120)
-- [ ] O teste antigo de FUN-38 passa a valer para os dois ramos, tão forte quanto antes; motivo no commit
-- [ ] Gate quick verde
+- [x] Com total > 0: "texto baseado na Bíblia Livre (BLIVRE)", os três autores, fevereiro de 2018, link da licença CC BY 4.0 Brasil, link da fonte, correções de digitação, ortografia e sentido, não endosso das mudanças nem do app, e "Ver as correções no texto", que chama `aoVerCorrecoes` (FUN-119)
+- [x] Com 0: "Só o formato do arquivo foi convertido para o app; o texto não foi modificado" e nenhum link de correções (FUN-120)
+- [x] O teste antigo de FUN-38 passa a valer para os dois ramos, tão forte quanto antes; motivo no commit
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-119`/`FUN-120`
 **Gate**: quick
@@ -555,8 +555,8 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 
 **Done when**:
 
-- [ ] `baseado` verdadeiro: "Baseado na Bíblia Livre"; falso: "Bíblia Livre"; o resto da capa igual (FUN-89 continua)
-- [ ] Gate quick verde
+- [x] `baseado` verdadeiro: "Baseado na Bíblia Livre"; falso: "Bíblia Livre"; o resto da capa igual (FUN-89 continua)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-121`
 **Gate**: quick
@@ -578,9 +578,9 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 
 **Done when**:
 
-- [ ] Reducer: `irPara('correcoes')` a partir do Sobre e `irPara('sobre')` de volta mantêm `ref`, formato e âncora
-- [ ] App: no Sobre com correções, tocar "Ver as correções no texto" mostra a tela; "Voltar" volta ao Sobre, e o "Voltar" do Sobre continua levando ao capítulo aberto
-- [ ] Gate quick verde
+- [x] Reducer: `irPara('correcoes')` a partir do Sobre e `irPara('sobre')` de volta mantêm `ref`, formato e âncora
+- [x] App: no Sobre com correções, tocar "Ver as correções no texto" mostra a tela; "Voltar" volta ao Sobre, e o "Voltar" do Sobre continua levando ao capítulo aberto
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-122`, em `src/estado/leitor.test.ts` e `src/App.test.tsx`
 **Gate**: quick
@@ -602,11 +602,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 
 **Done when**:
 
-- [ ] Com uma lista de exemplo fora de ordem: livros saem na ordem bíblica e os itens por capítulo e versículo; livro sem correção não aparece (FUN-122)
-- [ ] Cada regra aparece numa linha com a descrição e "N versículos" (FUN-123)
-- [ ] Item mostra referência, antes, depois e motivo; colchete nunca aparece, o trecho fica em itálico
-- [ ] Carregando enquanto a promessa não volta; erro com "Tentar de novo", que chama `carregar` de novo; vazio com a mensagem do mockup
-- [ ] Gate quick verde
+- [x] Com uma lista de exemplo fora de ordem: livros saem na ordem bíblica e os itens por capítulo e versículo; livro sem correção não aparece (FUN-122)
+- [x] Cada regra aparece numa linha com a descrição e "N versículos" (FUN-123)
+- [x] Item mostra referência, antes, depois e motivo; colchete nunca aparece, o trecho fica em itálico
+- [x] Carregando enquanto a promessa não volta; erro com "Tentar de novo", que chama `carregar` de novo; vazio com a mensagem do mockup
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-122`/`FUN-123`, em `src/telas/TelaCorrecoes.test.tsx`
 **Gate**: quick
@@ -628,18 +628,20 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ d35b6137cf326d8708133cd
 
 **Done when**:
 
-- [ ] Apocalipse 6:1 mostra "Cordeiro" (e não "Coreiro") na rolagem e no modo livro (FUN-116)
-- [ ] Sobre → "Ver as correções no texto" → Apocalipse aberto mostra "Coreiro" riscado e "Cordeiro" → "Voltar" volta ao Sobre (FUN-122)
-- [ ] Com o service worker ativo e a rede cortada, a tela abre com a lista completa (FUN-124)
-- [ ] Teste de arquivo: o job de e2e do CI roda `pnpm build:e2e`; o deploy roda `pnpm build` sem `--correcoes`
-- [ ] Rodada sem a mudança (teste vermelho) registrada; teto de 2 tentativas de 5 min
-- [ ] Gate full verde
+- [x] Apocalipse 6:1 mostra "Cordeiro" (e não "Coreiro") na rolagem e no modo livro (FUN-116)
+- [x] Sobre → "Ver as correções no texto" → Apocalipse aberto mostra "Coreiro" riscado e "Cordeiro" → "Voltar" volta ao Sobre (FUN-122)
+- [x] Com o service worker ativo e a rede cortada, a tela abre com a lista completa (FUN-124)
+- [x] Teste de arquivo: o job de e2e do CI roda `pnpm build:e2e`; o deploy roda `pnpm build` sem `--correcoes`
+- [x] Rodada sem a mudança (teste vermelho) registrada; teto de 2 tentativas de 5 min
+- [x] Gate full verde
 
 **Tests**: e2e, nomes com `FUN-116`/`FUN-122`/`FUN-124`
 **Gate**: full
 **Commit**: `test(e2e): jornada das correções com e sem rede`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = verde
 
 ## Critérios
 
