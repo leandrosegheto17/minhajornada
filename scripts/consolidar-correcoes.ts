@@ -60,7 +60,7 @@ export interface Consolidacao {
   relatorio: string;
 }
 
-function serializar(arquivo: ArquivoCorrecoes): string {
+export function serializar(arquivo: ArquivoCorrecoes): string {
   const lista = (itens: unknown[]): string =>
     itens.length === 0 ? '[]' : `[\n${itens.map((i) => `    ${JSON.stringify(i)}`).join(',\n')}\n  ]`;
   return `{\n  "versao": 1,\n  "regras": ${lista(arquivo.regras)},\n  "itens": ${lista(arquivo.itens)}\n}\n`;
