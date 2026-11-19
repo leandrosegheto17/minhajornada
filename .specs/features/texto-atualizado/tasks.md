@@ -104,6 +104,12 @@ T21
 T22 -> T23 -> T24 -> T25 -> T26 -> T27 -> T28 -> T29
 ```
 
+### Phase 9: Retrabalho R2
+
+```
+T30 -> T31 -> T32 -> T33
+```
+
 ---
 
 ## Task Breakdown
@@ -786,6 +792,75 @@ Gate: pnpm typecheck && pnpm test @ 069a0ee0c916eb1c5941b14442575164e11cf205 = v
 ---
 
 Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = verde
+
+### T30: Recusar caracteres de controle no "depois" (A-10)
+
+**What**: `mesclarDecisoes` e `validarCorrecoes` recusam `depois` com caracteres de controle (`[ --  ]`), com a mensagem citando o id, sem gravar.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: None
+**Reuses**: `src/biblia/correcoes/validar.ts:41-83` (molde da recusa por campo), `src/revisao/mesclar.ts:40-46`
+**Requirement**: FUN-113, FUN-125 · Achado: A-10 (validation.md)
+**Tests**: `src/revisao/mesclar.test.ts` e `src/biblia/correcoes/validar.test.ts`: `depois` com ``, `
+`, `` e ` ` é recusado (um teste por variante) e o arquivo de entrada não muda; `test/arquivos/aplicar-decisoes.test.ts`: o comando real sai com erro e não grava
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T31: Lista dos editados antes de gravar e só com aprovados (A-07)
+
+**What**: `scripts/aplicar-decisoes.ts` monta a lista dos `depois` editados antes do `writeFileSync`, imprime com `JSON.stringify` em antes e depois e lista só itens que ficam `aprovada` (recusados não aparecem).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T30
+**Reuses**: `scripts/aplicar-decisoes.ts:50-80`
+**Requirement**: FUN-113 · Achado: A-07 (validation.md, reaberto)
+**Tests**: `test/arquivos/aplicar-decisoes.test.ts`: item recusado com `depois` salvo não aparece na saída; a lista é impressa antes da gravação (ex.: falha de gravação provocada depois da listagem e a saída já traz o item); texto com aspas sai escapado
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T32: Sobreposição por contenção na ordem inversa (A-08)
+
+**What**: Teste de `agrupar` com o item menor listado antes do maior que o contém: os dois vão ao "um a um" e o bloco fica vazio.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T31
+**Reuses**: `src/revisao/logica.test.ts:78-85`
+**Requirement**: FUN-110 · Achado: A-08 (validation.md)
+**Tests**: `src/revisao/logica.test.ts`: `arquivo([menor, maior])`, os dois ids em `umAUm`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T33: Recusar mantém o "depois" salvo (A-09)
+
+**What**: Teste da página de revisão: item com `depois` salvo na decisão, o dono clica Recusar e a gravação leva o `depois` salvo.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T32
+**Reuses**: `src/revisao/pagina.test.ts:144-177`
+**Requirement**: FUN-112 · Achado: A-09 (validation.md)
+**Tests**: `src/revisao/pagina.test.ts`: `gravacoes[0]` igual a `{id, estado: 'recusada', depois: <salvo>}`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
 
 ## Critérios
 

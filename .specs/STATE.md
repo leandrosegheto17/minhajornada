@@ -26,6 +26,7 @@
 | 2026-11-15 | 1 | leitor | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /preparar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-19 | 3 | texto-atualizado | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | interface-livro | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | livro-tela-cheia | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | texto-atualizado | /executar | Sonnet | Opus (escolha do usuário) |
