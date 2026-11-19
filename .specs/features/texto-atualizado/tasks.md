@@ -803,11 +803,12 @@ Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = v
 **Depends on**: None
 **Reuses**: `src/biblia/correcoes/validar.ts:41-83` (molde da recusa por campo), `src/revisao/mesclar.ts:40-46`
 **Requirement**: FUN-113, FUN-125 · Achado: A-10 (validation.md)
-**Tests**: `src/revisao/mesclar.test.ts` e `src/biblia/correcoes/validar.test.ts`: `depois` com ``, `
+**Tests**: `src/revisao/mesclar.test.ts` e `src/biblia/correcoes/validar.test.ts`: `depois` com `
+`, `
 `, `` e ` ` é recusado (um teste por variante) e o arquivo de entrada não muda; `test/arquivos/aplicar-decisoes.test.ts`: o comando real sai com erro e não grava
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -824,7 +825,7 @@ Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = v
 **Tests**: `test/arquivos/aplicar-decisoes.test.ts`: item recusado com `depois` salvo não aparece na saída; a lista é impressa antes da gravação (ex.: falha de gravação provocada depois da listagem e a saída já traz o item); texto com aspas sai escapado
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -841,7 +842,7 @@ Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = v
 **Tests**: `src/revisao/logica.test.ts`: `arquivo([menor, maior])`, os dois ids em `umAUm`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -858,9 +859,11 @@ Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = v
 **Tests**: `src/revisao/pagina.test.ts`: `gravacoes[0]` igual a `{id, estado: 'recusada', depois: <salvo>}`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 152986c5be85135da0e3ed97b6a43522422e3c10 = verde
 
 ## Critérios
 
