@@ -884,7 +884,7 @@ Gate: pnpm typecheck && pnpm test @ 152986c5be85135da0e3ed97b6a43522422e3c10 = v
 **Tests**: `src/biblia/correcoes/validar.test.ts` e `src/revisao/mesclar.test.ts`: um caso por grupo (U+202E, U+2066, U+2069, U+200E, U+061C, U+200B, U+200D, U+2060, U+FEFF, U+00AD), escrito como escape, recusa citando o id; `test/arquivos/aplicar-decisoes.test.ts`: o ataque bidi pelo comando real sai com erro e não grava; o `correcoes.json` real continua aceito
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
 
@@ -901,9 +901,11 @@ Gate: pnpm typecheck && pnpm test @ 152986c5be85135da0e3ed97b6a43522422e3c10 = v
 **Tests**: os casos DEL e U+2029 falham se o ramo sair de `ehControle`
 **Gate**: quick
 
-- [ ] Concluída
+- [x] Concluída
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ ddb01c613f6bfd496b0a7c65ead6e39ce5ee33a3 = verde
 
 ## Critérios
 
