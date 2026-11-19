@@ -84,13 +84,13 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Quebra num bloco que caberia no resto da página: ele abre a página seguinte e a página anterior termina no bloco de antes (FUN-128, FUN-129)
-- [ ] Quebra no bloco 0, ou num bloco que já abriria página nova (página atual vazia): nenhuma página vazia é criada
-- [ ] Quebra num bloco maior que a página: as fatias começam no topo da página nova, como hoje (FUN-132)
-- [ ] Depois da quebra, os blocos seguintes do mesmo capítulo continuam enchendo a página (FUN-132)
-- [ ] Duas quebras seguidas (capítulo de um bloco): cada um numa página, o resto em branco (FUN-129)
-- [ ] Sem `quebras`, ou com todas falsas, o resultado é igual ao de hoje em todos os casos existentes (os testes atuais passam sem mudança)
-- [ ] Gate quick verde
+- [x] Quebra num bloco que caberia no resto da página: ele abre a página seguinte e a página anterior termina no bloco de antes (FUN-128, FUN-129)
+- [x] Quebra no bloco 0, ou num bloco que já abriria página nova (página atual vazia): nenhuma página vazia é criada
+- [x] Quebra num bloco maior que a página: as fatias começam no topo da página nova, como hoje (FUN-132)
+- [x] Depois da quebra, os blocos seguintes do mesmo capítulo continuam enchendo a página (FUN-132)
+- [x] Duas quebras seguidas (capítulo de um bloco): cada um numa página, o resto em branco (FUN-129)
+- [x] Sem `quebras`, ou com todas falsas, o resultado é igual ao de hoje em todos os casos existentes (os testes atuais passam sem mudança)
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/paginacao.test.ts`, nomes com `FUN-128`, `FUN-129` ou `FUN-132`
 **Gate**: quick
@@ -112,10 +112,10 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Rute (4 capítulos): `true` só nos blocos de 2:1, 3:1 e 4:1; o nome do livro e o 1:1 dão `false` (FUN-130)
-- [ ] Judas (1 capítulo): nenhuma quebra
-- [ ] Nos 66 livros, com páginas de 300 e de 60 px: todo versículo 1 de capítulo 2 em diante é a primeira parte de uma página; o 1:1 fica na página do nome do livro; nenhum bloco some e a ordem se mantém
-- [ ] Gate quick verde
+- [x] Rute (4 capítulos): `true` só nos blocos de 2:1, 3:1 e 4:1; o nome do livro e o 1:1 dão `false` (FUN-130)
+- [x] Judas (1 capítulo): nenhuma quebra
+- [x] Nos 66 livros, com páginas de 300 e de 60 px: todo versículo 1 de capítulo 2 em diante é a primeira parte de uma página; o 1:1 fica na página do nome do livro; nenhum bloco some e a ordem se mantém
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/paginacao.test.ts` e `test/arquivos/paginacao-66.test.ts`, nomes com `FUN-128` ou `FUN-130`
 **Gate**: quick
@@ -137,11 +137,11 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Em 1920 × 1080 e em 390 × 844, Gênesis 20 até o 21: a página com 21:1 tem o número do capítulo 21 como primeira coisa (topo da página, como `e2e/livro.spec.ts:84-88`) (FUN-128)
-- [ ] A página onde o 20 termina não tem versículo do 21 (FUN-129)
-- [ ] Gênesis 1: o nome "Gênesis" e o 1:1 na mesma página (FUN-130)
-- [ ] Os testes passam com a mudança e o de FUN-128 falha sem ela (rodada vermelha registrada no commit)
-- [ ] Gate full verde (`e2e/livro.spec.ts`)
+- [x] Em 1920 × 1080 e em 390 × 844, Gênesis 20 até o 21: a página com 21:1 tem o número do capítulo 21 como primeira coisa (topo da página, como `e2e/livro.spec.ts:84-88`) (FUN-128)
+- [x] A página onde o 20 termina não tem versículo do 21 (FUN-129)
+- [x] Gênesis 1: o nome "Gênesis" e o 1:1 na mesma página (FUN-130)
+- [x] Os testes passam com a mudança e o de FUN-128 falha sem ela (rodada vermelha registrada no commit)
+- [x] Gate full verde (`e2e/livro.spec.ts`)
 
 **Tests**: e2e em `e2e/livro.spec.ts`, nomes com `FUN-128`, `FUN-129` ou `FUN-130`
 **Gate**: full
@@ -163,16 +163,18 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Em 1920 × 1080, percorrendo Gênesis: há ao menos um par em que a página da esquerda termina um capítulo, e nele a página da direita começa com o número do capítulo seguinte no topo (FUN-131)
-- [ ] Escolher Gênesis 21 pela grade mostra a página que começa com o 21 no topo (FUN-83 com FUN-128)
-- [ ] Trocar a letra para o maior tamanho em Gênesis 21:1 mantém o capítulo 21 no topo da página mostrada (FUN-86 com FUN-128). Não afirma repaginação: o defeito anterior de `.specs/bugs/letra-livro-sem-repaginar/relato.md` fica fora desta feature (decisão do dono na execução, 2026-11-19)
-- [ ] Gate full verde (`e2e/livro.spec.ts`)
+- [x] Em 1920 × 1080, percorrendo Gênesis: há ao menos um par em que a página da esquerda termina um capítulo, e nele a página da direita começa com o número do capítulo seguinte no topo (FUN-131)
+- [x] Escolher Gênesis 21 pela grade mostra a página que começa com o 21 no topo (FUN-83 com FUN-128)
+- [x] Trocar a letra para o maior tamanho em Gênesis 21:1 mantém o capítulo 21 no topo da página mostrada (FUN-86 com FUN-128). Não afirma repaginação: o defeito anterior de `.specs/bugs/letra-livro-sem-repaginar/relato.md` fica fora desta feature (decisão do dono na execução, 2026-11-19)
+- [x] Gate full verde (`e2e/livro.spec.ts`)
 
 **Tests**: e2e em `e2e/livro.spec.ts`, nomes com `FUN-131`, `FUN-83` ou `FUN-86`
 **Gate**: full
 **Commit**: `test(e2e): prova o capítulo à direita, a grade e a troca de letra com a quebra`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 3c407daf91ae3697369cc07d2753db89af42ce8e = verde
 
 ### T5: Vão de 32 px entre as páginas, com a medida igual à página (FUN-133, FUN-135)
 
