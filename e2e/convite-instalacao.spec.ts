@@ -21,7 +21,9 @@ async function recebeOToque(alvo: Locator): Promise<{ recebe: boolean; topo: str
 }
 
 test.describe('convite de instalação na página inicial (FUN-46, FUN-47)', () => {
-  test('FUN-46: o botão "Dispensar convite" e o texto do convite ficam por cima da página inicial', async ({ page }) => {
+  test('FUN-46: o botão "Dispensar convite" e o texto do convite ficam por cima da página inicial', async ({
+    page,
+  }) => {
     await page.goto('/');
     await esperarInicial(page);
     await expect(convite(page)).toBeVisible();
