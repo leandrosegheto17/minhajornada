@@ -1,6 +1,6 @@
 # Inventário do projeto
 
-- **Atualizado em**: 2026-11-18 · **Commit**: d93f7e8 (áreas refeitas: interface, telas, livro, estado, preferências, e2e, scripts, testes de arquivo, vite.config; o resto vem de 2e90dc5)
+- **Atualizado em**: 2026-11-19 (correções e revisão, texto-atualizado `a9976c4`) e 2026-11-18 · **Commit**: d93f7e8 (áreas refeitas: interface, telas, livro, estado, preferências, e2e, scripts, testes de arquivo, vite.config; o resto vem de 2e90dc5)
 - **Stack**: TypeScript ~5.9, React 19, Vite 8, vite-plugin-pwa 2 (Workbox 7, `injectManifest`), CSS Modules; site estático na Cloudflare (Worker com assets, `wrangler.jsonc`); Node >=24 <25, pnpm >=11 <12 (`package.json:6-9`)
 - **Testes**: Vitest 5 + Testing Library + jsdom (projetos `componentes`, jsdom, `vite.config.ts:70-76`, e `arquivos`, node, `vite.config.ts:81-85`; setup `test/setup.ts`) · rodar: `pnpm typecheck && pnpm test` (o `pretest` e o `pretypecheck` rodam o conversor) · ficam ao lado do código (`src/**/*.test.ts(x)`) e em `test/arquivos/`; E2E Playwright em `e2e/` (`pnpm build && pnpm e2e`) e `e2e-geral/` (staging)
 
@@ -45,6 +45,8 @@
 | Conversor | `src/biblia/conversor.ts`, `scripts/converter-biblia.ts` (`gerar` `:25`, `nomeDoArquivo` `:14`, `ehPrincipal` `:51`) | Lê `.biblia/*.md` e grava `public/livros/NN.<hash8>.json` e o índice gerado |
 | Segmentos | `src/biblia/segmentos.ts:9` | Separa acréscimos `[...]` em itálico |
 | Tipos | `src/biblia/tipos.ts` | `Livro` `:2`, `Testamento` `:12`, `EntradaIndice` `:14`, `Indice` `:23`, `Ref` `:28`, `Tema` `:29`, `Formato` `:31`, `Segmento` `:32` |
+| Correções do texto | `src/biblia/correcoes/` (`arquivo.ts` leitura de `correcoes/correcoes.json`, `regras.ts`, `aplicar.ts`, `validar.ts` com `validarCorrecoes`, `semControle`, `nomeRef`, `posicaoUnica`) | Arquivo versionado de correções (itens e regras, estados proposta/aprovada/recusada), aplicado no build pelo conversor; recusa sobreposição, colchete sem par e caractere de controle ou de formatação (AD-018) (texto-atualizado, 2026-11-19) |
+| Revisão do dono | `src/revisao/` (`logica.ts` `agrupar`/`aprovarGrupo`/`podeAprovar`, `mesclar.ts` `mesclarDecisoes`, `pagina.ts` `iniciar`), `scripts/montar-revisao.ts`, `scripts/aplicar-decisoes.ts`, `scripts/consolidar-correcoes.ts` | Página de revisão num artifact com banco (AD-017) e o comando que mescla as decisões no arquivo, listando os "depois" editados antes de gravar |
 
 ## API
 
