@@ -116,10 +116,10 @@ T21
 
 **Done when**:
 
-- [ ] Arquivo válido volta tipado; `versao` diferente de 1 é recusado
-- [ ] Um teste por campo obrigatório ausente ou de tipo errado (id, ref com livro/capítulo/versículo inteiros ≥ 1, tipo, antes não vazio, depois, motivo, fonte, confiança, estado, confere), com a mensagem citando o caminho (ex.: `itens[0].estado`)
-- [ ] `tipo` `arcaico` e `estado` fora de proposta/aprovada/recusada são recusados
-- [ ] Gate quick verde
+- [x] Arquivo válido volta tipado; `versao` diferente de 1 é recusado
+- [x] Um teste por campo obrigatório ausente ou de tipo errado (id, ref com livro/capítulo/versículo inteiros ≥ 1, tipo, antes não vazio, depois, motivo, fonte, confiança, estado, confere), com a mensagem citando o caminho (ex.: `itens[0].estado`)
+- [x] `tipo` `arcaico` e `estado` fora de proposta/aprovada/recusada são recusados
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-103` (ex.: `FUN-103: item sem fonte como texto é recusado com o caminho do campo`)
 **Gate**: quick
@@ -141,10 +141,10 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, a lista de casos limite está no corpo do commit: espaço antes de `,.;:?!` com e sem `]` antes (`[dizendo] :`), vários espaços, `”,diz`, `sempre.E`, número com dois-pontos (`3:16`) e com vírgula, reticências, pontuação dupla (`:;`, Js 13:6), fim de versículo, `[` logo depois da pontuação. Caso sem resultado definido pela spec: parar e perguntar (`AskUserQuestion`)
-- [ ] R-01, R-02 e R-03 resolvem cada exemplo da lista; aplicar duas vezes dá o mesmo texto
-- [ ] Nenhuma regra muda letra, número ou a quantidade e a ordem de `[` e `]` (teste de propriedade sobre os 31.102 versículos reais da fonte)
-- [ ] Gate quick verde
+- [x] Antes de codar, a lista de casos limite está no corpo do commit: espaço antes de `,.;:?!` com e sem `]` antes (`[dizendo] :`), vários espaços, `”,diz`, `sempre.E`, número com dois-pontos (`3:16`) e com vírgula, reticências, pontuação dupla (`:;`, Js 13:6), fim de versículo, `[` logo depois da pontuação. Caso sem resultado definido pela spec: parar e perguntar (`AskUserQuestion`)
+- [x] R-01, R-02 e R-03 resolvem cada exemplo da lista; aplicar duas vezes dá o mesmo texto
+- [x] Nenhuma regra muda letra, número ou a quantidade e a ordem de `[` e `]` (teste de propriedade sobre os 31.102 versículos reais da fonte)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-106`/`FUN-117`
 **Gate**: quick
@@ -166,10 +166,10 @@ T21
 
 **Done when**:
 
-- [ ] Antes de codar, os casos e o resultado de cada um estão no corpo do commit (incluindo: sobreposição parcial, trechos encostados sem sobrepor, mesmo "antes" duas vezes no versículo, item recusado que não confere, proposta com colchete sem par). Caso sem resultado na spec: parar e perguntar
-- [ ] Um teste por ramo, cada um falhando se a guarda sair: id repetido; livro, capítulo e versículo inexistentes (três testes); aprovada com "antes" ausente e com "antes" duas vezes (`correção <id> não confere com <Livro c:v>`); duas aprovadas sobrepostas (cita os dois ids); trechos separados no mesmo versículo passam; "depois" com `[` sem `]` e com `]` sem `[`
-- [ ] Proposta e recusada que não conferem não derrubam (só a aprovada vai ao texto); o colchete sem par vale para todo estado (FUN-125)
-- [ ] Gate quick verde
+- [x] Antes de codar, os casos e o resultado de cada um estão no corpo do commit (incluindo: sobreposição parcial, trechos encostados sem sobrepor, mesmo "antes" duas vezes no versículo, item recusado que não confere, proposta com colchete sem par). Caso sem resultado na spec: parar e perguntar
+- [x] Um teste por ramo, cada um falhando se a guarda sair: id repetido; livro, capítulo e versículo inexistentes (três testes); aprovada com "antes" ausente e com "antes" duas vezes (`correção <id> não confere com <Livro c:v>`); duas aprovadas sobrepostas (cita os dois ids); trechos separados no mesmo versículo passam; "depois" com `[` sem `]` e com `]` sem `[`
+- [x] Proposta e recusada que não conferem não derrubam (só a aprovada vai ao texto); o colchete sem par vale para todo estado (FUN-125)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com o FUN de cada ramo
 **Gate**: quick
@@ -191,17 +191,19 @@ T21
 
 **Done when**:
 
-- [ ] Só aprovadas mudam o texto; proposta e recusada não (um teste para cada estado, item e regra)
-- [ ] Dois itens no mesmo versículo, em trechos separados, entram os dois; item e regra no mesmo versículo: item primeiro, regra depois, e o resultado é igual em duas execuções (FUN-127)
-- [ ] Mesmos 66 livros, mesma contagem de capítulos e versículos, colchetes em pares depois da aplicação (FUN-117); entrada não é modificada
-- [ ] A lista traz só o que mudou de fato; regra que não mudou nenhum versículo aparece com 0
-- [ ] Gate quick verde
+- [x] Só aprovadas mudam o texto; proposta e recusada não (um teste para cada estado, item e regra)
+- [x] Dois itens no mesmo versículo, em trechos separados, entram os dois; item e regra no mesmo versículo: item primeiro, regra depois, e o resultado é igual em duas execuções (FUN-127)
+- [x] Mesmos 66 livros, mesma contagem de capítulos e versículos, colchetes em pares depois da aplicação (FUN-117); entrada não é modificada
+- [x] A lista traz só o que mudou de fato; regra que não mudou nenhum versículo aparece com 0
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-114`/`FUN-117`/`FUN-127`
 **Gate**: quick
 **Commit**: `feat(correcoes): aplica as correções aprovadas ao texto`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 240299940a8cea248072e1c15ee8c5c753beea3b = verde
 
 ### T5: Correções no build (FUN-114, FUN-115, FUN-118)
 
