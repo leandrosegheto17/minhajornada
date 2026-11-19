@@ -32,7 +32,7 @@ No modo livro, o capítulo seguinte começa logo depois do fim do anterior, no m
 | Forma da separação | Vão de 32 px (`--esp-8`) com uma linha de 1 px no centro, na cor `--cor-borda` do tema | Decisão do dono em 2026-11-19 (afastar e pôr linha fina); os valores vêm dos tokens existentes e são conferidos no mockup | y |
 | Capítulo 1 | Fica na mesma página do nome do livro, logo abaixo dele | FUN-76 já abre o livro numa página nova; pular de novo deixaria a página do nome vazia | y |
 | Capa e plano pago (FUN-89) | Recebem o mesmo vão e a mesma linha | O par de páginas fica igual em todo o livro | y |
-| Cantos das páginas | Seguem o mockup; hoje só os cantos de fora são arredondados (`livro.module.css:67,71`) | Decisão visual, fechada no mockup antes do plano | y |
+| Cantos das páginas | Em tela larga, as duas páginas têm os quatro cantos arredondados (`--raio-m`); hoje só os de fora (`livro.module.css:67,71`) | Com o vão, cada página é uma área separada; mockup dispensado pelo dono em 2026-11-19 | y |
 | Posição gravada (FUN-85, FUN-86) | Continua por livro, capítulo, versículo e fatia; a página muda, o lugar não | A paginação nova muda os números de página, não o versículo gravado | y |
 
 **Open questions:** none - all resolved or logged above (required before the spec is confirmed).

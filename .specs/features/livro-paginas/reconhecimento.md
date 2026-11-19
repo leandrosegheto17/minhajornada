@@ -5,7 +5,7 @@
 - **Encaixe**: estende padr√£o (pagina√ß√£o pura de `paginar` e a tela larga de `livro-tela-cheia`)
 - **Arquitetura**: cabe
 - **Telas**: muda o modo livro (`TelaLivro`), na tela larga e na capa
-- **Mockup**: dispensado ó os valores da spec bastam (v„o de 32 px, linha de 1 px em `--cor-borda`, cantos arredondados nas quatro pontas das p·ginas em tela larga); decis„o do dono em 2026-11-19
+- **Mockup**: dispensado ‚Äî os valores da spec bastam (v√£o de 32 px, linha de 1 px em `--cor-borda`, cantos arredondados nas quatro pontas das p√°ginas em tela larga); decis√£o do dono em 2026-11-19
 - **Plano aprovado em**: pendente
 
 ## Onde entra
