@@ -375,12 +375,12 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 24de835d90a2b393e1811a9
 
 **Done when**:
 
-- [ ] Antes de codar, os grupos e as regras de entrada em cada um estão no corpo do commit (bloco = alta, confere, sem `italicoMuda`, por tipo e livro; um a um = média, baixa, todo sentido, não confere, `italicoMuda`). Caso de fronteira sem resposta: parar e perguntar
-- [ ] Cada grupo traz a contagem de pendentes, que cai com cada decisão (FUN-108)
-- [ ] Aprovar um bloco aprova só os itens dele que conferem, e nenhum outro (FUN-110), com um teste em que o grupo vizinho fica intacto
-- [ ] Sentido sem fonte: `podeAprovar` devolve "Falta a fonte" (FUN-111); não confere devolve "Não confere"
-- [ ] `primeiroPendente` segue a ordem regras → blocos → um a um e devolve `null` quando tudo foi decidido (FUN-112)
-- [ ] Gate quick verde
+- [x] Antes de codar, os grupos e as regras de entrada em cada um estão no corpo do commit (bloco = alta, confere, sem `italicoMuda`, por tipo e livro; um a um = média, baixa, todo sentido, não confere, `italicoMuda`). Caso de fronteira sem resposta: parar e perguntar
+- [x] Cada grupo traz a contagem de pendentes, que cai com cada decisão (FUN-108)
+- [x] Aprovar um bloco aprova só os itens dele que conferem, e nenhum outro (FUN-110), com um teste em que o grupo vizinho fica intacto
+- [x] Sentido sem fonte: `podeAprovar` devolve "Falta a fonte" (FUN-111); não confere devolve "Não confere"
+- [x] `primeiroPendente` segue a ordem regras → blocos → um a um e devolve `null` quando tudo foi decidido (FUN-112)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com o FUN de cada regra
 **Gate**: quick
@@ -402,16 +402,18 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 24de835d90a2b393e1811a9
 
 **Done when**:
 
-- [ ] Muda só `estado` e, quando veio, `depois` dos itens e regras decididos; os não decididos ficam iguais, byte a byte, no arquivo regravado
-- [ ] Id desconhecido, estado inválido ou "depois" com colchete sem par: recusa e não grava nada (um teste por ramo)
-- [ ] Mesclar duas vezes as mesmas decisões dá o mesmo arquivo
-- [ ] Gate quick verde
+- [x] Muda só `estado` e, quando veio, `depois` dos itens e regras decididos; os não decididos ficam iguais, byte a byte, no arquivo regravado
+- [x] Id desconhecido, estado inválido ou "depois" com colchete sem par: recusa e não grava nada (um teste por ramo)
+- [x] Mesclar duas vezes as mesmas decisões dá o mesmo arquivo
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-113`
 **Gate**: quick
 **Commit**: `feat(revisao): grava as decisões da revisão no arquivo de correções`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 821b6e98e28295525727aa489ce653a4bd8bbcf9 = verde
 
 ### T13: Dados da página de revisão (FUN-109)
 
