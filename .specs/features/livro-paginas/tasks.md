@@ -190,12 +190,12 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 3c407daf91ae369736
 
 **Done when**:
 
-- [ ] `test/arquivos/livro-css.test.ts`: a fórmula de `--largura-pagina-larga` desconta `var(--esp-8)`, e `.livro__aberto` e `.medida` continuam lendo a mesma variável (teste alterado com o motivo no commit)
-- [ ] Em 1280 × 800 e 1920 × 1080: distância entre a borda direita da página da esquerda e a esquerda da da direita = 32 px (±1) (FUN-133)
-- [ ] Nos mesmos tamanhos e em 900 × 600 e 1920 × 1200: as duas páginas com a mesma largura (±1), somando a largura da tela menos 2 × 24 px menos 32 px, sem rolagem horizontal (FUN-135, troca do teste de FUN-96)
-- [ ] A medida tem a largura da página mostrada (`e2e/livro-tela-cheia.spec.ts:235-253` verde) e nenhum versículo de Rute fica escondido em 1280 × 800 (`e2e/livro.spec.ts:40`)
-- [ ] Título e posição continuam alinhados às bordas das páginas, e os botões aos cantos (FUN-98, FUN-99 verdes)
-- [ ] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/livro.spec.ts`)
+- [x] `test/arquivos/livro-css.test.ts`: a fórmula de `--largura-pagina-larga` desconta `var(--esp-8)`, e `.livro__aberto` e `.medida` continuam lendo a mesma variável (teste alterado com o motivo no commit)
+- [x] Em 1280 × 800 e 1920 × 1080: distância entre a borda direita da página da esquerda e a esquerda da da direita = 32 px (±1) (FUN-133)
+- [x] Nos mesmos tamanhos e em 900 × 600 e 1920 × 1200: as duas páginas com a mesma largura (±1), somando a largura da tela menos 2 × 24 px menos 32 px, sem rolagem horizontal (FUN-135, troca do teste de FUN-96)
+- [x] A medida tem a largura da página mostrada (`e2e/livro-tela-cheia.spec.ts:235-253` verde) e nenhum versículo de Rute fica escondido em 1280 × 800 (`e2e/livro.spec.ts:40`)
+- [x] Título e posição continuam alinhados às bordas das páginas, e os botões aos cantos (FUN-98, FUN-99 verdes)
+- [x] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/livro.spec.ts`)
 
 **Tests**: unit em `test/arquivos/livro-css.test.ts` e e2e em `e2e/livro-tela-cheia.spec.ts`, nomes com `FUN-133` ou `FUN-135`
 **Gate**: full
@@ -217,9 +217,9 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 3c407daf91ae369736
 
 **Done when**:
 
-- [ ] Em 1280 × 800, nos temas claro, escuro e sépia: o `::before` (ou `::after`) de `.livro__aberto` tem 1 px de largura e `background-color` igual ao valor computado de `--cor-borda` do tema (FUN-134)
-- [ ] O meio da linha fica a 1 px do meio do vão, e o topo e a altura dela coincidem com os das páginas (±1) (FUN-134)
-- [ ] Gate full verde (`e2e/livro-tela-cheia.spec.ts`)
+- [x] Em 1280 × 800, nos temas claro, escuro e sépia: o `::before` (ou `::after`) de `.livro__aberto` tem 1 px de largura e `background-color` igual ao valor computado de `--cor-borda` do tema (FUN-134)
+- [x] O meio da linha fica a 1 px do meio do vão, e o topo e a altura dela coincidem com os das páginas (±1) (FUN-134)
+- [x] Gate full verde (`e2e/livro-tela-cheia.spec.ts`)
 
 **Tests**: e2e em `e2e/livro-tela-cheia.spec.ts`, nomes com `FUN-134`
 **Gate**: full
@@ -241,11 +241,13 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 3c407daf91ae369736
 
 **Done when**:
 
-- [ ] Em 1280 × 800: as duas páginas de texto têm os quatro `border-*-radius` iguais ao valor de `--raio-m`
-- [ ] Em 1280 × 800, na capa: plano pago à esquerda e capa à direita com o vão de 32 px e a linha de 1 px no meio (FUN-133, FUN-134)
-- [ ] Em 390 × 844 e 1024 × 1366: uma página só, sem pseudo-elemento visível de linha e com os cantos de hoje (FUN-136; o teste de FUN-102 continua verde)
-- [ ] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/capa.spec.ts`)
+- [x] Em 1280 × 800: as duas páginas de texto têm os quatro `border-*-radius` iguais ao valor de `--raio-m`
+- [x] Em 1280 × 800, na capa: plano pago à esquerda e capa à direita com o vão de 32 px e a linha de 1 px no meio (FUN-133, FUN-134)
+- [x] Em 390 × 844 e 1024 × 1366: uma página só, sem pseudo-elemento visível de linha e com os cantos de hoje (FUN-136; o teste de FUN-102 continua verde)
+- [x] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/capa.spec.ts`)
 
 **Tests**: e2e em `e2e/livro-tela-cheia.spec.ts`, nomes com `FUN-133`, `FUN-134` ou `FUN-136`
 **Gate**: full
 **Commit**: `feat(livro): cantos e capa com as páginas separadas`
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 55eecc480c1c4f15d8aefb6ce1a4fd6f270bef4b = verde
