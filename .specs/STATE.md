@@ -194,3 +194,11 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Date**: 2026-11-18
 - **Status**: active
 
+### AD-018
+- **Decision**: O trecho "depois" de uma correção não pode ter caractere de controle (C0, DEL, C1, U+2028, U+2029) nem de formatação (`\p{Cf}`: bidi e largura zero). A regra vale na mescla das decisões (`mesclarDecisoes`) e no build (`validarCorrecoes`), em qualquer estado, e a lista dos editados sai escapada em JSON.
+- **Reason**: A spec não tem requisito para isso; os achados A-10 e A-12 do `/validar` mostraram que esses caracteres deixam o dono conferir um texto no terminal enquanto o site mostra outro. Decisão do dono em 2026-11-19.
+- **Trade-off**: TAB e qualquer caractere invisível legítimo também são recusados; o `correcoes.json` real não tem nenhum (1.400 itens conferidos).
+- **Scope**: Feature `texto-atualizado`, `src/biblia/correcoes/validar.ts`, `src/revisao/mesclar.ts`, `scripts/aplicar-decisoes.ts`. Complementa FUN-113.
+- **Date**: 2026-11-19
+- **Status**: active
+

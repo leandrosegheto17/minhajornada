@@ -110,6 +110,12 @@ T22 -> T23 -> T24 -> T25 -> T26 -> T27 -> T28 -> T29
 T30 -> T31 -> T32 -> T33
 ```
 
+### Phase 10: Retrabalho R3
+
+```
+T34 -> T35
+```
+
 ---
 
 ## Task Breakdown
@@ -864,6 +870,40 @@ Gate: pnpm typecheck && pnpm test @ 419e5fd4d93473abca73d8492ec6be9689d141f7 = v
 ---
 
 Gate: pnpm typecheck && pnpm test @ 152986c5be85135da0e3ed97b6a43522422e3c10 = verde
+
+### T34: Recusar caracteres de formatação no "depois" (A-12)
+
+**What**: `semControle` (`src/biblia/correcoes/validar.ts:17-25`) passa a recusar também `\p{Cf}` (bidi U+202A-202E, U+2066-2069, U+200E, U+200F, U+061C; largura zero U+200B-200D, U+2060, U+FEFF, U+00AD), o que vale no mesclar e no build (AD-018).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: None
+**Reuses**: `src/biblia/correcoes/validar.ts:17-25` (estender `ehControle`/`semControle`, sem segunda função), AD-018
+**Requirement**: FUN-113, AD-018 · Achado: A-12 (validation.md)
+**Tests**: `src/biblia/correcoes/validar.test.ts` e `src/revisao/mesclar.test.ts`: um caso por grupo (U+202E, U+2066, U+2069, U+200E, U+061C, U+200B, U+200D, U+2060, U+FEFF, U+00AD), escrito como escape, recusa citando o id; `test/arquivos/aplicar-decisoes.test.ts`: o ataque bidi pelo comando real sai com erro e não grava; o `correcoes.json` real continua aceito
+**Gate**: quick
+
+- [ ] Concluída
+
+---
+
+### T35: Um teste por ramo da guarda de controle (A-11)
+
+**What**: As tabelas `it.each` de `validar.test.ts:13-22` e `mesclar.test.ts:102-114` ganham DEL (`\u007F`) e U+2029, todos os casos ficam escritos como escape (nada de caractere literal invisível) e os nomes dos testes citam FUN-113 e AD-018 no lugar de FUN-125.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T34
+**Reuses**: `src/biblia/correcoes/validar.test.ts:13-22`, `src/revisao/mesclar.test.ts:102-114`
+**Requirement**: FUN-113, AD-018 · Achado: A-11 (validation.md)
+**Tests**: os casos DEL e U+2029 falham se o ramo sair de `ehControle`
+**Gate**: quick
+
+- [ ] Concluída
+
+---
 
 ## Critérios
 
