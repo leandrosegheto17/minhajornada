@@ -44,6 +44,15 @@ describe('aplicarCorrecoes: vários itens e ordem (FUN-114, FUN-127)', () => {
     expect(texto(aplicar(arquivo([b, a])).livros, 1, 1, 2)).toBe(esperado);
   });
 
+  it('FUN-127: o "depois" do primeiro item muda o tamanho do texto e o segundo item ainda cai no lugar certo, em qualquer ordem', () => {
+    // Se as posições fossem aplicadas do começo para o fim, o segundo trecho já teria andado.
+    const a = item({ id: 'C-0001', estado: 'aprovada', antes: 'forma', depois: 'fôrma ampla e longa' });
+    const b = item({ id: 'C-0002', estado: 'aprovada', antes: 'Coreiro', depois: 'Cordeiro' });
+    const esperado = 'A terra era sem fôrma ampla e longa e vazia, e o Cordeiro abriu o livro.';
+    expect(texto(aplicar(arquivo([a, b])).livros, 1, 1, 2)).toBe(esperado);
+    expect(texto(aplicar(arquivo([b, a])).livros, 1, 1, 2)).toBe(esperado);
+  });
+
   it('FUN-127: item primeiro, regra depois, e o resultado é o mesmo em duas execuções', () => {
     // O "antes" do item tem o espaço errado: se a regra rodasse primeiro, o trecho não casaria mais.
     const itemComEspaco = item({
@@ -81,14 +90,21 @@ describe('aplicarCorrecoes: a lista do que foi aplicado (FUN-122, FUN-123)', () 
   const tres = (estado: 'aprovada' | 'proposta') =>
     (['R-01', 'R-02', 'R-03'] as IdRegra[]).map((id) => regra(id, { estado }));
 
-  it('FUN-123: cada regra aprovada traz os versículos que ela mudou neste build, e a que não mudou nenhum traz 0', () => {
+  // Teste alterado em T28 (A-06, autorizado em 2026-11-18): a regra que não mudou nenhum versículo sai da lista, em vez
+  // de aparecer com 0. Todas as outras asserções continuam.
+  it('FUN-123: cada regra aprovada traz os versículos que ela mudou neste build, e a que não mudou nenhum fica de fora', () => {
     const { aplicadas } = aplicar(arquivo([], tres('aprovada')));
     const descricao = (id: IdRegra) => REGRAS.find((r) => r.id === id)?.descricao;
     expect(aplicadas.regras).toEqual([
       { id: 'R-01', descricao: descricao('R-01'), versiculos: 2 },
       { id: 'R-02', descricao: descricao('R-02'), versiculos: 1 },
-      { id: 'R-03', descricao: descricao('R-03'), versiculos: 0 },
     ]);
+  });
+
+  it('FUN-123: regra aprovada que não muda versículo nenhum não entra na lista (e a lista fica vazia)', () => {
+    const { aplicadas } = aplicar(arquivo([], [regra('R-03', { estado: 'aprovada' })]));
+    expect(aplicadas.regras).toEqual([]);
+    expect(aplicadas.itens).toEqual([]);
   });
 
   it('FUN-123: só as regras aprovadas aparecem', () => {

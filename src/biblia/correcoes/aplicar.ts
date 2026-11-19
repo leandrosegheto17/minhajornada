@@ -71,11 +71,10 @@ export function aplicarCorrecoes(
   return {
     livros: novos,
     aplicadas: {
-      regras: regras.map((regra) => ({
-        id: regra.id,
-        descricao: regra.descricao,
-        versiculos: mudados.get(regra.id) ?? 0,
-      })),
+      // Regra aprovada que não mudou versículo nenhum fica de fora: o texto não foi corrigido por ela (FUN-123).
+      regras: regras
+        .map((regra) => ({ id: regra.id, descricao: regra.descricao, versiculos: mudados.get(regra.id) ?? 0 }))
+        .filter((regra) => regra.versiculos > 0),
       itens,
     },
   };
