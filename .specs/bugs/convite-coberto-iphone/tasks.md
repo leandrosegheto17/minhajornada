@@ -121,4 +121,6 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ e343b43603c900327f
 **Tests**: nenhum teste novo (só documentação); `e2e/convite-instalacao.spec.ts` continua verde
 **Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ c61f9af471a761d1adbd0bd8667db34912ca994a = verde
