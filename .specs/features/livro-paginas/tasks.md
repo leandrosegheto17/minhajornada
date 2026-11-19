@@ -66,6 +66,12 @@ T1 → T2 → T3 → T4
 T5 → T6 → T7
 ```
 
+### Phase 3: Retrabalho R1
+
+```
+T8
+```
+
 ---
 
 ## Task Breakdown
@@ -251,3 +257,21 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 3c407daf91ae369736
 **Commit**: `feat(livro): cantos e capa com as páginas separadas`
 
 Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 55eecc480c1c4f15d8aefb6ce1a4fd6f270bef4b = verde
+
+---
+
+### T8: Registrar a exclusão da repaginação na troca de letra (A-01)
+
+**What**: Registrar em `.specs/STATE.md` (AD nova) a decisão do dono de 2026-11-19 de deixar fora desta feature o caso limite "trocar a letra repagina com a regra de FUN-128" e anotar em `spec.md:81` que ele fica com o bug `.specs/bugs/letra-livro-sem-repaginar/`, citando a AD.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `.specs/STATE.md` (Decisions), `.specs/features/livro-paginas/spec.md:81`
+**Depends on**: —
+**Reuses**: formato das ADs de `.specs/STATE.md`; decisão já registrada em `tasks.md` (T4, terceiro item de Done when)
+**Requirement**: FUN-86 com FUN-128 · Achado: A-01 (validation.md)
+**Tests**: nenhum teste novo (só documentação); o e2e de FUN-86 de `e2e/livro.spec.ts:239-252` continua verde
+**Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot`
+
+- [ ] Concluída
