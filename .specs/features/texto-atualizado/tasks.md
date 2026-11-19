@@ -273,10 +273,10 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ cbcc535b7b971abbd5de42c
 
 **Done when**:
 
-- [ ] Antes de codar, os formatos achados nos 15 arquivos estão no corpo do commit (ref "Livro c:v", "N ocorrências (ex.: …)", livro com número ("1 João"), trecho com aspas tipográficas ou com `|` escapado, linha de cabeçalho e de separador). Formato sem leitura definida: vai para `ignoradas`, nunca some
-- [ ] Teste com trechos reais de `g15.md` (Tiago 1:13, Apocalipse 6:1) e uma linha `arcaico`, que sai
-- [ ] Linha "N ocorrências" volta como candidato marcado para expansão (AD-014)
-- [ ] Gate quick verde
+- [x] Antes de codar, os formatos achados nos 15 arquivos estão no corpo do commit (ref "Livro c:v", "N ocorrências (ex.: …)", livro com número ("1 João"), trecho com aspas tipográficas ou com `|` escapado, linha de cabeçalho e de separador). Formato sem leitura definida: vai para `ignoradas`, nunca some
+- [x] Teste com trechos reais de `g15.md` (Tiago 1:13, Apocalipse 6:1) e uma linha `arcaico`, que sai
+- [x] Linha "N ocorrências" volta como candidato marcado para expansão (AD-014)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-104`, em `test/arquivos/consolidacao-levantamento.test.ts`
 **Gate**: quick
@@ -298,10 +298,10 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ cbcc535b7b971abbd5de42c
 
 **Done when**:
 
-- [ ] Antes de codar, a tabela caso → resultado está no corpo do commit (incluindo: trecho que aparece duas vezes, trecho só sem colchetes, colchetes diferentes entre antes e depois, "N ocorrências" com contagem diferente). Caso sem resultado na AD ou na spec: parar e perguntar
-- [ ] Um teste por linha da tabela; o relatório conta conferem, não conferem, recuperados (AD-015), cobertos por regra (AD-013) e expandidos (AD-014)
-- [ ] Teste com o texto real: Apocalipse 6:1 "Coreiro" confere com confiança alta; um "antes" inexistente volta `confere: false` (Independent Test da spec)
-- [ ] Gate quick verde
+- [x] Antes de codar, a tabela caso → resultado está no corpo do commit (incluindo: trecho que aparece duas vezes, trecho só sem colchetes, colchetes diferentes entre antes e depois, "N ocorrências" com contagem diferente). Caso sem resultado na AD ou na spec: parar e perguntar
+- [x] Um teste por linha da tabela; o relatório conta conferem, não conferem, recuperados (AD-015), cobertos por regra (AD-013) e expandidos (AD-014)
+- [x] Teste com o texto real: Apocalipse 6:1 "Coreiro" confere com confiança alta; um "antes" inexistente volta `confere: false` (Independent Test da spec)
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-104`/`FUN-105`, em `test/arquivos/consolidacao-conferir.test.ts`
 **Gate**: quick
@@ -323,10 +323,10 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ cbcc535b7b971abbd5de42c
 
 **Done when**:
 
-- [ ] Para cada regra, o número de versículos é o de versículos da fonte que a regra muda, e os 5 exemplos são versículos reais com o antes e o depois da regra
-- [ ] O arquivo gravado passa em `lerArquivoCorrecoes` e `validarCorrecoes`; cada item ocupa uma linha
-- [ ] Rodar duas vezes sobre a mesma entrada grava o mesmo arquivo, byte a byte
-- [ ] Gate quick verde
+- [x] Para cada regra, o número de versículos é o de versículos da fonte que a regra muda, e os 5 exemplos são versículos reais com o antes e o depois da regra
+- [x] O arquivo gravado passa em `lerArquivoCorrecoes` e `validarCorrecoes`; cada item ocupa uma linha
+- [x] Rodar duas vezes sobre a mesma entrada grava o mesmo arquivo, byte a byte
+- [x] Gate quick verde
 
 **Tests**: unit, nomes com `FUN-106`, em `test/arquivos/consolidacao-regras.test.ts`
 **Gate**: quick
@@ -348,16 +348,18 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ cbcc535b7b971abbd5de42c
 
 **Done when**:
 
-- [ ] O arquivo real passa na leitura e na validação; nenhum item `arcaico`; tem as 3 regras com contagem e 5 exemplos
-- [ ] Tem o item de Apocalipse 6:1 ("Coreiro" → "Cordeiro", confiança alta, conferindo); o teste não fixa o estado, que muda com a revisão
-- [ ] As contagens do relatório (por tipo, conferem, não conferem, ignoradas) estão no corpo do commit
-- [ ] Gate quick verde
+- [x] O arquivo real passa na leitura e na validação; nenhum item `arcaico`; tem as 3 regras com contagem e 5 exemplos
+- [x] Tem o item de Apocalipse 6:1 ("Coreiro" → "Cordeiro", confiança alta, conferindo); o teste não fixa o estado, que muda com a revisão
+- [x] As contagens do relatório (por tipo, conferem, não conferem, ignoradas) estão no corpo do commit
+- [x] Gate quick verde
 
 **Tests**: integration, nomes com `FUN-104`/`FUN-105`/`FUN-106`
 **Gate**: quick
 **Commit**: `feat(correcoes): arquivo de correções consolidado do levantamento`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 24de835d90a2b393e1811a9e2fc294b5a73f90ab = verde
 
 ### T11: Lógica da revisão (FUN-108, FUN-110, FUN-111, FUN-112)
 
