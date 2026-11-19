@@ -42,6 +42,14 @@ export function blocosDoLivro(livro: Livro): Bloco[] {
   return blocos;
 }
 
+/**
+ * Quebras de página do livro (FUN-128, FUN-130): verdadeira no versículo 1 de cada capítulo do 2 em diante. O nome do
+ * livro e o capítulo 1 ficam juntos na primeira página (o livro já começa numa página nova, FUN-76).
+ */
+export function quebrasDoLivro(blocos: readonly Bloco[]): boolean[] {
+  return blocos.map((b) => b.tipo === 'versiculo' && b.abreCapitulo && b.ref.capitulo > 1);
+}
+
 /** Folga para o arredondamento do navegador: 99,99 px num espaço de 100 px cabe. */
 const FOLGA = 0.01;
 
@@ -55,10 +63,19 @@ function alturaUtil(altura: number): number {
  * página abre a seguinte. Um bloco que não cabe nem numa página vazia começa uma página nova e é dividido em fatias
  * de altura múltipla de `alturaLinha` (a última leva o que sobra, e os blocos seguintes continuam nela).
  *
+ * `quebras` (FUN-128, FUN-129), alinhada aos blocos: onde é verdadeira, a página atual fecha antes do bloco e ele abre
+ * a seguinte, deixando em branco o resto da anterior. Quebra em página ainda vazia não cria página vazia. Sem
+ * `quebras`, o resultado é o de sempre.
+ *
  * Entradas que impedem a conta (altura da página ou da linha inválida, ou página menor que uma linha) dão uma página
  * por bloco: o texto aparece, ainda que apertado, e a função termina. Lista vazia dá uma página vazia.
  */
-export function paginar(alturas: number[], alturaPagina: number, alturaLinha: number): Pagina[] {
+export function paginar(
+  alturas: number[],
+  alturaPagina: number,
+  alturaLinha: number,
+  quebras?: readonly boolean[],
+): Pagina[] {
   if (alturas.length === 0) return [{ partes: [] }];
 
   const valida =
@@ -78,6 +95,7 @@ export function paginar(alturas: number[], alturaPagina: number, alturaLinha: nu
 
   alturas.forEach((bruta, bloco) => {
     const altura = alturaUtil(bruta);
+    if (quebras?.[bloco]) fechar();
     if (altura <= alturaPagina - usado + FOLGA) {
       atual.partes.push({ bloco, recorte: 0 });
       usado += altura;

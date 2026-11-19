@@ -23,6 +23,8 @@
 | 2026-11-18 | 3 | livro-tela-cheia | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | texto-atualizado | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | texto-atualizado | /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-19 | 3 | livro-paginas | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-19 | 3 | livro-paginas | /validar | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
@@ -48,6 +50,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T28, A-06) | O teste `src/biblia/correcoes/aplicar.test.ts:84` (FUN-123) passa a afirmar que regra aprovada que muda 0 versículos sai da lista e do total, em vez de aparecer com 0; nenhuma outra asserção enfraquecida. Aprovada pelo dono. |
 | 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T25, A-03) | No teste `src/revisao/logica.test.ts:134` (FUN-110) o segundo item passa de `ref(1, 2)` para `ref(1, 3)`: os dois tinham o mesmo trecho no mesmo versículo, o que agora vai ao um a um; asserções iguais. Aprovada pelo dono. |
 | 2026-11-19 | Feature `livro-paginas`, T5 | `test/arquivos/livro-css.test.ts:45-49` passa a afirmar a fórmula de `--largura-pagina-larga` com o vão (`var(--esp-8)`), mantendo que página e medida leem a mesma variável; o e2e de FUN-96 (`e2e/livro-tela-cheia.spec.ts:171-187`) passa a descontar o vão de 32 px; os de FUN-98 (`:305-320`) e FUN-99 (`:344-351`), só se quebrarem, viram asserções tão fortes quanto antes contra as bordas das páginas. Motivo no commit. Aprovada pelo dono. |
+| 2026-11-19 | Feature `livro-paginas`, T3 | Em `src/telas/TelaLivro.test.tsx`, o teste de FUN-84/FUN-71 (âncora no 2:1, antes numa página que começava no capítulo 1) passa a esperar o título do capítulo 2 na página 2 e ganha o caso da âncora no 1:3 (título do capítulo 1, página 1); o de FUN-77 passa a esperar o 2:1 (antes 2:2) como primeiro versículo da página seguinte ao par. Motivo: FUN-128 proíbe capítulo no meio da página; as asserções ficam tão fortes quanto antes. Aprovada pelo dono na execução. |
 
 ## Decisions
 
@@ -208,5 +211,13 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Reason**: Decisão do dono em 2026-11-19.
 - **Trade-off**: Sem a V1, preço e demanda do pago continuam sem evidência (H2 e H3 de `ideia.md`); as entrevistas podem correr em paralelo. Conteúdo offline no aparelho é mais fácil de copiar do que conteúdo servido a cada abertura.
 - **Scope**: Features `resumo-livro`, `estudo-livro`, `assinatura` e `editor-estudo`.
+- **Date**: 2026-11-19
+- **Status**: active
+
+### AD-021
+- **Decision**: Fica fora da feature `livro-paginas` o caso limite "trocar a letra repagina com a regra de FUN-128" (`spec.md`, casos limite). O defeito é anterior à feature: a troca de letra no modo livro não repagina até recarregar (`.specs/bugs/letra-livro-sem-repaginar/relato.md`), e a correção é desse bug.
+- **Reason**: Achado na T4 do `/executar`, fora do escopo; decisão do dono em 2026-11-19. O `/validar` (A-01) pediu o registro.
+- **Trade-off**: O e2e de FUN-86 afirma só que o capítulo 21 continua no topo da página mostrada, não que a paginação refaça; a prova da repaginação fica para o teste de reprodução do bug.
+- **Scope**: Feature `livro-paginas`, `e2e/livro.spec.ts:239-252` e a linha de `spec.md` sobre troca de letra, tema e tamanho de tela.
 - **Date**: 2026-11-19
 - **Status**: active

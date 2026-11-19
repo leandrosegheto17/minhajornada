@@ -19,7 +19,7 @@
 | TelaEmBreve | `src/telas/TelaEmBreve.tsx:18` | Tela "em breve" com `Estado`; `aoVoltar`, `aoLerBiblia` |
 | CapaLivro, PaginaPago | `src/livro/CapaLivro.tsx:5`, `:31` (`TEXTO_PAGO` `:21`) | Capa "Bíblia Sagrada" e página do plano pago |
 | BlocoLivro, PaginaLivro | `src/livro/PaginaLivro.tsx:19`, `:57` | Bloco (nome do livro ou versículo) e página com rodapé |
-| Paginação | `src/livro/paginacao.ts` (`blocosDoLivro` `:30`, `paginar` `:61`, `paginaDoVersiculo` `:123`, `alvoDaPagina` `:144`, `primeiroVersiculo` `:160`) | Monta blocos e pagina pela altura medida |
+| Paginação | `src/livro/paginacao.ts` (`blocosDoLivro` `:30`, `quebrasDoLivro` `:49`, `paginar` `:73`, `paginaDoVersiculo` `:141`, `alvoDaPagina` `:162`, `primeiroVersiculo` `:178`) | Monta blocos e pagina pela altura medida; cada capítulo do 2 em diante abre página nova (FUN-128) |
 | Folhear | `src/livro/folhear.ts` (`visiveis` `:29`, `destinoSeguinte` `:48`, `destinoAnterior` `:68`, `destinoDaCapa` `:88`) | Páginas mostradas e destinos |
 | useMedidas, useTelaLarga | `src/livro/useMedidas.ts:58`, `src/livro/useTelaLarga.ts:22` | Medição por ResizeObserver; tela ≥ 900 px deitada |
 | PainelAparencia | `src/componentes/PainelAparencia.tsx:28` | Letra −/+ e tema |

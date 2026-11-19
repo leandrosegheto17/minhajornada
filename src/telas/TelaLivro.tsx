@@ -15,6 +15,7 @@ import {
   paginaDoVersiculo,
   paginar,
   primeiroVersiculo,
+  quebrasDoLivro,
   type Bloco,
   type Pagina,
 } from '../livro/paginacao';
@@ -81,8 +82,11 @@ export function TelaLivro({
   const blocos = useMemo(() => (livro ? blocosDoLivro(livro) : SEM_BLOCOS), [livro]);
   const { ref: refMedida, medidas } = useMedidas(blocos, letra, medir);
   const paginas = useMemo(
-    () => (livro && medidas ? paginar(medidas.alturas, medidas.alturaPagina, medidas.alturaLinha) : null),
-    [livro, medidas],
+    () =>
+      livro && medidas
+        ? paginar(medidas.alturas, medidas.alturaPagina, medidas.alturaLinha, quebrasDoLivro(blocos))
+        : null,
+    [livro, medidas, blocos],
   );
 
   const emCapa = ancora.tipo === 'capa' || ancora.tipo === 'pago';

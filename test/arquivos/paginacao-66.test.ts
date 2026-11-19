@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { Livro } from '../../src/biblia/tipos';
-import { blocosDoLivro, paginar } from '../../src/livro/paginacao';
+import { blocosDoLivro, paginar, quebrasDoLivro } from '../../src/livro/paginacao';
 
 /** Os 66 livros reais gerados em `public/livros/` (`pnpm converter-biblia`, rodado antes dos testes). */
 const PASTA = join(process.cwd(), 'public', 'livros');
@@ -51,6 +51,44 @@ describe('paginação dos 66 livros (FUN-75, FUN-76)', () => {
           paginas.every((pagina) => pagina.partes.length > 0),
           `${livro.nome}: páginas vazias`,
         ).toBe(true);
+      }
+    },
+    60_000,
+  );
+
+  // FUN-128, FUN-130: com as quebras, todo capítulo do 2 em diante abre uma página; o capítulo 1 fica com o nome.
+  it.each([300, 60])(
+    'FUN-128: com página de %i px, todo capítulo do 2 em diante é a primeira parte de uma página e o 1:1 fica com o nome do livro',
+    (alturaPagina) => {
+      for (const arquivo of arquivos) {
+        const livro = JSON.parse(readFileSync(join(PASTA, arquivo), 'utf8')) as Livro;
+        const blocos = blocosDoLivro(livro);
+        const alturas = alturasDe(livro, blocos);
+        const paginas = paginar(alturas, alturaPagina, 20, quebrasDoLivro(blocos));
+        const partes = paginas.flatMap((pagina) => pagina.partes);
+
+        // Nenhum bloco some e a ordem se mantém.
+        expect(new Set(partes.map((parte) => parte.bloco)).size, `${livro.nome}: blocos presentes`).toBe(blocos.length);
+        const ordem = partes.map((parte) => parte.bloco);
+        expect(ordem, `${livro.nome}: ordem dos blocos`).toEqual([...ordem].sort((a, b) => a - b));
+        expect(
+          paginas.every((pagina) => pagina.partes.length > 0),
+          `${livro.nome}: páginas vazias`,
+        ).toBe(true);
+
+        blocos.forEach((bloco, i) => {
+          if (bloco.tipo !== 'versiculo' || !bloco.abreCapitulo) return;
+          const pagina = paginas.find((p) => p.partes.some((parte) => parte.bloco === i))!;
+          if (bloco.ref.capitulo > 1) {
+            expect(pagina.partes[0], `${livro.nome} ${bloco.ref.capitulo}: topo da página`).toEqual({
+              bloco: i,
+              recorte: 0,
+            });
+          } else if (alturas[0]! + alturas[i]! <= alturaPagina) {
+            // O capítulo 1 não tem quebra: com espaço, o 1:1 fica na página do nome do livro (FUN-130).
+            expect(pagina.partes[0]!.bloco, `${livro.nome} 1: junto do nome do livro`).toBe(0);
+          }
+        });
       }
     },
     60_000,

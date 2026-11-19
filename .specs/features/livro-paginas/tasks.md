@@ -66,6 +66,12 @@ T1 → T2 → T3 → T4
 T5 → T6 → T7
 ```
 
+### Phase 3: Retrabalho R1
+
+```
+T8
+```
+
 ---
 
 ## Task Breakdown
@@ -84,13 +90,13 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Quebra num bloco que caberia no resto da página: ele abre a página seguinte e a página anterior termina no bloco de antes (FUN-128, FUN-129)
-- [ ] Quebra no bloco 0, ou num bloco que já abriria página nova (página atual vazia): nenhuma página vazia é criada
-- [ ] Quebra num bloco maior que a página: as fatias começam no topo da página nova, como hoje (FUN-132)
-- [ ] Depois da quebra, os blocos seguintes do mesmo capítulo continuam enchendo a página (FUN-132)
-- [ ] Duas quebras seguidas (capítulo de um bloco): cada um numa página, o resto em branco (FUN-129)
-- [ ] Sem `quebras`, ou com todas falsas, o resultado é igual ao de hoje em todos os casos existentes (os testes atuais passam sem mudança)
-- [ ] Gate quick verde
+- [x] Quebra num bloco que caberia no resto da página: ele abre a página seguinte e a página anterior termina no bloco de antes (FUN-128, FUN-129)
+- [x] Quebra no bloco 0, ou num bloco que já abriria página nova (página atual vazia): nenhuma página vazia é criada
+- [x] Quebra num bloco maior que a página: as fatias começam no topo da página nova, como hoje (FUN-132)
+- [x] Depois da quebra, os blocos seguintes do mesmo capítulo continuam enchendo a página (FUN-132)
+- [x] Duas quebras seguidas (capítulo de um bloco): cada um numa página, o resto em branco (FUN-129)
+- [x] Sem `quebras`, ou com todas falsas, o resultado é igual ao de hoje em todos os casos existentes (os testes atuais passam sem mudança)
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/paginacao.test.ts`, nomes com `FUN-128`, `FUN-129` ou `FUN-132`
 **Gate**: quick
@@ -112,10 +118,10 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Rute (4 capítulos): `true` só nos blocos de 2:1, 3:1 e 4:1; o nome do livro e o 1:1 dão `false` (FUN-130)
-- [ ] Judas (1 capítulo): nenhuma quebra
-- [ ] Nos 66 livros, com páginas de 300 e de 60 px: todo versículo 1 de capítulo 2 em diante é a primeira parte de uma página; o 1:1 fica na página do nome do livro; nenhum bloco some e a ordem se mantém
-- [ ] Gate quick verde
+- [x] Rute (4 capítulos): `true` só nos blocos de 2:1, 3:1 e 4:1; o nome do livro e o 1:1 dão `false` (FUN-130)
+- [x] Judas (1 capítulo): nenhuma quebra
+- [x] Nos 66 livros, com páginas de 300 e de 60 px: todo versículo 1 de capítulo 2 em diante é a primeira parte de uma página; o 1:1 fica na página do nome do livro; nenhum bloco some e a ordem se mantém
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/paginacao.test.ts` e `test/arquivos/paginacao-66.test.ts`, nomes com `FUN-128` ou `FUN-130`
 **Gate**: quick
@@ -137,11 +143,11 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Em 1920 × 1080 e em 390 × 844, Gênesis 20 até o 21: a página com 21:1 tem o número do capítulo 21 como primeira coisa (topo da página, como `e2e/livro.spec.ts:84-88`) (FUN-128)
-- [ ] A página onde o 20 termina não tem versículo do 21 (FUN-129)
-- [ ] Gênesis 1: o nome "Gênesis" e o 1:1 na mesma página (FUN-130)
-- [ ] Os testes passam com a mudança e o de FUN-128 falha sem ela (rodada vermelha registrada no commit)
-- [ ] Gate full verde (`e2e/livro.spec.ts`)
+- [x] Em 1920 × 1080 e em 390 × 844, Gênesis 20 até o 21: a página com 21:1 tem o número do capítulo 21 como primeira coisa (topo da página, como `e2e/livro.spec.ts:84-88`) (FUN-128)
+- [x] A página onde o 20 termina não tem versículo do 21 (FUN-129)
+- [x] Gênesis 1: o nome "Gênesis" e o 1:1 na mesma página (FUN-130)
+- [x] Os testes passam com a mudança e o de FUN-128 falha sem ela (rodada vermelha registrada no commit)
+- [x] Gate full verde (`e2e/livro.spec.ts`)
 
 **Tests**: e2e em `e2e/livro.spec.ts`, nomes com `FUN-128`, `FUN-129` ou `FUN-130`
 **Gate**: full
@@ -163,16 +169,18 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Em 1920 × 1080, percorrendo Gênesis: há ao menos um par em que a página da esquerda termina um capítulo, e nele a página da direita começa com o número do capítulo seguinte no topo (FUN-131)
-- [ ] Escolher Gênesis 21 pela grade mostra a página que começa com o 21 no topo (FUN-83 com FUN-128)
-- [ ] Trocar a letra para o maior tamanho em Gênesis 21:1 repagina e mantém o 21:1 no topo da página mostrada (FUN-86 com FUN-128)
-- [ ] Gate full verde (`e2e/livro.spec.ts`)
+- [x] Em 1920 × 1080, percorrendo Gênesis: há ao menos um par em que a página da esquerda termina um capítulo, e nele a página da direita começa com o número do capítulo seguinte no topo (FUN-131)
+- [x] Escolher Gênesis 21 pela grade mostra a página que começa com o 21 no topo (FUN-83 com FUN-128)
+- [x] Trocar a letra para o maior tamanho em Gênesis 21:1 mantém o capítulo 21 no topo da página mostrada (FUN-86 com FUN-128). Não afirma repaginação: o defeito anterior de `.specs/bugs/letra-livro-sem-repaginar/relato.md` fica fora desta feature (decisão do dono na execução, 2026-11-19)
+- [x] Gate full verde (`e2e/livro.spec.ts`)
 
 **Tests**: e2e em `e2e/livro.spec.ts`, nomes com `FUN-131`, `FUN-83` ou `FUN-86`
 **Gate**: full
 **Commit**: `test(e2e): prova o capítulo à direita, a grade e a troca de letra com a quebra`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 3c407daf91ae3697369cc07d2753db89af42ce8e = verde
 
 ### T5: Vão de 32 px entre as páginas, com a medida igual à página (FUN-133, FUN-135)
 
@@ -188,12 +196,12 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] `test/arquivos/livro-css.test.ts`: a fórmula de `--largura-pagina-larga` desconta `var(--esp-8)`, e `.livro__aberto` e `.medida` continuam lendo a mesma variável (teste alterado com o motivo no commit)
-- [ ] Em 1280 × 800 e 1920 × 1080: distância entre a borda direita da página da esquerda e a esquerda da da direita = 32 px (±1) (FUN-133)
-- [ ] Nos mesmos tamanhos e em 900 × 600 e 1920 × 1200: as duas páginas com a mesma largura (±1), somando a largura da tela menos 2 × 24 px menos 32 px, sem rolagem horizontal (FUN-135, troca do teste de FUN-96)
-- [ ] A medida tem a largura da página mostrada (`e2e/livro-tela-cheia.spec.ts:235-253` verde) e nenhum versículo de Rute fica escondido em 1280 × 800 (`e2e/livro.spec.ts:40`)
-- [ ] Título e posição continuam alinhados às bordas das páginas, e os botões aos cantos (FUN-98, FUN-99 verdes)
-- [ ] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/livro.spec.ts`)
+- [x] `test/arquivos/livro-css.test.ts`: a fórmula de `--largura-pagina-larga` desconta `var(--esp-8)`, e `.livro__aberto` e `.medida` continuam lendo a mesma variável (teste alterado com o motivo no commit)
+- [x] Em 1280 × 800 e 1920 × 1080: distância entre a borda direita da página da esquerda e a esquerda da da direita = 32 px (±1) (FUN-133)
+- [x] Nos mesmos tamanhos e em 900 × 600 e 1920 × 1200: as duas páginas com a mesma largura (±1), somando a largura da tela menos 2 × 24 px menos 32 px, sem rolagem horizontal (FUN-135, troca do teste de FUN-96)
+- [x] A medida tem a largura da página mostrada (`e2e/livro-tela-cheia.spec.ts:235-253` verde) e nenhum versículo de Rute fica escondido em 1280 × 800 (`e2e/livro.spec.ts:40`)
+- [x] Título e posição continuam alinhados às bordas das páginas, e os botões aos cantos (FUN-98, FUN-99 verdes)
+- [x] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/livro.spec.ts`)
 
 **Tests**: unit em `test/arquivos/livro-css.test.ts` e e2e em `e2e/livro-tela-cheia.spec.ts`, nomes com `FUN-133` ou `FUN-135`
 **Gate**: full
@@ -215,9 +223,9 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Em 1280 × 800, nos temas claro, escuro e sépia: o `::before` (ou `::after`) de `.livro__aberto` tem 1 px de largura e `background-color` igual ao valor computado de `--cor-borda` do tema (FUN-134)
-- [ ] O meio da linha fica a 1 px do meio do vão, e o topo e a altura dela coincidem com os das páginas (±1) (FUN-134)
-- [ ] Gate full verde (`e2e/livro-tela-cheia.spec.ts`)
+- [x] Em 1280 × 800, nos temas claro, escuro e sépia: o `::before` (ou `::after`) de `.livro__aberto` tem 1 px de largura e `background-color` igual ao valor computado de `--cor-borda` do tema (FUN-134)
+- [x] O meio da linha fica a 1 px do meio do vão, e o topo e a altura dela coincidem com os das páginas (±1) (FUN-134)
+- [x] Gate full verde (`e2e/livro-tela-cheia.spec.ts`)
 
 **Tests**: e2e em `e2e/livro-tela-cheia.spec.ts`, nomes com `FUN-134`
 **Gate**: full
@@ -239,11 +247,33 @@ T5 → T6 → T7
 
 **Done when**:
 
-- [ ] Em 1280 × 800: as duas páginas de texto têm os quatro `border-*-radius` iguais ao valor de `--raio-m`
-- [ ] Em 1280 × 800, na capa: plano pago à esquerda e capa à direita com o vão de 32 px e a linha de 1 px no meio (FUN-133, FUN-134)
-- [ ] Em 390 × 844 e 1024 × 1366: uma página só, sem pseudo-elemento visível de linha e com os cantos de hoje (FUN-136; o teste de FUN-102 continua verde)
-- [ ] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/capa.spec.ts`)
+- [x] Em 1280 × 800: as duas páginas de texto têm os quatro `border-*-radius` iguais ao valor de `--raio-m`
+- [x] Em 1280 × 800, na capa: plano pago à esquerda e capa à direita com o vão de 32 px e a linha de 1 px no meio (FUN-133, FUN-134)
+- [x] Em 390 × 844 e 1024 × 1366: uma página só, sem pseudo-elemento visível de linha e com os cantos de hoje (FUN-136; o teste de FUN-102 continua verde)
+- [x] Gate full verde (`e2e/livro-tela-cheia.spec.ts`, `e2e/capa.spec.ts`)
 
 **Tests**: e2e em `e2e/livro-tela-cheia.spec.ts`, nomes com `FUN-133`, `FUN-134` ou `FUN-136`
 **Gate**: full
 **Commit**: `feat(livro): cantos e capa com as páginas separadas`
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 55eecc480c1c4f15d8aefb6ce1a4fd6f270bef4b = verde
+
+---
+
+### T8: Registrar a exclusão da repaginação na troca de letra (A-01)
+
+**What**: Registrar em `.specs/STATE.md` (AD nova) a decisão do dono de 2026-11-19 de deixar fora desta feature o caso limite "trocar a letra repagina com a regra de FUN-128" e anotar em `spec.md:81` que ele fica com o bug `.specs/bugs/letra-livro-sem-repaginar/`, citando a AD.
+**Estimativa**: 15 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `.specs/STATE.md` (Decisions), `.specs/features/livro-paginas/spec.md:81`
+**Depends on**: —
+**Reuses**: formato das ADs de `.specs/STATE.md`; decisão já registrada em `tasks.md` (T4, terceiro item de Done when)
+**Requirement**: FUN-86 com FUN-128 · Achado: A-01 (validation.md)
+**Tests**: nenhum teste novo (só documentação); o e2e de FUN-86 de `e2e/livro.spec.ts:239-252` continua verde
+**Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot`
+
+- [x] Concluída
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 0300dbde592feed68575ad4113cccd22fb66ff8f = verde

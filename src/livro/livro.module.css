@@ -258,30 +258,45 @@
   width: min(var(--largura-pagina), calc(100vw - 2 * var(--esp-3)));
 }
 /*
- * Tela larga (FUN-96, FUN-97, FUN-100): as duas páginas preenchem a área, sem proporção fixa. A largura de cada uma é
- * metade da tela menos as margens (vão 0, as páginas encostam pela lombada); a altura é o que sobra entre a linha do
- * título e a dos botões. A página e a medida leem as mesmas duas variáveis, então não divergem (senão o texto quebra
- * em menos linhas que na página mostrada e versículos ficam escondidos). Variáveis locais: nada novo em tokens.css.
- * Altura: 100vh menos a barra (56 + 1 px de borda), o padding de cima (20) e o de baixo (16) de `.livro`, as linhas
- * do título e dos botões (`--alvo-toque` cada) e os dois `gap` (`--esp-4`).
+ * Tela larga (FUN-96, FUN-97, FUN-100, FUN-133 a FUN-135): as duas páginas preenchem a área, sem proporção fixa, e ficam
+ * separadas por um vão de 32 px com uma linha de 1 px no centro (a dobra do livro aberto). A largura de cada página é a
+ * da tela menos as margens e o vão, dividida por dois; a altura é o que sobra entre a linha do título e a dos botões.
+ * A página e a medida leem as mesmas duas variáveis, então não divergem (senão o texto quebra em menos linhas que na
+ * página mostrada e versículos ficam escondidos): o vão entra na conta da largura, nunca só no `column-gap`. Variáveis
+ * locais: nada novo em tokens.css. Altura: 100vh menos a barra (56 + 1 px de borda), o padding de cima (20) e o de baixo
+ * (16) de `.livro`, as linhas do título e dos botões (`--alvo-toque` cada) e os dois `gap` (`--esp-4`).
  */
 @media (min-width: 900px) and (orientation: landscape) {
   .livro {
-    --largura-pagina-larga: calc((100vw - 2 * var(--esp-6)) / 2);
+    --vao-paginas: var(--esp-8);
+    --largura-pagina-larga: calc((100vw - 2 * var(--esp-6) - var(--vao-paginas)) / 2);
     --altura-pagina-larga: calc(
       100vh - var(--altura-barra) - 1px - var(--esp-5) - var(--esp-4) - 2 * var(--alvo-toque) - 2 * var(--esp-4)
     );
     padding: var(--esp-5) var(--esp-6) var(--esp-4);
   }
   .livro__aberto {
+    position: relative;
     grid-template-columns: repeat(2, var(--largura-pagina-larga));
+    column-gap: var(--vao-paginas);
+  }
+  /* Linha fina no centro do vão, com a altura das páginas (FUN-134). */
+  .livro__aberto::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    background: var(--cor-borda);
+    pointer-events: none;
   }
   /* A capa e o plano pago não têm linha de título: reservam a altura dela, para páginas e botões ficarem onde estão em Rute (A-01). */
   .livro__aberto:has(.pagina--capa) {
     margin-top: calc(var(--alvo-toque) + var(--esp-4));
   }
   .livro__cabeca {
-    max-width: calc(2 * var(--largura-pagina-larga));
+    max-width: calc(2 * var(--largura-pagina-larga) + var(--vao-paginas));
   }
   /* O título leva o próprio respiro no botão; o `h1` externo não soma outro, senão o texto não encosta na página. */
   .livro__cabeca > .titulo-capitulo {
@@ -289,8 +304,14 @@
   }
   .navegacao-pagina {
     width: 100%;
-    max-width: calc(2 * var(--largura-pagina-larga));
+    max-width: calc(2 * var(--largura-pagina-larga) + var(--vao-paginas));
     justify-content: space-between;
+  }
+  /* Com o vão, cada página é uma área própria: os quatro cantos arredondados (FUN-133). */
+  .pagina,
+  .pagina--esquerda,
+  .pagina--direita {
+    border-radius: var(--raio-m);
   }
   .pagina {
     aspect-ratio: auto;

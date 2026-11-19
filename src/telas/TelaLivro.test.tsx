@@ -411,7 +411,7 @@ describe('tela larga e lugar da âncora (FUN-71, FUN-77, FUN-84, FUN-85, FUN-88;
     alturaPagina: 100,
     alturaLinha: 20,
   });
-  // Páginas: P1 [nome, 1:1, 1:2, 1:3, 2:1] (começa no capítulo 1, traz o 2:1) e P2 [2:2, 2:3].
+  // Páginas (FUN-128, o capítulo 2 abre uma página): P1 [nome, 1:1, 1:2, 1:3] e P2 [2:1, 2:2, 2:3].
   const noCapitulo2 = (extra: Partial<Props> = {}) =>
     renderizar({
       ancora: { tipo: 'texto', ref: { livro: RUTE, capitulo: 2 }, versiculo: 1 },
@@ -420,8 +420,19 @@ describe('tela larga e lugar da âncora (FUN-71, FUN-77, FUN-84, FUN-85, FUN-88;
       ...extra,
     });
 
-  it('FUN-84/FUN-71: a âncora no 2:1, numa página que começa no capítulo 1, mostra o título do capítulo 1 (primeiro versículo da página)', () => {
+  it('FUN-84/FUN-71 com FUN-128: a âncora no 2:1, que abre uma página, mostra o título do capítulo 2 (primeiro versículo da página)', () => {
     noCapitulo2();
+    expect(screen.getByRole('button', { name: 'Rute 2. Escolher outro capítulo' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Rute 1. Escolher outro capítulo' })).not.toBeInTheDocument();
+    expect(screen.getByRole('article', { name: 'Página 2 de Rute' })).toBeInTheDocument();
+  });
+
+  it('FUN-84/FUN-71 com FUN-128: a âncora no 1:3, última da página do capítulo 1, mostra o título do capítulo 1', () => {
+    renderizar({
+      ancora: { tipo: 'texto', ref: { livro: RUTE, capitulo: 1 }, versiculo: 3 },
+      carga: doisCapitulos(RUTE),
+      medir: medirDois,
+    });
     expect(screen.getByRole('button', { name: 'Rute 1. Escolher outro capítulo' })).toBeInTheDocument();
     expect(screen.getByRole('article', { name: 'Página 1 de Rute' })).toBeInTheDocument();
   });
@@ -432,14 +443,15 @@ describe('tela larga e lugar da âncora (FUN-71, FUN-77, FUN-84, FUN-85, FUN-88;
       alturaPagina: 100,
       alturaLinha: 20,
     });
-    // Nome 20 e versículos de 40, página de 100: P1 [nome, 1:1, 1:2], P2 [1:3, 2:1], P3 [2:2, 2:3]; o par é P1 e P2.
+    // Nome 20 e versículos de 40, página de 100 (FUN-128): P1 [nome, 1:1, 1:2], P2 [1:3], P3 [2:1, 2:2], P4 [2:3]; o
+    // par é P1 e P2, e a página seguinte ao par abre o capítulo 2.
     const props = renderizar({ carga: doisCapitulos(RUTE), medir: medirTres, larga: true });
     expect(screen.getAllByRole('article')).toHaveLength(2);
     fireEvent.click(seguinte());
     expect(props.aoIrParaAncora).toHaveBeenCalledWith({
       tipo: 'texto',
       ref: { livro: RUTE, capitulo: 2 },
-      versiculo: 2,
+      versiculo: 1,
     });
   });
 

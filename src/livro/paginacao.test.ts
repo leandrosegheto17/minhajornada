@@ -6,6 +6,7 @@ import {
   paginar,
   paginaDoVersiculo,
   primeiroVersiculo,
+  quebrasDoLivro,
   type Bloco,
   type Pagina,
 } from './paginacao';
@@ -224,6 +225,158 @@ describe('paginar (FUN-75)', () => {
     const paginas = paginar([100_000], 400, 1);
     expect(paginas).toHaveLength(250);
     expect(paginas.every((p, i) => p.partes[0]!.recorte === i * 400)).toBe(true);
+  });
+});
+
+describe('paginar com quebras de capítulo (FUN-128, FUN-129, FUN-132)', () => {
+  const PAGINA = 100;
+  const LINHA = 20;
+  const blocosDas = (paginas: Pagina[]) => paginas.map((p) => p.partes.map((parte) => parte.bloco));
+
+  it('FUN-128: quebra num bloco que caberia no resto da página abre a página seguinte', () => {
+    const paginas = paginar([30, 30, 30, 30], PAGINA, LINHA, [false, false, true, false]);
+    expect(blocosDas(paginas)).toEqual([
+      [0, 1],
+      [2, 3],
+    ]);
+  });
+
+  it('FUN-129: o resto da página antes da quebra fica em branco, sem bloco do capítulo seguinte', () => {
+    const paginas = paginar([10, 10, 10, 10], PAGINA, LINHA, [false, false, true, false]);
+    expect(blocosDas(paginas)).toEqual([
+      [0, 1],
+      [2, 3],
+    ]);
+    const usado = paginas[0]!.partes.length * 10;
+    expect(usado).toBeLessThan(PAGINA);
+  });
+
+  it('FUN-128: quebra no bloco 0 não cria página vazia', () => {
+    const paginas = paginar([30, 30], PAGINA, LINHA, [true, false]);
+    expect(blocosDas(paginas)).toEqual([[0, 1]]);
+  });
+
+  it('FUN-128: quebra num bloco que já abriria página nova não cria página vazia', () => {
+    // Os blocos 0 e 1 enchem a página; o 2 já abriria a seguinte, e a quebra nele não deixa página em branco.
+    const paginas = paginar([50, 50, 30], PAGINA, LINHA, [false, false, true]);
+    expect(blocosDas(paginas)).toEqual([[0, 1], [2]]);
+    expect(paginas.every((p) => p.partes.length > 0)).toBe(true);
+  });
+
+  it('FUN-132: bloco maior que a página depois da quebra começa no topo da página nova e é fatiado como sempre', () => {
+    const paginas = paginar([30, 250, 10], PAGINA, LINHA, [false, true, false]);
+    expect(paginas.map((p) => p.partes)).toEqual([
+      [{ bloco: 0, recorte: 0 }],
+      [{ bloco: 1, recorte: 0 }],
+      [{ bloco: 1, recorte: 100 }],
+      [
+        { bloco: 1, recorte: 200 },
+        { bloco: 2, recorte: 0 },
+      ],
+    ]);
+  });
+
+  it('FUN-128: quebra logo depois da última fatia de um bloco dividido abre a página seguinte', () => {
+    // O bloco 0 (250) termina na página 3 com 50 px usados; a quebra no bloco 1 não o põe ao lado do resto do 0.
+    const paginas = paginar([250, 10], PAGINA, LINHA, [false, true]);
+    expect(paginas.map((p) => p.partes)).toEqual([
+      [{ bloco: 0, recorte: 0 }],
+      [{ bloco: 0, recorte: 100 }],
+      [{ bloco: 0, recorte: 200 }],
+      [{ bloco: 1, recorte: 0 }],
+    ]);
+  });
+
+  it('FUN-132: depois da quebra os blocos seguintes do capítulo continuam enchendo a página', () => {
+    const paginas = paginar([60, 20, 20, 20, 20, 20], PAGINA, LINHA, [false, false, true, false, false, false]);
+    expect(blocosDas(paginas)).toEqual([
+      [0, 1],
+      [2, 3, 4, 5],
+    ]);
+  });
+
+  it('FUN-129: duas quebras seguidas põem cada bloco numa página, com o resto em branco', () => {
+    const paginas = paginar([10, 10, 10, 10], PAGINA, LINHA, [false, true, true, false]);
+    expect(blocosDas(paginas)).toEqual([[0], [1], [2, 3]]);
+  });
+
+  it('FUN-128: sem quebras, ou com todas falsas, o resultado é o de sempre', () => {
+    const alturas = [20, 35, 90, 10, 260, 45, 0, 100, 5, 330];
+    const sem = paginar(alturas, PAGINA, LINHA);
+    expect(
+      paginar(
+        alturas,
+        PAGINA,
+        LINHA,
+        alturas.map(() => false),
+      ),
+    ).toEqual(sem);
+    expect(paginar(alturas, PAGINA, LINHA, [])).toEqual(sem);
+  });
+
+  it('FUN-128: com quebras todos os blocos aparecem uma vez, em ordem, e nenhuma página passa da altura', () => {
+    const alturas = [20, 35, 90, 10, 260, 45, 5, 100, 5, 30];
+    const paginas = paginar(alturas, PAGINA, LINHA, [false, false, true, false, true, false, false, true, false, true]);
+    const ordem = todasAsPartes(paginas).map((parte) => parte.bloco);
+    expect(ordem).toEqual([...ordem].sort((a, b) => a - b));
+    expect(new Set(ordem).size).toBe(alturas.length);
+    alturasDasPartes(paginas, alturas).forEach((doBloco) => {
+      expect(doBloco.reduce((soma, h) => soma + h, 0)).toBeLessThanOrEqual(PAGINA);
+    });
+  });
+});
+
+describe('quebrasDoLivro (FUN-128, FUN-130)', () => {
+  const marcadas = (livro: Livro) => {
+    const blocos = blocosDoLivro(livro);
+    return quebrasDoLivro(blocos).flatMap((quebra, i) => {
+      const bloco = blocos[i]!;
+      return quebra && bloco.tipo === 'versiculo' ? [[bloco.ref.capitulo, bloco.versiculo]] : [];
+    });
+  };
+
+  it('FUN-130: em Rute o nome do livro e o 1:1 não têm quebra', () => {
+    const quebras = quebrasDoLivro(blocosDoLivro(rute()));
+    expect(quebras).toHaveLength(86);
+    expect(quebras[0]).toBe(false);
+    expect(quebras[1]).toBe(false);
+  });
+
+  it('FUN-128: em Rute só 2:1, 3:1 e 4:1 têm quebra', () => {
+    expect(marcadas(rute())).toEqual([
+      [2, 1],
+      [3, 1],
+      [4, 1],
+    ]);
+    expect(quebrasDoLivro(blocosDoLivro(rute())).filter(Boolean)).toHaveLength(3);
+  });
+
+  it('FUN-130: livro de capítulo único (Judas) não tem quebra', () => {
+    expect(quebrasDoLivro(blocosDoLivro(judas())).some(Boolean)).toBe(false);
+  });
+
+  it('FUN-128: livro sem capítulos não tem quebra', () => {
+    expect(quebrasDoLivro(blocosDoLivro({ numero: 8, nome: 'Rute', capitulos: [] }))).toEqual([false]);
+  });
+
+  it('FUN-128: com a quebra de Rute, cada capítulo do 2 em diante é o primeiro bloco de uma página', () => {
+    const livro = rute();
+    const blocos = blocosDoLivro(livro);
+    const paginas = paginar(
+      blocos.map((b) => (b.tipo === 'nomeLivro' ? 40 : 20)),
+      300,
+      20,
+      quebrasDoLivro(blocos),
+    );
+    for (const capitulo of [2, 3, 4]) {
+      const indiceBloco = blocos.findIndex(
+        (b) => b.tipo === 'versiculo' && b.ref.capitulo === capitulo && b.abreCapitulo,
+      );
+      const pagina = paginas.find((p) => p.partes.some((parte) => parte.bloco === indiceBloco))!;
+      expect(pagina.partes[0]).toEqual({ bloco: indiceBloco, recorte: 0 });
+    }
+    // O capítulo 1 fica na página do nome do livro.
+    expect(paginas[0]!.partes.slice(0, 2).map((parte) => parte.bloco)).toEqual([0, 1]);
   });
 });
 
