@@ -2,7 +2,7 @@
 // Node 24 roda este arquivo direto: só sintaxe de tipo apagável e imports com a extensão `.ts`.
 import type { ItemCorrecao, RefVersiculo } from '../../src/biblia/correcoes/arquivo.ts';
 import { REGRAS } from '../../src/biblia/correcoes/regras.ts';
-import { nomeRef, posicaoUnica } from '../../src/biblia/correcoes/validar.ts';
+import { colchetesEmPares, nomeRef, posicaoUnica } from '../../src/biblia/correcoes/validar.ts';
 import type { Livro } from '../../src/biblia/tipos.ts';
 import type { Candidato } from './levantamento.ts';
 
@@ -31,6 +31,8 @@ export interface RelatorioConferencia {
   expandidos: number;
   ocorrenciasDivergentes: OcorrenciaDivergente[];
   semVersiculo: RefSemVersiculo[];
+  /** Itens que deixariam colchete de itálico sem par no versículo (FUN-125): não entram no arquivo. */
+  semColchetes: RefSemVersiculo[];
   /** Linhas repetidas (mesma referência, antes e depois) contadas uma vez. */
   duplicados: number;
 }
@@ -54,9 +56,17 @@ function posicaoSemColchetes(versiculo: string, trecho: string): { inicio: numbe
   const achado = posicaoUnica(sem, alvo);
   if (achado === null) return null;
 
-  let inicio = indices[achado] ?? 0;
-  let fim = (indices[achado + alvo.length - 1] ?? 0) + 1;
-  // O trecho não pode cortar um par de colchetes ao meio: estende até fechar o par.
+  return estenderAoPar(versiculo, indices[achado] ?? 0, (indices[achado + alvo.length - 1] ?? 0) + 1);
+}
+
+/** O trecho não pode cortar um par de colchetes ao meio: estende até fechar o par. `null` se o par não fecha. */
+function estenderAoPar(
+  versiculo: string,
+  inicioBruto: number,
+  fimBruto: number,
+): { inicio: number; fim: number } | null {
+  let inicio = inicioBruto;
+  let fim = fimBruto;
   let aberto = 0;
   let fecharSemAbrir = false;
   for (const c of versiculo.slice(inicio, fim)) {
@@ -80,7 +90,14 @@ interface Achado {
 
 /** Procura o "antes" no versículo: exato uma vez, só sem colchetes uma vez, ou não confere. */
 function procurar(versiculo: string, antes: string): Achado {
-  if (posicaoUnica(versiculo, antes) !== null) return { antes, confere: true, recuperado: false };
+  const exato = posicaoUnica(versiculo, antes);
+  if (exato !== null) {
+    if (colchetesEmPares(antes)) return { antes, confere: true, recuperado: false };
+    // Trecho exato que corta um par de colchetes: estende até fechar o par (AD-015).
+    const par = colchetesEmPares(versiculo) ? estenderAoPar(versiculo, exato, exato + antes.length) : null;
+    if (par === null) return { antes, confere: true, recuperado: false };
+    return { antes: versiculo.slice(par.inicio, par.fim), confere: true, recuperado: true };
+  }
   if (versiculo.includes(antes)) return { antes, confere: false, recuperado: false }; // aparece mais de uma vez
   const sem = posicaoSemColchetes(versiculo, antes);
   if (sem === null) return { antes, confere: false, recuperado: false };
@@ -91,10 +108,9 @@ function versiculoDe(livros: Livro[], ref: RefVersiculo): string | undefined {
   return livros.find((l) => l.numero === ref.livro)?.capitulos[ref.capitulo - 1]?.[ref.versiculo - 1];
 }
 
-/** O "depois" só repete o "antes" com as regras mecânicas aplicadas (AD-013). Compara com e sem os colchetes. */
+/** O "depois" só repete o "antes" com as regras mecânicas aplicadas (AD-013). Comparação exata: pôr ou tirar colchete não é regra. */
 function cobertoPorRegra(antes: string, depois: string): boolean {
-  const aplicado = aplicarRegras(antes);
-  return aplicado === depois || tirarColchetes(aplicado) === tirarColchetes(depois);
+  return aplicarRegras(antes) === depois;
 }
 
 interface Provisorio {
@@ -119,6 +135,7 @@ export function conferir(
     expandidos: 0,
     ocorrenciasDivergentes: [],
     semVersiculo: [],
+    semColchetes: [],
     duplicados: 0,
   };
   const provisorios: Provisorio[] = [];
@@ -146,6 +163,21 @@ export function conferir(
       confere: achado.confere,
       ...(achado.recuperado && pares(achado.antes) !== pares(candidato.depois) ? { italicoMuda: true as const } : {}),
     };
+    // O versículo corrigido precisa ficar em pares (FUN-125), como `validarCorrecoes` confere; versículo da fonte que
+    // já estava sem par não é culpa da correção.
+    const inicio = posicaoUnica(versiculo, item.antes);
+    const corrigido =
+      inicio === null
+        ? item.depois
+        : versiculo.slice(0, inicio) + item.depois + versiculo.slice(inicio + item.antes.length);
+    if (!colchetesEmPares(corrigido) && (inicio === null || colchetesEmPares(versiculo))) {
+      relatorio.semColchetes.push({
+        arquivo: candidato.arquivo,
+        linha: candidato.linha,
+        motivo: `${nomeRef(livros, ref)}: o "depois" deixaria colchete de itálico sem par`,
+      });
+      return;
+    }
     if (achado.confere) relatorio.conferem += 1;
     else relatorio.naoConferem += 1;
     if (achado.recuperado) relatorio.recuperados += 1;

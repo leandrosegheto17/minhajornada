@@ -91,6 +91,7 @@ function relatorioDe(
     `- Cobertos por regra: ${relatorio.cobertosPorRegra} (fora da lista, AD-013)`,
     `- Arcaico descartado: ${contagens.arcaicos}`,
     `- Linhas repetidas contadas uma vez: ${relatorio.duplicados}`,
+    `- Fora do arquivo por colchete de itálico sem par (FUN-125): ${relatorio.semColchetes.length}`,
     `- Linhas ignoradas: ${contagens.ignoradas.length}`,
     '',
     '## Regras mecânicas',
@@ -106,6 +107,10 @@ function relatorioDe(
   if (relatorio.semVersiculo.length > 0) {
     linhas.push('', '## Referências que não existem na fonte', '');
     for (const s of relatorio.semVersiculo) linhas.push(`- ${s.arquivo}:${s.linha}: ${s.motivo}`);
+  }
+  if (relatorio.semColchetes.length > 0) {
+    linhas.push('', '## Fora do arquivo: o "depois" deixaria colchete de itálico sem par', '');
+    for (const s of relatorio.semColchetes) linhas.push(`- ${s.arquivo}:${s.linha}: ${s.motivo}`);
   }
   if (contagens.ignoradas.length > 0) {
     linhas.push('', '## Linhas ignoradas (formato sem leitura definida)', '');

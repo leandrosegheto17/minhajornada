@@ -32,6 +32,7 @@ const LIVROS: Livro[] = [
         'diz [dele] ,e vai e [dele] ,e vem',
         'Disse o [homem] a [ela] e foi.',
         'um [vaso] de barro e um vaso [de] barro',
+        'texto [sem fecho aqui',
       ],
       ['Rute disse ,vem.', 'Assim falou o [SENHOR] : vem.'],
     ],
@@ -124,6 +125,36 @@ describe('conferir (FUN-104, FUN-105)', () => {
       LIVROS,
     );
     expect(itens[0]).toMatchObject({ confere: true, antes: '[homem] a [ela]', italicoMuda: true });
+  });
+
+  it('FUN-105 (AD-015): "antes" exato que corta um par de colchetes ao meio se estende até fechar o par', () => {
+    const { itens, relatorio } = conferir(
+      [cand({ refs: [ref(1, 1, 1)], antes: 'Deus] criou', depois: 'Deus fez' })],
+      LIVROS,
+    );
+    expect(itens[0]).toMatchObject({ confere: true, antes: '[Deus] criou', italicoMuda: true });
+    expect(relatorio.recuperados).toBe(1);
+  });
+
+  it('FUN-125: item cujo "depois" deixaria colchete sem par no versículo não vira item e vai ao relatório', () => {
+    const { itens, relatorio } = conferir(
+      [
+        cand({ refs: [ref(1, 1, 1)], antes: 'os céus', depois: 'os [céus' }),
+        cand({ refs: [ref(1, 1, 1)], antes: 'criou', depois: 'criou]' }),
+        cand({ refs: [ref(1, 1, 1)], antes: 'os céus', depois: 'os [céus]' }),
+      ],
+      LIVROS,
+    );
+    expect(itens.map((i) => i.depois)).toEqual(['os [céus]']);
+    expect(relatorio.semColchetes).toHaveLength(2);
+    expect(relatorio.semColchetes[0]).toMatchObject({ arquivo: 'g01.md' });
+    expect(relatorio.semColchetes[0]?.motivo).toContain('Gênesis 1:1');
+    expect(relatorio.conferem).toBe(1);
+  });
+
+  it('FUN-125: versículo da fonte que já estava sem par não derruba o item (a falha não é da correção)', () => {
+    const { itens } = conferir([cand({ refs: [ref(1, 1, 7)], antes: 'texto', depois: 'trecho' })], LIVROS);
+    expect(itens).toHaveLength(1);
   });
 
   it('FUN-105 (AD-015): trecho sem colchetes que aparece duas vezes (com e sem colchetes) não confere', () => {
