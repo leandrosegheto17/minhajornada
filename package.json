@@ -13,6 +13,7 @@
     "dev": "vite",
     "prebuild": "node scripts/converter-biblia.ts",
     "build": "vite build",
+    "build:e2e": "node scripts/converter-biblia.ts --correcoes test/arquivos/dados/correcoes-exemplo.json && vite build --outDir dist-e2e",
     "preview": "vite preview",
     "lint": "eslint . && prettier --check .",
     "pretypecheck": "node scripts/converter-biblia.ts",
