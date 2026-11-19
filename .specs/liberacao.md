@@ -9,3 +9,10 @@
 - **Critério de parada**: página fora do ar, cabeçalho de segurança faltando ou erro ao abrir um livro
 - **Reversão**: `pnpm exec wrangler rollback <versão anterior>` (produção, sem `--env`) · testada no staging em 2026-11-17 (rollback para 76fa12db, site 200 com os cabeçalhos, depois republicado). Em produção a única versão anterior é a do primeiro disparo, igual à atual
 - **Resultado**: liberada
+
+## 2026-11-19 — Interface do livro, texto atualizado e páginas do livro (desenvolvimento @ bf74d37)
+
+- **Suíte**: `trava-testes.py --rodar` verde em `bf74d37`; CI do push verde (run 44607569313)
+- **Staging**: publicado pelo `deploy.yml` (run 44607847440, fumaça verde); E2E geral 25 passaram, 1 falhou (`e2e-geral/sobre-instalacao.spec.ts:18`, convite coberto no iPhone)
+- **Produção**: não publicada; segurada pelo dono até a correção do bug `.specs/bugs/convite-coberto-iphone/`
+- **Resultado**: parada no staging
