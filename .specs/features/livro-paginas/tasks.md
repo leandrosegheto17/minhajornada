@@ -274,4 +274,6 @@ Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 55eecc480c1c4f15d8
 **Tests**: nenhum teste novo (só documentação); o e2e de FUN-86 de `e2e/livro.spec.ts:239-252` continua verde
 **Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot`
 
-- [ ] Concluída
+- [x] Concluída
+
+Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ 0300dbde592feed68575ad4113cccd22fb66ff8f = verde
