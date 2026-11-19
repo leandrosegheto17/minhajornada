@@ -47,6 +47,12 @@ Um lote só (comum), T1 e T2 num commit `fix:`.
 T1 → T2
 ```
 
+### Phase 2: Retrabalho R1
+
+```
+T3
+```
+
 ---
 
 ## Task Breakdown
@@ -98,3 +104,21 @@ T1 → T2
 **Gate**: full
 
 Gate: pnpm typecheck && pnpm exec vitest run --reporter=dot @ e343b43603c900327f6e802778e1e5ebe526adfb = verde
+
+---
+
+### T3: Completar o causa.md com o commit e a linha do teste (A-01)
+
+**What**: Em `causa.md`, preencher **Commit da correção** com `9bb089d` e trocar a referência da saída vermelha de `e2e/convite-instalacao.spec.ts:30` para `:32` (o prettier moveu a asserção).
+**Estimativa**: 10 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Where**: `.specs/bugs/convite-coberto-iphone/causa.md:7,18`
+**Depends on**: —
+**Reuses**: modelo de `causa.md` (`.claude/skills/bug/references/causa.md`)
+**Requirement**: critério 2 do relato · Achado: A-01 (validation.md)
+**Tests**: nenhum teste novo (só documentação); `e2e/convite-instalacao.spec.ts` continua verde
+**Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot`
+
+- [ ] Concluída
