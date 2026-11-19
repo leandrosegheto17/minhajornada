@@ -4,7 +4,7 @@
 - **Teste planejado**: `e2e/convite-instalacao.spec.ts` (novo)
 - **Causa confirmada**: sim
 - **Plano da correção**: `tasks.md` pronto
-- **Commit da correção** (preenchido na execução): pendente
+- **Commit da correção** (preenchido na execução): `9bb089d` na branch `feature/convite-coberto-iphone`
 
 ## Reprodução
 
@@ -15,7 +15,7 @@
 
 - **Teste**: `e2e/convite-instalacao.spec.ts`, iPhone 14 emulado (`test.use` de `devices['iPhone 14']`), na página inicial: (a) o elemento em `elementFromPoint` no centro do botão "Dispensar convite" é o próprio botão (ou está dentro dele), e o mesmo para o texto do convite; (b) tocar em "Dispensar convite" esconde o convite e, depois de `reload`, ele não volta, com o título da página inicial visível (FUN-46, FUN-47)
 - **Comando**: `pnpm build:e2e && pnpm e2e e2e/convite-instalacao.spec.ts`
-- **Falha esperada**: a asserção (a) falha com o elemento de cima `cartao-inicial` em vez do botão; (b) estoura o tempo no clique ("subtree intercepts pointer events") · **Saída vermelha real** (preenchida pela T1): pendente
+- **Falha esperada**: a asserção (a) falha com o elemento de cima `cartao-inicial` em vez do botão; (b) estoura o tempo no clique ("subtree intercepts pointer events") · **Saída vermelha real** (T1, sem a correção): FUN-46 `Error: o toque no botão cai em SECTION._cartao-inicial_oxljy_69` (`e2e/convite-instalacao.spec.ts:32`); FUN-47 `TimeoutError: locator.click: Timeout 5000ms exceeded`. Com a correção: 19 passaram (`convite-instalacao`, `entrada`, `aparencia`)
 
 ## Causa raiz
 
