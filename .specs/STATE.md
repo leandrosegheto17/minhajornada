@@ -7,6 +7,7 @@
 - **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
 - **Fase aprovada também**: 2, Reconhecimento (`reconhecimento.md`, inventário em d93f7e8) em 2026-11-18
 - **Fase aprovada também**: 2b, Mockup (só `TelaCorrecoes`, `mockup/`) em 2026-11-18
+- **Revisão publicada (T15)**: artifact privado https://claude.ai/artifact/MXhc3ed26tA7VtYZUWa8Kz, slug `a6401c0b-687c-4126-ae72-22de16898aa1`, capacidades `db`, `user` e `downloads` (2026-11-18, confirmado pelo dono). Para republicar após mudar `correcoes/correcoes.json`: `node scripts/montar-revisao.ts`, `pnpm revisao:montar` e `publish_files` de `revisao/index.html`, `dados.json` e `dist/pagina.js`.
 - **Fase aprovada também**: 3, Plano (`design.md`, `tasks.md`, AD-012 a AD-017) e 4, Rede de proteção (linha de base 631 verdes, sem T0) em 2026-11-18. **Planejamento concluído.**
 - **Próximo passo**: `/executar` (Sonnet), Lote 1 crítico (Phase 1). Rodar suíte e gates pelo Git Bash (o `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`)
 - **Serviços no ar**: nenhum
