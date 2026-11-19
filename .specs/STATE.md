@@ -202,3 +202,18 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Date**: 2026-11-19
 - **Status**: active
 
+### AD-019
+- **Decision**: O roteiro passa a ter, depois da `texto-atualizado`: `livro-paginas` → `resumo-livro` → `estudo-livro` → `conta` → `assinatura` → `editor-estudo`. No modo livro, resumo, estudo e editor ocupam a página da direita, e a Bíblia fica só na da esquerda (pedido do dono em 2026-11-19).
+- **Reason**: O dono escolheu o conteúdo primeiro e a cobrança depois. A `livro-paginas` (páginas separadas e capítulo em página nova, pedidos de 2026-11-18) vem antes porque mexe na mesma paginação que o painel da direita vai usar. Conta e assinatura são features próprias e fecham antes de o pago abrir ao público; o editor depende da conta para guardar os textos.
+- **Trade-off**: Alternativa descartada: conta e assinatura antes do conteúdo, que tiraria cedo a maior incerteza técnica (o projeto ainda não tem servidor nem banco), mas atrasaria o valor que o dono vê. Restrição para o desenho do resumo: o conteúdo pago não pode ir no pacote público do site; até a `assinatura`, ele fica visível só ao dono.
+- **Scope**: Roteiro do produto, features 5 a 10. Substitui a ordem das features 5 e 6 da AD-009.
+- **Date**: 2026-11-19
+- **Status**: active
+
+### AD-020
+- **Decision**: Resumo, estudo e editor são recursos do plano pago. O pago avança sem a validação V1 de `.specs/produto/decisao.md` (entrevistas com quem ensina), com o risco aceito pelo dono. Quem assina lê o conteúdo pago também sem internet, depois de entrar. A cobrança é pelo Asaas.
+- **Reason**: Decisão do dono em 2026-11-19.
+- **Trade-off**: Sem a V1, preço e demanda do pago continuam sem evidência (H2 e H3 de `ideia.md`); as entrevistas podem correr em paralelo. Conteúdo offline no aparelho é mais fácil de copiar do que conteúdo servido a cada abertura.
+- **Scope**: Features `resumo-livro`, `estudo-livro`, `assinatura` e `editor-estudo`.
+- **Date**: 2026-11-19
+- **Status**: active
