@@ -1,7 +1,9 @@
 /* Convite de instalação (.specs/mockup/guia.html, seção Avisos, "convite-instalacao"). */
 
+/* Camadas: conteúdo das telas 1 (cartão e crédito da página inicial), convite e painel da aparência 2, barra 3. */
 .convite-instalacao {
   position: fixed;
+  z-index: 2;
   left: 50%;
   transform: translateX(-50%);
   bottom: max(var(--esp-3), env(safe-area-inset-bottom));
