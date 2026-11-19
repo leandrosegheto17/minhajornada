@@ -92,19 +92,19 @@ Varredura de requisitos implícitos (Medium): validação de entrada coberta pel
 
 | Requirement ID | Story | Phase | Status |
 | -------------- | ----- | ----- | ------ |
-| FUN-128 | P1: Capítulo em página nova | Design | Pending |
-| FUN-129 | P1: Capítulo em página nova | Design | Pending |
-| FUN-130 | P1: Capítulo em página nova | Design | Pending |
-| FUN-131 | P1: Capítulo em página nova | Design | Pending |
-| FUN-132 | P1: Capítulo em página nova | Design | Pending |
-| FUN-133 | P1: Páginas separadas em tela larga | Design | Pending |
-| FUN-134 | P1: Páginas separadas em tela larga | Design | Pending |
-| FUN-135 | P1: Páginas separadas em tela larga | Design | Pending |
-| FUN-136 | P1: Páginas separadas em tela larga | Design | Pending |
+| FUN-128 | P1: Capítulo em página nova | Tasks | In Tasks |
+| FUN-129 | P1: Capítulo em página nova | Tasks | In Tasks |
+| FUN-130 | P1: Capítulo em página nova | Tasks | In Tasks |
+| FUN-131 | P1: Capítulo em página nova | Tasks | In Tasks |
+| FUN-132 | P1: Capítulo em página nova | Tasks | In Tasks |
+| FUN-133 | P1: Páginas separadas em tela larga | Tasks | In Tasks |
+| FUN-134 | P1: Páginas separadas em tela larga | Tasks | In Tasks |
+| FUN-135 | P1: Páginas separadas em tela larga | Tasks | In Tasks |
+| FUN-136 | P1: Páginas separadas em tela larga | Tasks | In Tasks |
 
 **ID format:** `FUN-NNN`, continuando a numeração do projeto.
 
-**Coverage:** 9 total, 0 mapped to tasks, 9 unmapped ⚠️ (o plano mapeia)
+**Coverage:** 9 total, 9 mapped to tasks (T1 a T7), 0 unmapped
 
 ---
 

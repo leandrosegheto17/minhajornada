@@ -3,20 +3,12 @@
 ## Retomada
 
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
-- **Item**: `.specs/features/texto-atualizado/`
-- **Fase aprovada**: 1, Pedido (`spec.md`, FUN-103 a FUN-127) em 2026-11-18, depois do levantamento dos 66 livros (`levantamento/RESUMO.md`)
-- **Fase aprovada também**: 2, Reconhecimento (`reconhecimento.md`, inventário em d93f7e8) em 2026-11-18
-- **Fase aprovada também**: 2b, Mockup (só `TelaCorrecoes`, `mockup/`) em 2026-11-18
-- **Revisão publicada (T15)**: artifact privado https://claude.ai/artifact/MXhc3ed26tA7VtYZUWa8Kz, slug `a6401c0b-687c-4126-ae72-22de16898aa1`, capacidades `db`, `user` e `downloads` (2026-11-18, confirmado pelo dono). Para republicar após mudar `correcoes/correcoes.json`: `node scripts/montar-revisao.ts`, `pnpm revisao:montar` e `publish_files` de `revisao/index.html`, `dados.json` e `dist/pagina.js`.
-- **Fase aprovada também**: 3, Plano (`design.md`, `tasks.md`, AD-012 a AD-017) e 4, Rede de proteção (linha de base 631 verdes, sem T0) em 2026-11-18. **Planejamento concluído.**
-- **Próximo passo**: `/executar` (Sonnet), Lote 1 crítico (Phase 1). Rodar suíte e gates pelo Git Bash (o `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`)
+- **Item**: `.specs/features/livro-paginas/` (feature 5 do roteiro, AD-019)
+- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-128 a FUN-136), 2 Reconhecimento (mockup dispensado), 3 Plano e 4 Rede de proteção (`tasks.md`, 7 tarefas em 2 lotes, sem T0, linha de base 996 verdes) em 2026-11-19. **Planejamento concluído.**
+- **Próximo passo**: `/executar` (Sonnet), Lote 1 comum (Phase 1). Rodar suíte e gates pelo Git Bash (o `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`)
 - **Serviços no ar**: nenhum
-- **Progresso**: Produto: Faltam 3 de 6 features: 50% concluído; texto-atualizado 0 de 21 tarefas, conferida em 2026-11-18
-- **Combinado na conversa e não registrado em artefato**:
-  - Branches: `desenvolvimento` faz o papel da main; toda feature nasce dela e volta para ela (**Branch pai** = `desenvolvimento`). A `main` só recebe `desenvolvimento` quando o usuário pedir.
-  - Publicação: `desenvolvimento` → tst (`minhajornada-tst.ljssoftware.com.br`, workflow `deploy` manual depois do CI verde); `main` → produção. O tst foi publicado em 2026-11-18 com a `livro-tela-cheia` (run 44404040537).
-  - Reconhecimento deve olhar: `scripts/converter-biblia.ts` e `src/biblia/conversor.ts` (onde as correções entram no build), `src/biblia/segmentos.ts` (colchetes → itálico), `src/telas/TelaSobre.tsx` e `src/livro/CapaLivro.tsx` (texto do crédito), navegação de telas (onde entra "Correções no texto") e o cache por hash (AD-002). A página de revisão é um artifact privado no claude.ai (com banco do artifact), fora do app.
-- **Gravada em**: 2026-11-18
+- **Progresso**: Produto: Faltam 6 de 10 features: 40% concluído; livro-paginas 0 de 7 tarefas, conferida em 2026-11-19
+- **Combinado na conversa e não registrado em artefato**: nada; as decisões do plano pago estão em AD-019 e AD-020
 
 ## Modelo
 
@@ -55,6 +47,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-18 | Feature `texto-atualizado`, `test/arquivos/converter-biblia.test.ts:52-64` (FUN-03) | O teste que compara os 31.102 versículos com `.biblia/` passa a comparar com a fonte mais as correções aprovadas e a provar também que `.biblia/` não muda; tão forte quanto antes. Aprovada pelo dono. |
 | 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T28, A-06) | O teste `src/biblia/correcoes/aplicar.test.ts:84` (FUN-123) passa a afirmar que regra aprovada que muda 0 versículos sai da lista e do total, em vez de aparecer com 0; nenhuma outra asserção enfraquecida. Aprovada pelo dono. |
 | 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T25, A-03) | No teste `src/revisao/logica.test.ts:134` (FUN-110) o segundo item passa de `ref(1, 2)` para `ref(1, 3)`: os dois tinham o mesmo trecho no mesmo versículo, o que agora vai ao um a um; asserções iguais. Aprovada pelo dono. |
+| 2026-11-19 | Feature `livro-paginas`, T5 | `test/arquivos/livro-css.test.ts:45-49` passa a afirmar a fórmula de `--largura-pagina-larga` com o vão (`var(--esp-8)`), mantendo que página e medida leem a mesma variável; o e2e de FUN-96 (`e2e/livro-tela-cheia.spec.ts:171-187`) passa a descontar o vão de 32 px; os de FUN-98 (`:305-320`) e FUN-99 (`:344-351`), só se quebrarem, viram asserções tão fortes quanto antes contra as bordas das páginas. Motivo no commit. Aprovada pelo dono. |
 
 ## Decisions
 

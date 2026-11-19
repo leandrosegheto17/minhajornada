@@ -6,7 +6,7 @@
 - **Arquitetura**: cabe
 - **Telas**: muda o modo livro (`TelaLivro`), na tela larga e na capa
 - **Mockup**: dispensado — os valores da spec bastam (vão de 32 px, linha de 1 px em `--cor-borda`, cantos arredondados nas quatro pontas das páginas em tela larga); decisão do dono em 2026-11-19
-- **Plano aprovado em**: pendente
+- **Plano aprovado em**: 2026-11-19
 
 ## Onde entra
 
