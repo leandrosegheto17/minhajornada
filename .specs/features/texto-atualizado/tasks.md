@@ -219,11 +219,11 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 240299940a8cea248072e1c
 
 **Done when**:
 
-- [ ] Com o exemplo, Apocalipse 6:1 gerado diz "Cordeiro" e a lista gerada traz o item; o resumo tem `total` igual ao número de aplicadas
-- [ ] Arquivo com aprovada que não confere: `gerar` lança `correção <id> não confere com <Livro c:v>` **e** `public/livros` anterior continua no lugar (teste em `tmpdir`)
-- [ ] Hash: o livro corrigido ganha nome novo; um livro sem correção mantém o mesmo nome de antes (FUN-118, AD-002)
-- [ ] `pnpm test` e `pnpm typecheck` rodam com o arquivo inicial vazio
-- [ ] Gate quick verde
+- [x] Com o exemplo, Apocalipse 6:1 gerado diz "Cordeiro" e a lista gerada traz o item; o resumo tem `total` igual ao número de aplicadas
+- [x] Arquivo com aprovada que não confere: `gerar` lança `correção <id> não confere com <Livro c:v>` **e** `public/livros` anterior continua no lugar (teste em `tmpdir`)
+- [x] Hash: o livro corrigido ganha nome novo; um livro sem correção mantém o mesmo nome de antes (FUN-118, AD-002)
+- [x] `pnpm test` e `pnpm typecheck` rodam com o arquivo inicial vazio
+- [x] Gate quick verde
 
 **Tests**: integration, nomes com `FUN-114`/`FUN-115`/`FUN-118`, em `test/arquivos/converter-biblia.test.ts`
 **Gate**: quick
@@ -245,17 +245,19 @@ Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ 240299940a8cea248072e1c
 
 **Done when**:
 
-- [ ] Cada versículo gerado é igual ao da fonte, exceto os das aprovadas do exemplo, que são iguais à fonte com o "antes" trocado pelo "depois" (o teste calcula isso sozinho, sem chamar `aplicarCorrecoes`)
-- [ ] SHA-256 de cada arquivo de `.biblia/` igual antes e depois de `gerar` (FUN-114)
-- [ ] Build com id repetido e com referência inexistente falha com o id e a referência (FUN-126)
-- [ ] O motivo da troca e a autorização (`## Autorizações`, 2026-11-18) estão no corpo do commit
-- [ ] Gate quick verde
+- [x] Cada versículo gerado é igual ao da fonte, exceto os das aprovadas do exemplo, que são iguais à fonte com o "antes" trocado pelo "depois" (o teste calcula isso sozinho, sem chamar `aplicarCorrecoes`)
+- [x] SHA-256 de cada arquivo de `.biblia/` igual antes e depois de `gerar` (FUN-114)
+- [x] Build com id repetido e com referência inexistente falha com o id e a referência (FUN-126)
+- [x] O motivo da troca e a autorização (`## Autorizações`, 2026-11-18) estão no corpo do commit
+- [x] Gate quick verde
 
 **Tests**: integration, nomes com `FUN-03`/`FUN-114`/`FUN-126`
 **Gate**: quick
 **Commit**: `test(build): confere os versículos com as correções e a fonte intocada`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --reporter=dot @ cbcc535b7b971abbd5de42cb46076041bf4f43c9 = verde
 
 ### T7: Leitura das tabelas do levantamento (FUN-104)
 
