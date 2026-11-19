@@ -19,3 +19,5 @@ src/biblia/indice.gerado.json
 src/biblia/correcoes-resumo.gerado.json
 src/biblia/correcoes.gerado.json
 dist-e2e/
+revisao/dados.json
+revisao/dist/
