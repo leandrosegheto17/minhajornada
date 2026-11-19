@@ -139,3 +139,51 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Date**: 2026-11-18
 - **Status**: active
 
+### AD-012
+- **Decision**: "Não confere" (FUN-105) é uma marca derivada, o campo `confere` do item, e não um quarto valor de `estado`; o estado continua `proposta`, `aprovada` ou `recusada` (FUN-103).
+- **Reason**: A spec manda três estados em FUN-103 e manda "marcar o item como não confere" em FUN-105. A conferência depende da fonte e é recalculada; o estado é a decisão do dono.
+- **Trade-off**: Um item pode estar "aprovado" e deixar de conferir se a fonte mudar; o build recusa (FUN-115).
+- **Scope**: Feature `texto-atualizado`, `src/biblia/correcoes/`, `scripts/correcoes/`, `src/revisao/`.
+- **Date**: 2026-11-18
+- **Status**: active
+
+### AD-013
+- **Decision**: Na consolidação, o candidato cujo "depois" é igual ao "antes" com as regras mecânicas aplicadas sai da lista de itens: ele é coberto pela regra.
+- **Reason**: O levantamento lista como digitação muitos erros de espaço (ex.: Ap 5:9 "compraste , de"), que a regra R-01 ou R-02 já resolve. Sem isso, o mesmo erro contaria duas vezes na tela de correções (FUN-123) e na revisão.
+- **Trade-off**: Se o dono recusar a regra, esses erros não voltam como itens; reconsolidar com a regra recusada os recupera.
+- **Scope**: Feature `texto-atualizado`, `scripts/correcoes/conferir.ts`.
+- **Date**: 2026-11-18
+- **Status**: active
+
+### AD-014
+- **Decision**: Linha do levantamento com "Ref" do tipo "N ocorrências" vira um item por versículo em que o trecho "antes" aparece no texto inteiro; se a contagem achada difere de N, a linha vai ao relatório da consolidação.
+- **Reason**: FUN-104 manda um item por ocorrência; o levantamento agrupou ocorrências repetidas numa linha (`levantamento/INSTRUCOES.md:40`).
+- **Trade-off**: Trecho curto demais pode achar versículos que não eram erro; esses ficam "proposta" e vão ao dono, nunca entram sem decisão.
+- **Scope**: Feature `texto-atualizado`, `scripts/correcoes/conferir.ts`.
+- **Date**: 2026-11-18
+- **Status**: active
+
+### AD-015
+- **Decision**: Quando o "antes" do levantamento só aparece no versículo ignorando os colchetes de itálico, a consolidação o troca pelo trecho exato da fonte (com colchetes) e marca `confere`. Se o número de pares de colchetes do "antes" e do "depois" for diferente, o item ganha a marca `italicoMuda` e vai para a revisão um a um, nunca em bloco.
+- **Reason**: FUN-105 manda conferir contra a fonte; parte do levantamento citou o texto como o leitor vê (sem colchetes). FUN-117 e FUN-125 exigem os colchetes em pares, e um "depois" sem colchetes apagaria o itálico em silêncio.
+- **Trade-off**: A revisão um a um cresce com esses itens.
+- **Scope**: Feature `texto-atualizado`, `scripts/correcoes/conferir.ts`, `src/revisao/logica.ts`.
+- **Date**: 2026-11-18
+- **Status**: active
+
+### AD-016
+- **Decision**: O conversor lê o arquivo de correções do argumento `--correcoes <arquivo>`, com padrão `correcoes/correcoes.json`. Os testes de build e o build do e2e (`pnpm build:e2e` = conversor com `--correcoes test/arquivos/dados/correcoes-exemplo.json` e `vite build`) usam um arquivo de exemplo; o deploy usa `pnpm build`, sem o argumento.
+- **Reason**: O arquivo real muda a cada exportação da revisão; os testes precisam de correções aprovadas fixas (ex.: Ap 6:1) para provar FUN-114, FUN-116 e FUN-122. Argumento em vez de variável de ambiente: o `package.json` não define variável do mesmo jeito no Windows e no Linux sem biblioteca nova.
+- **Trade-off**: O e2e não roda sobre o texto que vai para produção; o teste de build com o arquivo real (válido, 66 livros, 31.102 versículos) cobre essa diferença.
+- **Scope**: Feature `texto-atualizado`, `scripts/converter-biblia.ts`, `.github/workflows/ci.yml`, `test/arquivos/deploy.test.ts`.
+- **Date**: 2026-11-18
+- **Status**: active
+
+### AD-017
+- **Decision**: A revisão do dono é uma página num artifact privado do claude.ai com as capacidades `db`, `user` e `downloads`: cada decisão é uma linha do banco; a exportação é feita por uma sessão do Claude que lê o banco e roda `scripts/aplicar-decisoes.ts` (ou pelo arquivo de "Baixar decisões"). No app, a lista de correções é um pedaço separado (import dinâmico) e só um resumo entra no código principal.
+- **Reason**: Decisão do dono em 2026-11-18; o app não tem conta nem servidor (FUN-41), e o arquivo versionado é a única fonte do build.
+- **Trade-off**: A exportação depende de uma sessão do Claude (ou de baixar o arquivo); a tela de correções ganha os estados carregando e erro.
+- **Scope**: Feature `texto-atualizado`, `src/revisao/`, `revisao/`, `src/biblia/correcoesAplicadas.ts`.
+- **Date**: 2026-11-18
+- **Status**: active
+
