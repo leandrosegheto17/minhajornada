@@ -23,6 +23,7 @@
 | 2026-11-18 | 3 | livro-tela-cheia | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | texto-atualizado | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-18 | 3 | texto-atualizado | /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-19 | 3 | livro-paginas | /executar | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
