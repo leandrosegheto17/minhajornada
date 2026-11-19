@@ -1,13 +1,14 @@
-# Validação: livro-paginas — FAIL ❌ (rodada 1)
+# Validação: livro-paginas — PASS ✅ (rodada 2, retrabalho R1)
 
-- **Data**: 2026-11-19 · **Branch**: feature/livro-paginas @ 2daa1ec · **Árvore**: 25ae1fe68fe68df9ad0850854ee827c3dec13cc8 (o código é o da árvore `55eecc48…` do `Gate:` do `tasks.md`; depois dela só mudaram `.specs/STATE.md` e `tasks.md`)
-- **Critérios**: 9/9 com asserção · **Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot` = verde, 60 arquivos e 1015 testes passaram, 0 falharam (repetido na árvore atual); `pnpm lint` verde; e2e `livro`, `livro-tela-cheia` e `capa` = 70 passaram, 0 falharam (build:e2e na árvore atual)
-- **Sensor**: 8 mutações, 7 mortas, 1 sobreviveu (equivalente: 1); a mais, M2c, também morreu
-- **Revisão de código**: modo curto pela sessão do `/validar` sobre o diff contra `desenvolvimento`: bloqueios 0, sugestões 0
-- **Veredito**: FAIL só pelo A-01 (comum, sem código); retrabalho R1 com T8
+- **Data**: 2026-11-19 · **Branch**: feature/livro-paginas @ 9b48217 · **Árvore**: 6a70f269cfb8c2dc05c4989e382c825151a5e257
+- **Rodada 2**: o diff `2daa1ec..HEAD` toca só `.specs/STATE.md`, `spec.md`, `tasks.md` e `validation.md`; `git diff c40f9a6..HEAD -- . ':!.specs'` vazio: nenhum código nem teste mudou desde a rodada 1. A-01 fechado (AD-021 em `STATE.md:217-223` e nota em `spec.md:81`, coerentes entre si e com `tasks.md`)
+- **Critérios**: 9/9 com asserção (da rodada 1, código inalterado) · **Gate**: `pnpm typecheck && pnpm exec vitest run --reporter=dot` = verde, 60 arquivos e 1015 testes passaram, 0 falharam (repetido na árvore atual, pois o `Gate:` do `tasks.md` é de outra árvore); `pnpm lint` (eslint e prettier) verde; e2e `livro`, `livro-tela-cheia` e `capa` = 70 passaram, 0 falharam (da rodada 1, código inalterado)
+- **Sensor**: 8 mutações, 7 mortas, 1 sobreviveu (equivalente: 1); a mais, M2c, também morreu (da rodada 1, código inalterado, não repetido)
+- **Revisão de código**: modo curto sobre o diff contra `desenvolvimento` (rodada 1): bloqueios 0, sugestões 0; sem código novo na rodada 2
+- **Veredito**: PASS; sem achado aberto, sem retrabalho novo
 - **Segurança**: não se aplica: site estático, sem servidor, sem dado do usuário virando HTML (`tasks.md`, "Segurança padrão de app web")
 
-## Critérios
+## Critérios (da rodada 1, código inalterado)
 
 | Critério | `arquivo:linha` e asserção | Resultado |
 |---|---|---|
@@ -23,7 +24,7 @@
 
 Decisões da Base: seguidas (vão em `--vao-paginas: var(--esp-8)`, `max-width` de cabeça e navegação somado ao vão, linha em pseudo-elemento de `.livro__aberto`, `quebras` opcional em `paginar`, capítulo 1 sem quebra). Spec × design: sem divergência. Testes existentes alterados (`TelaLivro.test.tsx`, `livro-css.test.ts`) estão autorizados em `STATE.md` (2026-11-19, T3 e T5); nenhum enfraquecido. O teste de FUN-96 (`e2e/livro-tela-cheia.spec.ts:171`) já descontava o vão sem mudança e continua verde. Typecheck de 073d3c9, e58b348 e c40f9a6: verde. Pacotes: workspace de um pacote só, coberto pelo `testes.json` (que não inclui o e2e, como o próprio arquivo registra). Sem banco, role ou policy.
 
-## Sensor (cópia isolada em pasta temporária, `node_modules` por junção, descartada; `git status --porcelain` igual ao de antes: vazio)
+## Sensor (da rodada 1, código inalterado; cópia isolada em pasta temporária, `node_modules` por junção, descartada; `git status --porcelain` igual ao de antes: vazio)
 
 | Mutação | Teste que a matou | Resultado |
 |---|---|---|
@@ -41,7 +42,9 @@ Decisões da Base: seguidas (vão em `--vao-paginas: var(--esp-8)`, `max-width` 
 
 | ID | `arquivo:linha` | Achado e evidência | Correção sugerida | Criticidade | Situação |
 |---|---|---|---|---|---|
-| A-01 | `spec.md:81`, `e2e/livro.spec.ts:239-252` | O caso limite "trocar a letra repagina com a regra de FUN-128" não tem prova: o e2e de FUN-86 só afirma que o 21 continua no topo, e diz no comentário que não afirma repaginação (defeito anterior à feature, `.specs/bugs/letra-livro-sem-repaginar/relato.md`; `useMedidas.ts` e `useLeitor.ts` não estão no diff, e eu não reproduzi o defeito na `desenvolvimento`). A exclusão foi decisão do dono na execução, gravada só no `tasks.md:168`; a spec ainda diz SHALL e o `STATE.md` não a registra | Registrar a decisão em `STATE.md` (AD ou `## Autorizações`) e acrescentar à spec que esse caso limite fica com o bug `letra-livro-sem-repaginar`; ou, se o dono preferir, corrigir o bug antes de integrar. Não gera código na feature | comum | aberto |
+| A-01 | `spec.md:81`, `e2e/livro.spec.ts:239-252` | O caso limite "trocar a letra repagina com a regra de FUN-128" não tem prova: o e2e de FUN-86 só afirma que o 21 continua no topo, e diz no comentário que não afirma repaginação (defeito anterior à feature, `.specs/bugs/letra-livro-sem-repaginar/relato.md`; `useMedidas.ts` e `useLeitor.ts` não estão no diff, e eu não reproduzi o defeito na `desenvolvimento`). A exclusão foi decisão do dono na execução, gravada só no `tasks.md:168`; a spec ainda diz SHALL e o `STATE.md` não a registra | Registrar a decisão em `STATE.md` (AD ou `## Autorizações`) e acrescentar à spec que esse caso limite fica com o bug `letra-livro-sem-repaginar`; ou, se o dono preferir, corrigir o bug antes de integrar. Não gera código na feature | comum | fechado |
+
+A-01, rodada 2: fechado. `STATE.md:217` registra a AD-021 (decisão do dono, escopo `e2e/livro.spec.ts:239-252` e a linha da spec) e `spec.md:81` diz que a troca de letra fica com o bug `letra-livro-sem-repaginar`, restando provado só que o capítulo continua no topo (FUN-86). Não há código no retrabalho; sem regressão (suíte e lint verdes).
 
 ## Lacunas e o que não foi validado
 
