@@ -2,7 +2,7 @@
 // recusada, lança antes de devolver qualquer coisa, para quem chama não gravar nada pela metade.
 // Node roda este arquivo direto pelo `scripts/aplicar-decisoes.ts`: imports relativos com a extensão `.ts`.
 import type { ArquivoCorrecoes } from '../biblia/correcoes/arquivo.ts';
-import { colchetesEmPares, validarCorrecoes } from '../biblia/correcoes/validar.ts';
+import { colchetesEmPares, semControle, validarCorrecoes } from '../biblia/correcoes/validar.ts';
 import type { Livro } from '../biblia/tipos.ts';
 import { podeAprovar } from './logica.ts';
 import type { Decisao } from './logica.ts';
@@ -11,7 +11,7 @@ const ESTADOS: readonly string[] = ['proposta', 'aprovada', 'recusada'];
 
 /**
  * Muda só o `estado` e, quando veio, o `depois` dos itens e regras decididos; o resto fica igual (mesmas chaves, na
- * mesma ordem). A última decisão do mesmo id vale. Recusa id desconhecido, estado inválido, "depois" com colchete
+ * mesma ordem). A última decisão do mesmo id vale. Recusa id desconhecido, estado inválido, "depois" com caractere de controle, com colchete
  * sem par ou numa regra, e aprovação de item que não confere ou de sentido sem fonte. Com `livros` (a fonte), recusa
  * também o arquivo que o build recusaria: aprovadas que se sobrepõem no mesmo versículo (FUN-107), antes de gravar.
  */
@@ -37,6 +37,11 @@ export function mesclarDecisoes(arquivo: ArquivoCorrecoes, decisoes: Decisao[], 
       continue;
     }
     if (item === undefined) throw new Error(`decisão ${decisao.id}: uma regra não tem trecho "depois" para editar`);
+    if (!semControle(decisao.depois)) {
+      throw new Error(
+        `decisão ${decisao.id}: o "depois" tem caractere de controle (quebra de linha, retorno de carro etc.)`,
+      );
+    }
     if (!colchetesEmPares(decisao.depois)) {
       throw new Error(`decisão ${decisao.id}: colchete de itálico sem par no "depois"`);
     }

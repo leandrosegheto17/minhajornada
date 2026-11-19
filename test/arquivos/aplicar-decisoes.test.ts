@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -156,6 +156,47 @@ describe('aplicar-decisoes pelo Node (FUN-113)', () => {
     expect(r.stdout).toContain('estava junto de Deus');
     expect(r.stdout).toContain('estava com o próprio Deus');
     expect(r.stdout).not.toContain('C-0003');
+  });
+
+  it('FUN-113: "depois" com retorno de carro sai com erro, cita o id e não grava nada (A-10)', () => {
+    const antes = readFileSync(correcoes, 'utf8');
+    escrever([{ id: 'C-0002', estado: 'aprovada', depois: 'TEXTO TROCADO\r  C-0002 legítimo' }]);
+    const r = rodar();
+    expect(r.status).not.toBe(0);
+    expect(r.stderr).toMatch(/C-0002.*controle/);
+    expect(readFileSync(correcoes, 'utf8')).toBe(antes);
+  });
+
+  it('FUN-113: item recusado com "depois" salvo não entra na lista dos editados, que só traz o que vai ao site (A-07)', () => {
+    escrever([
+      { id: 'C-0002', estado: 'recusada', depois: 'estava com o próprio Deus' },
+      { id: 'C-0003', estado: 'proposta', depois: 'outro texto' },
+    ]);
+    const r = rodar();
+    expect(r.status).toBe(0);
+    expect(r.stdout).not.toMatch(/editad/i);
+    expect(r.stdout).not.toContain('estava com o próprio Deus');
+  });
+
+  it('FUN-113: a lista aparece antes da gravação: se a gravação falha, ela já foi impressa (A-07)', () => {
+    escrever([{ id: 'C-0002', estado: 'aprovada', depois: 'estava com o próprio Deus' }]);
+    chmodSync(correcoes, 0o444);
+    try {
+      const r = rodar();
+      expect(r.status).not.toBe(0);
+      expect(r.stdout).toContain('C-0002');
+      expect(r.stdout).toContain('estava com o próprio Deus');
+    } finally {
+      chmodSync(correcoes, 0o644);
+    }
+  });
+
+  it('FUN-113: a lista mostra antes e depois como texto escapado (JSON), para nada ficar invisível (A-10)', () => {
+    escrever([{ id: 'C-0002', estado: 'aprovada', depois: 'estava com "Deus" ali' }]);
+    const r = rodar();
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain(JSON.stringify('estava com "Deus" ali'));
+    expect(r.stdout).toContain(JSON.stringify('estava junto de Deus'));
   });
 
   it('FUN-113: decisão sem "depois" editado não aparece na lista de editados', () => {

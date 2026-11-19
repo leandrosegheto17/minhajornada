@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { lerArquivoCorrecoes } from '../src/biblia/correcoes/arquivo.ts';
 import type { Decisao } from '../src/revisao/logica.ts';
+import { nomeRef } from '../src/biblia/correcoes/validar.ts';
 import { mesclarDecisoes } from '../src/revisao/mesclar.ts';
 import type { Livro } from '../src/biblia/tipos.ts';
 import { lerLivros } from './converter-biblia.ts';
@@ -44,21 +45,27 @@ export interface Editada {
 
 /**
  * Mescla as decisões no arquivo de correções e o regrava, uma linha por item. Lança sem gravar se algo for recusado;
- * com `livros` (a fonte), recusa também aprovadas sobrepostas (FUN-107). Devolve os itens com o "depois" editado, que o
- * comando lista antes de gravar (o texto editado vai ao site no próximo build).
+ * com `livros` (a fonte), recusa também aprovadas sobrepostas (FUN-107). Devolve os itens aprovados com o "depois"
+ * editado (o que vai ao site no próximo build) e os entrega a `aoEditar` **antes** de gravar, para o dono conferir.
  */
-export function aplicarDecisoes(caminhoCorrecoes: string, caminhoDecisoes: string, livros?: Livro[]): Editada[] {
+export function aplicarDecisoes(
+  caminhoCorrecoes: string,
+  caminhoDecisoes: string,
+  livros?: Livro[],
+  aoEditar?: (editadas: Editada[]) => void,
+): Editada[] {
   const arquivo = lerArquivoCorrecoes(JSON.parse(readFileSync(caminhoCorrecoes, 'utf8')) as unknown);
   const decisoes = lerDecisoes(JSON.parse(readFileSync(caminhoDecisoes, 'utf8')) as unknown);
   const mesclado = mesclarDecisoes(arquivo, decisoes, livros);
   const editadas = mesclado.itens
-    .filter((novo, i) => novo.depois !== arquivo.itens[i]?.depois)
+    .filter((novo, i) => novo.estado === 'aprovada' && novo.depois !== arquivo.itens[i]?.depois)
     .map(({ id, ref, antes, depois }) => ({
       id,
-      referencia: `${livros?.[ref.livro - 1]?.nome ?? `livro ${ref.livro}`} ${ref.capitulo}:${ref.versiculo}`,
+      referencia: livros === undefined ? `livro ${ref.livro} ${ref.capitulo}:${ref.versiculo}` : nomeRef(livros, ref),
       antes,
       depois,
     }));
+  aoEditar?.(editadas);
   writeFileSync(caminhoCorrecoes, serializar(mesclado));
   return editadas;
 }
@@ -73,10 +80,12 @@ if (ehPrincipal) {
   const solto = posicao < 0 ? args : args.filter((_, i) => i !== posicao && i !== posicao + 1);
   const decisoes = solto[0] ? resolve(solto[0]) : join(raiz, 'revisao', 'decisoes.json');
   const correcoes = arquivoCorrecoes ? resolve(arquivoCorrecoes) : join(raiz, 'correcoes', 'correcoes.json');
-  const editadas = aplicarDecisoes(correcoes, decisoes, lerLivros(join(raiz, '.biblia')));
-  if (editadas.length > 0) {
-    console.log('aplicar-decisoes: itens com o "depois" editado pelo dono (confira antes do próximo build):');
-    for (const e of editadas) console.log(`  ${e.id} ${e.referencia}: "${e.antes}" → "${e.depois}"`);
-  }
+  aplicarDecisoes(correcoes, decisoes, lerLivros(join(raiz, '.biblia')), (editadas) => {
+    if (editadas.length === 0) return;
+    console.log('aplicar-decisoes: itens aprovados com o "depois" editado pelo dono (confira antes do próximo build):');
+    // JSON.stringify escapa quebra de linha e controle: nada fica invisível nem forja outra linha.
+    for (const e of editadas)
+      console.log(`  ${e.id} ${e.referencia}: ${JSON.stringify(e.antes)} → ${JSON.stringify(e.depois)}`);
+  });
   console.log(`aplicar-decisoes: decisões de ${decisoes} gravadas em ${correcoes}`);
 }

@@ -177,6 +177,22 @@ describe('página de revisão (FUN-108, FUN-109, FUN-111, FUN-112)', () => {
     expect(gravacoes[0]).toEqual({ id: 'C-0003', estado: 'aprovada', depois: 'Rute respondeu' });
   });
 
+  it('FUN-112: recusar um item com "depois" salvo mantém o "depois" na decisão (A-09)', async () => {
+    const { banco, gravacoes } = bancoDuble([
+      { id: 'C-0001', estado: 'recusada' },
+      { id: 'C-0002', estado: 'recusada' },
+      { id: 'C-0003', estado: 'proposta', depois: 'Rute respondeu' },
+    ]);
+    await iniciar(raiz, DADOS(), banco);
+    vai('umAUm');
+    // Abre no primeiro pendente: o item C-0003, com o "depois" salvo na decisão.
+    await vi.waitFor(() => expect(texto()).toContain('Rute disse'));
+    expect(texto()).toContain('Rute respondeu');
+    botao('recusar').click();
+    await vi.waitFor(() => expect(gravacoes).toHaveLength(1));
+    expect(gravacoes[0]).toEqual({ id: 'C-0003', estado: 'recusada', depois: 'Rute respondeu' });
+  });
+
   it('FUN-111: item de sentido sem fonte mostra "Falta a fonte" e o Aprovar fica desativado', async () => {
     const { banco, gravacoes } = bancoDuble();
     await iniciar(raiz, DADOS(), banco);

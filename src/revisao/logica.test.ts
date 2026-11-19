@@ -84,6 +84,14 @@ describe('agrupar: itens sobrepostos vão ao um a um (FUN-110, FUN-107)', () => 
     expect(g.umAUm.itens.map((i) => i.id)).toEqual([maior.id, menor.id]);
   });
 
+  it('FUN-110: o item menor listado antes do maior que o contém também sai do bloco, junto com o maior (A-08)', () => {
+    const menor = doVersiculo('Eis que que');
+    const maior = doVersiculo('Eis que que seus ouvidos');
+    const g = agrupar(arquivo([menor, maior], []), []);
+    expect(g.blocos).toEqual([]);
+    expect(g.umAUm.itens.map((i) => i.id)).toEqual([menor.id, maior.id]);
+  });
+
   it('FUN-110: trechos que se sobrepõem só pelas pontas (o fim de um é o começo do outro) também vão ao um a um', () => {
     const a = doVersiculo('o Coreiro abriu');
     const b = doVersiculo('abriu um dos selos');

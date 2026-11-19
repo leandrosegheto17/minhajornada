@@ -10,6 +10,17 @@ const validar =
 
 // Gênesis 1:2 = 'A terra era sem forma e vazia, e o Coreiro abriu o livro.'
 
+describe('validarCorrecoes: caractere de controle no "depois" (FUN-125, A-10)', () => {
+  it.each([['\r'], ['\n'], ['\u001B'], [' '], ['\u0085']])(
+    'FUN-125: "depois" com o caractere de controle %j recusa, cita o id, em qualquer estado',
+    (controle) => {
+      for (const estado of ['proposta', 'aprovada', 'recusada'] as const) {
+        expect(validar(item({ id: 'C-0001', estado, depois: `Cordeiro${controle}x` }))).toThrow(/C-0001.*controle/);
+      }
+    },
+  );
+});
+
 describe('validarCorrecoes: arquivo válido', () => {
   it('FUN-115: aprovada que confere, proposta e recusada passam', () => {
     expect(

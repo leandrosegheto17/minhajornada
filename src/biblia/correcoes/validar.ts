@@ -14,6 +14,16 @@ export function posicaoUnica(texto: string, trecho: string): number | null {
   return primeira;
 }
 
+/** Caractere de controle: C0, DEL, C1 (quebra de linha, retorno de carro, escape) e os separadores U+2028 e U+2029. */
+const ehControle = (codigo: number): boolean =>
+  codigo <= 0x1f || (codigo >= 0x7f && codigo <= 0x9f) || codigo === 0x2028 || codigo === 0x2029;
+
+/** O texto não traz caractere de controle: ele esconderia ou forjaria linhas onde o dono confere o "depois". */
+export function semControle(texto: string): boolean {
+  for (let i = 0; i < texto.length; i++) if (ehControle(texto.charCodeAt(i))) return false;
+  return true;
+}
+
 /** Colchetes de itálico em pares, sem aninhar (a mesma forma que `segmentar` lê). */
 export function colchetesEmPares(texto: string): boolean {
   let aberto = false;
@@ -45,6 +55,11 @@ export function validarCorrecoes(arquivo: ArquivoCorrecoes, livros: Livro[]): vo
   for (const item of arquivo.itens) {
     if (ids.has(item.id)) throw new Error(`correção ${item.id}: identificador repetido`);
     ids.add(item.id);
+    if (!semControle(item.depois)) {
+      throw new Error(
+        `correção ${item.id}: o "depois" tem caractere de controle (quebra de linha, retorno de carro etc.)`,
+      );
+    }
 
     const versiculo = versiculoDe(livros, item.ref);
     if (versiculo === undefined) {

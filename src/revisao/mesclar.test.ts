@@ -99,6 +99,20 @@ describe('mesclarDecisoes (FUN-113)', () => {
     expect(ok.itens.map((i) => i.estado)).toEqual(['recusada', 'recusada']);
   });
 
+  it.each([
+    ['retorno de carro (\\r)', 'texto\rtrocado'],
+    ['quebra de linha (\\n)', 'texto\ntrocado'],
+    ['escape (\\u001B)', 'texto\u001B[0mtrocado'],
+    ['separador de linha (\\u2028)', 'texto trocado'],
+    ['controle C1 (\\u0085)', 'texto\u0085trocado'],
+  ])('FUN-113: "depois" com %s recusa, cita o id e não muda a entrada (A-10)', (_nome, depois) => {
+    const a = base();
+    const antes = JSON.stringify(a);
+    expect(() => mesclarDecisoes(a, [{ id: 'C-0001', estado: 'aprovada', depois }])).toThrow(/C-0001.*controle/);
+    expect(() => mesclarDecisoes(a, [{ id: 'C-0001', estado: 'recusada', depois }])).toThrow(/C-0001.*controle/);
+    expect(JSON.stringify(a)).toBe(antes);
+  });
+
   it('FUN-107 e FUN-113: duas aprovadas que se sobrepõem no mesmo versículo recusam, com os dois ids, e não gravam', () => {
     const a = arquivo([
       item({ id: 'C-0001', antes: 'Coreiro abriu', depois: 'Cordeiro abriu' }),
