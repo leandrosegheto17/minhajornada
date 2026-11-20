@@ -682,9 +682,9 @@ Gate: pnpm typecheck && pnpm test @ 54ceaeeda23f48aa3f254ad0fcc44e90e6ac709f = v
 
 **Done when**:
 
-- [ ] `git check-ignore resumos-exportados/resumos.json` confirma a regra e `git ls-files resumos-exportados` é vazio (FUN-176)
-- [ ] Com exportação local presente, nenhuma frase de 40 caracteres ou mais dela aparece em `dist/` nem nos arquivos do `git ls-files`; sem exportação, o teste diz que pulou essa parte (FUN-152)
-- [ ] Gate quick verde
+- [x] `git check-ignore resumos-exportados/resumos.json` confirma a regra e `git ls-files resumos-exportados` é vazio (FUN-176)
+- [x] Com exportação local presente, nenhuma frase de 40 caracteres ou mais dela aparece em `dist/` nem nos arquivos do `git ls-files`; sem exportação, o teste diz que pulou essa parte (FUN-152)
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/resumos-fora-do-git.test.ts`, nomes com `FUN-152` ou `FUN-176`
 **Gate**: quick
@@ -706,9 +706,9 @@ Gate: pnpm typecheck && pnpm test @ 54ceaeeda23f48aa3f254ad0fcc44e90e6ac709f = v
 
 **Done when**:
 
-- [ ] Teste: o passo de migração vem antes de `wrangler deploy`, roda `pnpm migrar`, tem `DATABASE_URL_DONO` e não tem o token da Cloudflare; nenhum outro passo tem a URL do banco; o token continua só em `wrangler deploy|rollback` (teste alterado com motivo no commit)
-- [ ] Teste: a fumaça exige 401 e `cache-control: no-store` em `/api/resumos/1`, e a falha aciona a volta da versão
-- [ ] Gate quick verde
+- [x] Teste: o passo de migração vem antes de `wrangler deploy`, roda `pnpm migrar`, tem `DATABASE_URL_DONO` e não tem o token da Cloudflare; nenhum outro passo tem a URL do banco; o token continua só em `wrangler deploy|rollback` (teste alterado com motivo no commit)
+- [x] Teste: a fumaça exige 401 e `cache-control: no-store` em `/api/resumos/1`, e a falha aciona a volta da versão
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/deploy.test.ts`
 **Gate**: quick
@@ -730,14 +730,16 @@ Gate: pnpm typecheck && pnpm test @ 54ceaeeda23f48aa3f254ad0fcc44e90e6ac709f = v
 
 **Done when**:
 
-- [ ] Teste: a denylist inclui `/^\/api\//`, e nenhum `registerRoute` do SW casa com `/api/resumos/1` (FUN-151)
-- [ ] Gate quick verde
+- [x] Teste: a denylist inclui `/^\/api\//`, e nenhum `registerRoute` do SW casa com `/api/resumos/1` (FUN-151)
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/sw.test.ts`, nomes com `FUN-151`
 **Gate**: quick
 **Commit**: `fix(pwa): service worker fora das rotas da api`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ b9a0c3696f389b62fa96fd5a48efbc2f454c3298 = verde
 
 ### T24: Chamadas de sessão no front (FUN-138, FUN-139, FUN-140, FUN-145)
 
