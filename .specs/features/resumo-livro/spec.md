@@ -46,8 +46,10 @@ O dono quer, no modo livro, ler a Bíblia na página da esquerda e o resumo do l
 | Piloto | Gênesis, Rute, Marcos e Romanos | Decisão do dono em 2026-11-19 | y |
 | Publicação | Um script lê o arquivo exportado da revisão (pasta ignorada pelo git), valida e grava os aprovados no Neon do ambiente pedido; produção só com confirmação | O texto não pode passar pelo git; regra de ação externa do `CLAUDE.md` | n |
 | Livro sem resumo publicado | Com o resumo ligado, a página do resumo mostra "Este livro ainda não tem resumo." | Os 62 livros fora do piloto ficam assim por um tempo | n |
-| Onde fica o botão "Resumo" | No modo livro, junto do botão de formato da barra de título; posição final no mockup | A barra já reúne os controles do modo livro (`src/componentes/BarraTitulo.tsx:53-61`) | n |
-| Resumo maior que uma página | A página do resumo tem o próprio "anterior" e "seguinte", separado do folhear da Bíblia | Com letra grande, 450 palavras passam de uma página | n |
+| Onde fica o botão "Resumo" | Na barra, logo depois do botão de formato, com `aria-pressed` em todas as larguras; só ícone abaixo de 640 px | Mockup aprovado em 2026-11-20 | y |
+| Navegação da Bíblia com o resumo na tela estreita | "Anterior" e "Seguinte" da Bíblia saem enquanto o resumo está na tela; o resumo usa o próprio paginador | Mockup aprovado em 2026-11-20: folhear uma Bíblia escondida confundiria | y |
+| Letra do resumo | Tamanho da interface (`--texto-m`), não o do "Aa" | Mockup aprovado em 2026-11-20: cerca de 1 página no PC | y |
+| Resumo maior que uma página | A página do resumo tem o próprio "anterior" e "seguinte" no rodapé ("‹ 1 de 2 ›"), separado do folhear da Bíblia | Mockup aprovado em 2026-11-20 | y |
 | Capa e página do plano pago | Com o resumo ligado, a capa e o plano pago (FUN-89, FUN-90) aparecem como hoje; o resumo só aparece com um livro aberto | O resumo é do livro, e a capa não é de nenhum livro | n |
 | Limite de tentativas de login | 5 tentativas por minuto por IP; a 6ª recebe 429 | Padrão do treInAmento (Rate Limiting do Worker) | n |
 
