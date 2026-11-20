@@ -168,10 +168,10 @@ T41
 
 **Done when**:
 
-- [ ] `pnpm typecheck` roda `tsc -p tsconfig.servidor.json` além dos dois de hoje, com tipos do Workers só nesse alvo
-- [ ] `pnpm test` roda os três projetos (`componentes`, `arquivos`, `servidor`)
-- [ ] `servidor/app.test.ts`: `GET /api/inexistente` e `POST /api/x` respondem 404 com JSON
-- [ ] Gate full verde
+- [x] `pnpm typecheck` roda `tsc -p tsconfig.servidor.json` além dos dois de hoje, com tipos do Workers só nesse alvo
+- [x] `pnpm test` roda os três projetos (`componentes`, `arquivos`, `servidor`)
+- [x] `servidor/app.test.ts`: `GET /api/inexistente` e `POST /api/x` respondem 404 com JSON
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/app.test.ts`
 **Gate**: full
@@ -193,9 +193,9 @@ T41
 
 **Done when**:
 
-- [ ] `wrangler.test.ts` afirma, para o topo e para `env.tst`: `main`, `run_worker_first: ["/api/*"]`, `nodejs_compat`, `vars.URL_PUBLICA` com o domínio do ambiente, um `hyperdrive`, `ratelimits` com `LIMITE_ENTRAR` (5 por 60 s), `workers_dev: false`, `preview_urls: false`, `dev.ip` `127.0.0.1`; nenhuma senha nem URL de banco no arquivo (teste alterado com motivo no commit)
-- [ ] `worker.ts` monta as dependências do `env` (Hyperdrive, binding, `URL_PUBLICA`) e repassa ao app; typecheck verde
-- [ ] Gate quick verde
+- [x] `wrangler.test.ts` afirma, para o topo e para `env.tst`: `main`, `run_worker_first: ["/api/*"]`, `nodejs_compat`, `vars.URL_PUBLICA` com o domínio do ambiente, um `hyperdrive`, `ratelimits` com `LIMITE_ENTRAR` (5 por 60 s), `workers_dev: false`, `preview_urls: false`, `dev.ip` `127.0.0.1`; nenhuma senha nem URL de banco no arquivo (teste alterado com motivo no commit)
+- [x] `worker.ts` monta as dependências do `env` (Hyperdrive, binding, `URL_PUBLICA`) e repassa ao app; typecheck verde
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/wrangler.test.ts`
 **Gate**: quick
@@ -217,15 +217,17 @@ T41
 
 **Done when**:
 
-- [ ] Teste de arquivo afirma o serviço `postgres:18` com `pg_isready`, porta 5432 e `DATABASE_URL_TESTE` apontando para `127.0.0.1`/`localhost` no passo `pnpm test`
-- [ ] Nenhum segredo real: senha de teste fixa só no CI
-- [ ] Gate quick verde
+- [x] Teste de arquivo afirma o serviço `postgres:18` com `pg_isready`, porta 5432 e `DATABASE_URL_TESTE` apontando para `127.0.0.1`/`localhost` no passo `pnpm test`
+- [x] Nenhum segredo real: senha de teste fixa só no CI
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/ci.test.ts`
 **Gate**: quick
 **Commit**: `ci: postgres para os testes do servidor`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquivos --reporter=dot @ 638260873ad62d6e773c8c43e8c206121e60cac8 = verde
 
 ### T4: Guarda de Host e de origem (segurança padrão)
 
