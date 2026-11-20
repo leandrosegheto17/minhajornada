@@ -93,7 +93,7 @@ export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
   }
 
   const cliente = (opcoes.conectar ?? criarCliente)(url);
-  let removidos = 0;
+  let removidos: number;
   try {
     removidos = await emTransacao(cliente, async (c) => {
       const apagados = await c.consultar(SQL_REMOVER, [recusados]);
