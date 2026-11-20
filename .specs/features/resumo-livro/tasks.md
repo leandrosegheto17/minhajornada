@@ -162,6 +162,18 @@ T42 → T43 → T44 → T45 → T46 → T47
 T48 → T49 → T50 → T51 → T52 → T53
 ```
 
+### Phase 17: Retrabalho R2 (crítica)
+
+```
+T54 → T55 → T56 → T57
+```
+
+### Phase 18: Retrabalho R2 (comum)
+
+```
+T58
+```
+
 ---
 
 ## Task Breakdown
@@ -1463,6 +1475,109 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 ---
 
 Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revisao-resumos test/arquivos --reporter=dot @ 11a505cca3412cf07745e31d82f8a32c6309302c = verde
+
+### T54: Arquivo só com recusados tira os livros do ar (A-14)
+
+**What**: `scripts/resumos/publicar.ts:65-69`: "Nada a publicar" só quando não há aprovados nem recusados; com recusados e sem aprovados, a transação apaga os recusados e imprime `0 livros gravados` e a contagem removida (a confirmação de produção diz quantos serão removidos).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `scripts/resumos/publicar.ts:71,98-102` (remoção na transação); `scripts/resumos/publicar.test.ts:141-236` (molde)
+**Requirement**: FUN-172, FUN-173 · Achado: A-14 (validation.md, rodada 2)
+
+**Done when**:
+
+- [ ] Arquivo só com recusados (e propostas) apaga os recusados publicados, com código 0
+- [ ] Arquivo sem aprovados nem recusados continua em "Nada a publicar", código 1
+- [ ] Gate verde
+**Tests**: `scripts/resumos/publicar.test.ts` › "FUN-172 arquivo só com recusados remove o livro publicado"; "FUN-173 sem aprovados nem recusados: nada a publicar"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T55: Conferência do papel com membresia NOINHERIT (A-15)
+
+**What**: Em `servidor/migracoes/conferir-papel.test.ts`, variante dos testes de `neon_superuser`, `pg_read_all_data` e `pg_write_all_data` com o papel criado `NOINHERIT` e o `GRANT` do grupo: a conferência recusa. Só teste; o código (`'MEMBER'`) já está certo.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T54
+**Reuses**: `servidor/migracoes/conferir-papel.test.ts:74-104` (molde; banco e papéis `teste_*` apagados no `finally`)
+**Requirement**: FUN-144 (AD-023) · Achado: A-15 (validation.md, rodada 2)
+
+**Done when**:
+
+- [ ] Três testes NOINHERIT, cada um falha com `pg_has_role(..., 'USAGE')` no lugar de `'MEMBER'`
+- [ ] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 papel NOINHERIT membro de <grupo> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes/conferir-papel.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T56: Conferência recusa membresia e TRUNCATE e escrita em usuarios (A-17)
+
+**What**: Nova migração que substitui `conferir_papel_app` (`CREATE OR REPLACE`): recusa o papel membro de qualquer outro papel; recusa TRUNCATE em `resumos`, `usuarios` e `sessoes`; recusa INSERT, UPDATE (qualquer coluna) e DELETE em `usuarios`. Não editar a migração já aplicada.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T55
+**Reuses**: `servidor/migracoes/1795132920000_conferir_papel_app.sql:7-44` (molde da função); `conferir-papel.test.ts` (um teste por condição)
+**Requirement**: FUN-144 (AD-023) · Achado: A-17 (validation.md, rodada 2)
+
+**Done when**:
+
+- [ ] Um teste por ramo novo (membresia em grupo comum NOINHERIT, TRUNCATE em cada tabela, INSERT, UPDATE de coluna e DELETE em `usuarios`), cada um falha sem a guarda
+- [ ] Papel `mj_app` correto (o da migração de papel) continua passando
+- [ ] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 papel com <privilégio> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T57: Conferência do papel a cada deploy (A-18)
+
+**What**: No job `migrar` de `.github/workflows/deploy.yml`, depois de `pnpm migrar`, um passo que roda `SELECT conferir_papel_app('mj_app')` com a `DATABASE_URL_DONO` (sem token da Cloudflare); falha para o deploy antes do `publicar`.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T56
+**Reuses**: `.github/workflows/deploy.yml:86-107` (job `migrar`); `test/arquivos/deploy.test.ts:176-200` (molde)
+**Requirement**: FUN-144, FUN-147 · Achado: A-18 (validation.md, rodada 2)
+
+**Done when**:
+
+- [ ] Passo de conferência no job `migrar`, depois da migração, só com a URL do dono
+- [ ] Teste de arquivo: o passo existe, vem depois do `pnpm migrar` e não recebe segredo da Cloudflare
+- [ ] Gate verde
+**Tests**: `test/arquivos/deploy.test.ts` › "FUN-147 o job migrar confere o papel do app a cada deploy"
+**Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot` (pelo Git Bash)
+
+---
+
+### T58: Teste da troca de livro no resumo da tela estreita (A-13)
+
+**What**: Teste em `src/App.test.tsx` do caso que a T50 prometia: tela estreita, ligar o resumo em Gênesis, ir a Êxodo e voltar a Gênesis: resumo desligado.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/App.test.tsx:490` (molde)
+**Requirement**: FUN-162 · Achado: A-13 (validation.md, rodada 2)
+
+**Done when**:
+
+- [ ] Teste falha com o efeito de `src/App.tsx:42` dependendo só de `[larga]`
+- [ ] Gate verde
+**Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
+
+---
 
 ## Depois da feature (fora do `/executar`)
 

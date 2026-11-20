@@ -28,6 +28,7 @@
 | 2026-11-19 | 12 | convite-coberto-iphone | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-20 | 3 | resumo-livro | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-20 | 3 | resumo-livro | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /validar rodada 2 | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
@@ -55,6 +56,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-19 | Feature `livro-paginas`, T5 | `test/arquivos/livro-css.test.ts:45-49` passa a afirmar a fórmula de `--largura-pagina-larga` com o vão (`var(--esp-8)`), mantendo que página e medida leem a mesma variável; o e2e de FUN-96 (`e2e/livro-tela-cheia.spec.ts:171-187`) passa a descontar o vão de 32 px; os de FUN-98 (`:305-320`) e FUN-99 (`:344-351`), só se quebrarem, viram asserções tão fortes quanto antes contra as bordas das páginas. Motivo no commit. Aprovada pelo dono. |
 | 2026-11-19 | Feature `livro-paginas`, T3 | Em `src/telas/TelaLivro.test.tsx`, o teste de FUN-84/FUN-71 (âncora no 2:1, antes numa página que começava no capítulo 1) passa a esperar o título do capítulo 2 na página 2 e ganha o caso da âncora no 1:3 (título do capítulo 1, página 1); o de FUN-77 passa a esperar o 2:1 (antes 2:2) como primeiro versículo da página seguinte ao par. Motivo: FUN-128 proíbe capítulo no meio da página; as asserções ficam tão fortes quanto antes. Aprovada pelo dono na execução. |
 | 2026-11-19 | Feature `resumo-livro` (AD-022) | `test/arquivos/wrangler.test.ts:33-36` ("sem `main`, sem bindings") e `test/arquivos/deploy.test.ts:78-85` (token só em `wrangler deploy\|rollback`) passam a afirmar o desenho novo (Worker com script, Hyperdrive e `ratelimits` por ambiente; segredo do banco só no passo de migração), tão fortes quanto antes; `src/componentes/BarraTitulo.test.tsx:69` e `src/App.test.tsx:105-113` passam a afirmar que a barra abre "Entrar" (FUN-137). Motivo no commit. Aprovada pelo dono. |
+| 2026-11-20 | Feature `resumo-livro`, retrabalho R1 (T45, A-11), `test/arquivos/deploy.test.ts:130-175` | Testes de FUN-147 reescritos para conferir a ordem dos jobs por `needs` (job `migrar` próprio); garantia tão forte quanto antes, motivo no commit 5b6aa54. Aprovada pelo dono no `/validar` rodada 2 (A-16). |
 
 ## Decisions
 
