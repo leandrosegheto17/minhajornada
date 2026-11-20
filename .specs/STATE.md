@@ -231,3 +231,19 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Scope**: Substitui a AD-001 na parte "sem servidor de aplicação nem banco"; front, build e PWA seguem a AD-001. Features `resumo-livro` em diante.
 - **Date**: 2026-11-19
 - **Status**: active
+
+### AD-023
+- **Decision**: O Worker conecta ao Neon (Hyperdrive) com o papel `mj_app`, que só lê `usuarios(id, dono)` e `resumos`, mexe em `sessoes` (SELECT, INSERT, UPDATE de `usada_em`, DELETE) e executa `usuario_entrar`; não lê `senha_hash` nem grava `usuarios` e `resumos`. Migração, publicação dos resumos e `criar-dono` usam o papel dono do banco, cuja URL fica só no passo de migração do deploy e na máquina do dono.
+- **Reason**: Escolha do dono em 2026-11-20: um erro de SQL ou injeção no Worker não lê o hash da senha nem muda o texto pago.
+- **Trade-off**: Mais um papel e uma URL por ambiente no `/preparar` (Nível 2), e a matriz de permissão × comando nos testes.
+- **Scope**: Feature `resumo-livro`, `servidor/migracoes/`, `servidor/repositorios/`, `scripts/resumos/`, `.github/workflows/deploy.yml`.
+- **Date**: 2026-11-20
+- **Status**: active
+
+### AD-024
+- **Decision**: `GET /api/resumos/<n>` confere a sessão antes do livro: sem sessão, 401; sem `dono`, 403; só depois `<n>` fora de 1 a 66 dá 400 e livro sem resumo dá 404.
+- **Reason**: A spec manda FUN-147 (sem sessão, 401) e FUN-150 (`<n>` inválido, 400) sem dizer qual vale quando os dois acontecem; o critério de sucesso pede 401 sem sessão de dono, e quem não entrou não aprende nada sobre a rota.
+- **Trade-off**: Sem sessão, `/api/resumos/abc` responde 401, não 400.
+- **Scope**: Feature `resumo-livro`, `servidor/rotas/resumos.ts`; testes de FUN-147 a FUN-150.
+- **Date**: 2026-11-20
+- **Status**: active

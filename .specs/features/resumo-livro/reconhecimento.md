@@ -6,7 +6,7 @@
 - **Arquitetura**: exige mudança. Site só estático (AD-001) → Worker com script (Hono em `/api/*`), Neon via Hyperdrive, sessão e migrações. Decisão do dono: seguir com o risco registrado (AD-022)
 - **Telas**: cria "Entrar"; muda a barra de título ("Sair", "Resumo") e o modo livro (resumo à direita na tela larga, alternado na estreita, estados do resumo)
 - **Mockup**: aprovado em 2026-11-20 (`mockup/`, https://claude.ai/artifact/MQKVxYCMLeavYaThufGqTA)
-- **Plano aprovado em**: pendente
+- **Plano aprovado em**: 2026-11-20 (`design.md`, `reuso.md`, `tasks.md`; AD-023 e AD-024)
 
 ## Onde entra
 
