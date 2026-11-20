@@ -1,0 +1,105 @@
+/* Página do resumo (mockup `resumo.css:33-52`). Usa a base `.pagina` de `livro.module.css`. */
+
+.pagina-resumo {
+  font-size: var(--texto-m);
+  line-height: var(--altura-linha-texto);
+}
+
+.cabeca {
+  margin: 0 0 var(--esp-4);
+}
+
+.selo {
+  display: inline-block;
+  font-family: var(--fonte-ui);
+  font-size: var(--texto-p);
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nome-livro {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-titulo-tela);
+  line-height: 1.15;
+  margin: var(--esp-1) 0 0;
+}
+
+.secao {
+  margin: 0 0 var(--esp-4);
+}
+
+.secao h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-g);
+  margin: 0 0 var(--esp-1);
+  color: var(--cor-texto);
+}
+
+.secao p {
+  margin: 0;
+  hyphens: auto;
+}
+
+.divisao {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.divisao li {
+  display: grid;
+  gap: 0;
+}
+
+.intervalo {
+  font-size: var(--texto-p);
+  color: var(--cor-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.chaves {
+  margin: 0;
+  display: grid;
+  gap: var(--esp-3);
+}
+
+.chaves dt {
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  font-variant-numeric: tabular-nums;
+}
+
+.chaves dd {
+  margin: 0;
+}
+
+.rodape {
+  align-items: center;
+}
+
+.paginador {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.paginador button {
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+}
+
+/* Carregando, erro e sem resumo ficam no meio da página. */
+.texto-estado {
+  display: flex;
+  flex-direction: column;
+}
+
+.texto-estado > * {
+  margin: auto;
+}
