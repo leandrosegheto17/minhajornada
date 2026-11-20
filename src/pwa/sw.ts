@@ -12,8 +12,8 @@ cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
 // Sem rede, abrir qualquer endereço do app serve o index.html do precache (FUN-35). Os livros (/livros/) não são
-// navegação e ficam fora da rota.
-registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/livros\//] }));
+// navegação e ficam fora da rota. `/api/*` também: a resposta do resumo só vem da rede, nunca do cache nem do shell (FUN-151).
+registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { denylist: [/^\/livros\//, /^\/api\//] }));
 
 // Atualização sem ação do leitor (FUN-37): o SW novo não espera as abas fecharem e assume as abertas, mas a página
 // não recarrega; a abertura seguinte já usa a versão nova (ver `registrarSW.ts`).
