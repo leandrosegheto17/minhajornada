@@ -418,10 +418,10 @@ Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = v
 
 **Done when**:
 
-- [ ] Cookie `__Host-sessao` com HttpOnly, Secure, SameSite=Lax, Path=/ e Max-Age de 30 dias; o de expirar tem Max-Age=0 (FUN-138)
-- [ ] Token de 43 caracteres base64url; hash de 32 bytes; dois tokens nunca iguais em 1.000 gerações
-- [ ] Cookie repetido ou fora do formato: `lerToken` devolve `null`
-- [ ] Gate full verde
+- [x] Cookie `__Host-sessao` com HttpOnly, Secure, SameSite=Lax, Path=/ e Max-Age de 30 dias; o de expirar tem Max-Age=0 (FUN-138)
+- [x] Token de 43 caracteres base64url; hash de 32 bytes; dois tokens nunca iguais em 1.000 gerações
+- [x] Cookie repetido ou fora do formato: `lerToken` devolve `null`
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/sessao/*.test.ts`, nomes com `FUN-138` ou `FUN-141`
 **Gate**: full
@@ -443,11 +443,11 @@ Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = v
 
 **Done when**:
 
-- [ ] Banco guarda só o hash: nenhuma coluna tem o token (FUN-141)
-- [ ] Relógio injetado: 29 dias e 23 h de criação com uso recente vale; 30 dias não vale e a linha some; 6 dias e 23 h sem uso vale; 7 dias não vale e some (FUN-144)
-- [ ] Uso renova `usada_em`; dois usos em menos de 60 s gravam uma vez
-- [ ] Devolve `dono` do usuário
-- [ ] Gate full verde
+- [x] Banco guarda só o hash: nenhuma coluna tem o token (FUN-141)
+- [x] Relógio injetado: 29 dias e 23 h de criação com uso recente vale; 30 dias não vale e a linha some; 6 dias e 23 h sem uso vale; 7 dias não vale e some (FUN-144)
+- [x] Uso renova `usada_em`; dois usos em menos de 60 s gravam uma vez
+- [x] Devolve `dono` do usuário
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/repositorios/sessoes.test.ts`, nomes com `FUN-141` ou `FUN-144`
 **Gate**: full
@@ -469,11 +469,11 @@ Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = v
 
 **Done when**:
 
-- [ ] Senha certa: 200, `Set-Cookie` com o cookie de FUN-138, uma linha em `sessoes` (FUN-138)
-- [ ] E-mail inexistente, senha errada, e-mail vazio, senha vazia, corpo que não é JSON, campos que não são texto: 401 com corpo idêntico e nenhuma sessão criada (FUN-139)
-- [ ] 6ª tentativa do mesmo IP: 429 sem consultar o banco (FUN-140)
-- [ ] `POST` com origem de fora: 403 (guarda de T4 ligada)
-- [ ] Gate full verde
+- [x] Senha certa: 200, `Set-Cookie` com o cookie de FUN-138, uma linha em `sessoes` (FUN-138)
+- [x] E-mail inexistente, senha errada, e-mail vazio, senha vazia, corpo que não é JSON, campos que não são texto: 401 com corpo idêntico e nenhuma sessão criada (FUN-139)
+- [x] 6ª tentativa do mesmo IP: 429 sem consultar o banco (FUN-140)
+- [x] `POST` com origem de fora: 403 (guarda de T4 ligada)
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/rotas/acesso.test.ts`, nomes com `FUN-138`, `FUN-139` ou `FUN-140`
 **Gate**: full
@@ -495,10 +495,10 @@ Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = v
 
 **Done when**:
 
-- [ ] Com sessão: 200 `{ dono: true }`; sem cookie, cookie inválido ou vencido: 401 (FUN-142, FUN-144)
-- [ ] `sair` com sessão: linha apagada, cookie com Max-Age=0, e o mesmo cookie depois dá 401 em `/api/sessao` (FUN-143)
-- [ ] `sair` sem sessão: 204
-- [ ] Gate full verde
+- [x] Com sessão: 200 `{ dono: true }`; sem cookie, cookie inválido ou vencido: 401 (FUN-142, FUN-144)
+- [x] `sair` com sessão: linha apagada, cookie com Max-Age=0, e o mesmo cookie depois dá 401 em `/api/sessao` (FUN-143)
+- [x] `sair` sem sessão: 204
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/rotas/acesso.test.ts`, nomes com `FUN-142`, `FUN-143` ou `FUN-144`
 **Gate**: full
@@ -520,15 +520,17 @@ Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = v
 
 **Done when**:
 
-- [ ] Depois de um login com e-mail e senha de exemplo e de um erro provocado, o log capturado não contém o e-mail, a senha, o token nem o valor do cookie, e tem uma linha por requisição com o status
-- [ ] Erro lançado numa rota: 500 genérico, sem pilha no corpo
-- [ ] Gate full verde
+- [x] Depois de um login com e-mail e senha de exemplo e de um erro provocado, o log capturado não contém o e-mail, a senha, o token nem o valor do cookie, e tem uma linha por requisição com o status
+- [x] Erro lançado numa rota: 500 genérico, sem pilha no corpo
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/app.test.ts`
 **Gate**: full
 **Commit**: `feat(servidor): log da api sem dado sensível`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 2deb7c31840bccefaabe86149b7e67dd651788a3 = verde
 
 ### T16: Formato e validação do resumo (FUN-163, FUN-164, FUN-174)
 
