@@ -1,3 +1,5 @@
+import type { ClienteRequisicao } from './db/cliente.ts';
+
 /** O que o binding de limite do Cloudflare (`ratelimits`) expõe: `success` falso quando a chave estourou o limite. */
 export interface LimiteTentativas {
   limit(opcoes: { key: string }): Promise<{ success: boolean }>;
@@ -12,4 +14,8 @@ export interface Deps {
   urlPublica?: string | undefined;
   /** Limite de tentativas de login (FUN-140); ausente, o login responde 503 (falha fechada). */
   limiteEntrar?: LimiteTentativas | undefined;
+  /** Cria o cliente do banco da requisição (conexão aberta só na primeira consulta, fechada no fim); ausente, a rota sem banco segue. */
+  conectar?: (() => ClienteRequisicao) | undefined;
+  /** Uma linha de log por requisição (T15); nunca recebe corpo, cookie, e-mail nem texto. */
+  log?: ((linha: string) => void) | undefined;
 }

@@ -26,4 +26,10 @@ describe('worker (ligação do Worker ao app)', () => {
     expect(depsDoEnv({ LIMITE_ENTRAR: limite }).limiteEntrar).toBe(limite);
     expect(depsDoEnv({}).limiteEntrar).toBeUndefined();
   });
+
+  it('o cliente do banco vem do binding HYPERDRIVE; sem ele, não há conexão', () => {
+    const hyperdrive = { connectionString: 'postgresql://mj_app:s@127.0.0.1:1/x' } as Hyperdrive;
+    expect(depsDoEnv({ HYPERDRIVE: hyperdrive }).conectar?.().aberto()).toBe(false);
+    expect(depsDoEnv({}).conectar).toBeUndefined();
+  });
 });
