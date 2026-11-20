@@ -16,6 +16,8 @@ export interface Deps {
   limiteEntrar?: LimiteTentativas | undefined;
   /** Cria o cliente do banco da requisição (conexão aberta só na primeira consulta, fechada no fim); ausente, a rota sem banco segue. */
   conectar?: (() => ClienteRequisicao) | undefined;
+  /** Relógio do app (sessões, vencimentos); padrão: a hora atual. Os testes injetam um relógio que se move. */
+  agora?: (() => Date) | undefined;
   /** Uma linha de log por requisição (T15); nunca recebe corpo, cookie, e-mail nem texto. */
   log?: ((linha: string) => void) | undefined;
 }
