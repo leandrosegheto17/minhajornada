@@ -407,6 +407,25 @@ describe('resumo no modo livro (FUN-153, FUN-157, FUN-162)', () => {
     semBotaoResumo();
   });
 
+  it('FUN-153: sessão de usuário comum (não dono) não tem botão "Resumo"', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === '/api/sessao') {
+          return new Response(JSON.stringify({ dono: false }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        throw new TypeError('sem rede');
+      }),
+    );
+    await abrirRomanos({ dono: false });
+    // A sessão de usuário já foi confirmada (a barra oferece "Sair"); só então a ausência do botão prova algo.
+    expect(await screen.findByRole('button', { name: 'Sair' })).toBeInTheDocument();
+    semBotaoResumo();
+  });
+
   it('FUN-153: na rolagem não há botão "Resumo"', async () => {
     await abrirRomanos({ formato: 'rolagem' });
     semBotaoResumo();

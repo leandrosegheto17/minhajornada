@@ -39,8 +39,8 @@ const TEXTO_LONGO = Array.from(
 ).join(' ');
 
 interface Opcoes {
-  /** Resposta de `/api/sessao`: 200 (dono) ou 401. */
-  sessao?: 200 | 401;
+  /** Resposta de `/api/sessao`: 200 (dono), 200 com `dono: false` (usuário comum) ou 401. */
+  sessao?: 200 | 401 | 'usuario';
   /** Resposta de `/api/resumos/:n`, por livro; sem entrada, 404. */
   resumos?: Record<number, { status: number; corpo?: ResumoDeExemplo }>;
   /** Segura as respostas de resumo até a função devolvida ser chamada. */
@@ -54,9 +54,8 @@ async function simularApi(page: Page, opcoes: Opcoes = {}) {
   await page.route('**/api/**', async (rota) => {
     const caminho = new URL(rota.request().url()).pathname;
     if (caminho === '/api/sessao') {
-      return sessao === 200
-        ? rota.fulfill({ status: 200, json: { dono: true } })
-        : rota.fulfill({ status: 401, json: { erro: 'sem_sessao' } });
+      if (sessao === 401) return rota.fulfill({ status: 401, json: { erro: 'sem_sessao' } });
+      return rota.fulfill({ status: 200, json: { dono: sessao !== 'usuario' } });
     }
     const livro = /^\/api\/resumos\/(\d+)$/.exec(caminho)?.[1];
     if (livro) {
@@ -182,6 +181,15 @@ test.describe('resumo na página da direita em 1920 × 1080', () => {
     await seguinte(page).click();
     await expect(paginasDaBiblia(page, 'Gênesis')).toHaveCount(1);
     await expect(paginaDoResumo(page, 'Gênesis')).toBeVisible();
+  });
+
+  test('FUN-153: sessão de usuário comum (não dono) não tem botão "Resumo"', async ({ page }) => {
+    await simularApi(page, { sessao: 'usuario' });
+    await abrirNoLivro(page, GENESIS, 1);
+    await expect(paginasDaBiblia(page, 'Gênesis').first()).toBeVisible();
+    // A sessão de usuário já foi confirmada (a barra oferece "Sair"); só então a ausência do botão prova algo.
+    await expect(page.getByRole('button', { name: 'Sair' })).toBeVisible();
+    await expect(botaoResumo(page)).toHaveCount(0);
   });
 
   test('FUN-153: sem sessão e na rolagem não há botão "Resumo"', async ({ page }) => {
