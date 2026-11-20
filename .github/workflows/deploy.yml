@@ -109,6 +109,13 @@ jobs:
           name: dist
           path: dist
 
+      # A URL do banco (papel dono) vive só neste passo e não chega ao token da Cloudflare (nem o contrário). As migrações
+      # são aditivas: se a fumaça falhar depois, a volta do Worker não precisa desfazer o banco.
+      - name: Migrar o banco antes de publicar
+        env:
+          DATABASE_URL_DONO: ${{ secrets.DATABASE_URL_DONO }}
+        run: pnpm migrar
+
       - name: 1. Publicar o Worker (só assets)
         id: publicar
         env:
@@ -130,6 +137,19 @@ jobs:
               fi
             done
           done
+
+      - name: 3. Fumaça da API sem sessão (FUN-147, FUN-151)
+        run: |
+          cabecalhos="$(curl -sS --retry 5 --retry-all-errors --retry-delay 3 -D - -o /dev/null "${URL_PUBLICA}/api/resumos/1")"
+          status="$(head -n 1 <<< "${cabecalhos}" | tr -d '\r' | cut -d ' ' -f 2)"
+          if [ "${status}" != "401" ]; then
+            echo "::error title=Fumaça da API falhou::/api/resumos/1 sem sessão devia responder 401 e respondeu ${status:-nada}."
+            exit 1
+          fi
+          if ! grep -qi -- '^cache-control:.*no-store' <<< "${cabecalhos}"; then
+            echo "::error title=Fumaça da API falhou::/api/resumos/1 não traz cache-control: no-store."
+            exit 1
+          fi
 
       - name: Voltar a versão anterior do Worker
         if: ${{ failure() && steps.publicar.outcome == 'success' }}

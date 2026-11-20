@@ -127,6 +127,120 @@ describe('deploy.yml: a fumaça confere os cabeçalhos do FUN-42 (A-05)', () => 
   });
 });
 
+/** Migração do banco e fumaça da API (resumo-livro, T22; FUN-147, FUN-151). */
+describe('deploy.yml: migração antes do deploy; a URL do banco só nesse passo (AD-022)', () => {
+  const lista = passos(job('publicar'));
+  const migrar = lista.find((p) => /pnpm migrar/.test(p)) ?? '';
+  const deploy = lista.findIndex((p) => /pnpm exec wrangler deploy/.test(p));
+
+  it('FUN-147: o passo de migração existe, roda `pnpm migrar` e vem antes de `wrangler deploy`', () => {
+    expect(migrar).not.toBe('');
+    expect(lista.indexOf(migrar)).toBeGreaterThanOrEqual(0);
+    expect(deploy).toBeGreaterThan(-1);
+    expect(lista.indexOf(migrar)).toBeLessThan(deploy);
+  });
+
+  it('FUN-147: o passo de migração tem DATABASE_URL_DONO de um segredo e não tem o token da Cloudflare', () => {
+    expect(migrar).toMatch(/DATABASE_URL_DONO: \$\{\{ secrets\.DATABASE_URL_DONO \}\}/);
+    expect(migrar).not.toMatch(/CLOUDFLARE/);
+  });
+
+  it('FUN-147: nenhum outro passo, job ou env de job tem a URL do banco', () => {
+    const fora = texto.replace(migrar, '');
+    expect(fora).not.toMatch(/DATABASE_URL/);
+    for (const nome of ['conferir', 'construir', 'publicar']) {
+      const antesDosPassos = job(nome).split(/\n {4}steps:/)[0] ?? '';
+      expect(antesDosPassos, `${nome}: env de job`).not.toMatch(/DATABASE_URL|secrets\./);
+    }
+  });
+
+  it('FUN-147: o token da Cloudflare continua só nos passos do wrangler (deploy e rollback)', () => {
+    for (const p of lista.filter((q) => /CLOUDFLARE_API_TOKEN/.test(q))) {
+      expect(p).toMatch(/pnpm exec wrangler (deploy|rollback)/);
+    }
+  });
+});
+
+describe('deploy.yml: a fumaça da API exige 401 e no-store e a falha volta a versão (FUN-147, FUN-151)', () => {
+  const lista = passos(job('publicar'));
+  const api = lista.find((p) => /Fumaça da API/.test(p)) ?? '';
+  const bloco = (/\n {8}run: \|\n((?: {10}.*\n?)+)/.exec(api)?.[1] ?? '').replace(/^ {10}/gm, '');
+
+  it('FUN-151: o passo consulta /api/resumos/1, vem depois do deploy e antes da volta da versão', () => {
+    expect(api).not.toBe('');
+    expect(bloco).toMatch(/\$\{URL_PUBLICA\}\/api\/resumos\/1/);
+    const iApi = lista.indexOf(api);
+    expect(iApi).toBeGreaterThan(lista.findIndex((p) => /pnpm exec wrangler deploy/.test(p)));
+    expect(iApi).toBeLessThan(lista.findIndex((p) => /pnpm exec wrangler rollback/.test(p)));
+  });
+
+  it('FUN-151: a falha de qualquer passo depois do deploy aciona a volta da versão', () => {
+    const volta = lista.find((p) => /pnpm exec wrangler rollback/.test(p)) ?? '';
+    expect(volta).toMatch(/if: \$\{\{ failure\(\) && steps\.publicar\.outcome == 'success' \}\}/);
+  });
+
+  const raiz = mkdtempSync(join(tmpdir(), 'fumaca-api-'));
+  const bin = join(raiz, 'bin');
+  mkdirSync(bin, { recursive: true });
+  // `curl` simulado: imprime a linha de status de STATUS (padrão 401) e, salvo SEM_CACHE, o cabeçalho de cache de CACHE.
+  writeFileSync(
+    join(bin, 'curl'),
+    [
+      '#!/bin/bash',
+      '[ -n "${SEM_RESPOSTA:-}" ] && exit 0',
+      'printf "HTTP/2 %s\\r\\n" "${STATUS:-401}"',
+      '[ -n "${SEM_CACHE:-}" ] || printf "%s\\r\\n" "${CACHE:-Cache-Control: no-store}"',
+      'printf "\\r\\n"',
+    ].join('\n'),
+  );
+  chmodSync(join(bin, 'curl'), 0o755);
+  afterAll(() => rmSync(raiz, { recursive: true, force: true }));
+
+  function rodar(extra: Record<string, string>) {
+    return spawnSync('bash', ['-e', '-c', bloco], {
+      encoding: 'utf8',
+      env: {
+        ...process.env,
+        ...extra,
+        URL_PUBLICA: 'https://exemplo.test',
+        PATH: `${bin}${delimiter}${process.env.PATH ?? ''}`,
+      },
+    });
+  }
+
+  it('FUN-147 FUN-151: 401 com no-store (em qualquer caixa) passa', () => {
+    expect(rodar({}).status).toBe(0);
+    expect(rodar({ CACHE: 'cache-control: private, NO-STORE' }).status).toBe(0);
+  });
+
+  it.each([['200'], ['403'], ['404'], ['500'], ['302']])(
+    'FUN-147: status %s em vez de 401 derruba a fumaça e o cita',
+    (status) => {
+      const r = rodar({ STATUS: status });
+      expect(r.status).not.toBe(0);
+      expect(r.stdout).toContain(`::error title=Fumaça da API falhou::`);
+      expect(r.stdout).toContain(`respondeu ${status}`);
+    },
+  );
+
+  it('FUN-151: 401 sem cache-control, ou com cache-control sem no-store, derruba a fumaça', () => {
+    const casos: Record<string, string>[] = [
+      { SEM_CACHE: '1' },
+      { CACHE: 'Cache-Control: max-age=60' },
+      { CACHE: 'Cache-Control: public' },
+    ];
+    for (const extra of casos) {
+      const r = rodar(extra);
+      expect(r.status, JSON.stringify(extra)).not.toBe(0);
+      expect(r.stdout).toContain('no-store');
+    }
+  });
+
+  it('FUN-147: resposta vazia (site fora) derruba a fumaça', () => {
+    expect(rodar({ SEM_RESPOSTA: '1' }).status).not.toBe(0);
+  });
+});
+
 /**
  * A-13 (FUN-42): o caminho de falha da fumaça é provado por execução. O bloco `run` do passo é rodado em `bash -e` (o
  * shell padrão do Actions) com um `curl` simulado no PATH, que devolve os cabeçalhos do FUN-42 menos o que o caso omite.
