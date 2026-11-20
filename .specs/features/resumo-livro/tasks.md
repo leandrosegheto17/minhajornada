@@ -243,9 +243,9 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] Um teste por ramo: Host igual, diferente, com porta, em caixa alta; `URL_PUBLICA` ausente e ilegível; para cada método de escrita: `Sec-Fetch-Site` `cross-site`, `same-site`, `SAME-ORIGIN`, `none`, ausente; `Origin` igual, diferente, `null`, em caixa alta; GET e HEAD passam sem conferir origem
-- [ ] A rodada vermelha (guarda removida) registrada no commit
-- [ ] Gate full verde
+- [x] Um teste por ramo: Host igual, diferente, com porta, em caixa alta; `URL_PUBLICA` ausente e ilegível; para cada método de escrita: `Sec-Fetch-Site` `cross-site`, `same-site`, `SAME-ORIGIN`, `none`, ausente; `Origin` igual, diferente, `null`, em caixa alta; GET e HEAD passam sem conferir origem
+- [x] A rodada vermelha (guarda removida) registrada no commit
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/middlewares/guarda.test.ts`, nomes com "Host 421" ou "origem 403"
 **Gate**: full
@@ -267,8 +267,8 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] Os quatro cabeçalhos em 200, 404, 421, 403, 500 (erro provocado numa rota de teste)
-- [ ] Gate full verde
+- [x] Os quatro cabeçalhos em 200, 404, 421, 403, 500 (erro provocado numa rota de teste)
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/middlewares/cabecalhos.test.ts`, nomes com `FUN-151`
 **Gate**: full
@@ -290,15 +290,17 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] Com um limite falso de 5 por chave: 5 passam, a 6ª dá 429 com `Retry-After: 60`; outro IP passa; sem `CF-Connecting-IP` usa a chave `entrar:sem-ip`
-- [ ] Binding ausente: 503; binding que lança: 503
-- [ ] Gate full verde
+- [x] Com um limite falso de 5 por chave: 5 passam, a 6ª dá 429 com `Retry-After: 60`; outro IP passa; sem `CF-Connecting-IP` usa a chave `entrar:sem-ip`
+- [x] Binding ausente: 503; binding que lança: 503
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/middlewares/limite.test.ts`, nomes com `FUN-140`
 **Gate**: full
 **Commit**: `feat(servidor): limite de tentativas de login`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquivos --reporter=dot @ 7efdd246b2dcc7c31302ca1f47280557869accc5 = verde
 
 ### T7: Banco de teste e migrador
 
