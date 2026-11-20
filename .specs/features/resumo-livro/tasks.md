@@ -1118,11 +1118,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.ts
 
 **Done when**:
 
-- [ ] Estados `proposta`, `aprovada`, `recusada` por livro (FUN-170)
-- [ ] Aprovar com texto editado guarda o editado como aprovado (FUN-171)
-- [ ] Recusar com nota vazia ou só espaço falha; recusado sai da exportação de aprovados e leva a nota (FUN-172)
-- [ ] `exportar` gera `{ formato: 'mj-resumos-v1', itens }` aceito por `lerArquivoExportado`
-- [ ] Gate quick verde
+- [x] Estados `proposta`, `aprovada`, `recusada` por livro (FUN-170)
+- [x] Aprovar com texto editado guarda o editado como aprovado (FUN-171)
+- [x] Recusar com nota vazia ou só espaço falha; recusado sai da exportação de aprovados e leva a nota (FUN-172)
+- [x] `exportar` gera `{ formato: 'mj-resumos-v1', itens }` aceito por `lerArquivoExportado`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/revisao-resumos/logica.test.ts`, nomes com `FUN-170` a `FUN-172`
 **Gate**: quick
@@ -1144,11 +1144,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.ts
 
 **Done when**:
 
-- [ ] Com banco dublê: abre a lista, edita "Contexto", aprova e a linha gravada tem o texto editado e `aprovada` (FUN-171)
-- [ ] Recusar sem nota mostra o erro e não grava (FUN-172)
-- [ ] Texto com `<img src=x>` aparece literal (sem elemento `img`)
-- [ ] "Baixar exportação" entrega o JSON de `exportar`
-- [ ] Gate quick verde
+- [x] Com banco dublê: abre a lista, edita "Contexto", aprova e a linha gravada tem o texto editado e `aprovada` (FUN-171)
+- [x] Recusar sem nota mostra o erro e não grava (FUN-172)
+- [x] Texto com `<img src=x>` aparece literal (sem elemento `img`)
+- [x] "Baixar exportação" entrega o JSON de `exportar`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/revisao-resumos/pagina.test.ts`, nomes com `FUN-170` a `FUN-172`
 **Gate**: quick
@@ -1170,9 +1170,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.ts
 
 **Done when**:
 
-- [ ] `pnpm revisao-resumos:montar` gera um HTML único sem nenhum texto de resumo dentro (teste de arquivo procura os nomes das seções só como rótulos)
-- [ ] O LEIA-ME cita os comandos reais e diz que produção pede confirmação escrita
-- [ ] Gate quick verde
+- [x] `pnpm revisao-resumos:montar` gera um HTML único sem nenhum texto de resumo dentro (teste de arquivo procura os nomes das seções só como rótulos)
+- [x] O LEIA-ME cita os comandos reais e diz que produção pede confirmação escrita
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/revisao-resumos.test.ts`
 **Gate**: quick
@@ -1194,16 +1194,18 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.ts
 
 **Done when**:
 
-- [ ] As quatro propostas passam em `problemasDoResumo` (lista vazia), rodado na sessão sobre um arquivo em `resumos-exportados/`
-- [ ] Publicar o artifact e gravar no banco dele só com a confirmação do dono (ação externa)
-- [ ] Nada do texto em arquivo versionado: `git status` limpo além de `tasks.md`; o teste de T21 verde com a exportação presente
-- [ ] Gate quick verde
+- [x] As quatro propostas passam em `problemasDoResumo` (lista vazia), rodado na sessão sobre um arquivo em `resumos-exportados/`
+- [x] Publicar o artifact e gravar no banco dele só com a confirmação do dono (ação externa)
+- [x] Nada do texto em arquivo versionado: `git status` limpo além de `tasks.md`; o teste de T21 verde com a exportação presente
+- [x] Gate quick verde
 
 **Tests**: unit (o teste de T21 com a exportação local e a validação de T16)
 **Gate**: quick
 **Commit**: `docs(resumos): propostas do piloto enviadas à revisão`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/revisao-resumos.test.ts --reporter=dot @ fbf10314c047a155f98f926775833c95d731d8a1 = verde
 
 ## Depois da feature (fora do `/executar`)
 
