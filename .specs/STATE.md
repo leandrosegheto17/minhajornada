@@ -3,12 +3,12 @@
 ## Retomada
 
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
-- **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019 e AD-020)
-- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; fase 2 Reconhecimento gravada (`reconhecimento.md`, AD-022), aguardando aprovação
-- **Próximo passo**: aprovar o reconhecimento; depois 2b Mockup (Entrar, barra, resumo no modo livro) e 3 Plano com `reuso.md` dos moldes externos
+- **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019, AD-020, AD-022)
+- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; 2 Reconhecimento (`reconhecimento.md`, AD-022) em 2026-11-19; 2b Mockup (`mockup/`, artifact https://claude.ai/artifact/MQKVxYCMLeavYaThufGqTA) em 2026-11-20
+- **Próxima fase**: 3 Plano (`tlc-spec-driven` Design e Tasks) — modelo indicado: opus. Gravar `reuso.md` com uma linha por arquivo de origem dos moldes do `reconhecimento.md` (GestaoDaPelada_v2 `c95e0dce`, ControleEmCasa_LJS `41debe6`, treInAmento `d2acb96`), conferência spec × design, e a seção Segurança padrão de app web do `CLAUDE.md` no primeiro lote do servidor. O `/preparar` precisa de nova rodada (banco local no Nível 1; Neon, Hyperdrive, segredos e ids livres do `ratelimits` no Nível 2)
 - **Serviços no ar**: nenhum
 - **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro sem tarefas ainda
-- **Combinado na conversa e não registrado em artefato**: nada; as decisões do dono de 2026-11-19 estão na tabela de premissas do `spec.md`
+- **Combinado na conversa e não registrado em artefato**: nada; decisões do dono estão na tabela de premissas do `spec.md`, na AD-022 e em `## Autorizações` (2026-11-19, resumo-livro)
 
 ## Modelo
 
