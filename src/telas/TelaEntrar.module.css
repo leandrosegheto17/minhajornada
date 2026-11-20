@@ -1,0 +1,101 @@
+/* Tela "Entrar" (mockup `telas/entrar.html`, `componentes.css:80-81` e `resumo.css:13-25`). */
+
+.tela-estado {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  padding: var(--esp-8) var(--esp-3);
+}
+
+.tela-estado > :first-child {
+  justify-self: start;
+  max-width: var(--largura-estado);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.cartao-entrar {
+  width: 100%;
+  max-width: var(--largura-estado);
+  margin: 0 auto;
+  display: grid;
+  gap: var(--esp-4);
+  padding: var(--esp-6);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-m);
+}
+
+.cartao-entrar h1 {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  font-size: var(--texto-titulo-tela);
+  line-height: 1.15;
+  margin: 0;
+}
+
+.cartao-entrar > button {
+  width: 100%;
+}
+
+.apoio {
+  margin: 0;
+  color: var(--cor-suave);
+  line-height: var(--altura-linha-texto);
+}
+
+.campo {
+  display: grid;
+  gap: var(--esp-1);
+}
+
+.campo label {
+  font-weight: var(--peso-forte);
+  font-size: var(--texto-p);
+  color: var(--cor-texto);
+}
+
+.campo input {
+  font: inherit;
+  font-size: var(--texto-m);
+  min-height: var(--alvo-toque);
+  padding: 0 var(--esp-3);
+  border: 1px solid var(--cor-contorno);
+  border-radius: var(--raio-p);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  width: 100%;
+}
+
+.campo input:focus-visible {
+  outline: var(--largura-foco) solid var(--cor-acento);
+  outline-offset: 1px;
+  border-color: var(--cor-acento);
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--cor-erro);
+}
+
+.rodape {
+  margin: 0;
+  text-align: center;
+  font-size: var(--texto-p);
+  color: var(--cor-suave);
+}
+
+.link-criar {
+  font: inherit;
+  font-weight: var(--peso-forte);
+  color: var(--cor-acento);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-criar:focus-visible {
+  outline: var(--largura-foco) solid var(--cor-acento);
+  outline-offset: 2px;
+}
