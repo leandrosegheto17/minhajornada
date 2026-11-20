@@ -4,8 +4,8 @@
 
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
 - **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019 e AD-020)
-- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19
-- **Próximo passo**: fase 2 Reconhecimento (Opus): skill `inventario`, depois `reconhecimento`. A feature cria o primeiro servidor do projeto (Worker com Hono, sessão em cookie, Neon), no padrão do treInAmento e do ControleEmCasa_LJS
+- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; fase 2 Reconhecimento gravada (`reconhecimento.md`, AD-022), aguardando aprovação
+- **Próximo passo**: aprovar o reconhecimento; depois 2b Mockup (Entrar, barra, resumo no modo livro) e 3 Plano com `reuso.md` dos moldes externos
 - **Serviços no ar**: nenhum
 - **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro sem tarefas ainda
 - **Combinado na conversa e não registrado em artefato**: nada; as decisões do dono de 2026-11-19 estão na tabela de premissas do `spec.md`
@@ -52,6 +52,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-18 | Feature `texto-atualizado`, retrabalho R1 (T25, A-03) | No teste `src/revisao/logica.test.ts:134` (FUN-110) o segundo item passa de `ref(1, 2)` para `ref(1, 3)`: os dois tinham o mesmo trecho no mesmo versículo, o que agora vai ao um a um; asserções iguais. Aprovada pelo dono. |
 | 2026-11-19 | Feature `livro-paginas`, T5 | `test/arquivos/livro-css.test.ts:45-49` passa a afirmar a fórmula de `--largura-pagina-larga` com o vão (`var(--esp-8)`), mantendo que página e medida leem a mesma variável; o e2e de FUN-96 (`e2e/livro-tela-cheia.spec.ts:171-187`) passa a descontar o vão de 32 px; os de FUN-98 (`:305-320`) e FUN-99 (`:344-351`), só se quebrarem, viram asserções tão fortes quanto antes contra as bordas das páginas. Motivo no commit. Aprovada pelo dono. |
 | 2026-11-19 | Feature `livro-paginas`, T3 | Em `src/telas/TelaLivro.test.tsx`, o teste de FUN-84/FUN-71 (âncora no 2:1, antes numa página que começava no capítulo 1) passa a esperar o título do capítulo 2 na página 2 e ganha o caso da âncora no 1:3 (título do capítulo 1, página 1); o de FUN-77 passa a esperar o 2:1 (antes 2:2) como primeiro versículo da página seguinte ao par. Motivo: FUN-128 proíbe capítulo no meio da página; as asserções ficam tão fortes quanto antes. Aprovada pelo dono na execução. |
+| 2026-11-19 | Feature `resumo-livro` (AD-022) | `test/arquivos/wrangler.test.ts:33-36` ("sem `main`, sem bindings") e `test/arquivos/deploy.test.ts:78-85` (token só em `wrangler deploy\|rollback`) passam a afirmar o desenho novo (Worker com script, Hyperdrive e `ratelimits` por ambiente; segredo do banco só no passo de migração), tão fortes quanto antes; `src/componentes/BarraTitulo.test.tsx:69` e `src/App.test.tsx:105-113` passam a afirmar que a barra abre "Entrar" (FUN-137). Motivo no commit. Aprovada pelo dono. |
 
 ## Decisions
 
@@ -61,7 +62,7 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Trade-off**: Cerca de 60 KB gzip de React a mais do que Preact ou TypeScript puro.
 - **Scope**: Todo o front do MinhaJornada; o pago pode acrescentar backend com um AD novo.
 - **Date**: 2026-11-14
-- **Status**: active
+- **Status**: superseded by AD-022 (o front continua o mesmo; o servidor e o banco entram com a resumo-livro)
 
 ### AD-002
 - **Decision**: O texto bíblico é convertido no build em um JSON por livro com hash no nome (`public/livros/NN.<hash8>.json`); o service worker precacheia só o app, e os livros ficam num cache próprio (`mj-livros`) gerido pelo app, baixados um por vez depois do primeiro capítulo.
@@ -220,5 +221,13 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Reason**: Achado na T4 do `/executar`, fora do escopo; decisão do dono em 2026-11-19. O `/validar` (A-01) pediu o registro.
 - **Trade-off**: O e2e de FUN-86 afirma só que o capítulo 21 continua no topo da página mostrada, não que a paginação refaça; a prova da repaginação fica para o teste de reprodução do bug.
 - **Scope**: Feature `livro-paginas`, `e2e/livro.spec.ts:239-252` e a linha de `spec.md` sobre troca de letra, tema e tamanho de tela.
+- **Date**: 2026-11-19
+- **Status**: active
+
+### AD-022
+- **Decision**: O MinhaJornada ganha servidor no padrão dos projetos irmãos: o mesmo Worker da Cloudflare serve os assets e, com `run_worker_first: ["/api/*"]`, um app Hono em `/api/*`; Neon (Postgres) via Hyperdrive com `pg` (um cliente por requisição, sem ORM); sessão própria em cookie `__Host-sessao` (só o SHA-256 do token no banco); senha com `crypt()` do pgcrypto; coluna `dono` no usuário, ligada só por script; guarda de Origin/Sec-Fetch-Site (403) e de Host (421) contra a URL configurada do ambiente; limite de login pelo binding `ratelimits` com falha fechada (binding ausente responde 503); migrações com `node-pg-migrate` e histórico, aplicadas pelo deploy antes do `wrangler deploy`.
+- **Reason**: Decisão do dono em 2026-11-19 ("siga o padrão dos outros projetos"; "login só do dono na 6"), para o resumo pago ficar visível só ao dono sem ir no pacote público (AD-019). Moldes: GestaoDaPelada_v2 `c95e0dce`, ControleEmCasa_LJS `41debe6`, treInAmento `d2acb96` (`.specs/features/resumo-livro/reconhecimento.md`).
+- **Trade-off**: O projeto deixa de ser só estático: CI com Postgres, deploy com migração e segredos do Neon, e o `/preparar` com banco local (Nível 1) e Neon e Hyperdrive (Nível 2). Falha fechada no limite pode bloquear o login por erro de configuração (aparece na fumaça). O 421 exige o Host certo no `wrangler dev` e nos testes.
+- **Scope**: Substitui a AD-001 na parte "sem servidor de aplicação nem banco"; front, build e PWA seguem a AD-001. Features `resumo-livro` em diante.
 - **Date**: 2026-11-19
 - **Status**: active

@@ -1,6 +1,6 @@
 # Inventário do projeto
 
-- **Atualizado em**: 2026-11-19 (correções e revisão, texto-atualizado `a9976c4`) e 2026-11-18 · **Commit**: d93f7e8 (áreas refeitas: interface, telas, livro, estado, preferências, e2e, scripts, testes de arquivo, vite.config; o resto vem de 2e90dc5)
+- **Atualizado em**: 2026-11-19 (conferido para a resumo-livro: só a área `livro` mudou, livro-paginas e convite-coberto-iphone, já refletida) · **Commit**: 14ecf8a (antes: d93f7e8 e `a9976c4`; o resto vem de 2e90dc5)
 - **Stack**: TypeScript ~5.9, React 19, Vite 8, vite-plugin-pwa 2 (Workbox 7, `injectManifest`), CSS Modules; site estático na Cloudflare (Worker com assets, `wrangler.jsonc`); Node >=24 <25, pnpm >=11 <12 (`package.json:6-9`)
 - **Testes**: Vitest 5 + Testing Library + jsdom (projetos `componentes`, jsdom, `vite.config.ts:70-76`, e `arquivos`, node, `vite.config.ts:81-85`; setup `test/setup.ts`) · rodar: `pnpm typecheck && pnpm test` (o `pretest` e o `pretypecheck` rodam o conversor) · ficam ao lado do código (`src/**/*.test.ts(x)`) e em `test/arquivos/`; E2E Playwright em `e2e/` (`pnpm build && pnpm e2e`) e `e2e-geral/` (staging)
 
@@ -83,7 +83,7 @@ Não há: site estático, sem servidor de aplicação.
 | `deploy.test.ts`, `wrangler.test.ts` | Workflow de deploy e Worker só de assets |
 | `icones-png.test.ts`, `icone-svg.test.ts` | Ícones (FUN-93, FUN-94) |
 | `paginacao-66.test.ts:20` | Paginação dos 66 livros gerados (FUN-75, FUN-76) |
-| `livro-css.test.ts` | Variáveis de largura e altura do livro (FUN-96, FUN-97, FUN-100) |
+| `livro-css.test.ts` | Variáveis de largura e altura do livro (FUN-96, FUN-97, FUN-100) e o vão de `--esp-8` entre as páginas (FUN-133, FUN-135) |
 
 ## Configuração e segurança
 
