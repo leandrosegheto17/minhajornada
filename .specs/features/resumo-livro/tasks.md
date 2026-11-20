@@ -884,8 +884,8 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] Grava e lê `true`/`false`; valor inválido ou ausente lê `false` e é apagado; `localStorage` que lança não quebra (FUN-157)
-- [ ] Gate quick verde
+- [x] Grava e lê `true`/`false`; valor inválido ou ausente lê `false` e é apagado; `localStorage` que lança não quebra (FUN-157)
+- [x] Gate quick verde
 
 **Tests**: unit em `src/dados/preferencias.test.ts`, nomes com `FUN-157`
 **Gate**: quick
@@ -907,9 +907,9 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] 200 com resumo bem formado → `pronto`; 404 → `semResumo` (FUN-168); 401 → `semSessao` (FUN-145); rede fora, 5xx, 400, 403 e JSON fora do formato → `erro` (FUN-167)
-- [ ] Pede `GET /api/resumos/<n>` com `credentials: 'same-origin'` e `cache: 'no-store'`
-- [ ] Gate quick verde
+- [x] 200 com resumo bem formado → `pronto`; 404 → `semResumo` (FUN-168); 401 → `semSessao` (FUN-145); rede fora, 5xx, 400, 403 e JSON fora do formato → `erro` (FUN-167)
+- [x] Pede `GET /api/resumos/<n>` com `credentials: 'same-origin'` e `cache: 'no-store'`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/dados/resumos.test.ts`, nomes com `FUN-145`, `FUN-167` ou `FUN-168`
 **Gate**: quick
@@ -931,11 +931,11 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] Títulos "Contexto", "Mensagem central", "Divisão do livro", "Versículos-chave" nessa ordem (FUN-163)
-- [ ] Parte da divisão com título e "Capítulos 1 a 11"; parte de um capítulo como "Capítulo 50"; versículo-chave "Gênesis 12:1-3" e "Gênesis 15:6" com a frase (FUN-164)
-- [ ] Texto com `<b>x</b>` aparece literal, sem elemento `b` (FUN-165)
-- [ ] "Carregando o resumo…" (FUN-166); "Não foi possível carregar o resumo. Confira a internet e tente de novo." com "Tentar de novo" que busca de novo (FUN-167); "Este livro ainda não tem resumo." (FUN-168); `semSessao` chama `aoPerderSessao`
-- [ ] Gate quick verde
+- [x] Títulos "Contexto", "Mensagem central", "Divisão do livro", "Versículos-chave" nessa ordem (FUN-163)
+- [x] Parte da divisão com título e "Capítulos 1 a 11"; parte de um capítulo como "Capítulo 50"; versículo-chave "Gênesis 12:1-3" e "Gênesis 15:6" com a frase (FUN-164)
+- [x] Texto com `<b>x</b>` aparece literal, sem elemento `b` (FUN-165)
+- [x] "Carregando o resumo…" (FUN-166); "Não foi possível carregar o resumo. Confira a internet e tente de novo." com "Tentar de novo" que busca de novo (FUN-167); "Este livro ainda não tem resumo." (FUN-168); `semSessao` chama `aoPerderSessao`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/PaginaResumo.test.tsx`, nomes com `FUN-163` a `FUN-168`
 **Gate**: quick
@@ -957,17 +957,19 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] Medida injetada que não cabe numa página: "1 de 2", "Página anterior do resumo" desabilitado; "seguinte" mostra a 2 e a âncora da Bíblia não muda (FUN-169)
-- [ ] Cabe numa página: sem paginador
-- [ ] Trocar de livro volta à página 1 do resumo
-- [ ] Testes de `useMedidas` e `TelaLivro` existentes verdes sem mudança
-- [ ] Gate quick verde
+- [x] Medida injetada que não cabe numa página: "1 de 2", "Página anterior do resumo" desabilitado; "seguinte" mostra a 2 e a âncora da Bíblia não muda (FUN-169)
+- [x] Cabe numa página: sem paginador
+- [x] Trocar de livro volta à página 1 do resumo
+- [x] Testes de `useMedidas` e `TelaLivro` existentes verdes sem mudança
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/PaginaResumo.test.tsx`, nomes com `FUN-169`
 **Gate**: quick
 **Commit**: `feat(livro): páginas próprias do resumo`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos --reporter=dot @ 042904dd10c9a1a058fb88574fc7432a70df4c7e = verde
 
 ### T33: Resumo à direita na tela larga (FUN-154 a FUN-156, FUN-158, FUN-159)
 
