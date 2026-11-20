@@ -586,7 +586,9 @@ describe('resumo no modo livro (FUN-154 a FUN-162)', () => {
   });
 
   it('FUN-159: "sozinho" na capa também ignora o resumo', () => {
-    render(<TelaLivro {...basePropsResumo({ larga: false, resumo: 'sozinho', ancora: { tipo: 'capa' }, carga: null })} />);
+    render(
+      <TelaLivro {...basePropsResumo({ larga: false, resumo: 'sozinho', ancora: { tipo: 'capa' }, carga: null })} />,
+    );
     expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
     expect(screen.queryByRole('article', { name: 'Resumo de Rute' })).toBeNull();
   });

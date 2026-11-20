@@ -19,4 +19,4 @@ Um livro novo segue o mesmo caminho: nenhum código novo por livro.
 
 O artifact leva só `index.html` e as capacidades `db`, `user` e `downloads`. Cada livro é uma linha do banco (`resumos/<livro>`, com `{ livro, estado, resumo, nota? }`), por isso a revisão continua ali quando você fecha e reabre a página. Publicar o artifact e gravar no banco dele são ações externas: só com a sua confirmação.
 
-Publicação: **pendente**.
+Publicação: artifact privado publicado em 2026-11-20 (https://claude.ai/artifact/D6uzn2RZqDWp4UACwEd7H3), com as propostas de Gênesis, Rute, Marcos e Romanos no banco dele.
