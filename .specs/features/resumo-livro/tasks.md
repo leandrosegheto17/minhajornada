@@ -1066,10 +1066,10 @@ Gate: pnpm typecheck && pnpm exec vitest run src --reporter=dot @ 7f574ec4306c4a
 
 **Done when**:
 
-- [ ] Ligar em Gênesis 1: a página da Bíblia fica à esquerda e o resumo à direita (`boundingBox`), com o vão de 32 px e a linha (FUN-154)
-- [ ] Avançar três vezes: a esquerda passa uma página por vez e a direita continua no resumo de Gênesis (FUN-155); desligar volta às duas páginas (FUN-156)
-- [ ] Recarregar mantém o resumo ligado (FUN-157); capa sem resumo (FUN-159); sem sessão, sem botão (FUN-153)
-- [ ] Gate full verde (`e2e/resumo.spec.ts`)
+- [x] Ligar em Gênesis 1: a página da Bíblia fica à esquerda e o resumo à direita (`boundingBox`), com o vão de 32 px e a linha (FUN-154)
+- [x] Avançar três vezes: a esquerda passa uma página por vez e a direita continua no resumo de Gênesis (FUN-155); desligar volta às duas páginas (FUN-156)
+- [x] Recarregar mantém o resumo ligado (FUN-157); capa sem resumo (FUN-159); sem sessão, sem botão (FUN-153)
+- [x] Gate full verde (`e2e/resumo.spec.ts`)
 
 **Tests**: e2e em `e2e/resumo.spec.ts`, nomes com o FUN de cada passo
 **Gate**: full
@@ -1091,16 +1091,18 @@ Gate: pnpm typecheck && pnpm exec vitest run src --reporter=dot @ 7f574ec4306c4a
 
 **Done when**:
 
-- [ ] Rute 2: "Resumo" mostra o resumo de Rute com `aria-pressed="true"`; de novo, a mesma página de Rute 2 (FUN-160 a FUN-162)
-- [ ] Quatro títulos na ordem (FUN-163); 404 mostra a mensagem de sem resumo (FUN-168); falha mostra a mensagem e "Tentar de novo" (FUN-167); resposta lenta mostra "Carregando o resumo…" (FUN-166)
-- [ ] Resumo longo: "1 de 2" e "seguinte" sem mudar a página da Bíblia (FUN-169)
-- [ ] Gate full verde (`e2e/resumo.spec.ts`)
+- [x] Rute 2: "Resumo" mostra o resumo de Rute com `aria-pressed="true"`; de novo, a mesma página de Rute 2 (FUN-160 a FUN-162)
+- [x] Quatro títulos na ordem (FUN-163); 404 mostra a mensagem de sem resumo (FUN-168); falha mostra a mensagem e "Tentar de novo" (FUN-167); resposta lenta mostra "Carregando o resumo…" (FUN-166)
+- [x] Resumo longo: "1 de 2" e "seguinte" sem mudar a página da Bíblia (FUN-169)
+- [x] Gate full verde (`e2e/resumo.spec.ts`)
 
 **Tests**: e2e em `e2e/resumo.spec.ts`, nomes com o FUN de cada passo
 **Gate**: full
 **Commit**: `test(e2e): resumo na tela estreita e estados`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.tsx --reporter=dot && pnpm exec playwright test e2e/resumo.spec.ts --reporter=dot @ c45dbbcc65fbee5b29ab8c9212f11a00ab43a13f = verde
 
 ### T38: Lógica da revisão dos resumos (FUN-170 a FUN-172)
 
