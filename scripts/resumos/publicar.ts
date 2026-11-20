@@ -63,12 +63,12 @@ export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
   }
 
   const aprovados = arquivo.itens.filter((i) => i.estado === 'aprovada');
-  if (aprovados.length === 0) {
-    erro('Nada a publicar: nenhum resumo aprovado no arquivo.');
+  const recusados = arquivo.itens.filter((i) => i.estado === 'recusada').map((i) => i.livro);
+  // Só recusados também é uma publicação: tira o livro recusado do ar (FUN-172, A-14).
+  if (aprovados.length === 0 && recusados.length === 0) {
+    erro('Nada a publicar: nenhum resumo aprovado nem recusado no arquivo.');
     return 1;
   }
-
-  const recusados = arquivo.itens.filter((i) => i.estado === 'recusada').map((i) => i.livro);
 
   // Valida todos antes de conectar: um problema em qualquer livro recusa a publicação inteira (FUN-174).
   const problemas = aprovados.flatMap((i) => {

@@ -190,6 +190,40 @@ describe('A-12 FUN-172 FUN-173: livro recusado sai da publicação', () => {
     );
   });
 
+  it('FUN-172: arquivo só com recusados (e propostas) remove o livro publicado, sem gravar nenhum', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const env = { DATABASE_URL_TST: url };
+        await rodar(
+          arquivoCom([
+            [3, 'aprovada'],
+            [4, 'aprovada'],
+          ]),
+          { env },
+        );
+        const s = await rodar(
+          arquivoCom([
+            [3, 'recusada'],
+            [4, 'proposta'],
+          ]),
+          { env },
+        );
+        expect(s.codigo).toBe(0);
+        expect(s.fora).toContain('0 livros gravados');
+        expect(s.fora).toContain('1 livros removidos');
+        expect(await livrosGravados(url)).toEqual([4]);
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-173: sem aprovados nem recusados (só propostas): "Nada a publicar", código 1 e sem conexão', async () => {
+    const s = await rodar(arquivoCom([[4, 'proposta']]), { env: { DATABASE_URL_TST: 'postgresql://x@127.0.0.1:1/x' } });
+    expect(s.codigo).toBe(1);
+    expect(s.erro.join('\n')).toContain('Nada a publicar');
+    expect(s.conexoes).toBe(0);
+  });
+
   it('FUN-173: falha provocada depois da remoção desfaz a remoção (tudo ou nada)', async () => {
     await bancoDeTeste(
       async (url) => {
@@ -259,15 +293,23 @@ describe('FUN-174: validação antes de conectar', () => {
     );
   });
 
-  it('FUN-174: um recusado inválido não impede a publicação dos aprovados', async () => {
-    const s = await rodar(
-      arquivoCom([[1, 'recusada', { versiculos: [{ capitulo: 51, versiculo: 1, frase: 'frase de exemplo' }] }]]),
-      { env: { DATABASE_URL_TST: 'postgresql://x:y@127.0.0.1:1/nada' } },
+  it('FUN-174: um recusado inválido não impede a publicação: o recusado não é validado e o livro sai do ar', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const env = { DATABASE_URL_TST: url };
+        await rodar(arquivoCom([[1, 'aprovada']]), { env });
+        // A-14: arquivo só com um recusado (inválido) conecta, remove o livro e sai com 0.
+        const s = await rodar(
+          arquivoCom([[1, 'recusada', { versiculos: [{ capitulo: 51, versiculo: 1, frase: 'frase de exemplo' }] }]]),
+          { env },
+        );
+        expect(s.codigo).toBe(0);
+        expect(s.conexoes).toBe(1);
+        expect(s.fora).toContain('1 livros removidos');
+        expect(await resumosGravados(url)).toEqual([]);
+      },
+      { migrado: true },
     );
-    // Nenhum aprovado: não conecta e explica.
-    expect(s.codigo).toBe(1);
-    expect(s.conexoes).toBe(0);
-    expect(s.erro.join('\n')).toContain('nenhum resumo aprovado');
   });
 
   it('FUN-174: arquivo ilegível ou com forma errada sai com 1, sem conectar e sem repetir o texto', async () => {
