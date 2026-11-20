@@ -35,6 +35,9 @@ export interface OpcoesPublicar {
 const SQL_GRAVAR = `INSERT INTO resumos (livro, conteudo, publicado_em) VALUES ($1, $2::jsonb, now())
   ON CONFLICT (livro) DO UPDATE SET conteudo = EXCLUDED.conteudo, publicado_em = now()`;
 
+// Livro recusado depois de publicado sai do banco (FUN-172, A-12): só os `recusada` do arquivo, nunca os `proposta`.
+const SQL_REMOVER = 'DELETE FROM resumos WHERE livro = ANY($1::int[])';
+
 /** Devolve o código de saída: 0 gravou; 1 recusou ou falhou (nesse caso nada foi gravado). */
 export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
   const { ambiente, erro } = opcoes;
@@ -65,6 +68,8 @@ export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
     return 1;
   }
 
+  const recusados = arquivo.itens.filter((i) => i.estado === 'recusada').map((i) => i.livro);
+
   // Valida todos antes de conectar: um problema em qualquer livro recusa a publicação inteira (FUN-174).
   const problemas = aprovados.flatMap((i) => {
     const nome = opcoes.biblia.find((l) => l.numero === i.livro)?.nome ?? `Livro ${i.livro}`;
@@ -77,8 +82,9 @@ export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
   }
 
   if (ambiente === 'producao') {
+    const remocao = recusados.length > 0 ? ` e remover ${recusados.length} recusados` : '';
     const resposta = await opcoes.perguntar(
-      `Publicar ${aprovados.length} livros em PRODUÇÃO. Digite ${CONFIRMACAO} para confirmar: `,
+      `Publicar ${aprovados.length} livros${remocao} em PRODUÇÃO. Digite ${CONFIRMACAO} para confirmar: `,
     );
     if (resposta === null || resposta.normalize('NFC') !== CONFIRMACAO) {
       erro('Confirmação não recebida: nada foi gravado.');
@@ -87,9 +93,12 @@ export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
   }
 
   const cliente = (opcoes.conectar ?? criarCliente)(url);
+  let removidos = 0;
   try {
-    await emTransacao(cliente, async (c) => {
+    removidos = await emTransacao(cliente, async (c) => {
+      const apagados = await c.consultar(SQL_REMOVER, [recusados]);
       for (const item of aprovados) await c.consultar(SQL_GRAVAR, [item.livro, JSON.stringify(item.resumo)]);
+      return apagados.rowCount ?? 0;
     });
   } catch (e) {
     erro(`Falha ao gravar: ${e instanceof Error ? e.message : 'erro desconhecido'}. Nenhum livro foi gravado.`);
@@ -98,6 +107,7 @@ export async function publicar(opcoes: OpcoesPublicar): Promise<number> {
     await cliente.fechar();
   }
   opcoes.saida(`${aprovados.length} livros gravados`);
+  opcoes.saida(`${removidos} livros removidos`);
   return 0;
 }
 

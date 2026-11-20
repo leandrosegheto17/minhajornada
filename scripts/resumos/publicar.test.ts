@@ -138,6 +138,104 @@ describe('FUN-173: publicar grava só os aprovados', () => {
   });
 });
 
+describe('A-12 FUN-172 FUN-173: livro recusado sai da publicação', () => {
+  const livrosGravados = async (url: string) => (await resumosGravados(url)).map((l) => l.livro);
+
+  it('FUN-172: livro publicado e depois recusado é removido do banco, e o resto do arquivo é gravado', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const env = { DATABASE_URL_TST: url };
+        await rodar(
+          arquivoCom([
+            [1, 'aprovada'],
+            [3, 'aprovada'],
+          ]),
+          { env },
+        );
+        expect(await livrosGravados(url)).toEqual([1, 3]);
+        const s = await rodar(
+          arquivoCom([
+            [1, 'aprovada'],
+            [3, 'recusada'],
+          ]),
+          { env },
+        );
+        expect(s.codigo).toBe(0);
+        expect(s.fora).toContain('1 livros gravados');
+        expect(s.fora).toContain('1 livros removidos');
+        expect(await livrosGravados(url)).toEqual([1]);
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-172: recusado que nunca foi publicado não remove nada, e proposta já publicada continua', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const env = { DATABASE_URL_TST: url };
+        await rodar(arquivoCom([[2, 'aprovada']]), { env });
+        const s = await rodar(
+          arquivoCom([
+            [1, 'aprovada'],
+            [2, 'proposta'],
+            [3, 'recusada'],
+          ]),
+          { env },
+        );
+        expect(s.codigo).toBe(0);
+        expect(s.fora).toContain('0 livros removidos');
+        expect(await livrosGravados(url)).toEqual([1, 2]);
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-173: falha provocada depois da remoção desfaz a remoção (tudo ou nada)', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const env = { DATABASE_URL_TST: url };
+        await rodar(arquivoCom([[3, 'aprovada']]), { env });
+        await comCliente(url, async (c) => {
+          await c.query(`CREATE FUNCTION falha_no_4() RETURNS trigger LANGUAGE plpgsql AS $$
+            BEGIN IF NEW.livro = 4 THEN RAISE EXCEPTION 'falha provocada no livro 4'; END IF; RETURN NEW; END; $$`);
+          await c.query('CREATE TRIGGER t BEFORE INSERT ON resumos FOR EACH ROW EXECUTE FUNCTION falha_no_4()');
+        });
+        const s = await rodar(
+          arquivoCom([
+            [3, 'recusada'],
+            [4, 'aprovada'],
+          ]),
+          { env },
+        );
+        expect(s.codigo).toBe(1);
+        expect(s.erro.join('\n')).toContain('falha provocada no livro 4');
+        expect(s.fora.join('\n')).not.toContain('removidos');
+        expect(await livrosGravados(url)).toEqual([3]);
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-175: em produção a pergunta diz quantos livros serão removidos, e sem confirmação nada é removido', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        await rodar(arquivoCom([[3, 'aprovada']]), { env: { DATABASE_URL_TST: url } });
+        const s = await rodar(
+          arquivoCom([
+            [1, 'aprovada'],
+            [3, 'recusada'],
+          ]),
+          { ambiente: 'producao', env: { DATABASE_URL_PRODUCAO: url }, respostas: ['sim'] },
+        );
+        expect(s.perguntas[0]).toContain('remover 1');
+        expect(s.codigo).toBe(1);
+        expect(await livrosGravados(url)).toEqual([3]);
+      },
+      { migrado: true },
+    );
+  });
+});
+
 describe('FUN-174: validação antes de conectar', () => {
   it('FUN-174: um aprovado com "Gênesis 51:1" lista o problema, sai com 1, não conecta e o banco fica igual', async () => {
     await bancoDeTeste(

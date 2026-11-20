@@ -7,7 +7,7 @@ A revisão é um artifact **privado** do claude.ai (`revisao-resumos/dist/index.
 1. **Escrever:** uma sessão do Claude escreve a proposta (linguagem simples, quatro seções, versículo-chave sem copiar o texto bíblico), confere com `problemasDoResumo` (`src/resumos/validar.ts`) e grava a linha `resumos/<livro>` no banco do artifact com o estado `proposta`.
 2. **Revisar:** no artifact, você edita as seções, aprova (o texto editado vira o aprovado) ou recusa com uma nota (sem nota, a recusa não é aceita).
 3. **Exportar:** "Baixar exportação" entrega `resumos.json` (formato `mj-resumos-v1`, com todos os livros e o estado de cada um). Guarde-o em `resumos-exportados/resumos.json`.
-4. **Publicar:** `node scripts/resumos/publicar.ts --ambiente tst` grava no Neon do ambiente só os `aprovada`, numa transação, e imprime quantos livros gravou. Para produção, `node scripts/resumos/publicar.ts --ambiente producao` pede a **confirmação escrita** antes de gravar.
+4. **Publicar:** `node scripts/resumos/publicar.ts --ambiente tst` grava no Neon do ambiente só os `aprovada`, numa transação, remove do banco os livros que o arquivo traz como `recusada` (um livro publicado e depois recusado sai do ar) e imprime quantos gravou e quantos removeu. Para produção, `node scripts/resumos/publicar.ts --ambiente producao` pede a **confirmação escrita** antes de gravar.
 
 Um livro novo segue o mesmo caminho: nenhum código novo por livro.
 
