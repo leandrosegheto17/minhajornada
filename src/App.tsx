@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { resumoCorrecoes } from './biblia/correcoesAplicadas';
 import { indice } from './biblia/indice';
 import { BarraTitulo } from './componentes/BarraTitulo';
@@ -38,6 +38,8 @@ export function App() {
     estado.ancora.tipo === 'texto' ? estado.ancora.ref.livro : estado.ancora.tipo === 'fim' ? estado.ancora.livro : 0;
   const comBotaoResumo =
     sessao.sessao === 'dono' && estado.tela === 'leitor' && estado.formato === 'livro' && numeroLivro > 0;
+  // Trocar de livro ou de largura desliga o resumo da tela estreita: voltar ao livro anterior não o religa (A-04).
+  useEffect(() => setResumoEstreita(null), [numeroLivro, larga]);
   const resumoLigado = larga ? resumoLarga : resumoEstreita === numeroLivro;
   const modoResumo = !comBotaoResumo || !resumoLigado ? 'desligado' : larga ? 'lado' : 'sozinho';
   const alternarResumo = () => {

@@ -371,13 +371,24 @@ describe('sessão do dono no app (FUN-138, FUN-142, FUN-143, FUN-145)', () => {
 });
 
 describe('resumo no modo livro (FUN-153, FUN-157, FUN-162)', () => {
-  const telaLarga = (larga: boolean) =>
+  // Largura controlável: `girar` muda a consulta e avisa quem assinou, como o navegador ao girar a tela.
+  const largura = { larga: true, ouvintes: new Set<() => void>() };
+  const telaLarga = (larga: boolean) => {
+    largura.larga = larga;
+    largura.ouvintes.clear();
     vi.stubGlobal('matchMedia', (consulta: string) => ({
-      matches: larga,
+      get matches() {
+        return largura.larga;
+      },
       media: consulta,
-      addEventListener: () => {},
-      removeEventListener: () => {},
+      addEventListener: (_tipo: string, ouvinte: () => void) => largura.ouvintes.add(ouvinte),
+      removeEventListener: (_tipo: string, ouvinte: () => void) => largura.ouvintes.delete(ouvinte),
     }));
+  };
+  const girar = (larga: boolean) => {
+    largura.larga = larga;
+    act(() => largura.ouvintes.forEach((ouvinte) => ouvinte()));
+  };
   const botaoResumo = () => screen.getByRole('button', { name: 'Resumo' });
   const semBotaoResumo = () => expect(screen.queryByRole('button', { name: 'Resumo' })).toBeNull();
 
@@ -474,6 +485,18 @@ describe('resumo no modo livro (FUN-153, FUN-157, FUN-162)', () => {
     expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
     expect(screen.getByRole('article', { name: pagina! })).toBeInTheDocument();
     expect(localStorage.getItem(CHAVES.resumo)).toBeNull();
+  });
+
+  it('A-04 FUN-162: ligado na tela estreita, girar para larga e voltar à estreita deixa o resumo desligado', async () => {
+    await abrirRomanos({ larga: false });
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+    girar(true);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false'); // na larga vale a preferência gravada (desligada)
+    girar(false);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByRole('article', { name: 'Resumo de Romanos' })).toBeNull();
+    expect(screen.getByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeInTheDocument();
   });
 
   it('FUN-162: com o resumo ligado na tela larga, abrir na estreita mostra a Bíblia com o botão não pressionado', async () => {
