@@ -1,19 +1,41 @@
-// Worker só com assets (AD-001): sem `main`, sem banco, sem segredo aqui. O deploy só sai do
-// .github/workflows/deploy.yml. Topo = produção (`main`); `env.tst` = staging (`desenvolvimento`).
+// Worker com script em /api/* (AD-022, T2): os assets saem como antes e só /api/* passa pelo app Hono (`main`). O deploy só
+// sai do .github/workflows/deploy.yml. Topo = produção (`main`); `env.tst` = staging (`desenvolvimento`).
+// Bindings, vars e rotas não herdam do topo: cada ambiente repete os seus. Sem senha nem URL de banco aqui: o Hyperdrive guarda
+// a conexão (papel mj_app, AD-023) e, no `wrangler dev`, a URL local vem de CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE.
+// Os ids do Hyperdrive e do limite de login são criados no /preparar (Nível 2); troque os valores abaixo antes do primeiro deploy.
 {
   "name": "minhajornada",
+  "main": "servidor/entrada/worker.ts",
   "compatibility_date": "2026-10-01",
+  // O `pg` precisa dos módulos do Node (nodejs_compat).
+  "compatibility_flags": ["nodejs_compat"],
+  // Só o domínio próprio responde: sem *.workers.dev e sem URL de prévia.
+  "workers_dev": false,
+  "preview_urls": false,
   "assets": {
     "directory": "dist",
     "not_found_handling": "single-page-application",
+    // Só /api/* passa pelo Worker antes dos assets (FUN-146 a FUN-151).
+    "run_worker_first": ["/api/*"],
   },
   "routes": [{ "pattern": "minhajornada.ljssoftware.com.br", "custom_domain": true }],
-  // Logs do Workers no painel da Cloudflare (item Observabilidade do /preparar). Sem Sentry: não há servidor (AD-003).
+  // Origem pública do ambiente: base da guarda de Host (421) e de origem (403).
+  "vars": { "URL_PUBLICA": "https://minhajornada.ljssoftware.com.br" },
+  "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "SUBSTITUIR-NO-PREPARAR-HYPERDRIVE-PRODUCAO" }],
+  // Limite de login (FUN-140): 5 tentativas por 60 s por IP. O namespace_id é único na conta Cloudflare
+  // (ocupados: 2001-2005, 3001-3005, 3101-3105); o /preparar confirma que este está livre.
+  "ratelimits": [{ "name": "LIMITE_ENTRAR", "namespace_id": "4001", "simple": { "limit": 5, "period": 60 } }],
+  // Escuta local só em 127.0.0.1 (segurança padrão de app web).
+  "dev": { "ip": "127.0.0.1" },
+  // Logs do Workers no painel da Cloudflare (item Observabilidade do /preparar).
   "observability": { "enabled": true },
   "env": {
     "tst": {
       "name": "minhajornada-tst",
       "routes": [{ "pattern": "minhajornada-tst.ljssoftware.com.br", "custom_domain": true }],
+      "vars": { "URL_PUBLICA": "https://minhajornada-tst.ljssoftware.com.br" },
+      "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "SUBSTITUIR-NO-PREPARAR-HYPERDRIVE-TST" }],
+      "ratelimits": [{ "name": "LIMITE_ENTRAR", "namespace_id": "4002", "simple": { "limit": 5, "period": 60 } }],
       "observability": { "enabled": true },
     },
   },
