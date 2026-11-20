@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ReactElement } from 'react';
 import { Estado } from '../componentes/base/Estado';
 import { BotaoIcone } from '../componentes/base/Botoes';
@@ -209,7 +209,10 @@ export function PaginaResumo({ numeroLivro, nome, aoPerderSessao, letra = 0, bus
   } else if (situacao.tipo === 'semResumo') {
     corpo = <Estado variante="vazio" icone={<IconeLivro />} titulo={nome} texto={MENSAGEM_SEM_RESUMO} />;
   } else {
-    corpo = pagina.partes.map((parte) => blocos[parte.bloco]?.desenhar(parte.recorte) ?? null);
+    corpo = pagina.partes.map((parte) => {
+      const bloco = blocos[parte.bloco];
+      return bloco ? <Fragment key={bloco.chave}>{bloco.desenhar(parte.recorte)}</Fragment> : null;
+    });
   }
 
   return (
@@ -220,7 +223,9 @@ export function PaginaResumo({ numeroLivro, nome, aoPerderSessao, letra = 0, bus
         <div className={estilo['involucro-medida']}>
           <div className={`${livro.pagina} ${livro.medida} ${estilo['pagina-resumo']}`} aria-hidden="true">
             <div className={livro['pagina__texto']} ref={refMedida}>
-              {blocos.map((bloco) => bloco.desenhar(0))}
+              {blocos.map((bloco) => (
+                <Fragment key={bloco.chave}>{bloco.desenhar(0)}</Fragment>
+              ))}
             </div>
             <footer className={livro['pagina__rodape']}>
               <span>&nbsp;</span>

@@ -41,6 +41,17 @@ function renderizar(busca: BuscaResumo | Promise<BuscaResumo>, extras: { medir?:
   return { buscar, aoPerderSessao, ...utilitarios };
 }
 
+describe('A-03 FUN-163: lista de blocos com key', () => {
+  it('FUN-163: renderizar o resumo não emite aviso de `key` do React', async () => {
+    const erros = vi.spyOn(console, 'error').mockImplementation(() => {});
+    renderizar(pronto());
+    await screen.findByRole('heading', { level: 3, name: 'Contexto' });
+    const avisos = erros.mock.calls.map((c) => c.map(String).join(' ')).filter((m) => /unique "key"/.test(m));
+    erros.mockRestore();
+    expect(avisos).toEqual([]);
+  });
+});
+
 describe('seções (FUN-163, FUN-164, FUN-165)', () => {
   it('FUN-163: os títulos vêm nesta ordem: Contexto, Mensagem central, Divisão do livro, Versículos-chave', async () => {
     renderizar(pronto());
