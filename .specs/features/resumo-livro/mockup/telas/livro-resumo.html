@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modo livro com resumo · Gênesis · MinhaJornada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../componentes.css">
+<link rel="stylesheet" href="../resumo.css">
+</head>
+<!-- Modo livro com o resumo do livro (FUN-153 a FUN-169).
+     Tela larga: Bíblia só à esquerda, uma página por vez; resumo à direita, com o próprio "anterior" e "seguinte".
+     Tela estreita: o botão "Resumo" troca a página mostrada entre a Bíblia e o resumo.
+     Variações: ?resumo=desligado | ?sessao=nao (sem o botão) | ?estado=carregando | erro | sem-resumo | ?pagina=2
+     #claro | #escuro | #sepia  tema.
+     O texto do resumo é EXEMPLO do formato, escrito para o mockup: não é o resumo revisado nem o publicado (FUN-152). -->
+<body data-formato="livro" data-destino-formato="#" data-sessao="dono" data-resumo="ligado">
+<main class="livro" aria-label="Leitura em formato livro">
+  <div class="livro__cabeca">
+    <h1 class="titulo-capitulo"><button class="titulo-capitulo" aria-label="Gênesis 1. Escolher outro capítulo">Gênesis 1 <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h1>
+    <span class="livro__posicao" id="posicao">Gênesis, página 1 de 160</span>
+  </div>
+
+  <div class="livro__aberto" id="aberto" data-celular-mostra="direita">
+    <article class="pagina pagina--esquerda" aria-label="Página 1 de Gênesis">
+      <div class="pagina__texto">
+        <h2 class="pagina__livro">Gênesis</h2>
+        <p><span class="numero-capitulo" aria-label="Capítulo 1">1</span><span class="numero-versiculo">1</span>No princípio criou Deus os céus e a terra.</p>
+        <p><span class="numero-versiculo">2</span>E a terra estava desordenada e vazia, e as trevas estavam sobre a face do abismo, e o Espírito de Deus se movia sobre a face das águas.</p>
+        <p><span class="numero-versiculo">3</span>E disse Deus: Haja luz; e houve luz.</p>
+        <p><span class="numero-versiculo">4</span>E viu Deus que a luz era boa: e separou Deus a luz das trevas.</p>
+        <p><span class="numero-versiculo">5</span>E chamou Deus à luz Dia, e às trevas chamou Noite: e foi a tarde e a manhã o primeiro dia.</p>
+        <p><span class="numero-versiculo">6</span>E disse Deus: Haja expansão em meio das águas, e separe as águas das águas.</p>
+        <p class="so-pagina-larga"><span class="numero-versiculo">7</span>E fez Deus a expansão, e separou as águas que estavam debaixo da expansão, das águas que estavam sobre a expansão: e foi assim.</p>
+      </div>
+      <footer class="pagina__rodape"><span>Gênesis 1</span><span>1</span></footer>
+    </article>
+
+    <article class="pagina pagina--direita pagina--resumo" id="resumo" aria-label="Resumo de Gênesis, página 1 de 2">
+      <div class="pagina__texto" id="resumo-texto">
+        <header class="resumo__cabeca">
+          <span class="resumo__selo">Resumo</span>
+          <h2 class="resumo__livro">Gênesis</h2>
+        </header>
+        <section class="resumo__secao" aria-labelledby="r-contexto">
+          <h3 id="r-contexto">Contexto</h3>
+          <p>Primeiro livro da Bíblia e da Lei de Moisés. A tradição atribui a escrita a Moisés, para o povo de Israel que saía do Egito e precisava saber de onde vinha e quem era o seu Deus.</p>
+        </section>
+        <section class="resumo__secao" aria-labelledby="r-mensagem">
+          <h3 id="r-mensagem">Mensagem central</h3>
+          <p>Deus cria tudo bom, o ser humano se afasta dele, e Deus não desiste: escolhe uma família, a de Abraão, e promete abençoar por meio dela todas as famílias da terra.</p>
+        </section>
+      </div>
+      <footer class="pagina__rodape">
+        <span>Resumo de Gênesis</span>
+        <span class="paginador-resumo" role="group" aria-label="Páginas do resumo">
+          <button class="botao-icone" id="resumo-anterior" aria-label="Página anterior do resumo" disabled><svg class="icone-p" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <span id="resumo-pos">1 de 2</span>
+          <button class="botao-icone" id="resumo-seguinte" aria-label="Página seguinte do resumo"><svg class="icone-p" viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </span>
+      </footer>
+    </article>
+  </div>
+
+  <nav class="navegacao-pagina" aria-label="Páginas da Bíblia">
+    <a class="botao-secundario" href="#" aria-label="Página anterior"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Anterior</a>
+    <button class="botao-secundario" aria-label="Página seguinte">Seguinte<svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </nav>
+</main>
+<script>
+/* atributos do <body> antes da barra, pelo endereço */
+(function () {
+  var q = new URLSearchParams(location.search);
+  if (q.get('sessao') === 'nao') { document.body.removeAttribute('data-sessao'); document.body.removeAttribute('data-resumo'); }
+  if (q.get('resumo') === 'desligado') document.body.setAttribute('data-resumo', 'desligado');
+})();
+</script>
+<script src="../barra.js"></script>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var estado = q.get('estado');
+  var aberto = document.getElementById('aberto');
+  var resumo = document.getElementById('resumo');
+  var texto = document.getElementById('resumo-texto');
+  var posicao = document.getElementById('posicao');
+  var estreita = matchMedia('(max-width: 899px), (orientation: portrait)').matches;
+
+  /* página da Bíblia que fica no lugar do resumo quando ele está desligado (tela larga) */
+  var biblia2 = '<article class="pagina pagina--direita" aria-label="Página 2 de Gênesis"><div class="pagina__texto">' +
+    '<p><span class="numero-versiculo">8</span>E chamou Deus à expansão Céus: e foi a tarde e a manhã, o dia segundo.</p>' +
+    '<p><span class="numero-versiculo">9</span>E disse Deus: Juntem-se as águas que estão debaixo dos céus em um lugar, e descubra-se a porção seca; e foi assim.</p>' +
+    '<p><span class="numero-versiculo">10</span>E chamou Deus à porção seca Terra, e à reunião das águas chamou Mares; e viu Deus que era bom.</p>' +
+    '<p><span class="numero-versiculo">11</span>E disse Deus: Produza a terra erva verde, erva que dê semente; árvore de fruto que dê fruto segundo a sua espécie, que sua semente esteja nela, sobre a terra: e foi assim.</p>' +
+    '</div><footer class="pagina__rodape"><span>Gênesis 1</span><span>2</span></footer></article>';
+  var resumoHtml = resumo.outerHTML;
+
+  function aplicar(ligado) {
+    var atual = document.getElementById('resumo') || aberto.children[1];
+    if (ligado) {
+      if (atual.id !== 'resumo') { atual.outerHTML = resumoHtml; ligarPaginador(); preencherEstado(); }
+      aberto.setAttribute('data-celular-mostra', 'direita');
+      posicao.textContent = estreita ? 'Resumo de Gênesis' : 'Gênesis, página 1 de 160';
+    } else {
+      if (!estreita && atual.id === 'resumo') atual.outerHTML = biblia2;
+      aberto.removeAttribute('data-celular-mostra');
+      posicao.textContent = estreita ? 'Gênesis, página 1 de 160' : 'Gênesis, páginas 1 e 2 de 160';
+    }
+  }
+  window.alternarResumo = aplicar;
+
+  function preencherEstado() {
+    var r = document.getElementById('resumo'); if (!r) return;
+    var t = r.querySelector('.pagina__texto'), rod = r.querySelector('.paginador-resumo');
+    if (estado === 'carregando') {
+      r.setAttribute('aria-busy', 'true'); rod.hidden = true;
+      t.innerHTML = '<header class="resumo__cabeca"><span class="resumo__selo">Resumo</span><h2 class="resumo__livro">Gênesis</h2></header>' +
+        '<p role="status" class="so-leitor">Carregando o resumo…</p><div class="esqueleto" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>' +
+        '<p class="resumo__intervalo" aria-hidden="true">Carregando o resumo…</p>';
+    }
+    if (estado === 'erro') {
+      rod.hidden = true;
+      t.innerHTML = '<div class="estado" role="alert"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M8.5 8.6A7 7 0 0 0 5 10.5M2 7.6a12 12 0 0 1 3.7-2.3M10.7 5.1A12 12 0 0 1 22 7.6M12 19.5h.01M9.2 15.6a4 4 0 0 1 5.6 0M15.5 10.4a7 7 0 0 1 3.5 2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' +
+        '<h2>Resumo indisponível</h2><p>Não foi possível carregar o resumo. Confira a internet e tente de novo.</p>' +
+        '<button class="botao-secundario">Tentar de novo</button></div>';
+    }
+    if (estado === 'sem-resumo') {
+      rod.hidden = true;
+      t.innerHTML = '<div class="estado"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="3.5" width="15" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>' +
+        '<h2>Êxodo</h2><p>Este livro ainda não tem resumo.</p></div>';
+      document.querySelector('.titulo-capitulo button').firstChild.textContent = 'Êxodo 1 ';
+    }
+  }
+
+  var pagina2 = '<section class="resumo__secao" aria-labelledby="r-divisao">          <h3 id="r-divisao">Divisão do livro</h3>          <ol class="resumo__divisao">            <li><span>A criação e o começo da humanidade</span><span class="resumo__intervalo">Capítulos 1 a 11</span></li>            <li><span>Abraão, Isaque e Jacó</span><span class="resumo__intervalo">Capítulos 12 a 36</span></li>            <li><span>José no Egito</span><span class="resumo__intervalo">Capítulos 37 a 50</span></li>          </ol>        </section><section class="resumo__secao" aria-labelledby="r-chaves"><h3 id="r-chaves">Versículos-chave</h3><dl class="resumo__chaves">' +
+    '<div><dt>Gênesis 1:1</dt><dd>Tudo começa em Deus: ele é o criador de tudo o que existe.</dd></div>' +
+    '<div><dt>Gênesis 12:1-3</dt><dd>A promessa a Abraão, que atravessa o resto da Bíblia.</dd></div>' +
+    '<div><dt>Gênesis 15:6</dt><dd>Abraão creu, e isso lhe foi contado como justiça.</dd></div>' +
+    '<div><dt>Gênesis 50:20</dt><dd>Deus transforma em bem o mal que fizeram a José.</dd></div></dl></section>';
+
+  function ligarPaginador() {
+    var r = document.getElementById('resumo'); if (!r) return;
+    var t = r.querySelector('.pagina__texto'), ant = r.querySelector('#resumo-anterior'), seg = r.querySelector('#resumo-seguinte'), pos = r.querySelector('#resumo-pos');
+    var p1 = t.innerHTML;
+    function ir(n) {
+      t.innerHTML = n === 2 ? pagina2 : p1;
+      ant.disabled = n === 1; seg.disabled = n === 2;
+      pos.textContent = n + ' de 2';
+      r.setAttribute('aria-label', 'Resumo de Gênesis, página ' + n + ' de 2');
+    }
+    ant.onclick = function () { ir(1); }; seg.onclick = function () { ir(2); };
+    if (q.get('pagina') === '2') ir(2);
+  }
+
+  var corpo = document.body;
+  if (!corpo.getAttribute('data-sessao')) { aplicar(false); return; }
+  ligarPaginador(); preencherEstado();
+  aplicar(corpo.getAttribute('data-resumo') === 'ligado');
+})();
+</script>
+</body>
+</html>

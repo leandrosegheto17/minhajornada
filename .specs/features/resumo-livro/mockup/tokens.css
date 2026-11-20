@@ -1,0 +1,187 @@
+/* MinhaJornada · tokens.css
+   Única fonte de cores, fontes, tamanhos, espaços, raios, sombras e quebras.
+   Direção aprovada: C · Leve e legível (2026-11-14).
+   O app copia este arquivo sem alterar (src/estilo/tokens.css) e usa só var(--...).
+   As fontes ficam no próprio site (@font-face em src/estilo/fontes.css, arquivos .woff2 em
+   src/estilo/fontes/): Atkinson Hyperlegible 400, 400 itálico e 700; Fraunces 600. Licença OFL. */
+
+:root {
+  /* tema claro (padrão) */
+  --cor-fundo: #FFFFFF;
+  --cor-superficie: #F8F6F9;
+  --cor-realce: #F4F1F5;
+  --cor-texto: #202124;
+  --cor-suave: #5F6368;
+  --cor-acento: #9A3B5B;
+  --cor-acento-texto: #FFFFFF;
+  --cor-borda: #E6E4EA;
+  --cor-contorno: #8E8A96;
+  --cor-erro: #B3261E;
+  --cor-erro-fundo: #FCEEEE;
+  --cor-aviso-fundo: #F4F1F5;
+  color-scheme: light;
+
+  /* tipografia */
+  --fonte-texto: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-ui: var(--fonte-texto);
+  --fonte-titulo: "Fraunces", Georgia, "Times New Roman", serif;
+  --texto-p: 14px;   /* rótulos pequenos */
+  --texto-m: 16px;   /* interface */
+  --texto-g: 18px;   /* destaque de interface */
+  --texto-gg: clamp(34px, 6vw, 48px);  /* título do capítulo */
+  --texto-titulo-tela: clamp(26px, 4.5vw, 34px);
+  --peso-normal: 400;
+  --peso-forte: 700;
+  --peso-titulo: 600;
+  --altura-linha-texto: 1.65;
+  --altura-linha-ui: 1.4;
+
+  /* tamanho da letra do texto bíblico: níveis 1 a 5 (FUN-23), padrão 3 */
+  --letra-1: 15px;
+  --letra-2: 17px;
+  --letra-3: 19px;
+  --letra-4: 22px;
+  --letra-5: 25px;
+
+  /* espaçamento */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 20px;
+  --esp-6: 24px;
+  --esp-8: 32px;
+  --esp-12: 48px;
+
+  /* forma */
+  --raio-p: 8px;
+  --raio-m: 14px;
+  --raio-total: 999px;
+  --sombra-1: 0 1px 2px rgba(20, 16, 24, .06), 0 4px 12px rgba(20, 16, 24, .08);
+  --sombra-2: 0 8px 28px rgba(20, 16, 24, .18);
+  --largura-foco: 3px;
+
+  /* medidas */
+  --alvo-toque: 44px;       /* mínimo de qualquer controle */
+  --largura-leitura: 44em;  /* coluna do texto: ~65 caracteres na letra 3 */
+  --largura-tela: 960px;    /* telas de escolha */
+  --coluna-numero: 2.6em;
+  --largura-painel: 340px;
+  --largura-aviso: 560px;
+  --largura-estado: 420px;
+  --coluna-livro: 150px;
+  --celula-capitulo: 52px;
+  --altura-cartao-nav: 72px;
+  --icone-p: 20px;
+  --icone-m: 24px;
+  --icone-g: 28px;
+  --icone-gg: 40px;
+
+  /* quebras (referência; as media queries usam o valor) */
+  --quebra-celular: 640px;
+  --quebra-pc: 1024px;
+}
+
+/* tema do sistema enquanto a pessoa não escolheu (FUN-29) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema]) {
+  --cor-fundo: #1B1A1F;
+  --cor-superficie: #232128;
+  --cor-realce: #2B2930;
+  --cor-texto: #ECEAF0;
+  --cor-suave: #A7A3B0;
+  --cor-acento: #E39AB5;
+  --cor-acento-texto: #2A0E1A;
+  --cor-borda: #2E2C34;
+  --cor-contorno: #6E6A78;
+  --cor-erro: #F2B8B5;
+  --cor-erro-fundo: #3A2224;
+  --cor-aviso-fundo: #2B2930;
+    color-scheme: dark;
+  }
+}
+
+:root[data-tema="claro"] {
+  --cor-fundo: #FFFFFF;
+  --cor-superficie: #F8F6F9;
+  --cor-realce: #F4F1F5;
+  --cor-texto: #202124;
+  --cor-suave: #5F6368;
+  --cor-acento: #9A3B5B;
+  --cor-acento-texto: #FFFFFF;
+  --cor-borda: #E6E4EA;
+  --cor-contorno: #8E8A96;
+  --cor-erro: #B3261E;
+  --cor-erro-fundo: #FCEEEE;
+  --cor-aviso-fundo: #F4F1F5;
+  color-scheme: light;
+}
+
+:root[data-tema="escuro"] {
+  --cor-fundo: #1B1A1F;
+  --cor-superficie: #232128;
+  --cor-realce: #2B2930;
+  --cor-texto: #ECEAF0;
+  --cor-suave: #A7A3B0;
+  --cor-acento: #E39AB5;
+  --cor-acento-texto: #2A0E1A;
+  --cor-borda: #2E2C34;
+  --cor-contorno: #6E6A78;
+  --cor-erro: #F2B8B5;
+  --cor-erro-fundo: #3A2224;
+  --cor-aviso-fundo: #2B2930;
+  color-scheme: dark;
+}
+
+:root[data-tema="sepia"] {
+  --cor-fundo: #F6EEDC;
+  --cor-superficie: #F0E6CF;
+  --cor-realce: #EEE3CB;
+  --cor-texto: #3B3024;
+  --cor-suave: #6E5E49;
+  --cor-acento: #8A3552;
+  --cor-acento-texto: #FFFFFF;
+  --cor-borda: #E4D6BB;
+  --cor-contorno: #8A7960;
+  --cor-erro: #9C2A1E;
+  --cor-erro-fundo: #F6E0D6;
+  --cor-aviso-fundo: #EEE3CB;
+  color-scheme: light;
+}
+
+:root[data-letra="1"] { --letra: var(--letra-1); }
+:root { --letra: var(--letra-3); }
+:root[data-letra="2"] { --letra: var(--letra-2); }
+:root[data-letra="4"] { --letra: var(--letra-4); }
+:root[data-letra="5"] { --letra: var(--letra-5); }
+
+/* interface-livro: barra de título, página inicial, modo livro, capa e quebras */
+:root {
+  /* barra de título */
+  --altura-barra: 56px;
+  --largura-barra: 1240px;        /* conteúdo da barra no PC */
+
+  /* página inicial */
+  --largura-cartao-inicial: 400px;
+  --veu-imagem: linear-gradient(90deg, rgba(20, 16, 24, .10) 0%, rgba(20, 16, 24, .25) 45%, rgba(20, 16, 24, .62) 100%);
+  --veu-imagem-celular: linear-gradient(180deg, rgba(20, 16, 24, .10) 0%, rgba(20, 16, 24, .55) 100%);
+
+  /* modo livro */
+  --largura-pagina: 520px;        /* página no PC; no celular, a largura da tela */
+  --respiro-pagina: 40px;         /* margem interna da página no PC */
+  --respiro-pagina-celular: 20px;
+  --sombra-pagina: 0 1px 2px rgba(20, 16, 24, .06), 0 10px 30px rgba(20, 16, 24, .12);
+  --sombra-lombada: inset -14px 0 18px -16px rgba(20, 16, 24, .35);
+  --sombra-lombada-direita: inset 14px 0 18px -16px rgba(20, 16, 24, .35);
+  --texto-titulo-livro: clamp(30px, 4vw, 40px);  /* nome do livro no topo da página */
+  --texto-numero-capitulo: 1.9em;                /* número do capítulo, relativo à letra */
+
+  /* capa */
+  --cor-capa: var(--cor-acento);
+  --cor-capa-texto: var(--cor-acento-texto);
+  --texto-capa: clamp(38px, 5vw, 56px);
+
+  /* quebras (referência; as media queries usam o valor) */
+  --quebra-barra-compacta: 480px; /* "Entrar / Criar conta" vira ícone (FUN-64) */
+  --quebra-livro-duplo: 900px;    /* duas páginas, se também for mais larga que alta (FUN-73) */
+}

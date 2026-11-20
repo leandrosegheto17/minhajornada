@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resumo do livro: mockup das telas</title>
+<style>
+:root{--fundo:#F2F3F5;--superficie:#FFFFFF;--texto:#1A1D23;--suave:#5B616E;--acento:#9A3B5B;--borda:#DADDE3;--fonte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root{--fundo:#121418;--superficie:#1B1E24;--texto:#E6E8EC;--suave:#9AA1AD;--acento:#E39AB5;--borda:#2C313A;color-scheme:dark}}
+*{box-sizing:border-box} body{margin:0;background:var(--fundo);color:var(--texto);font-family:var(--fonte);line-height:1.5}
+header{max-width:1240px;margin:0 auto;padding:32px 20px 8px} h1{font-size:28px;margin:0 0 8px} header p{margin:0 0 6px;color:var(--suave);max-width:80ch}
+header a,.temas a{color:var(--acento)}
+section{max-width:1240px;margin:24px auto;padding:20px;background:var(--superficie);border:1px solid var(--borda);border-radius:14px}
+h2{font-size:20px;margin:0 0 4px} .intencao{margin:0 0 6px;color:var(--suave);max-width:92ch}
+.temas{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px} .temas a{font-size:14px;text-decoration:none;border:1px solid var(--borda);border-radius:999px;padding:6px 12px}
+.vistas{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap} .vista{display:flex;flex-direction:column;gap:6px} .vista span{font-size:13px;color:var(--suave)}
+.pc{width:720px;height:450px;overflow:hidden;border:1px solid var(--borda);border-radius:10px;max-width:100%} .pc iframe{width:1440px;height:900px;border:0;transform:scale(.5);transform-origin:0 0}
+.cel{width:390px;height:760px;border:1px solid var(--borda);border-radius:28px;overflow:hidden;max-width:100%} .cel iframe{width:390px;height:760px;border:0}
+.cel-p{width:300px;height:600px} .cel-p iframe{width:390px;height:780px;transform:scale(.77);transform-origin:0 0}
+ul.decisoes{margin:12px 0 0;padding-left:20px;color:var(--suave)} ul.decisoes li{margin:3px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>Resumo do livro: telas</h1>
+<p>Feature <code>resumo-livro</code> (FUN-137 a FUN-169). As telas usam o <code>tokens.css</code> e os componentes do guia do projeto; os componentes novos (botão "Resumo", campo, cartão "Entrar", página do resumo) estão em <code>resumo.css</code>, <strong>sem token novo</strong>. As páginas separadas por vão de 32 px e linha de 1 px são as da <code>livro-paginas</code>.</p>
+<p>O texto do resumo de Gênesis aqui é <strong>exemplo do formato</strong>, escrito para o mockup; não é o resumo que você vai revisar nem o que será publicado (o repositório é público, FUN-152).</p>
+</header>
+
+<section><h2>1. Livro com o resumo, no PC</h2>
+<p class="intencao">Com o dono entrado e o resumo ligado: a Bíblia fica só na página da esquerda e passa uma página por vez ("Gênesis, página 1 de 160"); o resumo do livro fica à direita, com o próprio "‹ 1 de 2 ›" no rodapé (FUN-154, FUN-155, FUN-169). O botão "Resumo" fica logo depois de "Rolagem" na barra, marcado quando ligado (FUN-153, FUN-162). A conta vira "Sair" (FUN-142). Toque em "Resumo" na barra para desligar e ver as duas páginas da Bíblia (FUN-156).</p>
+<div class="temas"><a href="telas/livro-resumo.html#claro">Claro</a> <a href="telas/livro-resumo.html#escuro">Escuro</a> <a href="telas/livro-resumo.html#sepia">Sépia</a> <a href="telas/livro-resumo.html?pagina=2">Página 2 do resumo</a> <a href="telas/livro-resumo.html?resumo=desligado">Resumo desligado</a> <a href="telas/livro-resumo.html?sessao=nao">Sem sessão (como hoje)</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (escala 50%), resumo ligado, tema claro</span><div class="pc"><iframe src="telas/livro-resumo.html" title="Livro com resumo no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>PC, página 2 do resumo, tema escuro</span><div class="pc"><iframe src="telas/livro-resumo.html?pagina=2#escuro" title="Página 2 do resumo, tema escuro" loading="lazy"></iframe></div></div>
+<div class="vista"><span>PC, resumo desligado: duas páginas da Bíblia</span><div class="pc"><iframe src="telas/livro-resumo.html?resumo=desligado#sepia" title="Resumo desligado, tema sépia" loading="lazy"></iframe></div></div>
+</div>
+<ul class="decisoes">
+<li>Quatro seções fixas, nesta ordem: Contexto, Mensagem central, Divisão do livro (parte e "Capítulos X a Y") e Versículos-chave (referência em destaque e uma frase própria, sem copiar o versículo) (FUN-163, FUN-164).</li>
+<li>A letra do resumo é a da interface (16 px), não a do "Aa": cabe cerca de 1 página em PC; o resto vai para a página 2 com o próprio paginador, que não mexe na Bíblia.</li>
+<li>Referências são só texto, sem link (decisão de 2026-11-19).</li>
+<li>Na capa e na página do plano pago, nada muda: o resumo só aparece com um livro aberto (FUN-159).</li>
+</ul></section>
+
+<section><h2>2. Resumo no celular</h2>
+<p class="intencao">Uma página só. "Resumo" na barra (ícone, sem rótulo abaixo de 640 px) troca a página mostrada pelo resumo; tocar de novo volta à mesma página da Bíblia (FUN-160, FUN-161). A posição no topo diz "Resumo de Gênesis" enquanto ele está na tela.</p>
+<div class="vistas">
+<div class="vista"><span>Bíblia (resumo desligado)</span><div class="cel cel-p"><iframe src="telas/livro-resumo.html?resumo=desligado" title="Celular, Bíblia" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Resumo ligado</span><div class="cel cel-p"><iframe src="telas/livro-resumo.html" title="Celular, resumo" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Resumo, página 2, tema escuro</span><div class="cel cel-p"><iframe src="telas/livro-resumo.html?pagina=2#escuro" title="Celular, resumo página 2, escuro" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>3. Estados do resumo</h2>
+<p class="intencao">Carregando (esqueleto do guia, FUN-166), erro de rede ou do servidor com "Tentar de novo" (FUN-167) e livro sem resumo publicado (FUN-168). Os três ficam só na página do resumo; a Bíblia continua lendo normalmente.</p>
+<div class="temas"><a href="telas/livro-resumo.html?estado=carregando">Carregando</a> <a href="telas/livro-resumo.html?estado=erro">Erro</a> <a href="telas/livro-resumo.html?estado=sem-resumo">Sem resumo</a></div>
+<div class="vistas">
+<div class="vista"><span>Carregando, PC</span><div class="pc"><iframe src="telas/livro-resumo.html?estado=carregando" title="Carregando no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Erro, celular, escuro</span><div class="cel cel-p"><iframe src="telas/livro-resumo.html?estado=erro#escuro" title="Erro, celular" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Sem resumo (Êxodo), celular, sépia</span><div class="cel cel-p"><iframe src="telas/livro-resumo.html?estado=sem-resumo#sepia" title="Sem resumo, celular" loading="lazy"></iframe></div></div>
+</div></section>
+
+<section><h2>4. Entrar</h2>
+<p class="intencao">Aberta por "Entrar / Criar conta" na barra (FUN-137), com "Voltar" à tela de onde veio. E-mail, senha, "Entrar" e o link "Criar conta" para o "em breve". Erro único para e-mail inexistente, senha errada ou campo vazio (FUN-139) e o aviso de limite (FUN-140). Enquanto envia, o botão mostra "Entrando…" e os campos ficam travados.</p>
+<div class="temas"><a href="telas/entrar.html">Normal</a> <a href="telas/entrar.html?estado=enviando">Enviando</a> <a href="telas/entrar.html?estado=erro">Erro</a> <a href="telas/entrar.html?estado=limite">Limite</a></div>
+<div class="vistas">
+<div class="vista"><span>PC, 1440 px (escala 50%)</span><div class="pc"><iframe src="telas/entrar.html" title="Entrar no PC" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Erro, celular</span><div class="cel cel-p"><iframe src="telas/entrar.html?estado=erro" title="Entrar com erro, celular" loading="lazy"></iframe></div></div>
+<div class="vista"><span>Limite, celular, escuro</span><div class="cel cel-p"><iframe src="telas/entrar.html?estado=limite#escuro" title="Entrar com limite, celular" loading="lazy"></iframe></div></div>
+</div>
+<ul class="decisoes">
+<li>O campo de formulário é peça nova no projeto (não havia nenhum); usa só tokens existentes: contorno, raio pequeno, alvo de toque de 44 px e o anel de foco do guia.</li>
+<li>Sem "Esqueci a senha": recuperação é da feature <code>conta</code> (8).</li>
+</ul></section>
+</body>
+</html>

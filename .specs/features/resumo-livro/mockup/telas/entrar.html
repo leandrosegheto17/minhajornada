@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-letra="3">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar · MinhaJornada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../componentes.css">
+<link rel="stylesheet" href="../resumo.css">
+</head>
+<!-- Tela "Entrar" (FUN-137 a FUN-140): aberta por "Entrar / Criar conta" na barra.
+     "Voltar" e o sucesso levam à tela de onde o login foi aberto (FUN-138).
+     O envio é por fetch, sem <form action> (CSP form-action 'none', public/_headers:5).
+     Variações: ?estado=enviando | erro | limite   #claro | #escuro | #sepia  tema -->
+<body data-formato="rolagem" data-destino-formato="livro-resumo.html">
+<main class="tela-estado">
+  <a class="botao-voltar" href="livro-resumo.html?sessao=nao"><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Voltar</a>
+  <section class="cartao-entrar" aria-labelledby="titulo-entrar">
+    <h1 id="titulo-entrar">Entrar</h1>
+    <p class="cartao-entrar__apoio">Entre com o e-mail e a senha da sua conta.</p>
+    <div class="aviso aviso--erro" id="aviso" role="alert" hidden><svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5v6M12 16.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><p id="aviso-texto">E-mail ou senha incorretos.</p></div>
+    <div class="campo">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username" inputmode="email" value="dono@exemplo.com.br">
+    </div>
+    <div class="campo">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" autocomplete="current-password" value="senhaexemplo">
+    </div>
+    <button class="botao-primario" id="entrar" type="button">Entrar</button>
+    <p class="cartao-entrar__rodape">Ainda não tem conta? <a href="#">Criar conta</a></p>
+  </section>
+</main>
+<script src="../barra.js"></script>
+<script>
+(function () {
+  var estado = new URLSearchParams(location.search).get('estado');
+  var aviso = document.getElementById('aviso'), texto = document.getElementById('aviso-texto');
+  var botao = document.getElementById('entrar');
+  var email = document.getElementById('email'), senha = document.getElementById('senha');
+  if (estado === 'enviando') { botao.disabled = true; botao.textContent = 'Entrando…'; email.disabled = true; senha.disabled = true; }
+  if (estado === 'erro') { aviso.hidden = false; senha.value = ''; senha.setAttribute('aria-invalid', 'true'); senha.setAttribute('aria-describedby', 'aviso-texto'); }
+  if (estado === 'limite') { aviso.hidden = false; texto.textContent = 'Muitas tentativas. Tente de novo em 1 minuto.'; senha.value = ''; }
+  botao.onclick = function () { location.href = 'livro-resumo.html' + location.hash; };
+})();
+</script>
+</body>
+</html>
