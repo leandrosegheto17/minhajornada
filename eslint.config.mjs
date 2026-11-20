@@ -40,14 +40,14 @@ export default tseslint.config(
   { languageOptions: { globals: { ...globals.node } } },
   { files: ['src/**/*.{ts,tsx}'], languageOptions: { globals: { ...globals.browser } } },
   {
-    files: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}'],
+    files: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'servidor/**/*.{ts,mjs}'],
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     },
   },
-  // FUN-04: sem HTML interpretado nem avaliação de código no app e nos scripts.
+  // FUN-04: sem HTML interpretado nem avaliação de código no app, nos scripts e no servidor.
   {
-    files: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}'],
+    files: ['src/**/*.{ts,tsx}', 'scripts/**/*.{ts,mjs}', 'servidor/**/*.{ts,mjs}'],
     ignores: ['src/**/*.test.{ts,tsx}'],
     rules: {
       'no-restricted-syntax': ['error', ...SINTAXE_PROIBIDA],

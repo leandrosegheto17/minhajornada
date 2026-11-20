@@ -84,6 +84,17 @@ export default defineConfig({
           include: ['src/estilo/estilo.test.ts', 'test/**/*.test.ts', 'scripts/**/*.test.mjs'],
         },
       },
+      {
+        // Servidor e scripts de banco (AD-022): node, com Postgres real (`DATABASE_URL_TESTE`); um arquivo por vez, porque
+        // cada um cria e apaga o próprio banco `teste_<hex>` no mesmo cluster.
+        extends: true,
+        test: {
+          name: 'servidor',
+          environment: 'node',
+          include: ['servidor/**/*.test.ts', 'scripts/**/*.test.ts'],
+          fileParallelism: false,
+        },
+      },
     ],
   },
 });
