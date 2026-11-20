@@ -150,6 +150,18 @@ T38 → T39 → T40
 T41
 ```
 
+### Phase 15: Retrabalho R1 (crítica)
+
+```
+T42 → T43 → T44 → T45 → T46 → T47
+```
+
+### Phase 16: Retrabalho R1 (comum)
+
+```
+T48 → T49 → T50 → T51 → T52 → T53
+```
+
 ---
 
 ## Task Breakdown
@@ -1206,6 +1218,186 @@ Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.ts
 ---
 
 Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/revisao-resumos.test.ts --reporter=dot @ fbf10314c047a155f98f926775833c95d731d8a1 = verde
+
+### T42: Botão "Resumo" ausente para sessão de usuário comum (A-01)
+
+**What**: Teste em `src/App.test.tsx` com `/api/sessao` devolvendo 200 `{dono:false}` que afirma a ausência do botão "Resumo" (e o e2e equivalente em `e2e/resumo.spec.ts`); corrigir `src/App.tsx:40` se falhar.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `src/App.test.tsx:405` (teste "sem sessão de dono", molde)
+**Requirement**: FUN-153 · Achado: A-01 (validation.md)
+**Tests**: `src/App.test.tsx` › "FUN-153 sessão de usuário comum não mostra o botão Resumo"; morre com `sessao.sessao !== 'sem'` em `App.tsx:40`
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
+
+---
+
+### T43: Migração de conferência dos privilégios do `mj_app` (A-07)
+
+**What**: Migração nova que falha com `RAISE EXCEPTION` se o `mj_app` tiver `rolsuper`, `rolbypassrls`, `rolcreaterole` ou `rolcreatedb`, for membro de `neon_superuser`, `pg_read_all_data` ou `pg_write_all_data`, ou puder ler `usuarios.senha_hash`; e o passo do `/preparar` cria o papel por SQL (`CREATE ROLE mj_app LOGIN NOINHERIT`), registrado em `.specs/preparacao.md` (Nível 2).
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T42
+**Reuses**: `servidor/migracoes/1795132860000_papel_app.sql` (molde); `servidor/migracoes/papel-app.test.ts`
+**Requirement**: AD-023 · Achado: A-07 (validation.md)
+**Tests**: `servidor/migracoes/papel-app.test.ts` › um teste por condição (papel com `BYPASSRLS`, membro de `pg_read_all_data`, `GRANT SELECT (senha_hash)`): a migração falha; papel correto: passa
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot`
+
+---
+
+### T44: Trocar a senha do dono encerra as sessões abertas (A-09)
+
+**What**: `scripts/criar-dono.ts`, no mesmo comando que troca o hash, apaga as linhas de `sessoes` do usuário.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T43
+**Reuses**: `scripts/criar-dono.ts:19-20`
+**Requirement**: FUN-141, FUN-143 · Achado: A-09 (validation.md)
+**Tests**: `scripts/criar-dono.test.ts` › "trocar a senha apaga as sessões do dono e mantém as de outro usuário"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot`
+
+---
+
+### T45: Senha mínima no `criar-dono` (A-10)
+
+**What**: `scripts/criar-dono.ts` recusa senha com menos de 12 caracteres e avisa acima de 72 bytes (limite do bcrypt).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T44
+**Reuses**: `scripts/criar-dono.ts:35`
+**Requirement**: FUN-141 · Achado: A-10 (validation.md)
+**Tests**: `scripts/criar-dono.test.ts` › 11 caracteres recusa sem gravar; 12 grava; 73 bytes grava com aviso
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot`
+
+---
+
+### T46: Migração em job próprio no deploy (A-11)
+
+**What**: Em `.github/workflows/deploy.yml`, `pnpm migrar` passa a um job próprio (mesmo environment, `needs` antes do `publicar`), sem o `CLOUDFLARE_API_TOKEN` no job que roda as dependências da migração.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T45
+**Reuses**: `.github/workflows/deploy.yml:106,114-125`; `test/arquivos/deploy.test.ts` (molde)
+**Requirement**: FUN-151 (segredos do deploy, SEC-001) · Achado: A-11 (validation.md)
+**Tests**: `test/arquivos/deploy.test.ts` › o job da migração não tem `CLOUDFLARE_API_TOKEN` e o `publicar` depende dele
+**Gate**: `pnpm typecheck && pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+---
+
+### T47: Livro recusado sai da publicação (A-12)
+
+**What**: `scripts/resumos/publicar.ts`, na mesma transação, apaga de `resumos` os livros `recusada` da exportação e imprime quantos removeu.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T46
+**Reuses**: `scripts/resumos/publicar.ts:35-36,62`; `emTransacao`
+**Requirement**: FUN-172, FUN-173 · Achado: A-12 (validation.md)
+**Tests**: `scripts/resumos/publicar.test.ts` › "FUN-172 livro publicado e depois recusado é removido"; falha provocada depois da remoção desfaz tudo
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot`
+
+---
+
+### T48: Prova de FUN-152 sobre toda exportação local (A-02)
+
+**What**: `test/arquivos/resumos-fora-do-git.test.ts` varre todos os `*.json` de `resumos-exportados/` (não só `resumos.json`) e inclui os títulos da divisão e as frases dos versículos.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `test/arquivos/resumos-fora-do-git.test.ts:18,84`
+**Requirement**: FUN-152 · Achado: A-02 (validation.md)
+**Tests**: o próprio teste deixa de ser pulado com `propostas.json` presente
+**Gate**: `pnpm exec vitest run test/arquivos/resumos-fora-do-git.test.ts --reporter=dot`
+
+---
+
+### T49: `key` nos blocos da página do resumo (A-03)
+
+**What**: `src/livro/PaginaResumo.tsx:212,223`: cada bloco devolvido no `map` ganha `key` estável.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T48
+**Reuses**: `src/livro/PaginaResumo.tsx`
+**Requirement**: FUN-163 · Achado: A-03 (validation.md)
+**Tests**: `src/livro/PaginaResumo.test.tsx` › sem aviso de `key` no `console.error`
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/livro --reporter=dot`
+
+---
+
+### T50: Resumo da tela estreita desligado ao trocar de livro (A-04)
+
+**What**: `src/App.tsx:36-48`: ao mudar de livro (ou de largura), o resumo da tela estreita volta a desligado; voltar ao livro anterior não o religa.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T49
+**Reuses**: `src/App.test.tsx:447,460` (molde)
+**Requirement**: FUN-162 · Achado: A-04 (validation.md)
+**Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
+
+---
+
+### T51: Recusar guarda o texto editado (A-05)
+
+**What**: `recusar(item, nota, editado?)` em `src/revisao-resumos/logica.ts` e a página passa `editado()` ao recusar, como já faz ao aprovar.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T50
+**Reuses**: `aprovar` em `src/revisao-resumos/logica.ts:11`; `src/revisao-resumos/pagina.ts:149`
+**Requirement**: FUN-171, FUN-172 · Achado: A-05 (validation.md)
+**Tests**: `logica.test.ts` e `pagina.test.ts` › "FUN-172 recusar com edição guarda o texto editado e a nota"
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
+
+---
+
+### T52: Edição preservada quando a recusa ou a gravação falha (A-06)
+
+**What**: `src/revisao-resumos/pagina.ts:190`: erro de recusa sem nota ou de `banco.gravar` mostra o aviso sem redesenhar as textareas (o texto digitado continua).
+**Estimativa**: 1h30
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T51
+**Reuses**: `src/revisao-resumos/pagina.ts` (`desenhar`, `guardar`)
+**Requirement**: FUN-171, FUN-172 · Achado: A-06 (validation.md)
+**Tests**: `pagina.test.ts` › editar, recusar sem nota: o texto editado continua; banco dublê que lança: o texto continua e o aviso aparece
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
+
+---
+
+### T53: Hyperdrive sem cache de consultas (A-08)
+
+**What**: Registrar no Nível 2 do `.specs/preparacao.md` que os Hyperdrive de tst e produção são criados com `--caching-disabled`, e no `wrangler.jsonc` um comentário com a decisão; teste de arquivo confere o registro.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T52
+**Reuses**: `test/arquivos/wrangler.test.ts` (molde)
+**Requirement**: FUN-143, FUN-144 · Achado: A-08 (validation.md)
+**Tests**: `test/arquivos/wrangler.test.ts` › o `preparacao.md` pede `--caching-disabled` para os dois Hyperdrive
+**Gate**: `pnpm exec vitest run test/arquivos/wrangler.test.ts --reporter=dot`
+
+---
 
 ## Depois da feature (fora do `/executar`)
 

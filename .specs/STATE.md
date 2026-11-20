@@ -26,6 +26,7 @@
 | 2026-11-19 | 3 | livro-paginas | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-19 | 3 | livro-paginas | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-19 | 12 | convite-coberto-iphone | /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /executar e /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-20 | 3 | resumo-livro | /executar | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
