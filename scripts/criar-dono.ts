@@ -15,9 +15,20 @@ export interface OpcoesCriarDono {
   erro: (linha: string) => void;
 }
 
-// bcrypt de custo 12 no próprio banco (AD-022); o e-mail em caixa baixa é exigido pelo CHECK da tabela.
-const SQL = `INSERT INTO usuarios (email, senha_hash, dono) VALUES ($1, crypt($2, gen_salt('bf', 12)), true)
-  ON CONFLICT (email) DO UPDATE SET senha_hash = EXCLUDED.senha_hash, dono = true`;
+// bcrypt de custo 12 no próprio banco (AD-022); o e-mail em caixa baixa é exigido pelo CHECK da tabela. Trocar a senha
+// encerra as sessões abertas do usuário no mesmo comando (A-09): um cookie roubado não sobrevive à troca.
+const SQL = `WITH gravado AS (
+    INSERT INTO usuarios (email, senha_hash, dono) VALUES ($1, crypt($2, gen_salt('bf', 12)), true)
+    ON CONFLICT (email) DO UPDATE SET senha_hash = EXCLUDED.senha_hash, dono = true
+    RETURNING id
+  ), encerradas AS (
+    DELETE FROM sessoes WHERE usuario_id IN (SELECT id FROM gravado)
+  )
+  SELECT count(*)::int AS n FROM gravado`;
+
+/** Mínimo de caracteres da senha do dono (A-10) e o limite de bytes que o bcrypt lê (o resto é ignorado). */
+export const SENHA_MINIMA = 12;
+export const BCRYPT_BYTES = 72;
 
 /** Devolve o código de saída. Nenhuma mensagem leva a senha. */
 export async function criarDono(opcoes: OpcoesCriarDono): Promise<number> {
@@ -36,6 +47,10 @@ export async function criarDono(opcoes: OpcoesCriarDono): Promise<number> {
     opcoes.erro('A senha não pode ser vazia: informe a senha pela entrada padrão.');
     return 1;
   }
+  if ([...senha].length < SENHA_MINIMA) {
+    opcoes.erro(`A senha deve ter pelo menos ${SENHA_MINIMA} caracteres.`);
+    return 1;
+  }
   const cliente = criarCliente(url);
   try {
     await cliente.consultar(SQL, [email, senha]);
@@ -47,6 +62,9 @@ export async function criarDono(opcoes: OpcoesCriarDono): Promise<number> {
     await cliente.fechar();
   }
   opcoes.saida(`Usuário dono ${email} gravado.`);
+  if (Buffer.byteLength(senha, 'utf8') > BCRYPT_BYTES) {
+    opcoes.saida(`Aviso: o bcrypt lê só os primeiros ${BCRYPT_BYTES} bytes da senha; o resto é ignorado.`);
+  }
   return 0;
 }
 

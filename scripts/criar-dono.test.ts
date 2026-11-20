@@ -127,3 +127,113 @@ describe('FUN-141 FUN-146: script que cria o dono', () => {
     );
   });
 });
+
+describe('A-09 FUN-141 FUN-143: trocar a senha encerra as sessões abertas', () => {
+  const sessoesDe = (url: string, email: string) =>
+    comCliente(
+      url,
+      async (c) =>
+        (
+          await c.query(
+            'SELECT count(*)::int AS n FROM sessoes s JOIN usuarios u ON u.id = s.usuario_id WHERE u.email = $1',
+            [email],
+          )
+        ).rows[0]?.n as number,
+    );
+
+  it('FUN-143: trocar a senha do dono apaga as sessões dele e mantém as de outro usuário', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        await rodar(url, 'dono@exemplo.com', SENHA);
+        await comCliente(url, async (c) => {
+          await c.query(
+            "INSERT INTO usuarios (email, senha_hash) VALUES ('outro@exemplo.com', crypt('senha-do-outro-1', gen_salt('bf', 12)))",
+          );
+          await c.query(
+            "INSERT INTO sessoes (token_hash, usuario_id) SELECT '\\x0a', id FROM usuarios WHERE email = 'dono@exemplo.com'",
+          );
+          await c.query(
+            "INSERT INTO sessoes (token_hash, usuario_id) SELECT '\\x0b', id FROM usuarios WHERE email = 'dono@exemplo.com'",
+          );
+          await c.query(
+            "INSERT INTO sessoes (token_hash, usuario_id) SELECT '\\x0c', id FROM usuarios WHERE email = 'outro@exemplo.com'",
+          );
+        });
+        expect(await sessoesDe(url, 'dono@exemplo.com')).toBe(2);
+
+        const r = await rodar(url, 'dono@exemplo.com', 'senha-nova-456');
+        expect(r.codigo).toBe(0);
+        expect(await sessoesDe(url, 'dono@exemplo.com')).toBe(0);
+        expect(await sessoesDe(url, 'outro@exemplo.com')).toBe(1);
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-143: a primeira criação do dono não falha por não haver sessões', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const r = await rodar(url, 'dono@exemplo.com', SENHA);
+        expect(r.codigo).toBe(0);
+        expect(await sessoesDe(url, 'dono@exemplo.com')).toBe(0);
+      },
+      { migrado: true },
+    );
+  });
+});
+
+describe('A-10 FUN-141: senha mínima do dono', () => {
+  const nUsuarios = (url: string) =>
+    comCliente(url, async (c) => (await c.query('SELECT count(*)::int AS n FROM usuarios')).rows[0]?.n as number);
+
+  it('FUN-141: senha de 11 caracteres recusa com código 1, diz o mínimo e não grava', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const r = await rodar(url, 'dono@exemplo.com', 'abcdefghijk');
+        expect(r.codigo).toBe(1);
+        expect(r.erro.join('\n')).toContain('12 caracteres');
+        expect(r.erro.join('\n')).not.toContain('abcdefghijk');
+        expect(await nUsuarios(url)).toBe(0);
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-141: senha de exatamente 12 caracteres grava, sem aviso', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const r = await rodar(url, 'dono@exemplo.com', 'abcdefghijkl');
+        expect(r.codigo).toBe(0);
+        expect(r.fora.join('\n')).not.toContain('72');
+        expect(await entrar(url, 'dono@exemplo.com', 'abcdefghijkl')).not.toBeNull();
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-141: senha com mais de 72 bytes grava e avisa que o bcrypt ignora o resto', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const longa = 'a'.repeat(73);
+        const r = await rodar(url, 'dono@exemplo.com', longa);
+        expect(r.codigo).toBe(0);
+        expect(r.fora.join('\n')).toContain('72 bytes');
+        expect(r.fora.join('\n')).not.toContain(longa);
+        const justa = await rodar(url, 'dono@exemplo.com', 'a'.repeat(72));
+        expect(justa.fora.join('\n')).not.toContain('72 bytes');
+      },
+      { migrado: true },
+    );
+  });
+
+  it('FUN-141: o limite de 72 conta bytes, não caracteres (acentos ocupam dois)', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const r = await rodar(url, 'dono@exemplo.com', 'ã'.repeat(40)); // 40 caracteres, 80 bytes
+        expect(r.codigo).toBe(0);
+        expect(r.fora.join('\n')).toContain('72 bytes');
+      },
+      { migrado: true },
+    );
+  });
+});
