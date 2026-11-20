@@ -103,6 +103,42 @@ describe('AD-023: conferência dos privilégios do papel do app', () => {
     }
   });
 
+  // A-15: o `/preparar` cria o mj_app `NOINHERIT`; nesse papel a membresia não dá privilégio direto, e `pg_has_role(...,
+  // 'USAGE')` não a enxerga. A conferência usa 'MEMBER', e estes testes morrem se ela voltar a olhar só a herança.
+  it.each([['pg_read_all_data'], ['pg_write_all_data']])(
+    'AD-023: papel NOINHERIT membro de %s falha',
+    async (grupo) => {
+      await comPapelRuim(
+        'NOSUPERUSER NOINHERIT',
+        (c, papel) => c.query(`GRANT ${grupo} TO ${papel}`).then(() => undefined),
+        async (verificar) => {
+          await expect(verificar()).rejects.toThrow(new RegExp(grupo));
+        },
+      );
+    },
+  );
+
+  it('AD-023: papel NOINHERIT membro de neon_superuser falha', async () => {
+    let criou = false;
+    try {
+      await comPapelRuim(
+        'NOSUPERUSER NOINHERIT',
+        async (c, papel) => {
+          const { rowCount } = await c.query("SELECT 1 FROM pg_roles WHERE rolname = 'neon_superuser'");
+          criou = rowCount === 0;
+          if (criou) await c.query('CREATE ROLE neon_superuser NOLOGIN');
+          await c.query(`GRANT neon_superuser TO ${papel}`);
+        },
+        async (verificar) => {
+          await expect(verificar()).rejects.toThrow(/neon_superuser/);
+        },
+      );
+    } finally {
+      if (criou)
+        await comCliente(process.env.DATABASE_URL_TESTE ?? '', (c) => c.query('DROP ROLE IF EXISTS neon_superuser'));
+    }
+  });
+
   it('AD-023: papel que lê usuarios.senha_hash falha', async () => {
     await comPapelRuim(
       'NOSUPERUSER',
