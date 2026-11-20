@@ -499,6 +499,41 @@ describe('resumo no modo livro (FUN-153, FUN-157, FUN-162)', () => {
     expect(screen.getByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeInTheDocument();
   });
 
+  it('A-13 FUN-162: ligado na tela estreita em um livro, ir a outro e voltar deixa o resumo desligado', async () => {
+    const outro = indice.livros[47]!; // Gálatas: outro livro, com o texto guardado no cache
+    await duble.cache(CACHE_LIVROS).put(
+      outro.arquivo,
+      new Response(
+        JSON.stringify({
+          numero: outro.numero,
+          nome: outro.nome,
+          capitulos: Array.from({ length: outro.capitulos }, (_, c) => [`${outro.nome} ${c + 1}:1`]),
+        }),
+      ),
+    );
+    await abrirRomanos({ larga: false });
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('article', { name: 'Resumo de Romanos' })).toBeInTheDocument();
+
+    // Com o resumo ligado o título do livro continua na tela: é por ele que se escolhe outro livro.
+    const irPara = async (livro: { nome: string; capitulos: number }) => {
+      fireEvent.click(screen.getByRole('button', { name: /\. Escolher outro capítulo$/ }));
+      fireEvent.click(screen.getByRole('button', { name: 'Trocar livro' }));
+      fireEvent.click(screen.getByRole('button', { name: `${livro.nome}, ${livro.capitulos} capítulos` }));
+      fireEvent.click(screen.getByRole('button', { name: 'Capítulo 1' }));
+      expect(await screen.findByRole('button', { name: new RegExp(`^${livro.nome} 1\\.`) })).toBeInTheDocument();
+    };
+    await irPara(outro);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByRole('article', { name: /^Resumo de / })).toBeNull();
+
+    await irPara({ nome: 'Romanos', capitulos: 16 });
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByRole('article', { name: 'Resumo de Romanos' })).toBeNull();
+    expect(screen.getByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeInTheDocument();
+  });
+
   it('FUN-162: com o resumo ligado na tela larga, abrir na estreita mostra a Bíblia com o botão não pressionado', async () => {
     localStorage.setItem(CHAVES.resumo, 'true');
     await abrirRomanos({ larga: false });
