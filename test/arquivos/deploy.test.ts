@@ -199,6 +199,35 @@ describe('deploy.yml: a migração tem job próprio, sem o token da Cloudflare (
   });
 });
 
+/**
+ * A-18: a conferência do papel do app roda a cada deploy, depois da migração e antes do publicar; um papel alterado
+ * depois no Console do Neon para o deploy. Fica no mesmo passo de `pnpm migrar`: a URL do banco continua em um só passo.
+ */
+describe('deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, FUN-144, FUN-147)', () => {
+  const migrar = job('migrar');
+  const passo = passos(migrar).find((p) => /pnpm migrar/.test(p)) ?? '';
+  const comandos = passo.split(/\r?\n/);
+  const iMigrar = comandos.findIndex((c) => /pnpm migrar/.test(c));
+  const iConferir = comandos.findIndex((c) => /conferir_papel_app\('mj_app'\)/.test(c));
+
+  it("A-18: o passo roda `SELECT conferir_papel_app('mj_app')` com psql na URL do dono, depois de `pnpm migrar`", () => {
+    expect(iMigrar).toBeGreaterThanOrEqual(0);
+    expect(iConferir).toBeGreaterThan(iMigrar);
+    expect(comandos[iConferir]).toMatch(/psql\b.*\$DATABASE_URL_DONO/);
+    expect(comandos[iConferir]).toMatch(/ON_ERROR_STOP=1/);
+  });
+
+  it('A-18: o passo sem token da Cloudflare, e a falha da conferência pára o job (sem `|| true` nem continue-on-error)', () => {
+    expect(passo).not.toMatch(/CLOUDFLARE|wrangler/i);
+    expect(passo).not.toMatch(/\|\|\s*true|continue-on-error/);
+    expect(migrar).not.toMatch(/continue-on-error/);
+  });
+
+  it('A-18: o publicar espera o migrar (a conferência vermelha impede o deploy)', () => {
+    expect(job('publicar')).toMatch(/needs:\s*\[[^\]]*\bmigrar\b/);
+  });
+});
+
 describe('deploy.yml: a fumaça da API exige 401 e no-store e a falha volta a versão (FUN-147, FUN-151)', () => {
   const lista = passos(job('publicar'));
   const api = lista.find((p) => /Fumaça da API/.test(p)) ?? '';

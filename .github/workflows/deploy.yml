@@ -101,10 +101,13 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Migrar o banco antes de publicar
+      # A conferência do papel roda a cada deploy: papel alterado depois no Console do Neon para o deploy (A-18).
+      - name: Migrar o banco e conferir o papel do app antes de publicar
         env:
           DATABASE_URL_DONO: ${{ secrets.DATABASE_URL_DONO }}
-        run: pnpm migrar
+        run: |
+          pnpm migrar
+          psql "$DATABASE_URL_DONO" -v ON_ERROR_STOP=1 -c "SELECT conferir_papel_app('mj_app')"
 
   publicar:
     needs: [construir, migrar]
