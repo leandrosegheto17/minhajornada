@@ -1309,6 +1309,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 
 ---
 
+Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes scripts test/arquivos/deploy.test.ts --reporter=dot @ fd88c13d23e3977e1071199ceb84cfa83680ebca = verde
+
 ### T48: Prova de FUN-152 sobre toda exportação local (A-02)
 
 **What**: `test/arquivos/resumos-fora-do-git.test.ts` varre todos os `*.json` de `resumos-exportados/` (não só `resumos.json`) e inclui os títulos da divisão e as frases dos versículos.
