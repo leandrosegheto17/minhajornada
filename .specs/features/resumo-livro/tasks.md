@@ -1489,9 +1489,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 
 **Done when**:
 
-- [ ] Arquivo só com recusados (e propostas) apaga os recusados publicados, com código 0
-- [ ] Arquivo sem aprovados nem recusados continua em "Nada a publicar", código 1
-- [ ] Gate verde
+- [x] Arquivo só com recusados (e propostas) apaga os recusados publicados, com código 0
+- [x] Arquivo sem aprovados nem recusados continua em "Nada a publicar", código 1
+- [x] Gate verde
 **Tests**: `scripts/resumos/publicar.test.ts` › "FUN-172 arquivo só com recusados remove o livro publicado"; "FUN-173 sem aprovados nem recusados: nada a publicar"
 **Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1510,8 +1510,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 
 **Done when**:
 
-- [ ] Três testes NOINHERIT, cada um falha com `pg_has_role(..., 'USAGE')` no lugar de `'MEMBER'`
-- [ ] Gate verde
+- [x] Três testes NOINHERIT, cada um falha com `pg_has_role(..., 'USAGE')` no lugar de `'MEMBER'`
+- [x] Gate verde
 **Tests**: `conferir-papel.test.ts` › "AD-023 papel NOINHERIT membro de <grupo> é recusado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes/conferir-papel.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1530,9 +1530,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 
 **Done when**:
 
-- [ ] Um teste por ramo novo (membresia em grupo comum NOINHERIT, TRUNCATE em cada tabela, INSERT, UPDATE de coluna e DELETE em `usuarios`), cada um falha sem a guarda
-- [ ] Papel `mj_app` correto (o da migração de papel) continua passando
-- [ ] Gate verde
+- [x] Um teste por ramo novo (membresia em grupo comum NOINHERIT, TRUNCATE em cada tabela, INSERT, UPDATE de coluna e DELETE em `usuarios`), cada um falha sem a guarda
+- [x] Papel `mj_app` correto (o da migração de papel) continua passando
+- [x] Gate verde
 **Tests**: `conferir-papel.test.ts` › "AD-023 papel com <privilégio> é recusado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1551,13 +1551,15 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 
 **Done when**:
 
-- [ ] Passo de conferência no job `migrar`, depois da migração, só com a URL do dono
-- [ ] Teste de arquivo: o passo existe, vem depois do `pnpm migrar` e não recebe segredo da Cloudflare
-- [ ] Gate verde
+- [x] Passo de conferência no job `migrar`, depois da migração, só com a URL do dono
+- [x] Teste de arquivo: o passo existe, vem depois do `pnpm migrar` e não recebe segredo da Cloudflare
+- [x] Gate verde
 **Tests**: `test/arquivos/deploy.test.ts` › "FUN-147 o job migrar confere o papel do app a cada deploy"
 **Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot` (pelo Git Bash)
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run scripts/resumos servidor/migracoes test/arquivos src/App.test.tsx --reporter=dot @ f2eedb2256e1176a9a6cb47c2ef4d7bb0a8eb60a = verde
 
 ### T58: Teste da troca de livro no resumo da tela estreita (A-13)
 
