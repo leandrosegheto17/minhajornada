@@ -6,7 +6,7 @@
 - **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019, AD-020, AD-022)
 - **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; 2 Reconhecimento (`reconhecimento.md`, AD-022) em 2026-11-19; 2b Mockup (`mockup/`, artifact https://claude.ai/artifact/MQKVxYCMLeavYaThufGqTA) em 2026-11-20; 3 Plano (`design.md`, `reuso.md`, `tasks.md`, AD-023, AD-024) em 2026-11-20; 4 Rede de proteção planejada (linha de base, sem T0) em 2026-11-20
 - **Próxima fase**: planejamento concluído. Próximo: `/preparar` (nova rodada: Postgres local e `DATABASE_URL_TESTE` no Nível 1, exigidos a partir da T1; Neon, papel `mj_app`, Hyperdrive, `DATABASE_URL_DONO`, `URL_PUBLICA` e id livre do `ratelimits` no Nível 2) e depois `/executar` (Sonnet)
-- **Serviços no ar**: nenhum
+- **Serviços no ar**: container `minhajornada-postgres` (postgres:18, 127.0.0.1:55433, usuário `mj_dono`, banco `minhajornada`); testes com `DATABASE_URL_TESTE=postgresql://mj_dono:senha-so-local@127.0.0.1:55433/minhajornada` (derrubar ao fim da feature)
 - **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro: faltam 41 de 41 tarefas
 - **Combinado na conversa e não registrado em artefato**: nada; escolhas do dono de 2026-11-20 (papel `mj_app`, propostas na T41) estão na AD-023 e no `tasks.md`
 
@@ -26,6 +26,7 @@
 | 2026-11-19 | 3 | livro-paginas | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-19 | 3 | livro-paginas | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-19 | 12 | convite-coberto-iphone | /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /executar | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
