@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { resumoCorrecoes } from './biblia/correcoesAplicadas';
 import { indice } from './biblia/indice';
 import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
+import { gravarResumoLigado, lerResumoLigado } from './dados/preferencias';
 import { useLeitor } from './estado/useLeitor';
 import { useSessao } from './estado/useSessao';
+import { PaginaResumo } from './livro/PaginaResumo';
 import { useTelaLarga } from './livro/useTelaLarga';
 import { TelaLivro } from './telas/TelaLivro';
 import { TelaCapitulos } from './telas/TelaCapitulos';
@@ -26,6 +29,25 @@ export function App() {
   const larga = useTelaLarga();
   const { estado, carga } = leitor;
   const ref = estado.ref;
+
+  // Resumo no modo livro (FUN-153, FUN-157, FUN-162): na tela larga a escolha é gravada; na estreita fica só na memória
+  // e vale para o livro em que foi ligada (trocar de livro a desliga).
+  const [resumoLarga, setResumoLarga] = useState(lerResumoLigado);
+  const [resumoEstreita, setResumoEstreita] = useState<number | null>(null);
+  const numeroLivro =
+    estado.ancora.tipo === 'texto' ? estado.ancora.ref.livro : estado.ancora.tipo === 'fim' ? estado.ancora.livro : 0;
+  const comBotaoResumo =
+    sessao.sessao === 'dono' && estado.tela === 'leitor' && estado.formato === 'livro' && numeroLivro > 0;
+  const resumoLigado = larga ? resumoLarga : resumoEstreita === numeroLivro;
+  const modoResumo = !comBotaoResumo || !resumoLigado ? 'desligado' : larga ? 'lado' : 'sozinho';
+  const alternarResumo = () => {
+    if (larga) {
+      gravarResumoLigado(!resumoLarga);
+      setResumoLarga(!resumoLarga);
+    } else {
+      setResumoEstreita(resumoEstreita === numeroLivro ? null : numeroLivro);
+    }
+  };
 
   const voltarALeitura = () => leitor.irPara('leitor');
   const abrirSobre = () => leitor.irPara('sobre');
@@ -61,6 +83,17 @@ export function App() {
         aoTocarTitulo={leitor.tocarTitulo}
         aoEscolherOutroLivro={leitor.trocarLivro}
         aoQueroSaber={leitor.abrirEmBreve}
+        resumo={modoResumo}
+        paginaResumo={
+          modoResumo === 'desligado' ? undefined : (
+            <PaginaResumo
+              numeroLivro={numeroLivro}
+              nome={indice.livros[numeroLivro - 1]?.nome ?? ''}
+              aoPerderSessao={sessao.perder}
+              letra={estado.letra}
+            />
+          )
+        }
       />
     );
   } else if (estado.tela === 'leitor' && ref && carga) {
@@ -112,6 +145,7 @@ export function App() {
         aoAbrirConta={leitor.abrirEntrar}
         comSessao={sessao.sessao !== 'sem'}
         aoSair={() => void sessao.sair()}
+        resumo={comBotaoResumo ? { ligado: resumoLigado, aoAlternar: alternarResumo } : undefined}
         aoMudarLetra={leitor.mudarLetra}
         aoEscolherTema={leitor.escolherTema}
       />

@@ -39,6 +39,13 @@ interface Props {
   aoEscolherOutroLivro: () => void;
   /** "Quero saber" do plano pago (FUN-92). */
   aoQueroSaber: () => void;
+  /**
+   * Resumo do livro (FUN-154 a FUN-162): `lado` (tela larga) deixa uma página da Bíblia à esquerda e o resumo à direita;
+   * `sozinho` (tela estreita) mostra só o resumo, sem passar página da Bíblia; capa e plano pago o ignoram (FUN-159).
+   */
+  resumo?: 'desligado' | 'lado' | 'sozinho';
+  /** A página do resumo do livro aberto; só é usada com `resumo` diferente de `desligado`. */
+  paginaResumo?: ReactNode;
   /** Medida injetada nos testes (o jsdom não tem layout). */
   medir?: Medir;
 }
@@ -76,6 +83,8 @@ export function TelaLivro({
   aoTocarTitulo,
   aoEscolherOutroLivro,
   aoQueroSaber,
+  resumo = 'desligado',
+  paginaResumo,
   medir,
 }: Props) {
   const livro: Livro | null = carga?.situacao === 'pronto' ? carga.livro : null;
@@ -105,16 +114,24 @@ export function TelaLivro({
     if (ancora.tipo === 'fim' && paginas) aoIrParaAncora(ancoraDaPagina(paginas, blocos, total - 1, ancora.livro));
   }, [ancora, paginas, total, blocos, aoIrParaAncora]);
 
+  // Com o resumo à direita a Bíblia mostra uma página por vez, como na tela estreita (FUN-154, FUN-155); a capa e o
+  // plano pago seguem pela largura da tela (FUN-159). Com o resumo sozinho não se passa página da Bíblia (FUN-160).
+  const duasPaginas = larga && resumo !== 'lado';
+  const soResumo = resumo === 'sozinho';
+
   function destino(sentido: 'seguinte' | 'anterior'): Ancora | null {
     if (ancora.tipo === 'capa' || ancora.tipo === 'pago') {
       const d = destinoDaCapa(ancora.tipo, sentido, larga);
       return d && 'ancora' in d ? d.ancora : null;
     }
     if (!paginas) return null;
+    if (soResumo) return null;
     const d =
       sentido === 'seguinte'
-        ? destinoSeguinte(atual, total, numeroLivro, larga)
-        : destinoAnterior(atual, total, numeroLivro, larga);
+        ? destinoSeguinte(atual, total, numeroLivro, duasPaginas)
+        : destinoAnterior(atual, total, numeroLivro, duasPaginas);
+    // Em Gênesis, "anterior" com o resumo à direita vai à capa, como na tela larga sem resumo (FUN-90).
+    if (d && 'ancora' in d && d.ancora.tipo === 'pago' && larga) return { tipo: 'capa' };
     return comoAncora(d, paginas, blocos, numeroLivro);
   }
 
@@ -159,8 +176,8 @@ export function TelaLivro({
     <main
       className={estilo.livro}
       aria-label="Leitura em formato livro"
-      onPointerDown={aoComecarDeslize}
-      onPointerUp={aoTerminarDeslize}
+      onPointerDown={soResumo && !emCapa ? undefined : aoComecarDeslize}
+      onPointerUp={soResumo && !emCapa ? undefined : aoTerminarDeslize}
       onPointerCancel={() => {
         inicioDeslize.current = null;
       }}
@@ -206,7 +223,7 @@ export function TelaLivro({
   }
 
   const nomeLivro = indice.livros[numeroLivro - 1]?.nome ?? '';
-  const mostradas = livro && paginas ? visiveis(atual, larga, total) : [];
+  const mostradas = livro && paginas ? visiveis(atual, duasPaginas, total) : [];
   const primeira = paginas ? primeiroVersiculo(paginas[mostradas[0] ?? 0] ?? { partes: [] }, blocos) : null;
   const capitulo = primeira?.ref.capitulo ?? (ancora.tipo === 'texto' ? ancora.ref.capitulo : 1);
   const titulo = `${nomeLivro} ${capitulo}`;
@@ -248,18 +265,21 @@ export function TelaLivro({
             <span className={estilo['livro__posicao']}>{posicao}</span>
           </div>
           <div className={estilo['livro__aberto']}>
-            {mostradas.map((indicePagina, i) => (
-              <PaginaLivro
-                key={indicePagina}
-                livro={livro}
-                blocos={blocos}
-                pagina={paginas[indicePagina] ?? { partes: [] }}
-                numero={indicePagina + 1}
-                lado={mostradas.length === 2 ? (i === 0 ? 'esquerda' : 'direita') : 'unica'}
-              />
-            ))}
+            {soResumo
+              ? paginaResumo
+              : mostradas.map((indicePagina, i) => (
+                  <PaginaLivro
+                    key={indicePagina}
+                    livro={livro}
+                    blocos={blocos}
+                    pagina={paginas[indicePagina] ?? { partes: [] }}
+                    numero={indicePagina + 1}
+                    lado={mostradas.length === 2 || resumo === 'lado' ? (i === 0 ? 'esquerda' : 'direita') : 'unica'}
+                  />
+                ))}
+            {resumo === 'lado' ? paginaResumo : null}
           </div>
-          {navegacao}
+          {soResumo ? null : navegacao}
         </>
       ) : (
         <Estado variante="carregando" rotulo={`Carregando ${nomeLivro}`} />

@@ -114,3 +114,34 @@ describe('BarraTitulo', () => {
     expect(barra.className).toMatch(/barra-titulo/);
   });
 });
+
+describe('botão "Resumo" (FUN-153, FUN-157, FUN-162)', () => {
+  it('FUN-153: sem a prop `resumo` não há botão "Resumo"', () => {
+    render(<BarraTitulo {...props('livro')} />);
+    expect(screen.queryByRole('button', { name: 'Resumo' })).toBeNull();
+  });
+
+  it('FUN-153: com a prop, a ordem é marca, formato, "Resumo", Aa, Sobre e conta', () => {
+    render(<BarraTitulo {...props('livro')} resumo={{ ligado: false, aoAlternar: vi.fn() }} />);
+    const nomes = screen.getAllByRole('button').map((b) => b.getAttribute('aria-label'));
+    expect(nomes).toEqual([
+      'MinhaJornada, página inicial',
+      'Ler em rolagem',
+      'Resumo',
+      'Aparência: letra e tema',
+      'Sobre o MinhaJornada',
+      'Entrar ou criar conta',
+    ]);
+  });
+
+  it('FUN-162: `aria-pressed` acompanha `ligado` e o clique alterna', () => {
+    const aoAlternar = vi.fn();
+    const { rerender } = render(<BarraTitulo {...props('livro')} resumo={{ ligado: false, aoAlternar }} />);
+    const botao = screen.getByRole('button', { name: 'Resumo' });
+    expect(botao).toHaveAttribute('aria-pressed', 'false');
+    fireEvent.click(botao);
+    expect(aoAlternar).toHaveBeenCalledTimes(1);
+    rerender(<BarraTitulo {...props('livro')} resumo={{ ligado: true, aoAlternar }} />);
+    expect(screen.getByRole('button', { name: 'Resumo' })).toHaveAttribute('aria-pressed', 'true');
+  });
+});
