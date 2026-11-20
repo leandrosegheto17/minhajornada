@@ -15,6 +15,22 @@ concurrency:
 jobs:
   base:
     runs-on: ubuntu-latest
+    # Banco dos testes do servidor (AD-022): o superusuário do serviço cria e apaga os bancos `teste_<hex>` (FUN-141 a
+    # FUN-175). A senha é só deste serviço descartável, nunca de um ambiente real.
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: mj_dono
+          POSTGRES_PASSWORD: senha-so-do-ci
+          POSTGRES_DB: minhajornada
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U mj_dono -d minhajornada"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -28,6 +44,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+        env:
+          DATABASE_URL_TESTE: postgresql://mj_dono:senha-so-do-ci@127.0.0.1:5432/minhajornada
 
   e2e:
     runs-on: ubuntu-latest
