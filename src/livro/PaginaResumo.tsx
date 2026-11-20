@@ -215,13 +215,17 @@ export function PaginaResumo({ numeroLivro, nome, aoPerderSessao, letra = 0, bus
   return (
     <>
       {resumo ? (
-        <div className={`${livro.pagina} ${livro.medida} ${estilo['pagina-resumo']}`} aria-hidden="true">
-          <div className={livro['pagina__texto']} ref={refMedida}>
-            {blocos.map((bloco) => bloco.desenhar(0))}
+        // O invólucro não é `.pagina`: na tela estreita `.pagina + .pagina` esconde a página seguinte, e o contêiner de
+        // medida (uma `.pagina`) escondia o resumo; fora do fluxo da grade, ele também não ocupa coluna.
+        <div className={estilo['involucro-medida']}>
+          <div className={`${livro.pagina} ${livro.medida} ${estilo['pagina-resumo']}`} aria-hidden="true">
+            <div className={livro['pagina__texto']} ref={refMedida}>
+              {blocos.map((bloco) => bloco.desenhar(0))}
+            </div>
+            <footer className={livro['pagina__rodape']}>
+              <span>&nbsp;</span>
+            </footer>
           </div>
-          <footer className={livro['pagina__rodape']}>
-            <span>&nbsp;</span>
-          </footer>
         </div>
       ) : null}
       <article
