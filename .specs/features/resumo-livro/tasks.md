@@ -832,11 +832,11 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] "Entrar / Criar conta" abre a tela "Entrar" (testes trocados com motivo no commit) (FUN-137)
-- [ ] Login de dono volta à tela de origem e a barra mostra "Sair" com o mesmo texto no rótulo acessível (FUN-138, FUN-142)
-- [ ] "Sair" chama `sair`, mostra "Entrar / Criar conta" e esconde o botão "Resumo" (FUN-143)
-- [ ] `perder()` faz o mesmo sem mensagem (FUN-145); abertura sem rede com `mj:dono` mantém o estado de dono
-- [ ] Gate quick verde
+- [x] "Entrar / Criar conta" abre a tela "Entrar" (testes trocados com motivo no commit) (FUN-137)
+- [x] Login de dono volta à tela de origem e a barra mostra "Sair" com o mesmo texto no rótulo acessível (FUN-138, FUN-142)
+- [x] "Sair" chama `sair`, mostra "Entrar / Criar conta" e esconde o botão "Resumo" (FUN-143)
+- [x] `perder()` faz o mesmo sem mensagem (FUN-145); abertura sem rede com `mj:dono` mantém o estado de dono
+- [x] Gate quick verde
 
 **Tests**: unit em `src/App.test.tsx` e `src/componentes/BarraTitulo.test.tsx`, nomes com o FUN de cada caso
 **Gate**: quick
@@ -858,15 +858,17 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] Independent Test de "Entrar e sair como dono" em 1280 × 800 e 390 × 844, com a API simulada
-- [ ] A rodada sem a mudança (barra indo ao "em breve") falha o teste de FUN-137
-- [ ] Gate full verde (`e2e/entrar.spec.ts`)
+- [x] Independent Test de "Entrar e sair como dono" em 1280 × 800 e 390 × 844, com a API simulada
+- [x] A rodada sem a mudança (barra indo ao "em breve") falha o teste de FUN-137
+- [x] Gate full verde (`e2e/entrar.spec.ts`)
 
 **Tests**: e2e em `e2e/entrar.spec.ts`, nomes com o FUN de cada passo
 **Gate**: full
 **Commit**: `test(e2e): entrar e sair como dono`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos --reporter=dot @ 615f7f89404a7f0c8f0bcd579af4944259f74a5f = verde
 
 ### T29: Preferência "resumo ligado" (FUN-157)
 
