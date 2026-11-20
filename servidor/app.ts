@@ -4,6 +4,8 @@ import type { Deps } from './deps.ts';
 import { cabecalhos } from './middlewares/cabecalhos.ts';
 import { guarda } from './middlewares/guarda.ts';
 import { limiteEntrar } from './middlewares/limite.ts';
+import { logRequisicao } from './middlewares/log.ts';
+import { rotasDeAcesso } from './rotas/acesso.ts';
 
 /**
  * App Hono da API (AD-022, design: "Servidor"). Recebe as dependências por parâmetro: o Worker injeta Hyperdrive e o
@@ -14,10 +16,13 @@ import { limiteEntrar } from './middlewares/limite.ts';
  */
 export function criarApp(deps: Deps): Hono<AppEnv> {
   const app = new Hono<AppEnv>();
+  app.use('/api/*', logRequisicao(deps));
   app.use('/api/*', cabecalhos());
   app.use('/api/*', guarda(deps));
   app.use('/api/*', comBanco(deps.conectar));
   app.post('/api/entrar', limiteEntrar(deps));
+  // As rotas de acesso precisam do banco: sem `conectar` (testes de guarda e de limite) não são montadas.
+  if (deps.conectar) rotasDeAcesso(app, deps);
   // Rota desconhecida da API é 404 em JSON: sem isso o `not_found_handling` dos assets devolveria o index.html.
   // Falha não tratada (banco fora, erro de código): resposta genérica; o erro nunca vai ao corpo nem ao log, pois pode
   // carregar host, usuário ou senha do banco.
