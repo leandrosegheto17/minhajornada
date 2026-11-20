@@ -8,9 +8,9 @@ export interface Env {
   LIMITE_ENTRAR?: RateLimit;
 }
 
-/** Monta as dependências do app a partir do `env`; cada tarefa do servidor liga aqui o que passa a usar (T6, T10). */
+/** Monta as dependências do app a partir do `env`; cada tarefa do servidor liga aqui o que passa a usar (T10). */
 export function depsDoEnv(env: Env): Deps {
-  return { urlPublica: env.URL_PUBLICA };
+  return { urlPublica: env.URL_PUBLICA, limiteEntrar: env.LIMITE_ENTRAR };
 }
 
 // Só ligação: o que decide vive em `criarApp`, testado com dublês. Só /api/* chega aqui (`run_worker_first`).

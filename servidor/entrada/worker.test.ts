@@ -5,7 +5,11 @@ const ctx = { waitUntil: () => undefined, passThroughOnException: () => undefine
 
 describe('worker (ligação do Worker ao app)', () => {
   it('o fetch do Worker entrega /api/* ao app: rota desconhecida é 404 em JSON', async () => {
-    const resposta = await worker.fetch(new Request('https://minhajornada.ljssoftware.com.br/api/x'), {}, ctx);
+    const resposta = await worker.fetch(
+      new Request('https://minhajornada.ljssoftware.com.br/api/x'),
+      { URL_PUBLICA: 'https://minhajornada.ljssoftware.com.br' },
+      ctx,
+    );
     expect(resposta.status).toBe(404);
     expect(await resposta.json()).toEqual({ erro: 'nao_encontrado' });
   });
@@ -15,5 +19,11 @@ describe('worker (ligação do Worker ao app)', () => {
       'https://minhajornada-tst.ljssoftware.com.br',
     );
     expect(depsDoEnv({}).urlPublica).toBeUndefined();
+  });
+
+  it('o limite de login vem do binding LIMITE_ENTRAR', () => {
+    const limite = { limit: async () => ({ success: true }) };
+    expect(depsDoEnv({ LIMITE_ENTRAR: limite }).limiteEntrar).toBe(limite);
+    expect(depsDoEnv({}).limiteEntrar).toBeUndefined();
   });
 });
