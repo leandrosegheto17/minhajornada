@@ -8,6 +8,8 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "resumos:publicar": "node scripts/resumos/publicar.ts",
+    "criar-dono": "node scripts/criar-dono.ts",
     "migrar": "node --env-file-if-exists=.env node_modules/node-pg-migrate/bin/node-pg-migrate.js up -m servidor/migracoes --database-url-var DATABASE_URL_DONO --no-single-transaction",
     "converter-biblia": "node scripts/converter-biblia.ts",
     "predev": "node scripts/converter-biblia.ts",
