@@ -985,13 +985,13 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] Ligado: uma `PaginaLivro` à esquerda e o resumo à direita, posição "Gênesis, página X de Y" (FUN-154)
-- [ ] "Seguinte" e "Anterior" passam uma página por vez, com a quebra de capítulo, e o resumo continua (FUN-155)
-- [ ] Desligar na página 3 mostra o par que contém a página 3 (FUN-156)
-- [ ] Trocar de livro mostra à direita o resumo do livro novo (FUN-158)
-- [ ] Capa e plano pago com o resumo ligado: o par de hoje, sem resumo, e "seguinte" da capa vai a Gênesis (FUN-159)
-- [ ] Estados e transições listados antes de codar no commit; testes de capa e de FUN-73 a FUN-91 verdes
-- [ ] Gate quick verde
+- [x] Ligado: uma `PaginaLivro` à esquerda e o resumo à direita, posição "Gênesis, página X de Y" (FUN-154)
+- [x] "Seguinte" e "Anterior" passam uma página por vez, com a quebra de capítulo, e o resumo continua (FUN-155)
+- [x] Desligar na página 3 mostra o par que contém a página 3 (FUN-156)
+- [x] Trocar de livro mostra à direita o resumo do livro novo (FUN-158)
+- [x] Capa e plano pago com o resumo ligado: o par de hoje, sem resumo, e "seguinte" da capa vai a Gênesis (FUN-159)
+- [x] Estados e transições listados antes de codar no commit; testes de capa e de FUN-73 a FUN-91 verdes
+- [x] Gate quick verde
 
 **Tests**: unit em `src/telas/TelaLivro.test.tsx`, nomes com `FUN-154` a `FUN-159`
 **Gate**: quick
@@ -1013,10 +1013,10 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] `sozinho`: o resumo do livro aberto ocupa a página e não há botões "Página anterior/seguinte" da Bíblia; deslize não passa página (FUN-160)
-- [ ] Voltar a `desligado` mostra a mesma página da Bíblia de antes (FUN-161)
-- [ ] O título do capítulo continua o da Bíblia
-- [ ] Gate quick verde
+- [x] `sozinho`: o resumo do livro aberto ocupa a página e não há botões "Página anterior/seguinte" da Bíblia; deslize não passa página (FUN-160)
+- [x] Voltar a `desligado` mostra a mesma página da Bíblia de antes (FUN-161)
+- [x] O título do capítulo continua o da Bíblia
+- [x] Gate quick verde
 
 **Tests**: unit em `src/telas/TelaLivro.test.tsx`, nomes com `FUN-160` ou `FUN-161`
 **Gate**: quick
@@ -1038,17 +1038,19 @@ Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos
 
 **Done when**:
 
-- [ ] Botão só com sessão de dono, formato livro e livro aberto; sem sessão, sessão sem dono, capa, plano pago e rolagem: não existe (FUN-153)
-- [ ] Larga: alterna e grava `mj:resumo`; reabrir o app volta ligado (FUN-157)
-- [ ] Estreita: `aria-pressed="true"` com o resumo na tela (FUN-162); passar de larga ligada a estreita mostra a Bíblia, com o botão não pressionado
-- [ ] Ordem na barra: formato, "Resumo", "Aa"
-- [ ] Gate quick verde
+- [x] Botão só com sessão de dono, formato livro e livro aberto; sem sessão, sessão sem dono, capa, plano pago e rolagem: não existe (FUN-153)
+- [x] Larga: alterna e grava `mj:resumo`; reabrir o app volta ligado (FUN-157)
+- [x] Estreita: `aria-pressed="true"` com o resumo na tela (FUN-162); passar de larga ligada a estreita mostra a Bíblia, com o botão não pressionado
+- [x] Ordem na barra: formato, "Resumo", "Aa"
+- [x] Gate quick verde
 
 **Tests**: unit em `src/App.test.tsx` e `src/componentes/BarraTitulo.test.tsx`, nomes com `FUN-153`, `FUN-157` ou `FUN-162`
 **Gate**: quick
 **Commit**: `feat(app): botão resumo no modo livro`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src --reporter=dot @ 7f574ec4306c4ab9a786d18faab5d79a879b74ca = verde
 
 ### T36: Prova de tela do resumo em tela larga
 
