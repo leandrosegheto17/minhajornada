@@ -316,10 +316,10 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] Teste: migrar um banco vazio duas vezes não falha nem repete migração
-- [ ] Teste: falha provocada no meio do teste não deixa `teste_*` no cluster (consulta a `pg_database` depois)
-- [ ] Host fora da lista é recusado antes de conectar
-- [ ] Gate full verde
+- [x] Teste: migrar um banco vazio duas vezes não falha nem repete migração
+- [x] Teste: falha provocada no meio do teste não deixa `teste_*` no cluster (consulta a `pg_database` depois)
+- [x] Host fora da lista é recusado antes de conectar
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/migrar.test.ts`
 **Gate**: full
@@ -341,10 +341,10 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] `usuario_entrar` devolve o id com a senha certa e `NULL` com senha errada, e-mail inexistente, e-mail vazio e senha vazia (FUN-139)
-- [ ] `senha_hash` começa com `$2` (bcrypt) e nunca é igual à senha (FUN-141); `email` em caixa alta é recusado pelo `CHECK`
-- [ ] `resumos.livro` fora de 1 a 66 é recusado; apagar o usuário apaga as sessões
-- [ ] Gate full verde
+- [x] `usuario_entrar` devolve o id com a senha certa e `NULL` com senha errada, e-mail inexistente, e-mail vazio e senha vazia (FUN-139)
+- [x] `senha_hash` começa com `$2` (bcrypt) e nunca é igual à senha (FUN-141); `email` em caixa alta é recusado pelo `CHECK`
+- [x] `resumos.livro` fora de 1 a 66 é recusado; apagar o usuário apaga as sessões
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/migracoes/inicial.test.ts`, nomes com `FUN-139` ou `FUN-141`
 **Gate**: full
@@ -366,10 +366,10 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] Matriz como `mj_app`: `usuarios` — SELECT de `id, dono` passa, SELECT de `senha_hash` e `*` falham, INSERT, UPDATE (com e sem WHERE) e DELETE (com e sem WHERE) falham; `resumos` — SELECT passa, INSERT, UPDATE e DELETE (com e sem WHERE) falham; `sessoes` — SELECT, INSERT, UPDATE de `usada_em` e DELETE passam, UPDATE de `usuario_id` falha; `usuario_entrar` executa
-- [ ] Papel sem a concessão (PUBLIC) não executa `usuario_entrar`
-- [ ] Casos limite e estados listados antes de codar no commit
-- [ ] Gate full verde
+- [x] Matriz como `mj_app`: `usuarios` — SELECT de `id, dono` passa, SELECT de `senha_hash` e `*` falham, INSERT, UPDATE (com e sem WHERE) e DELETE (com e sem WHERE) falham; `resumos` — SELECT passa, INSERT, UPDATE e DELETE (com e sem WHERE) falham; `sessoes` — SELECT, INSERT, UPDATE de `usada_em` e DELETE passam, UPDATE de `usuario_id` falha; `usuario_entrar` executa
+- [x] Papel sem a concessão (PUBLIC) não executa `usuario_entrar`
+- [x] Casos limite e estados listados antes de codar no commit
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/migracoes/papel-app.test.ts`, nomes com `AD-023` e o FUN do item
 **Gate**: full
@@ -391,16 +391,18 @@ Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquiv
 
 **Done when**:
 
-- [ ] Erro provocado (`RAISE EXCEPTION`) dentro de `emTransacao` não deixa linha gravada
-- [ ] Requisição que consulta e a que não consulta terminam com a conexão fechada (contagem em `pg_stat_activity` ou dublê)
-- [ ] URL inválida: 500 `{ erro: 'interno' }` sem host nem senha no corpo nem no log
-- [ ] Gate full verde
+- [x] Erro provocado (`RAISE EXCEPTION`) dentro de `emTransacao` não deixa linha gravada
+- [x] Requisição que consulta e a que não consulta terminam com a conexão fechada (contagem em `pg_stat_activity` ou dublê)
+- [x] URL inválida: 500 `{ erro: 'interno' }` sem host nem senha no corpo nem no log
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/db/cliente.test.ts`
 **Gate**: full
 **Commit**: `feat(servidor): cliente do banco por requisição`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = verde
 
 ### T11: Token e cookie da sessão (FUN-138, FUN-141)
 
