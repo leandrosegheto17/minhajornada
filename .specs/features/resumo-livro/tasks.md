@@ -604,12 +604,12 @@ Gate: pnpm typecheck && pnpm test @ 5eea45f96d5ff53b5fe6882cfe60c19339795e4c = v
 
 **Done when**:
 
-- [ ] 4 aprovados e 1 recusado: grava 4, imprime "4 livros gravados" e o recusado não entra (FUN-173)
-- [ ] Publicar de novo com texto mudado substitui o livro (uma linha por livro) (FUN-173)
-- [ ] Um aprovado com "Gênesis 51:1": lista `Gênesis: …`, sai com código 1 e não conecta; o banco continua igual (FUN-174)
-- [ ] Falha provocada no 3º livro (gatilho `RAISE EXCEPTION` no teste): nenhum livro gravado (caso limite da spec)
-- [ ] Sem a variável de URL do ambiente: mensagem clara e código 1
-- [ ] Gate full verde
+- [x] 4 aprovados e 1 recusado: grava 4, imprime "4 livros gravados" e o recusado não entra (FUN-173)
+- [x] Publicar de novo com texto mudado substitui o livro (uma linha por livro) (FUN-173)
+- [x] Um aprovado com "Gênesis 51:1": lista `Gênesis: …`, sai com código 1 e não conecta; o banco continua igual (FUN-174)
+- [x] Falha provocada no 3º livro (gatilho `RAISE EXCEPTION` no teste): nenhum livro gravado (caso limite da spec)
+- [x] Sem a variável de URL do ambiente: mensagem clara e código 1
+- [x] Gate full verde
 
 **Tests**: integration em `scripts/resumos/publicar.test.ts`, nomes com `FUN-173` ou `FUN-174`
 **Gate**: full
@@ -631,9 +631,9 @@ Gate: pnpm typecheck && pnpm test @ 5eea45f96d5ff53b5fe6882cfe60c19339795e4c = v
 
 **Done when**:
 
-- [ ] Produção com resposta `PRODUÇÃO`: grava; com `sim`, vazio, `produção` ou entrada fechada: não conecta e sai com código 1 (FUN-175)
-- [ ] tst não pergunta
-- [ ] Gate full verde
+- [x] Produção com resposta `PRODUÇÃO`: grava; com `sim`, vazio, `produção` ou entrada fechada: não conecta e sai com código 1 (FUN-175)
+- [x] tst não pergunta
+- [x] Gate full verde
 
 **Tests**: integration em `scripts/resumos/publicar.test.ts`, nomes com `FUN-175`
 **Gate**: full
@@ -655,16 +655,18 @@ Gate: pnpm typecheck && pnpm test @ 5eea45f96d5ff53b5fe6882cfe60c19339795e4c = v
 
 **Done when**:
 
-- [ ] Depois do script, `usuario_entrar` com a senha dada devolve o id e o usuário tem `dono = true`; rodar de novo com outra senha troca a senha
-- [ ] E-mail em caixa alta é gravado em caixa baixa; senha vazia recusa
-- [ ] A senha não aparece na saída
-- [ ] Gate full verde
+- [x] Depois do script, `usuario_entrar` com a senha dada devolve o id e o usuário tem `dono = true`; rodar de novo com outra senha troca a senha
+- [x] E-mail em caixa alta é gravado em caixa baixa; senha vazia recusa
+- [x] A senha não aparece na saída
+- [x] Gate full verde
 
 **Tests**: integration em `scripts/criar-dono.test.ts`
 **Gate**: full
 **Commit**: `feat(servidor): script que cria o usuário dono`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 54ceaeeda23f48aa3f254ad0fcc44e90e6ac709f = verde
 
 ### T21: Pasta da exportação fora do git (FUN-152, FUN-176)
 
