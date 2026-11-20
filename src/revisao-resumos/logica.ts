@@ -13,11 +13,16 @@ export function aprovar(item: ItemRevisao, editado?: Resumo): ItemRevisao {
   return { livro: item.livro, estado: 'aprovada', resumo };
 }
 
-/** Recusa o resumo (FUN-172): exige uma nota que não seja vazia nem só espaço; o texto continua para refazer. */
-export function recusar(item: ItemRevisao, nota: string): ItemRevisao {
+/**
+ * Recusa o resumo (FUN-172): exige uma nota que não seja vazia nem só espaço. Com `editado`, o texto editado durante a
+ * revisão fica guardado, como em `aprovar` (A-05); sem ele, o texto continua o da proposta para refazer.
+ */
+export function recusar(item: ItemRevisao, nota: string, editado?: Resumo): ItemRevisao {
   const limpa = nota.trim();
   if (limpa === '') throw new Error('Escreva uma nota para recusar.');
-  return { livro: item.livro, estado: 'recusada', resumo: item.resumo, nota: limpa };
+  const resumo = editado ?? item.resumo;
+  if (resumo.livro !== item.livro) throw new Error(`o resumo editado é do livro ${resumo.livro}, não do ${item.livro}`);
+  return { livro: item.livro, estado: 'recusada', resumo, nota: limpa };
 }
 
 /**

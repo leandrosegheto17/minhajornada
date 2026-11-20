@@ -43,6 +43,22 @@ describe('revisão dos resumos: lógica (FUN-170 a FUN-172)', () => {
     expect(() => recusar(proposta(8), '   \n ')).toThrow('Escreva uma nota para recusar.');
   });
 
+  it('A-05 FUN-172: recusar com texto editado guarda o texto editado e a nota', () => {
+    const recusado = recusar(proposta(8), ' Refazer a mensagem. ', resumo(8, 'Editado antes de recusar.'));
+    expect(recusado).toMatchObject({
+      livro: 8,
+      estado: 'recusada',
+      nota: 'Refazer a mensagem.',
+      resumo: { contexto: 'Editado antes de recusar.' },
+    });
+    expect(recusar(proposta(8), 'Nota.').resumo).toEqual(proposta(8).resumo);
+  });
+
+  it('A-05 FUN-172: recusar com texto editado de outro livro falha, e sem nota continua falhando', () => {
+    expect(() => recusar(proposta(8), 'Nota.', resumo(1))).toThrow(/livro 1/);
+    expect(() => recusar(proposta(8), '  ', resumo(8, 'Editado.'))).toThrow('Escreva uma nota para recusar.');
+  });
+
   it('FUN-172: o recusado leva a nota na exportação e não sai como aprovado', () => {
     const arquivo = exportar([recusar(proposta(41), '  Linguagem difícil. '), aprovar(proposta(8))]);
     const marcos = arquivo.itens.find((i) => i.livro === 41);

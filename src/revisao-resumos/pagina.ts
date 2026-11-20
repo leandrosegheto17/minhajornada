@@ -102,6 +102,13 @@ export async function iniciar(
   }
   let atual = itens[0]?.livro ?? null;
   let erro = '';
+  let alertaEl: HTMLElement | null = null;
+
+  // O aviso troca só o texto do alerta: redesenhar a página recriaria as caixas de texto e perderia a edição (A-06).
+  function mostrarErro(mensagem: string): void {
+    erro = mensagem;
+    if (alertaEl !== null) alertaEl.textContent = mensagem;
+  }
 
   async function guardar(novo: ItemRevisao): Promise<void> {
     try {
@@ -109,7 +116,8 @@ export async function iniciar(
       itens = itens.map((i) => (i.livro === novo.livro ? novo : i));
       erro = '';
     } catch (falha) {
-      erro = `Não foi possível gravar: ${(falha as Error).message}`;
+      mostrarErro(`Não foi possível gravar: ${(falha as Error).message}`);
+      return;
     }
     desenhar();
   }
@@ -146,10 +154,9 @@ export async function iniciar(
       nota.bloco,
       botao('Recusar', () => {
         try {
-          void guardar(recusar(item, nota.ler()));
+          void guardar(recusar(item, nota.ler(), editado()));
         } catch (falha) {
-          erro = (falha as Error).message;
-          desenhar();
+          mostrarErro((falha as Error).message);
         }
       }),
     );
@@ -164,6 +171,7 @@ export async function iniciar(
       botao('Baixar exportação', () => baixar(NOME_EXPORTACAO, `${JSON.stringify(exportar(itens), null, 2)}\n`)),
     );
     const alerta = el('p', erro, { role: 'alert' });
+    alertaEl = alerta;
 
     const lista = el('nav', undefined, { 'aria-label': 'Livros' });
     for (const item of itens) {

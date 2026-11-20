@@ -87,6 +87,47 @@ describe('revisão dos resumos: página (FUN-170 a FUN-172)', () => {
     expect(banco.gravados[0]).toMatchObject({ estado: 'recusada', nota: 'Linguagem difícil.' });
   });
 
+  it('A-05 FUN-172: editar o contexto e recusar com nota grava recusada com o texto editado', async () => {
+    const banco = bancoDuble([item(8)]);
+    await montar(banco);
+    fireEvent.input(screen.getByLabelText('Contexto'), { target: { value: 'Contexto ajustado.' } });
+    fireEvent.input(screen.getByLabelText('Nota da recusa'), { target: { value: 'Refazer a mensagem.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Recusar' }));
+    await waitFor(() => expect(banco.gravados).toHaveLength(1));
+    expect(banco.gravados[0]).toMatchObject({
+      estado: 'recusada',
+      nota: 'Refazer a mensagem.',
+      resumo: { contexto: 'Contexto ajustado.' },
+    });
+  });
+
+  it('A-06 FUN-172: recusar sem nota mostra o erro e mantém o texto digitado nas seções', async () => {
+    const banco = bancoDuble([item(8)]);
+    await montar(banco);
+    fireEvent.input(screen.getByLabelText('Contexto'), { target: { value: 'Contexto ajustado.' } });
+    fireEvent.input(screen.getByLabelText('Mensagem central'), { target: { value: 'Mensagem ajustada.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Recusar' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Escreva uma nota para recusar.');
+    expect(screen.getByLabelText('Contexto')).toHaveValue('Contexto ajustado.');
+    expect(screen.getByLabelText('Mensagem central')).toHaveValue('Mensagem ajustada.');
+    expect(banco.gravados).toHaveLength(0);
+  });
+
+  it('A-06 FUN-171: falha ao gravar mostra o aviso e mantém o texto editado (nada vira aprovado)', async () => {
+    const banco: BancoResumos = {
+      carregar: async () => [item(8)],
+      gravar: async () => {
+        throw new Error('banco fora do ar');
+      },
+    };
+    await montar(banco);
+    fireEvent.input(screen.getByLabelText('Contexto'), { target: { value: 'Contexto ajustado.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Aprovar' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Não foi possível gravar: banco fora do ar');
+    expect(screen.getByLabelText('Contexto')).toHaveValue('Contexto ajustado.');
+    expect(screen.getByRole('button', { name: 'Rute · proposta' })).toBeInTheDocument();
+  });
+
   it('FUN-170: texto com <img src=x> aparece literal, sem elemento img', async () => {
     const { raiz } = await montar(
       bancoDuble([{ ...item(8), estado: 'recusada', nota: '<img src=x onerror=alert(1)>' }]),
