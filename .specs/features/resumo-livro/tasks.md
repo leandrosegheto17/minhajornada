@@ -1574,12 +1574,14 @@ Gate: pnpm typecheck && pnpm exec vitest run scripts/resumos servidor/migracoes 
 
 **Done when**:
 
-- [ ] Teste falha com o efeito de `src/App.tsx:42` dependendo só de `[larga]`
-- [ ] Gate verde
+- [x] Teste falha com o efeito de `src/App.tsx:42` dependendo só de `[larga]`
+- [x] Gate verde
 **Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ fdcfad26074f8206995ca06a3a1abd44ec48215a = verde
 
 ## Depois da feature (fora do `/executar`)
 
