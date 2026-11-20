@@ -18,11 +18,11 @@ export interface OpcoesCriarDono {
 // bcrypt de custo 12 no próprio banco (AD-022); o e-mail em caixa baixa é exigido pelo CHECK da tabela. Trocar a senha
 // encerra as sessões abertas do usuário no mesmo comando (A-09): um cookie roubado não sobrevive à troca.
 const SQL = `WITH gravado AS (
-    INSERT INTO usuarios (email, senha_hash, dono) VALUES ($1, crypt($2, gen_salt('bf', 12)), true)
+    INSERT INTO public.usuarios (email, senha_hash, dono) VALUES ($1, crypt($2, gen_salt('bf', 12)), true)
     ON CONFLICT (email) DO UPDATE SET senha_hash = EXCLUDED.senha_hash, dono = true
     RETURNING id
   ), encerradas AS (
-    DELETE FROM sessoes WHERE usuario_id IN (SELECT id FROM gravado)
+    DELETE FROM public.sessoes WHERE usuario_id IN (SELECT id FROM gravado)
   )
   SELECT count(*)::int AS n FROM gravado`;
 

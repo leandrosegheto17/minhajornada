@@ -24,6 +24,8 @@ export async function migrar(url: string, opcoes: OpcoesMigrar = {}): Promise<st
     dir: join(pasta, '*.sql').replaceAll('\\', '/'),
     useGlob: true,
     migrationsTable: TABELA_MIGRACOES,
+    // `SET search_path TO "public"`: um schema com o nome do papel dono não recebe as tabelas (A-22).
+    schema: 'public',
     direction: 'up',
     count: Infinity,
     singleTransaction: false,

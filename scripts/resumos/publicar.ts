@@ -32,11 +32,12 @@ export interface OpcoesPublicar {
   erro: (linha: string) => void;
 }
 
-const SQL_GRAVAR = `INSERT INTO resumos (livro, conteudo, publicado_em) VALUES ($1, $2::jsonb, now())
+const SQL_GRAVAR = `INSERT INTO public.resumos (livro, conteudo, publicado_em) VALUES ($1, $2::jsonb, now())
   ON CONFLICT (livro) DO UPDATE SET conteudo = EXCLUDED.conteudo, publicado_em = now()`;
 
+// Tabela com schema: um schema com o nome do papel dono sombrearia `resumos` no search_path padrão (A-22).
 // Livro recusado depois de publicado sai do banco (FUN-172, A-12): só os `recusada` do arquivo, nunca os `proposta`.
-const SQL_REMOVER = 'DELETE FROM resumos WHERE livro = ANY($1::int[])';
+const SQL_REMOVER = 'DELETE FROM public.resumos WHERE livro = ANY($1::int[])';
 
 /** Devolve o código de saída: 0 gravou; 1 recusou ou falhou (nesse caso nada foi gravado). */
 export async function publicar(opcoes: OpcoesPublicar): Promise<number> {

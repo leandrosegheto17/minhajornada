@@ -32,6 +32,25 @@ describe('migrar e banco de teste (T7, base de FUN-141 a FUN-149)', () => {
     });
   });
 
+  // A-22: com um schema de mesmo nome que o papel dono, `"$user"` vem antes de `public` no search_path padrão e a migração
+  // (e a tabela de controle) iriam para lá; a migração fixa `public`.
+  it('A-22 FUN-173: com um schema com o nome do dono, a migração e a tabela de controle ficam em public', async () => {
+    const pasta = pastaComMigracao();
+    await bancoDeTeste(async (url) => {
+      await comCliente(url, async (c) => {
+        const { rows } = await c.query('SELECT current_user AS usuario');
+        await c.query(`CREATE SCHEMA "${rows[0].usuario}"`);
+      });
+      expect(await migrar(url, { pasta })).toHaveLength(1);
+      const { rows } = await comCliente(url, (c) =>
+        c.query(
+          "SELECT to_regclass('public.exemplo') IS NOT NULL AS tabela, to_regclass('public.pgmigrations') IS NOT NULL AS controle",
+        ),
+      );
+      expect(rows[0]).toEqual({ tabela: true, controle: true });
+    });
+  });
+
   it('falha provocada no meio do teste não deixa banco teste_* no cluster', async () => {
     let nome = '';
     await expect(

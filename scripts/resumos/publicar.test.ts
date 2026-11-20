@@ -224,6 +224,34 @@ describe('A-12 FUN-172 FUN-173: livro recusado sai da publicação', () => {
     expect(s.conexoes).toBe(0);
   });
 
+  // A-22: com um schema de mesmo nome que o papel dono e uma tabela `resumos` nele, o SQL sem schema gravaria lá.
+  it('A-22 FUN-173: com um schema sombra com o nome do dono, publicar grava em public.resumos', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const sombra = await comCliente(url, async (c) => {
+          const { rows } = await c.query('SELECT current_user AS usuario');
+          const usuario = rows[0].usuario as string;
+          await c.query(`CREATE SCHEMA "${usuario}"`);
+          await c.query(`CREATE TABLE "${usuario}".resumos (LIKE public.resumos INCLUDING ALL)`);
+          return usuario;
+        });
+        const s = await rodar(
+          arquivoCom([
+            [1, 'aprovada'],
+            [3, 'recusada'],
+          ]),
+          { env: { DATABASE_URL_TST: url } },
+        );
+        expect(s.codigo).toBe(0);
+        const publicos = await comCliente(url, (c) => c.query('SELECT livro FROM public.resumos ORDER BY livro'));
+        expect(publicos.rows.map((l) => l.livro)).toEqual([1]);
+        const fora = await comCliente(url, (c) => c.query(`SELECT livro FROM "${sombra}".resumos`));
+        expect(fora.rows).toEqual([]);
+      },
+      { migrado: true },
+    );
+  });
+
   it('FUN-173: falha provocada depois da remoção desfaz a remoção (tudo ou nada)', async () => {
     await bancoDeTeste(
       async (url) => {
