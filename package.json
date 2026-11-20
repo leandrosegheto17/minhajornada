@@ -17,6 +17,7 @@
     "prebuild": "node scripts/converter-biblia.ts",
     "build": "vite build",
     "revisao:montar": "vite build --config revisao/vite.config.ts",
+    "revisao-resumos:montar": "vite build --config revisao-resumos/vite.config.ts",
     "build:e2e": "node scripts/converter-biblia.ts --correcoes test/arquivos/dados/correcoes-exemplo.json && vite build --outDir dist-e2e",
     "preview": "vite preview",
     "lint": "eslint . && prettier --check .",
