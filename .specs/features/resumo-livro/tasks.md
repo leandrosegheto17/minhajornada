@@ -1602,9 +1602,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 
 **Done when**:
 
-- [ ] A chamada usa `public.conferir_papel_app` e o `search_path` fixo
-- [ ] Teste de arquivo falha sem o `public.` e sem o `search_path`
-- [ ] Gate verde
+- [x] A chamada usa `public.conferir_papel_app` e o `search_path` fixo
+- [x] Teste de arquivo falha sem o `public.` e sem o `search_path`
+- [x] Gate verde
 **Tests**: `test/arquivos/deploy.test.ts` › "A-19 FUN-147 a conferência chama public.conferir_papel_app com search_path fixo"
 **Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot` (pelo Git Bash)
 
@@ -1623,9 +1623,9 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 
 **Done when**:
 
-- [ ] Um teste por ramo novo (dono do banco, CREATE no banco, CREATE em `public`, CREATE em outro schema, dono de schema), cada um falha sem a guarda
-- [ ] O `mj_app` da migração de papel continua passando
-- [ ] Gate verde
+- [x] Um teste por ramo novo (dono do banco, CREATE no banco, CREATE em `public`, CREATE em outro schema, dono de schema), cada um falha sem a guarda
+- [x] O `mj_app` da migração de papel continua passando
+- [x] Gate verde
 **Tests**: `conferir-papel.test.ts` › "AD-023 A-20 papel <condição> é recusado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1644,8 +1644,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 
 **Done when**:
 
-- [ ] Um teste por ramo (REPLICATION, TRIGGER e REFERENCES em cada tabela, SELECT em `usuarios.email`), cada um falha sem a guarda; o de `senha_hash` continua
-- [ ] Gate verde
+- [x] Um teste por ramo (REPLICATION, TRIGGER e REFERENCES em cada tabela, SELECT em `usuarios.email`), cada um falha sem a guarda; o de `senha_hash` continua
+- [x] Gate verde
 **Tests**: `conferir-papel.test.ts` › "AD-023 A-21 papel <condição> é recusado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1664,13 +1664,15 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 
 **Done when**:
 
-- [ ] Com um schema `<papel dono>` contendo uma tabela `resumos`, publicar grava em `public.resumos` (teste com banco real, schema apagado no `finally`)
-- [ ] Teste de arquivo: o script `migrar` fixa o `search_path`
-- [ ] Gate verde
+- [x] Com um schema `<papel dono>` contendo uma tabela `resumos`, publicar grava em `public.resumos` (teste com banco real, schema apagado no `finally`)
+- [x] Teste de arquivo: o script `migrar` fixa o `search_path`
+- [x] Gate verde
 **Tests**: `publicar.test.ts` › "A-22 FUN-173 publicar grava em public.resumos mesmo com schema sombra"; `test/arquivos/` › "A-22 migrar fixa o search_path"
 **Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos test/arquivos --reporter=dot` (com `DATABASE_URL_TESTE`)
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --reporter=dot @ 3a8f9afd7efe4570716ac94bf7205db9a3f91723 = verde
 
 ## Depois da feature (fora do `/executar`)
 
