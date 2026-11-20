@@ -4,11 +4,11 @@
 
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
 - **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019, AD-020, AD-022)
-- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; 2 Reconhecimento (`reconhecimento.md`, AD-022) em 2026-11-19; 2b Mockup (`mockup/`, artifact https://claude.ai/artifact/MQKVxYCMLeavYaThufGqTA) em 2026-11-20
-- **Próxima fase**: 3 Plano (`tlc-spec-driven` Design e Tasks) — modelo indicado: opus. Gravar `reuso.md` com uma linha por arquivo de origem dos moldes do `reconhecimento.md` (GestaoDaPelada_v2 `c95e0dce`, ControleEmCasa_LJS `41debe6`, treInAmento `d2acb96`), conferência spec × design, e a seção Segurança padrão de app web do `CLAUDE.md` no primeiro lote do servidor. O `/preparar` precisa de nova rodada (banco local no Nível 1; Neon, Hyperdrive, segredos e ids livres do `ratelimits` no Nível 2)
+- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; 2 Reconhecimento (`reconhecimento.md`, AD-022) em 2026-11-19; 2b Mockup (`mockup/`, artifact https://claude.ai/artifact/MQKVxYCMLeavYaThufGqTA) em 2026-11-20; 3 Plano (`design.md`, `reuso.md`, `tasks.md`, AD-023, AD-024) em 2026-11-20; 4 Rede de proteção planejada (linha de base, sem T0) em 2026-11-20
+- **Próxima fase**: planejamento concluído. Próximo: `/preparar` (nova rodada: Postgres local e `DATABASE_URL_TESTE` no Nível 1, exigidos a partir da T1; Neon, papel `mj_app`, Hyperdrive, `DATABASE_URL_DONO`, `URL_PUBLICA` e id livre do `ratelimits` no Nível 2) e depois `/executar` (Sonnet)
 - **Serviços no ar**: nenhum
-- **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro sem tarefas ainda
-- **Combinado na conversa e não registrado em artefato**: nada; decisões do dono estão na tabela de premissas do `spec.md`, na AD-022 e em `## Autorizações` (2026-11-19, resumo-livro)
+- **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro: faltam 41 de 41 tarefas
+- **Combinado na conversa e não registrado em artefato**: nada; escolhas do dono de 2026-11-20 (papel `mj_app`, propostas na T41) estão na AD-023 e no `tasks.md`
 
 ## Modelo
 

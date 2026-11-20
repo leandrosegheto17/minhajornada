@@ -23,6 +23,16 @@
 
 ---
 
+## Linha de base
+
+- **Comando**: `pnpm typecheck && pnpm test` (`.specs/projeto/testes.json`), pelo Git Bash
+- **Resultado**: rodado em 2026-11-20 no commit `dbc2363`: typecheck verde; Vitest 60 arquivos, 1.015 testes, todos passando (36,9 s)
+- **Falhas preexistentes**: nenhuma. Aviso de ambiente: Node 26 local fora de `engines` (`>=24 <25`). O `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`: rode pelo Git Bash. Depois da T1, a suíte exige o Postgres local no ar (`DATABASE_URL_TESTE`, Nível 1 do `/preparar`)
+- **T0 (rede de proteção)**: não precisa. Os comportamentos tocados têm teste: modo livro e folhear (`src/telas/TelaLivro.test.tsx:60-475`, `src/livro/folhear.test.ts:13-148`, `e2e/livro.spec.ts`, `e2e/livro-tela-cheia.spec.ts`, `e2e/capa.spec.ts`), barra (`src/componentes/BarraTitulo.test.tsx:21-85`), app (`src/App.test.tsx`), medida (`src/livro/useMedidas.test.ts`), `voltarPara` (`src/estado/leitor.test.ts`), preferências (`src/dados/preferencias.test.ts`), Worker e deploy (`test/arquivos/wrangler.test.ts:25-36`, `test/arquivos/deploy.test.ts:45-227`, `test/arquivos/cabecalhos.test.ts:35-74`) e a navegação do service worker (`e2e/sw.spec.ts:11-40`, FUN-35)
+- **Regra do /executar**: nenhuma falha nova; a suíte inteira e o E2E rodam ao fim da feature
+
+---
+
 ## Test Coverage Matrix
 
 > Gerada do código, das regras e da spec. Guidelines encontradas: `.claude/CLAUDE.md` (Execução, Testes, Segurança padrão), `vite.config.ts:65-88`, `.specs/projeto/testes.json`. Amostras: `src/dados/livros.test.ts`, `src/telas/TelaLivro.test.tsx`, `src/componentes/BarraTitulo.test.tsx`, `src/revisao/logica.test.ts`, `test/arquivos/wrangler.test.ts`, `test/arquivos/deploy.test.ts`, `e2e/livro.spec.ts`; servidor: T `guarda.test.ts:21-132`, G `test/apoio/banco.ts:35-58`.
