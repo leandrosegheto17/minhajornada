@@ -254,6 +254,41 @@ describe('AD-023: conferência dos privilégios do papel do app', () => {
     );
   });
 
+  // A-21: REPLICATION lê as gravações pelo slot lógico sem privilégio de tabela; TRIGGER roda código como o dono;
+  // REFERENCES trava a tabela; e o app lê só `id` e `dono` de usuarios (e-mail é dado pessoal).
+  it('AD-023 A-21: papel com REPLICATION falha', async () => {
+    await comPapelRuim('NOSUPERUSER REPLICATION', nada, async (verificar) => {
+      await expect(verificar()).rejects.toThrow(/rolreplication/);
+    });
+  });
+
+  it.each([
+    ['TRIGGER', 'resumos'],
+    ['TRIGGER', 'usuarios'],
+    ['TRIGGER', 'sessoes'],
+    ['REFERENCES', 'resumos'],
+    ['REFERENCES', 'usuarios'],
+    ['REFERENCES', 'sessoes'],
+  ])('AD-023 A-21: papel com %s em %s falha', async (comando, tabela) => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`GRANT ${comando} ON ${tabela} TO ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(new RegExp(`${comando}.* ${tabela}`));
+      },
+    );
+  });
+
+  it.each([['email'], ['criado_em']])('AD-023 A-21: papel que lê usuarios.%s falha', async (coluna) => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`GRANT SELECT (${coluna}) ON usuarios TO ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(new RegExp(`usuarios\\.${coluna}`));
+      },
+    );
+  });
+
   it('AD-023: papel que lê usuarios.senha_hash falha', async () => {
     await comPapelRuim(
       'NOSUPERUSER',
