@@ -96,3 +96,23 @@ describe('wrangler.jsonc: Worker com script em /api/* (AD-022, FUN-140, FUN-151)
     expect(texto).not.toMatch(/password|senha\s*[:=]/i);
   });
 });
+
+describe('A-08 FUN-143 FUN-144: o Hyperdrive não guarda consultas em cache', () => {
+  const preparacao = readFileSync(join(process.cwd(), '.specs', 'preparacao.md'), 'utf8');
+  const bruto = readFileSync(CAMINHO, 'utf8');
+
+  it('A-08: o Nível 2 do /preparar manda criar os Hyperdrive de tst e de produção com --caching-disabled', () => {
+    const item = preparacao.split('\n').find((l) => /Hyperdrive/.test(l) && /--caching-disabled/.test(l)) ?? '';
+    expect(item).not.toBe('');
+    expect(item).toMatch(/tst/);
+    expect(item).toMatch(/produção/);
+    expect(item).toMatch(/\[ \]|\[x\]/); // é um item da lista de verificação
+  });
+
+  it('A-08: o wrangler.jsonc registra a decisão ao lado dos dois Hyperdrive (sessão encerrada não pode valer)', () => {
+    const comentario = bruto.split('\n').filter((l) => l.trimStart().startsWith('//') && /--caching-disabled/.test(l));
+    expect(comentario.length).toBeGreaterThanOrEqual(1);
+    expect(lerWrangler().hyperdrive).toHaveLength(1);
+    expect(lerWrangler().env?.tst?.hyperdrive).toHaveLength(1);
+  });
+});

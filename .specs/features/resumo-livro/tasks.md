@@ -1355,8 +1355,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 
 **Done when**:
 
-- [ ] O teste de FUN-152 varre todo `*.json` de `resumos-exportados/` e deixa de ser pulado
-- [ ] Gate verde
+- [x] O teste de FUN-152 varre todo `*.json` de `resumos-exportados/` e deixa de ser pulado
+- [x] Gate verde
 **Tests**: o próprio teste deixa de ser pulado com `propostas.json` presente
 **Gate**: `pnpm exec vitest run test/arquivos/resumos-fora-do-git.test.ts --reporter=dot`
 
@@ -1375,8 +1375,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 
 **Done when**:
 
-- [ ] Nenhum aviso de `key` do React na página do resumo
-- [ ] Gate verde
+- [x] Nenhum aviso de `key` do React na página do resumo
+- [x] Gate verde
 **Tests**: `src/livro/PaginaResumo.test.tsx` › sem aviso de `key` no `console.error`
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/livro --reporter=dot`
 
@@ -1395,8 +1395,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 
 **Done when**:
 
-- [ ] Resumo da tela estreita desligado ao trocar de livro ou de largura
-- [ ] Gate verde
+- [x] Resumo da tela estreita desligado ao trocar de livro ou de largura
+- [x] Gate verde
 **Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
 
@@ -1415,8 +1415,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 
 **Done when**:
 
-- [ ] Recusar com texto editado guarda o editado e a nota
-- [ ] Gate verde
+- [x] Recusar com texto editado guarda o editado e a nota
+- [x] Gate verde
 **Tests**: `logica.test.ts` e `pagina.test.ts` › "FUN-172 recusar com edição guarda o texto editado e a nota"
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
 
@@ -1435,8 +1435,8 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 
 **Done when**:
 
-- [ ] Erro ao recusar ou gravar mostra o aviso e preserva o texto digitado
-- [ ] Gate verde
+- [x] Erro ao recusar ou gravar mostra o aviso e preserva o texto digitado
+- [x] Gate verde
 **Tests**: `pagina.test.ts` › editar, recusar sem nota: o texto editado continua; banco dublê que lança: o texto continua e o aviso aparece
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
 
@@ -1455,12 +1455,14 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 
 **Done when**:
 
-- [ ] Registro do `--caching-disabled` do Hyperdrive no Nível 2 e no `wrangler.jsonc`, com teste
-- [ ] Gate verde
+- [x] Registro do `--caching-disabled` do Hyperdrive no Nível 2 e no `wrangler.jsonc`, com teste
+- [x] Gate verde
 **Tests**: `test/arquivos/wrangler.test.ts` › o `preparacao.md` pede `--caching-disabled` para os dois Hyperdrive
 **Gate**: `pnpm exec vitest run test/arquivos/wrangler.test.ts --reporter=dot`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revisao-resumos test/arquivos --reporter=dot @ 11a505cca3412cf07745e31d82f8a32c6309302c = verde
 
 ## Depois da feature (fora do `/executar`)
 

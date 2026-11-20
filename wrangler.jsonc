@@ -21,6 +21,8 @@
   "routes": [{ "pattern": "minhajornada.ljssoftware.com.br", "custom_domain": true }],
   // Origem pública do ambiente: base da guarda de Host (421) e de origem (403).
   "vars": { "URL_PUBLICA": "https://minhajornada.ljssoftware.com.br" },
+  // Os dois Hyperdrive (aqui e em env.tst) são criados com `--caching-disabled` (A-08): o cache de consultas manteria uma
+  // sessão encerrada ou vencida valendo por até 60 s. O /preparar cria e registra a evidência.
   "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "SUBSTITUIR-NO-PREPARAR-HYPERDRIVE-PRODUCAO" }],
   // Limite de login (FUN-140): 5 tentativas por 60 s por IP. O namespace_id é único na conta Cloudflare
   // (ocupados: 2001-2005, 3001-3005, 3101-3105); o /preparar confirma que este está livre.
