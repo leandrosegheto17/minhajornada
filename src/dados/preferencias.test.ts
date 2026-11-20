@@ -7,10 +7,12 @@ import {
   gravarFormato,
   gravarLeitura,
   gravarLetra,
+  gravarResumoLigado,
   gravarTema,
   lerFormato,
   lerLeitura,
   lerLetra,
+  lerResumoLigado,
   lerTema,
 } from './preferencias';
 
@@ -152,6 +154,45 @@ describe('convite de instalação (FUN-47)', () => {
     dispensarConvite();
     expect(conviteDispensado()).toBe(true);
     expect(localStorage.getItem(CHAVES.convite)).toBe('true');
+  });
+});
+
+describe('resumo ligado (FUN-157)', () => {
+  it('FUN-157: sem escolha lê false e não grava nada', () => {
+    expect(lerResumoLigado()).toBe(false);
+    expect(localStorage.getItem(CHAVES.resumo)).toBeNull();
+  });
+
+  it('FUN-157: grava e lê true e false na chave mj:resumo', () => {
+    gravarResumoLigado(true);
+    expect(localStorage.getItem('mj:resumo')).toBe('true');
+    expect(lerResumoLigado()).toBe(true);
+    gravarResumoLigado(false);
+    expect(localStorage.getItem('mj:resumo')).toBe('false');
+    expect(lerResumoLigado()).toBe(false);
+  });
+
+  it.each([['"sim"'], ['1'], ['null'], ['{"a":1}'], ['não é json']])(
+    'FUN-157: valor inválido %s lê false e é apagado',
+    (bruto) => {
+      localStorage.setItem(CHAVES.resumo, bruto);
+      expect(lerResumoLigado()).toBe(false);
+      expect(localStorage.getItem(CHAVES.resumo)).toBeNull();
+    },
+  );
+
+  it('FUN-157: localStorage que lança não quebra', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('SecurityError');
+    });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('QuotaExceededError');
+    });
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      throw new Error('SecurityError');
+    });
+    expect(() => gravarResumoLigado(true)).not.toThrow();
+    expect(lerResumoLigado()).toBe(false);
   });
 });
 

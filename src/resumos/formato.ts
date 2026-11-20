@@ -85,6 +85,11 @@ function lerResumo(valor: unknown, onde: string): Resumo {
   };
 }
 
+/** Confere a forma de um resumo já lido do JSON (resposta da API): campo a mais ou tipo errado lança. */
+export function lerResumoJson(valor: unknown): Resumo {
+  return lerResumo(valor, 'resumo');
+}
+
 /**
  * Lê o arquivo exportado pela revisão com forma estrita: campo desconhecido em qualquer nível, estado fora de
  * proposta/aprovada/recusada, livro fora de 1 a 66 (ou diferente do livro do resumo, ou repetido) e tipo errado
