@@ -180,6 +180,12 @@ T58
 T59 → T60 → T61 → T62
 ```
 
+### Phase 20: Retrabalho R4 (crítica)
+
+```
+T63 → T64 → T65 → T66 → T67
+```
+
 ---
 
 ## Task Breakdown
@@ -1673,6 +1679,109 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 ---
 
 Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --reporter=dot @ 3a8f9afd7efe4570716ac94bf7205db9a3f91723 = verde
+
+### T63: `pnpm migrar` só lê as migrações `.sql` (A-25)
+
+**What**: Tirar os testes de `servidor/migracoes/` (mover `conferir-papel.test.ts`, `inicial.test.ts` e `papel-app.test.ts` para `servidor/test/migracoes/`, só os imports mudam) para o CLI do `node-pg-migrate` ler só os `.sql`; teste que roda o script `migrar` do `package.json` num banco descartável e confere as migrações aplicadas.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `servidor/migrar.test.ts` (molde do banco descartável); `package.json:13`
+**Requirement**: FUN-147 · Achado: A-25 (validation.md, rodada 4)
+
+**Done when**:
+
+- [ ] Os testes movidos passam iguais (só caminho e import mudam; nenhuma asserção muda)
+- [ ] `pnpm migrar` num banco descartável sai com 0 e aplica todas as migrações (teste que falha com um `.test.ts` na pasta)
+- [ ] Gate verde
+**Tests**: `servidor/migrar.test.ts` › "A-25 FUN-147 o script migrar do package.json aplica as migrações num banco descartável"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T64: Teste do `public.` no DELETE do publicar (A-23)
+
+**What**: Reforçar o teste do schema sombra de `scripts/resumos/publicar.test.ts`: semear 1 e 3 em `public.resumos` antes, publicar com 1 aprovado e 3 recusado, esperar `public.resumos` só com [1] e a sombra vazia. Só teste (o código já tem `public.`).
+**Estimativa**: 30 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T63
+**Reuses**: `scripts/resumos/publicar.test.ts:227-253`
+**Requirement**: FUN-172, FUN-173 · Achado: A-23 (validation.md, rodada 4)
+
+**Done when**:
+
+- [ ] O teste falha com o `DELETE` de `publicar.ts:40` sem `public.`
+- [ ] Gate verde
+**Tests**: `publicar.test.ts` › "A-22 FUN-173: com um schema sombra com o nome do dono, publicar grava em public.resumos" (reforçado; teste desta feature, de T62)
+**Gate**: `pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T65: criar-dono com schema fixo nas tabelas e nas funções (A-24)
+
+**What**: `scripts/criar-dono.ts`: `public.crypt(..., public.gen_salt('bf', 12))`; teste com schema sombra do nome do dono (cópias de `usuarios` e `sessoes` e uma `crypt` falsa): usuário gravado e sessão apagada em `public`, a sombra intocada e o hash é bcrypt de verdade.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T64
+**Reuses**: `scripts/criar-dono.test.ts:131-178` (molde); teste do schema sombra de `publicar.test.ts`
+**Requirement**: FUN-141, FUN-143 · Achado: A-24 (validation.md, rodada 4)
+
+**Done when**:
+
+- [ ] O teste falha sem o `public.` em cada tabela e em `crypt`/`gen_salt`
+- [ ] Gate verde
+**Tests**: `criar-dono.test.ts` › "A-24 FUN-141 com schema sombra, criar-dono grava e encerra sessões em public com bcrypt real"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T66: Conferência imune a sobrecarga e a objetos do papel (A-26)
+
+**What**: Nova migração (substitui a função, sem editar as aplicadas): recusa papel dono de qualquer função, tabela/visão/sequência ou tipo (`pg_proc.proowner`, `pg_class.relowner`, `pg_type.typowner`) e chama `public.conferir_papel_app('mj_app'::name)`; o passo do `deploy.yml` passa a usar `'mj_app'::name`.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T65
+**Reuses**: `servidor/migracoes/1795133100000_conferir_papel_app_atributos.sql` (molde); `comPapelRuim` de `conferir-papel.test.ts`; `test/arquivos/deploy.test.ts` (A-19)
+**Requirement**: FUN-144 (AD-023), FUN-147 · Achado: A-26 (validation.md, rodada 4)
+
+**Done when**:
+
+- [ ] Um teste por ramo (dono de função, de tabela, de tipo), cada um falha sem a guarda
+- [ ] Teste com a sobrecarga `(text)` falsa em `public`: a chamada com `::name` ainda recusa um papel SUPERUSER
+- [ ] Teste de arquivo: o deploy chama com `::name`
+- [ ] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-26 …"; `deploy.test.ts` › "A-26 FUN-147 a conferência chama com 'mj_app'::name"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor test/arquivos/deploy.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T67: REFERENCES por coluna recusado (A-27)
+
+**What**: Na função da T66: `has_any_column_privilege(papel, tabela, 'REFERENCES')` no lugar da checagem da tabela inteira, nas três tabelas.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T66
+**Reuses**: migração da T66; testes de REFERENCES de `conferir-papel.test.ts`
+**Requirement**: FUN-144 (AD-023) · Achado: A-27 (validation.md, rodada 4)
+
+**Done when**:
+
+- [ ] Teste com `GRANT REFERENCES (email) ON usuarios` (e uma coluna de cada outra tabela) recusa, e falha sem a mudança
+- [ ] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-27 papel com REFERENCES em coluna de <tabela> falha"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
 
 ## Depois da feature (fora do `/executar`)
 

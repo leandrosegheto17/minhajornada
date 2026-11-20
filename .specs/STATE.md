@@ -30,6 +30,7 @@
 | 2026-11-20 | 3 | resumo-livro | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-20 | 3 | resumo-livro | /validar rodada 2 | Sonnet | Opus (escolha do usuário) |
 | 2026-11-20 | 3 | resumo-livro | /validar rodada 3 | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /validar rodada 4 | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
