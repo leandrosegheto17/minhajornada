@@ -174,6 +174,12 @@ T54 → T55 → T56 → T57
 T58
 ```
 
+### Phase 19: Retrabalho R3 (crítica)
+
+```
+T59 → T60 → T61 → T62
+```
+
 ---
 
 ## Task Breakdown
@@ -1582,6 +1588,89 @@ Gate: pnpm typecheck && pnpm exec vitest run scripts/resumos servidor/migracoes 
 ---
 
 Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ fdcfad26074f8206995ca06a3a1abd44ec48215a = verde
+
+### T59: Conferência do papel no deploy com schema e search_path fixos (A-19)
+
+**What**: No passo do job `migrar` de `.github/workflows/deploy.yml`, chamar `SELECT public.conferir_papel_app('mj_app')` com `PGOPTIONS='-c search_path=pg_catalog'`, para um schema com o nome do dono não sombrear a função.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `.github/workflows/deploy.yml:104-110`; `test/arquivos/deploy.test.ts:206-229` (molde)
+**Requirement**: FUN-144, FUN-147 · Achado: A-19 (validation.md, rodada 3)
+
+**Done when**:
+
+- [ ] A chamada usa `public.conferir_papel_app` e o `search_path` fixo
+- [ ] Teste de arquivo falha sem o `public.` e sem o `search_path`
+- [ ] Gate verde
+**Tests**: `test/arquivos/deploy.test.ts` › "A-19 FUN-147 a conferência chama public.conferir_papel_app com search_path fixo"
+**Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot` (pelo Git Bash)
+
+---
+
+### T60: Conferência recusa dono do banco, CREATE e dono de schema (A-20)
+
+**What**: Nova migração que substitui `conferir_papel_app` (`CREATE OR REPLACE`, sem editar as aplicadas): recusa o papel membro de `pg_database_owner` (ou `datdba` do banco atual), com `CREATE` no banco atual, com `CREATE` em qualquer schema que não seja de sistema nem temporário, e dono de qualquer schema.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T59
+**Reuses**: `servidor/migracoes/1795132980000_conferir_papel_app_completa.sql` (molde da função); `servidor/migracoes/conferir-papel.test.ts` (`comPapelRuim`, um teste por condição)
+**Requirement**: FUN-144 (AD-023) · Achado: A-20 (validation.md, rodada 3)
+
+**Done when**:
+
+- [ ] Um teste por ramo novo (dono do banco, CREATE no banco, CREATE em `public`, CREATE em outro schema, dono de schema), cada um falha sem a guarda
+- [ ] O `mj_app` da migração de papel continua passando
+- [ ] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-20 papel <condição> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T61: Conferência recusa REPLICATION, TRIGGER, REFERENCES e leitura de colunas de usuarios (A-21)
+
+**What**: Na função da T60: recusar `rolreplication`; recusar `TRIGGER` e `REFERENCES` em `resumos`, `usuarios` e `sessoes`; trocar a checagem só de `senha_hash` por uma volta pelas colunas de `usuarios` que recusa SELECT em qualquer coluna fora de `id` e `dono`.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T60
+**Reuses**: migração da T60; `conferir-papel.test.ts` (molde)
+**Requirement**: FUN-144 (AD-023) · Achado: A-21 (validation.md, rodada 3)
+
+**Done when**:
+
+- [ ] Um teste por ramo (REPLICATION, TRIGGER e REFERENCES em cada tabela, SELECT em `usuarios.email`), cada um falha sem a guarda; o de `senha_hash` continua
+- [ ] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-21 papel <condição> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T62: search_path fixo na conexão do publicar e da migração (A-22)
+
+**What**: A conexão do `scripts/resumos/publicar.ts` (e do `criar-dono.ts`, se usa o mesmo cliente) fixa `search_path=public` (opção `options: '-c search_path=public'` no cliente ou `SET search_path` no início da transação); o script `migrar` do `package.json` passa o mesmo `search_path` ao `node-pg-migrate` (`PGOPTIONS`).
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T61
+**Reuses**: `scripts/resumos/publicar.ts:35-39`; `scripts/resumos/publicar.test.ts` (molde); `package.json:13`
+**Requirement**: FUN-173 · Achado: A-22 (validation.md, rodada 3)
+
+**Done when**:
+
+- [ ] Com um schema `<papel dono>` contendo uma tabela `resumos`, publicar grava em `public.resumos` (teste com banco real, schema apagado no `finally`)
+- [ ] Teste de arquivo: o script `migrar` fixa o `search_path`
+- [ ] Gate verde
+**Tests**: `publicar.test.ts` › "A-22 FUN-173 publicar grava em public.resumos mesmo com schema sombra"; `test/arquivos/` › "A-22 migrar fixa o search_path"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos test/arquivos --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
 
 ## Depois da feature (fora do `/executar`)
 
