@@ -8,6 +8,7 @@
     "pnpm": ">=11 <12"
   },
   "scripts": {
+    "migrar": "node --env-file-if-exists=.env node_modules/node-pg-migrate/bin/node-pg-migrate.js up -m servidor/migracoes --database-url-var DATABASE_URL_DONO --no-single-transaction",
     "converter-biblia": "node scripts/converter-biblia.ts",
     "predev": "node scripts/converter-biblia.ts",
     "dev": "vite",
