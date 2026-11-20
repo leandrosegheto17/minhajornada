@@ -178,6 +178,82 @@ describe('AD-023: conferência dos privilégios do papel do app', () => {
     );
   });
 
+  // A-20: dono do banco (membro implícito de `pg_database_owner`, dono do schema `public`), CREATE no banco ou num schema e
+  // dono de schema deixam o papel apagar ou sombrear objetos do dono; a conferência os recusa.
+  it('AD-023 A-20: papel dono do banco falha', async () => {
+    let dono = '';
+    let banco = '';
+    await comPapelRuim(
+      'NOSUPERUSER',
+      async (c, papel) => {
+        const { rows } = await c.query(
+          'SELECT current_database() AS banco, pg_get_userbyid(datdba) AS dono FROM pg_database WHERE datname = current_database()',
+        );
+        banco = rows[0].banco;
+        dono = rows[0].dono;
+        await c.query(`ALTER DATABASE "${banco}" OWNER TO ${papel}`);
+      },
+      async (verificar) => {
+        try {
+          await expect(verificar()).rejects.toThrow(/dono do banco/);
+        } finally {
+          await comCliente(process.env.DATABASE_URL_TESTE ?? '', (c) =>
+            c.query(`ALTER DATABASE "${banco}" OWNER TO "${dono}"`),
+          );
+        }
+      },
+    );
+  });
+
+  it('AD-023 A-20: papel com CREATE no banco falha', async () => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      async (c, papel) => {
+        const { rows } = await c.query('SELECT current_database() AS banco');
+        await c.query(`GRANT CREATE ON DATABASE "${rows[0].banco}" TO ${papel}`);
+      },
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(/CREATE no banco/);
+      },
+    );
+  });
+
+  it('AD-023 A-20: papel com CREATE no schema public falha', async () => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`GRANT CREATE ON SCHEMA public TO ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(/CREATE no schema public/);
+      },
+    );
+  });
+
+  it('AD-023 A-20: papel com CREATE em outro schema falha', async () => {
+    const schema = `teste_schema_${randomBytes(4).toString('hex')}`;
+    await comPapelRuim(
+      'NOSUPERUSER',
+      async (c, papel) => {
+        await c.query(`CREATE SCHEMA ${schema}`);
+        await c.query(`GRANT CREATE ON SCHEMA ${schema} TO ${papel}`);
+      },
+      async (verificar) => {
+        // O schema nasce no banco descartável do teste e some com ele.
+        await expect(verificar()).rejects.toThrow(new RegExp(`CREATE no schema ${schema}`));
+      },
+    );
+  });
+
+  it('AD-023 A-20: papel dono de um schema falha', async () => {
+    const schema = `teste_schema_${randomBytes(4).toString('hex')}`;
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`CREATE SCHEMA ${schema} AUTHORIZATION ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(new RegExp(`dono do schema ${schema}`));
+      },
+    );
+  });
+
   it('AD-023: papel que lê usuarios.senha_hash falha', async () => {
     await comPapelRuim(
       'NOSUPERUSER',
