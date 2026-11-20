@@ -127,17 +127,20 @@ describe('deploy.yml: a fumaça confere os cabeçalhos do FUN-42 (A-05)', () => 
   });
 });
 
-/** Migração do banco e fumaça da API (resumo-livro, T22; FUN-147, FUN-151). */
+/**
+ * Migração do banco e fumaça da API (resumo-livro, T22; FUN-147, FUN-151). Desde a A-11 a migração roda no job
+ * `migrar`, que o `publicar` espera; as garantias da T22 continuam as mesmas, agora lidas nesse job.
+ */
 describe('deploy.yml: migração antes do deploy; a URL do banco só nesse passo (AD-022)', () => {
-  const lista = passos(job('publicar'));
+  const lista = passos(job('migrar'));
   const migrar = lista.find((p) => /pnpm migrar/.test(p)) ?? '';
-  const deploy = lista.findIndex((p) => /pnpm exec wrangler deploy/.test(p));
+  const publicar = job('publicar');
 
-  it('FUN-147: o passo de migração existe, roda `pnpm migrar` e vem antes de `wrangler deploy`', () => {
+  it('FUN-147: o passo de migração existe, roda `pnpm migrar` e o publicar só começa depois dele', () => {
     expect(migrar).not.toBe('');
     expect(lista.indexOf(migrar)).toBeGreaterThanOrEqual(0);
-    expect(deploy).toBeGreaterThan(-1);
-    expect(lista.indexOf(migrar)).toBeLessThan(deploy);
+    expect(publicar).toMatch(/needs:\s*\[[^\]]*\bmigrar\b/);
+    expect(publicar).toMatch(/pnpm exec wrangler deploy/);
   });
 
   it('FUN-147: o passo de migração tem DATABASE_URL_DONO de um segredo e não tem o token da Cloudflare', () => {
@@ -148,16 +151,51 @@ describe('deploy.yml: migração antes do deploy; a URL do banco só nesse passo
   it('FUN-147: nenhum outro passo, job ou env de job tem a URL do banco', () => {
     const fora = texto.replace(migrar, '');
     expect(fora).not.toMatch(/DATABASE_URL/);
-    for (const nome of ['conferir', 'construir', 'publicar']) {
+    for (const nome of ['conferir', 'construir', 'migrar', 'publicar']) {
       const antesDosPassos = job(nome).split(/\n {4}steps:/)[0] ?? '';
       expect(antesDosPassos, `${nome}: env de job`).not.toMatch(/DATABASE_URL|secrets\./);
     }
   });
 
   it('FUN-147: o token da Cloudflare continua só nos passos do wrangler (deploy e rollback)', () => {
-    for (const p of lista.filter((q) => /CLOUDFLARE_API_TOKEN/.test(q))) {
+    for (const p of passos(publicar).filter((q) => /CLOUDFLARE_API_TOKEN/.test(q))) {
       expect(p).toMatch(/pnpm exec wrangler (deploy|rollback)/);
     }
+  });
+});
+
+/** A-11: a migração roda num job próprio, sem o token da Cloudflare; o `publicar` só executa o wrangler. */
+describe('deploy.yml: a migração tem job próprio, sem o token da Cloudflare (A-11, SEC-001)', () => {
+  const migrar = job('migrar');
+  const publicar = job('publicar');
+
+  it('A-11: existe o job migrar, depois do construir, que roda `pnpm migrar` com DATABASE_URL_DONO de um segredo', () => {
+    expect(migrar).not.toBe('');
+    expect(migrar).toMatch(/needs:\s*\[?\s*construir/);
+    expect(passos(migrar).filter((p) => /pnpm migrar/.test(p))).toHaveLength(1);
+    expect(migrar).toMatch(/DATABASE_URL_DONO: \${\{ secrets\.DATABASE_URL_DONO \}\}/);
+  });
+
+  it('A-11: o job migrar não tem nenhum vestígio da Cloudflare nem do wrangler', () => {
+    expect(migrar).not.toMatch(/CLOUDFLARE|wrangler/i);
+  });
+
+  it('A-11: o migrar usa o mesmo environment do publicar (segredos e regra de branch) e instala sem scripts', () => {
+    const env = (corpo: string) => /\n {4}environment:\n((?: {6}.*\n?)+)/.exec(corpo)?.[1] ?? '';
+    expect(env(migrar)).not.toBe('');
+    expect(env(migrar)).toBe(env(publicar));
+    expect(migrar).toMatch(/pnpm install --frozen-lockfile --ignore-scripts/);
+    expect(migrar).not.toMatch(/cache:\s*pnpm/);
+  });
+
+  it('A-11: o publicar depende do migrar e não roda `pnpm migrar` nem vê a URL do banco', () => {
+    expect(publicar).toMatch(/needs:\s*\[[^\]]*\bmigrar\b/);
+    expect(publicar).not.toMatch(/pnpm migrar|DATABASE_URL/);
+  });
+
+  it('A-11: só o job migrar tem a URL do banco, e só em um passo', () => {
+    const fora = texto.replace(passos(migrar).find((p) => /DATABASE_URL_DONO/.test(p)) ?? '', '');
+    expect(fora).not.toMatch(/DATABASE_URL/);
   });
 });
 
