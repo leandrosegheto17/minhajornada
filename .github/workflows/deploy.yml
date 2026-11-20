@@ -101,13 +101,14 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      # A conferência do papel roda a cada deploy: papel alterado depois no Console do Neon para o deploy (A-18).
+      # A conferência do papel roda a cada deploy: papel alterado depois no Console do Neon para o deploy (A-18). Com schema
+      # e search_path fixos, nenhum schema criado pelo papel conferido sombreia a função (A-19).
       - name: Migrar o banco e conferir o papel do app antes de publicar
         env:
           DATABASE_URL_DONO: ${{ secrets.DATABASE_URL_DONO }}
         run: |
           pnpm migrar
-          psql "$DATABASE_URL_DONO" -v ON_ERROR_STOP=1 -c "SELECT conferir_papel_app('mj_app')"
+          PGOPTIONS='-c search_path=pg_catalog' psql "$DATABASE_URL_DONO" -v ON_ERROR_STOP=1 -c "SELECT public.conferir_papel_app('mj_app')"
 
   publicar:
     needs: [construir, migrar]

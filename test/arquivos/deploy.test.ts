@@ -217,6 +217,13 @@ describe('deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, F
     expect(comandos[iConferir]).toMatch(/ON_ERROR_STOP=1/);
   });
 
+  // A-19: sem schema e com o `search_path` do banco, um papel com CREATE criaria um schema com o nome do dono e uma função
+  // falsa que a conferência chamaria no lugar da verdadeira.
+  it('A-19 FUN-147: a conferência chama `public.conferir_papel_app` com o search_path fixo em pg_catalog', () => {
+    expect(comandos[iConferir]).toMatch(/SELECT public\.conferir_papel_app\('mj_app'\)/);
+    expect(comandos[iConferir]).toMatch(/PGOPTIONS='-c search_path=pg_catalog'\s+psql\b/);
+  });
+
   it('A-18: o passo sem token da Cloudflare, e a falha da conferência pára o job (sem `|| true` nem continue-on-error)', () => {
     expect(passo).not.toMatch(/CLOUDFLARE|wrangler/i);
     expect(passo).not.toMatch(/\|\|\s*true|continue-on-error/);
