@@ -1229,6 +1229,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 **Depends on**: —
 **Reuses**: `src/App.test.tsx:405` (teste "sem sessão de dono", molde)
 **Requirement**: FUN-153 · Achado: A-01 (validation.md)
+
+**Done when**:
+
+- [x] Sessão `{dono:false}` não mostra o botão "Resumo" (teste de componente e de tela); morre com o mutante `!== 'sem'`
+- [x] Gate verde
 **Tests**: `src/App.test.tsx` › "FUN-153 sessão de usuário comum não mostra o botão Resumo"; morre com `sessao.sessao !== 'sem'` em `App.tsx:40`
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
 
@@ -1244,6 +1249,12 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 **Depends on**: T42
 **Reuses**: `servidor/migracoes/1795132860000_papel_app.sql` (molde); `servidor/migracoes/papel-app.test.ts`
 **Requirement**: AD-023 · Achado: A-07 (validation.md)
+
+**Done when**:
+
+- [x] Migração que falha se o `mj_app` tem `rolsuper`, `rolbypassrls`, `rolcreaterole`, `rolcreatedb`, é membro de `neon_superuser`, `pg_read_all_data` ou `pg_write_all_data`, lê `senha_hash` ou escreve em `resumos`
+- [x] O passo de criar o papel por SQL registrado em `.specs/preparacao.md`
+- [x] Gate verde
 **Tests**: `servidor/migracoes/papel-app.test.ts` › um teste por condição (papel com `BYPASSRLS`, membro de `pg_read_all_data`, `GRANT SELECT (senha_hash)`): a migração falha; papel correto: passa
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot`
 
@@ -1259,6 +1270,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 **Depends on**: T43
 **Reuses**: `scripts/criar-dono.ts:19-20`
 **Requirement**: FUN-141, FUN-143 · Achado: A-09 (validation.md)
+
+**Done when**:
+
+- [x] Trocar a senha apaga as sessões do usuário e mantém as de outro
+- [x] Gate verde
 **Tests**: `scripts/criar-dono.test.ts` › "trocar a senha apaga as sessões do dono e mantém as de outro usuário"
 **Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot`
 
@@ -1274,6 +1290,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 **Depends on**: T44
 **Reuses**: `scripts/criar-dono.ts:35`
 **Requirement**: FUN-141 · Achado: A-10 (validation.md)
+
+**Done when**:
+
+- [x] Senha com menos de 12 caracteres recusa sem gravar; mais de 72 bytes grava com aviso
+- [x] Gate verde
 **Tests**: `scripts/criar-dono.test.ts` › 11 caracteres recusa sem gravar; 12 grava; 73 bytes grava com aviso
 **Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot`
 
@@ -1289,6 +1310,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 **Depends on**: T45
 **Reuses**: `.github/workflows/deploy.yml:106,114-125`; `test/arquivos/deploy.test.ts` (molde)
 **Requirement**: FUN-151 (segredos do deploy, SEC-001) · Achado: A-11 (validation.md)
+
+**Done when**:
+
+- [x] Job `migrar` próprio, sem o token da Cloudflare, e o `publicar` espera por ele
+- [x] Gate verde
 **Tests**: `test/arquivos/deploy.test.ts` › o job da migração não tem `CLOUDFLARE_API_TOKEN` e o `publicar` depende dele
 **Gate**: `pnpm typecheck && pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot`
 
@@ -1304,6 +1330,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/r
 **Depends on**: T46
 **Reuses**: `scripts/resumos/publicar.ts:35-36,62`; `emTransacao`
 **Requirement**: FUN-172, FUN-173 · Achado: A-12 (validation.md)
+
+**Done when**:
+
+- [x] Livro recusado e publicado antes é removido na mesma transação, com a contagem impressa; falha desfaz tudo
+- [x] Gate verde
 **Tests**: `scripts/resumos/publicar.test.ts` › "FUN-172 livro publicado e depois recusado é removido"; falha provocada depois da remoção desfaz tudo
 **Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot`
 
@@ -1321,6 +1352,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 **Depends on**: —
 **Reuses**: `test/arquivos/resumos-fora-do-git.test.ts:18,84`
 **Requirement**: FUN-152 · Achado: A-02 (validation.md)
+
+**Done when**:
+
+- [ ] O teste de FUN-152 varre todo `*.json` de `resumos-exportados/` e deixa de ser pulado
+- [ ] Gate verde
 **Tests**: o próprio teste deixa de ser pulado com `propostas.json` presente
 **Gate**: `pnpm exec vitest run test/arquivos/resumos-fora-do-git.test.ts --reporter=dot`
 
@@ -1336,6 +1372,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 **Depends on**: T48
 **Reuses**: `src/livro/PaginaResumo.tsx`
 **Requirement**: FUN-163 · Achado: A-03 (validation.md)
+
+**Done when**:
+
+- [ ] Nenhum aviso de `key` do React na página do resumo
+- [ ] Gate verde
 **Tests**: `src/livro/PaginaResumo.test.tsx` › sem aviso de `key` no `console.error`
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/livro --reporter=dot`
 
@@ -1351,6 +1392,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 **Depends on**: T49
 **Reuses**: `src/App.test.tsx:447,460` (molde)
 **Requirement**: FUN-162 · Achado: A-04 (validation.md)
+
+**Done when**:
+
+- [ ] Resumo da tela estreita desligado ao trocar de livro ou de largura
+- [ ] Gate verde
 **Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
 
@@ -1366,6 +1412,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 **Depends on**: T50
 **Reuses**: `aprovar` em `src/revisao-resumos/logica.ts:11`; `src/revisao-resumos/pagina.ts:149`
 **Requirement**: FUN-171, FUN-172 · Achado: A-05 (validation.md)
+
+**Done when**:
+
+- [ ] Recusar com texto editado guarda o editado e a nota
+- [ ] Gate verde
 **Tests**: `logica.test.ts` e `pagina.test.ts` › "FUN-172 recusar com edição guarda o texto editado e a nota"
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
 
@@ -1381,6 +1432,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 **Depends on**: T51
 **Reuses**: `src/revisao-resumos/pagina.ts` (`desenhar`, `guardar`)
 **Requirement**: FUN-171, FUN-172 · Achado: A-06 (validation.md)
+
+**Done when**:
+
+- [ ] Erro ao recusar ou gravar mostra o aviso e preserva o texto digitado
+- [ ] Gate verde
 **Tests**: `pagina.test.ts` › editar, recusar sem nota: o texto editado continua; banco dublê que lança: o texto continua e o aviso aparece
 **Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
 
@@ -1396,6 +1452,11 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes
 **Depends on**: T52
 **Reuses**: `test/arquivos/wrangler.test.ts` (molde)
 **Requirement**: FUN-143, FUN-144 · Achado: A-08 (validation.md)
+
+**Done when**:
+
+- [ ] Registro do `--caching-disabled` do Hyperdrive no Nível 2 e no `wrangler.jsonc`, com teste
+- [ ] Gate verde
 **Tests**: `test/arquivos/wrangler.test.ts` › o `preparacao.md` pede `--caching-disabled` para os dois Hyperdrive
 **Gate**: `pnpm exec vitest run test/arquivos/wrangler.test.ts --reporter=dot`
 
