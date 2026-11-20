@@ -3,12 +3,12 @@
 ## Retomada
 
 - **Fluxo**: 3, Feature em projeto feito com IA — skill `feature`
-- **Item**: `.specs/features/livro-paginas/` (feature 5 do roteiro, AD-019)
-- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-128 a FUN-136), 2 Reconhecimento (mockup dispensado), 3 Plano e 4 Rede de proteção (`tasks.md`, 7 tarefas em 2 lotes, sem T0, linha de base 996 verdes) em 2026-11-19. **Planejamento concluído.**
-- **Próximo passo**: `/executar` (Sonnet), Lote 1 comum (Phase 1). Rodar suíte e gates pelo Git Bash (o `bash` do PowerShell é o do WSL e derruba `deploy.test.ts`)
+- **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019 e AD-020)
+- **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19
+- **Próximo passo**: fase 2 Reconhecimento (Opus): skill `inventario`, depois `reconhecimento`. A feature cria o primeiro servidor do projeto (Worker com Hono, sessão em cookie, Neon), no padrão do treInAmento e do ControleEmCasa_LJS
 - **Serviços no ar**: nenhum
-- **Progresso**: Produto: Faltam 6 de 10 features: 40% concluído; livro-paginas 0 de 7 tarefas, conferida em 2026-11-19
-- **Combinado na conversa e não registrado em artefato**: nada; as decisões do plano pago estão em AD-019 e AD-020
+- **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro sem tarefas ainda
+- **Combinado na conversa e não registrado em artefato**: nada; as decisões do dono de 2026-11-19 estão na tabela de premissas do `spec.md`
 
 ## Modelo
 
