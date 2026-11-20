@@ -139,6 +139,45 @@ describe('AD-023: conferência dos privilégios do papel do app', () => {
     }
   });
 
+  // A-17: privilégio herdado por `SET ROLE`, TRUNCATE e escrita em usuarios também fazem a conferência falhar.
+  it.each([['NOINHERIT'], ['INHERIT']])('AD-023: papel %s membro de qualquer outro papel falha', async (heranca) => {
+    const grupo = `teste_grupo_${randomBytes(4).toString('hex')}`;
+    await comPapelRuim(
+      `NOSUPERUSER ${heranca}`,
+      async (c, papel) => {
+        await c.query(`CREATE ROLE ${grupo} NOLOGIN`);
+        await c.query(`GRANT ${grupo} TO ${papel}`);
+      },
+      async (verificar) => {
+        try {
+          await expect(verificar()).rejects.toThrow(new RegExp(`membro de .*${grupo}`));
+        } finally {
+          await comCliente(process.env.DATABASE_URL_TESTE ?? '', (c) => c.query(`DROP ROLE IF EXISTS ${grupo}`));
+        }
+      },
+    );
+  });
+
+  it.each([['resumos'], ['usuarios'], ['sessoes']])('AD-023: papel com TRUNCATE em %s falha', async (tabela) => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`GRANT TRUNCATE ON ${tabela} TO ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(new RegExp(`TRUNCATE.* ${tabela}`));
+      },
+    );
+  });
+
+  it.each([['INSERT'], ['DELETE'], ['UPDATE (dono)']])('AD-023: papel com %s em usuarios falha', async (comando) => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`GRANT ${comando} ON usuarios TO ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(/escrever em usuarios/);
+      },
+    );
+  });
+
   it('AD-023: papel que lê usuarios.senha_hash falha', async () => {
     await comPapelRuim(
       'NOSUPERUSER',
