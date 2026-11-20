@@ -524,3 +524,69 @@ describe('fatia da âncora num versículo maior que a página (FUN-77, FUN-78, F
     expect(reduzirLeitor(sem, { tipo: 'irParaAncora', ancora: versiculo(3, 0) }, indice)).toBe(sem);
   });
 });
+
+describe('tela "entrar" com volta à origem (FUN-137, FUN-138)', () => {
+  const origens: [string, () => EstadoLeitor][] = [
+    ['inicial', () => aplicar(ESTADO_INICIAL, iniciar(null))],
+    ['livros', () => aplicar(ESTADO_INICIAL, iniciar(null), lerBiblia)],
+    ['leitor na rolagem', () => noLeitor('Romanos', 8)],
+    ['leitor no livro', () => noLivro('Rute', 2)],
+    ['sobre', () => aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'sobre' })],
+  ];
+
+  it.each(origens)(
+    'FUN-138: de %s, abrirEntrar vai a "entrar" e voltar volta à mesma tela com a mesma âncora',
+    (_nome, montar) => {
+      const origem = montar();
+      const aberta = aplicar(origem, { tipo: 'abrirEntrar' });
+      expect(aberta.tela).toBe('entrar');
+      expect(aberta.voltarPara).toBe(origem.tela);
+      const volta = aplicar(aberta, { tipo: 'voltar' });
+      expect(volta.tela).toBe(origem.tela);
+      expect(volta.ref).toEqual(origem.ref);
+      expect(volta.ancora).toEqual(origem.ancora);
+      expect(volta.livroGrade).toBe(origem.livroGrade);
+    },
+  );
+
+  it('FUN-138: de uma tela de grade de capítulos, voltar volta à grade do mesmo livro', () => {
+    const naGrade = aplicar(ESTADO_INICIAL, iniciar(null), { tipo: 'escolherLivro', livro: n('Salmos') });
+    const volta = aplicar(naGrade, { tipo: 'abrirEntrar' }, { tipo: 'voltar' });
+    expect(volta.tela).toBe('capitulos');
+    expect(volta.livroGrade).toBe(n('Salmos'));
+  });
+
+  it('FUN-137: irPara "entrar" abre a tela como abrirEntrar', () => {
+    const estado = aplicar(noLeitor('Romanos', 8), { tipo: 'irPara', tela: 'entrar' });
+    expect(estado.tela).toBe('entrar');
+    expect(aplicar(estado, { tipo: 'voltar' }).tela).toBe('leitor');
+  });
+
+  it('FUN-138: abrirEntrar estando em "entrar" não muda a origem guardada (mesmo objeto)', () => {
+    const aberta = aplicar(noLeitor('Romanos', 8), { tipo: 'abrirEntrar' });
+    expect(reduzirLeitor(aberta, { tipo: 'abrirEntrar' }, indice)).toBe(aberta);
+    expect(aplicar(aberta, { tipo: 'voltar' }).tela).toBe('leitor');
+  });
+
+  it('FUN-137: de "entrar", "Criar conta" vai a "em breve" e o voltar de lá volta a "entrar"', () => {
+    const emBreve = aplicar(noLeitor('Romanos', 8), { tipo: 'abrirEntrar' }, { tipo: 'abrirEmBreve' });
+    expect(emBreve.tela).toBe('emBreve');
+    expect(aplicar(emBreve, { tipo: 'voltar' }).tela).toBe('entrar');
+  });
+
+  it('FUN-138: de "entrar" aberta por "em breve" o voltar não cai em si mesma: vai à inicial', () => {
+    const cicloDeVolta = aplicar(
+      noLeitor('Romanos', 8),
+      { tipo: 'abrirEntrar' },
+      { tipo: 'abrirEmBreve' },
+      { tipo: 'voltar' },
+    );
+    expect(cicloDeVolta.tela).toBe('entrar');
+    expect(aplicar(cicloDeVolta, { tipo: 'voltar' }).tela).toBe('inicial');
+  });
+
+  it('FUN-138: "voltar" sem origem guardada em "entrar" vai à inicial', () => {
+    const semOrigem: EstadoLeitor = { ...ESTADO_INICIAL, tela: 'entrar' };
+    expect(aplicar(semOrigem, { tipo: 'voltar' }).tela).toBe('inicial');
+  });
+});
