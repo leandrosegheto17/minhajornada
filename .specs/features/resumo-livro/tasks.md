@@ -755,10 +755,10 @@ Gate: pnpm typecheck && pnpm test @ b9a0c3696f389b62fa96fd5a48efbc2f454c3298 = v
 
 **Done when**:
 
-- [ ] `entrar`: 200 → `dono`/`usuario`; 401 → `incorreto`; 429 → `limite`; rede fora, 5xx e 503 → `rede`; corpo enviado como JSON com `credentials: 'same-origin'`
-- [ ] `lerSessao`: 200 → `dono`/`usuario`; 401 → `sem` (apaga `mj:dono`); rede fora → `rede` (mantém `mj:dono`)
-- [ ] `sair` chama `POST /api/sair` e apaga `mj:dono` mesmo sem rede
-- [ ] Gate quick verde
+- [x] `entrar`: 200 → `dono`/`usuario`; 401 → `incorreto`; 429 → `limite`; rede fora, 5xx e 503 → `rede`; corpo enviado como JSON com `credentials: 'same-origin'`
+- [x] `lerSessao`: 200 → `dono`/`usuario`; 401 → `sem` (apaga `mj:dono`); rede fora → `rede` (mantém `mj:dono`)
+- [x] `sair` chama `POST /api/sair` e apaga `mj:dono` mesmo sem rede
+- [x] Gate quick verde
 
 **Tests**: unit em `src/dados/sessao.test.ts`, nomes com o FUN de cada caso
 **Gate**: quick
@@ -780,10 +780,10 @@ Gate: pnpm typecheck && pnpm test @ b9a0c3696f389b62fa96fd5a48efbc2f454c3298 = v
 
 **Done when**:
 
-- [ ] De cada tela (inicial, livros, leitor rolagem, leitor livro, sobre), `abrirEntrar` vai a `entrar` e `voltar` volta à mesma tela com a mesma âncora (FUN-138)
-- [ ] `abrirEntrar` em `entrar` não muda `voltarPara`; de `entrar`, "Criar conta" vai a `emBreve` e o voltar de lá volta a `entrar`
-- [ ] Testes existentes de `emBreve` verdes sem mudança
-- [ ] Gate quick verde
+- [x] De cada tela (inicial, livros, leitor rolagem, leitor livro, sobre), `abrirEntrar` vai a `entrar` e `voltar` volta à mesma tela com a mesma âncora (FUN-138)
+- [x] `abrirEntrar` em `entrar` não muda `voltarPara`; de `entrar`, "Criar conta" vai a `emBreve` e o voltar de lá volta a `entrar`
+- [x] Testes existentes de `emBreve` verdes sem mudança
+- [x] Gate quick verde
 
 **Tests**: unit em `src/estado/leitor.test.ts`, nomes com `FUN-137` ou `FUN-138`
 **Gate**: quick
@@ -805,16 +805,18 @@ Gate: pnpm typecheck && pnpm test @ b9a0c3696f389b62fa96fd5a48efbc2f454c3298 = v
 
 **Done when**:
 
-- [ ] Campos com rótulo "E-mail" e "Senha", botão "Entrar" e link "Criar conta" que chama `aoCriarConta` (FUN-137)
-- [ ] `incorreto` mostra "E-mail ou senha incorretos." (FUN-139); `limite` mostra "Muitas tentativas. Tente de novo em 1 minuto." (FUN-140); `rede` mostra a mensagem de rede da tela
-- [ ] Envio com Enter chama `aoEntrar` uma vez, sem envio nativo do formulário; o botão fica desabilitado enquanto envia
-- [ ] Gate quick verde
+- [x] Campos com rótulo "E-mail" e "Senha", botão "Entrar" e link "Criar conta" que chama `aoCriarConta` (FUN-137)
+- [x] `incorreto` mostra "E-mail ou senha incorretos." (FUN-139); `limite` mostra "Muitas tentativas. Tente de novo em 1 minuto." (FUN-140); `rede` mostra a mensagem de rede da tela
+- [x] Envio com Enter chama `aoEntrar` uma vez, sem envio nativo do formulário; o botão fica desabilitado enquanto envia
+- [x] Gate quick verde
 
 **Tests**: unit em `src/telas/TelaEntrar.test.tsx`, nomes com `FUN-137`, `FUN-139` ou `FUN-140`
 **Gate**: quick
 **Commit**: `feat(telas): tela de entrar`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos --reporter=dot @ ea4592b1a024f4a8f970ac6359f1b2ae82e40dd0 = verde
 
 ### T27: Sessão no app e "Sair" na barra (FUN-138, FUN-142, FUN-143, FUN-145)
 
