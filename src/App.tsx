@@ -3,11 +3,13 @@ import { indice } from './biblia/indice';
 import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
 import { useLeitor } from './estado/useLeitor';
+import { useSessao } from './estado/useSessao';
 import { useTelaLarga } from './livro/useTelaLarga';
 import { TelaLivro } from './telas/TelaLivro';
 import { TelaCapitulos } from './telas/TelaCapitulos';
 import { TelaCorrecoes } from './telas/TelaCorrecoes';
 import { TelaEmBreve } from './telas/TelaEmBreve';
+import { TelaEntrar } from './telas/TelaEntrar';
 import { TelaInicial } from './telas/TelaInicial';
 import { TelaLeitor } from './telas/TelaLeitor';
 import { TelaLivros } from './telas/TelaLivros';
@@ -20,6 +22,7 @@ import { TelaSobre } from './telas/TelaSobre';
  */
 export function App() {
   const leitor = useLeitor();
+  const sessao = useSessao();
   const larga = useTelaLarga();
   const { estado, carga } = leitor;
   const ref = estado.ref;
@@ -33,6 +36,19 @@ export function App() {
     tela = <TelaInicial aoLerBiblia={leitor.lerBiblia} aoCriarConta={leitor.abrirEmBreve} />;
   } else if (estado.tela === 'emBreve') {
     tela = <TelaEmBreve aoVoltar={leitor.voltar} aoLerBiblia={leitor.lerBiblia} />;
+  } else if (estado.tela === 'entrar') {
+    // FUN-137, FUN-138: com a sessão aberta, volta à tela de onde o login foi aberto; "Criar conta" vai à "em breve".
+    tela = (
+      <TelaEntrar
+        aoEntrar={async (email, senha) => {
+          const resultado = await sessao.entrar(email, senha);
+          if (resultado === 'dono' || resultado === 'usuario') leitor.voltar();
+          return resultado;
+        }}
+        aoVoltar={leitor.voltar}
+        aoCriarConta={leitor.abrirEmBreve}
+      />
+    );
   } else if (estado.tela === 'leitor' && estado.formato === 'livro') {
     // FUN-66, FUN-67: no formato livro a tela é a do livro, com a âncora; a capa e o plano pago não têm livro (carga nula).
     tela = (
@@ -93,7 +109,9 @@ export function App() {
         aoIrParaInicial={() => leitor.irPara('inicial')}
         aoTrocarFormato={leitor.trocarFormato}
         aoAbrirSobre={abrirSobre}
-        aoAbrirConta={leitor.abrirEmBreve}
+        aoAbrirConta={leitor.abrirEntrar}
+        comSessao={sessao.sessao !== 'sem'}
+        aoSair={() => void sessao.sair()}
         aoMudarLetra={leitor.mudarLetra}
         aoEscolherTema={leitor.escolherTema}
       />

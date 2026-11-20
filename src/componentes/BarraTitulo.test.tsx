@@ -75,6 +75,32 @@ describe('BarraTitulo', () => {
     expect(p.aoAbrirConta).toHaveBeenCalledTimes(1);
   });
 
+  it('FUN-142: com sessão o botão da conta vira "Sair", com o mesmo texto no rótulo acessível e no visível', () => {
+    const p = props();
+    render(<BarraTitulo {...p} comSessao aoSair={vi.fn()} />);
+    const sair = screen.getByRole('button', { name: 'Sair' });
+    expect(sair).toHaveTextContent('Sair');
+    expect(screen.queryByRole('button', { name: 'Entrar ou criar conta' })).toBeNull();
+  });
+
+  it('FUN-143: com sessão o botão chama aoSair e não aoAbrirConta', () => {
+    const p = props();
+    const aoSair = vi.fn();
+    render(<BarraTitulo {...p} comSessao aoSair={aoSair} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Sair' }));
+    expect(aoSair).toHaveBeenCalledTimes(1);
+    expect(p.aoAbrirConta).not.toHaveBeenCalled();
+  });
+
+  it('FUN-142: sem sessão segue "Entrar / Criar conta" e aoSair não é chamado', () => {
+    const p = props();
+    const aoSair = vi.fn();
+    render(<BarraTitulo {...p} comSessao={false} aoSair={aoSair} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Entrar ou criar conta' }));
+    expect(p.aoAbrirConta).toHaveBeenCalledTimes(1);
+    expect(aoSair).not.toHaveBeenCalled();
+  });
+
   it('FUN-44: o Sobre tem rótulo em português e abre o Sobre', () => {
     const p = props();
     render(<BarraTitulo {...p} />);
