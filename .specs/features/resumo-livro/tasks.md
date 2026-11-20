@@ -546,13 +546,13 @@ Gate: pnpm typecheck && pnpm test @ 2deb7c31840bccefaabe86149b7e67dd651788a3 = v
 
 **Done when**:
 
-- [ ] Contagem pela regra do design: 299 e 451 recusam, 300 e 450 passam; títulos de seção e referências não contam
-- [ ] Cada seção vazia (ou só espaço) recusa, com o nome da seção
-- [ ] Divisão com capítulo 0, além do último ou `de > ate` recusa; versículo-chave "Gênesis 51:1", "Gênesis 1:32" e intervalo invertido recusam; "Gênesis 12:1-3" passa
-- [ ] Cada classe de AD-018 (C0, DEL, C1, U+2028, U+2029, `\p{Cf}`) recusa
-- [ ] Arquivo exportado com campo a mais, estado desconhecido ou livro fora de 1 a 66 é recusado por `lerArquivoExportado`
-- [ ] Casos limite listados antes de codar no commit; testes só com texto de exemplo
-- [ ] Gate quick verde
+- [x] Contagem pela regra do design: 299 e 451 recusam, 300 e 450 passam; títulos de seção e referências não contam
+- [x] Cada seção vazia (ou só espaço) recusa, com o nome da seção
+- [x] Divisão com capítulo 0, além do último ou `de > ate` recusa; versículo-chave "Gênesis 51:1", "Gênesis 1:32" e intervalo invertido recusam; "Gênesis 12:1-3" passa
+- [x] Cada classe de AD-018 (C0, DEL, C1, U+2028, U+2029, `\p{Cf}`) recusa
+- [x] Arquivo exportado com campo a mais, estado desconhecido ou livro fora de 1 a 66 é recusado por `lerArquivoExportado`
+- [x] Casos limite listados antes de codar no commit; testes só com texto de exemplo
+- [x] Gate quick verde
 
 **Tests**: unit em `src/resumos/*.test.ts`, nomes com `FUN-174`, `FUN-163` ou `FUN-164`
 **Gate**: quick
@@ -574,19 +574,21 @@ Gate: pnpm typecheck && pnpm test @ 2deb7c31840bccefaabe86149b7e67dd651788a3 = v
 
 **Done when**:
 
-- [ ] Sessão de dono e livro publicado: 200 com as quatro seções (FUN-146)
-- [ ] Sem cookie, cookie inválido e sessão vencida: 401 sem nenhum texto do resumo no corpo (FUN-147)
-- [ ] Usuário sem `dono`: 403 sem texto (FUN-148)
-- [ ] Dono, livro sem resumo: 404 (FUN-149)
-- [ ] Dono e `0`, `67`, `1.5`, `abc`, `-1`, `01`: 400 (FUN-150); sem sessão, os mesmos: 401 (AD-024)
-- [ ] Toda resposta com `Cache-Control: no-store` (FUN-151)
-- [ ] Gate full verde
+- [x] Sessão de dono e livro publicado: 200 com as quatro seções (FUN-146)
+- [x] Sem cookie, cookie inválido e sessão vencida: 401 sem nenhum texto do resumo no corpo (FUN-147)
+- [x] Usuário sem `dono`: 403 sem texto (FUN-148)
+- [x] Dono, livro sem resumo: 404 (FUN-149)
+- [x] Dono e `0`, `67`, `1.5`, `abc`, `-1`, `01`: 400 (FUN-150); sem sessão, os mesmos: 401 (AD-024)
+- [x] Toda resposta com `Cache-Control: no-store` (FUN-151)
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/rotas/resumos.test.ts`, nomes com `FUN-146` a `FUN-150`
 **Gate**: full
 **Commit**: `feat(servidor): rota do resumo só para o dono`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 5eea45f96d5ff53b5fe6882cfe60c19339795e4c = verde
 
 ### T18: Script de publicação (FUN-173, FUN-174)
 
