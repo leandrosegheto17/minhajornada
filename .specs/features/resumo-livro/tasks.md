@@ -1693,9 +1693,9 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 
 **Done when**:
 
-- [ ] Os testes movidos passam iguais (só caminho e import mudam; nenhuma asserção muda)
-- [ ] `pnpm migrar` num banco descartável sai com 0 e aplica todas as migrações (teste que falha com um `.test.ts` na pasta)
-- [ ] Gate verde
+- [x] Os testes movidos passam iguais (só caminho e import mudam; nenhuma asserção muda)
+- [x] `pnpm migrar` num banco descartável sai com 0 e aplica todas as migrações (teste que falha com um `.test.ts` na pasta)
+- [x] Gate verde
 **Tests**: `servidor/migrar.test.ts` › "A-25 FUN-147 o script migrar do package.json aplica as migrações num banco descartável"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1714,8 +1714,8 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 
 **Done when**:
 
-- [ ] O teste falha com o `DELETE` de `publicar.ts:40` sem `public.`
-- [ ] Gate verde
+- [x] O teste falha com o `DELETE` de `publicar.ts:40` sem `public.`
+- [x] Gate verde
 **Tests**: `publicar.test.ts` › "A-22 FUN-173: com um schema sombra com o nome do dono, publicar grava em public.resumos" (reforçado; teste desta feature, de T62)
 **Gate**: `pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1734,8 +1734,8 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 
 **Done when**:
 
-- [ ] O teste falha sem o `public.` em cada tabela e em `crypt`/`gen_salt`
-- [ ] Gate verde
+- [x] O teste falha sem o `public.` em cada tabela e em `crypt`/`gen_salt`
+- [x] Gate verde
 **Tests**: `criar-dono.test.ts` › "A-24 FUN-141 com schema sombra, criar-dono grava e encerra sessões em public com bcrypt real"
 **Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1754,10 +1754,10 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 
 **Done when**:
 
-- [ ] Um teste por ramo (dono de função, de tabela, de tipo), cada um falha sem a guarda
-- [ ] Teste com a sobrecarga `(text)` falsa em `public`: a chamada com `::name` ainda recusa um papel SUPERUSER
-- [ ] Teste de arquivo: o deploy chama com `::name`
-- [ ] Gate verde
+- [x] Um teste por ramo (dono de função, de tabela, de tipo), cada um falha sem a guarda
+- [x] Teste com a sobrecarga `(text)` falsa em `public`: a chamada com `::name` ainda recusa um papel SUPERUSER
+- [x] Teste de arquivo: o deploy chama com `::name`
+- [x] Gate verde
 **Tests**: `conferir-papel.test.ts` › "AD-023 A-26 …"; `deploy.test.ts` › "A-26 FUN-147 a conferência chama com 'mj_app'::name"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor test/arquivos/deploy.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
 
@@ -1776,12 +1776,14 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 
 **Done when**:
 
-- [ ] Teste com `GRANT REFERENCES (email) ON usuarios` (e uma coluna de cada outra tabela) recusa, e falha sem a mudança
-- [ ] Gate verde
+- [x] Teste com `GRANT REFERENCES (email) ON usuarios` (e uma coluna de cada outra tabela) recusa, e falha sem a mudança
+- [x] Gate verde
 **Tests**: `conferir-papel.test.ts` › "AD-023 A-27 papel com REFERENCES em coluna de <tabela> falha"
 **Gate**: `pnpm typecheck && pnpm exec vitest run servidor --reporter=dot` (com `DATABASE_URL_TESTE`)
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --reporter=dot @ 3632a075f3cba935b6d1a5f217652bc197270c2b = verde
 
 ## Depois da feature (fora do `/executar`)
 
