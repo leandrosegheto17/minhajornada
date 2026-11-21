@@ -64,8 +64,11 @@ describe('migrar e banco de teste (T7, base de FUN-141 a FUN-149)', () => {
         cwd: join(import.meta.dirname, '..'),
         env: { ...process.env, DATABASE_URL_DONO: url },
       });
-      expect(r.status, `${r.stdout}
-${r.stderr}`).toBe(0);
+      expect(
+        r.status,
+        `${r.stdout}
+${r.stderr}`,
+      ).toBe(0);
       const { rows } = await comCliente(url, (c) => c.query('SELECT count(*)::int AS n FROM pgmigrations'));
       expect(rows[0].n).toBe(sqls.length);
     });

@@ -194,7 +194,9 @@ describe('A-24 FUN-141 FUN-143: schema com o nome do dono não sombreia tabelas 
           await c.query(`CREATE SCHEMA "${u}"`);
           await c.query(`CREATE TABLE "${u}".usuarios (LIKE public.usuarios INCLUDING ALL)`);
           await c.query(`CREATE TABLE "${u}".sessoes (LIKE public.sessoes INCLUDING ALL)`);
-          await c.query(`CREATE FUNCTION "${u}".crypt(text, text) RETURNS text LANGUAGE sql AS $$ SELECT 'falso'::text $$`);
+          await c.query(
+            `CREATE FUNCTION "${u}".crypt(text, text) RETURNS text LANGUAGE sql AS $$ SELECT 'falso'::text $$`,
+          );
           await c.query(
             `CREATE FUNCTION "${u}".gen_salt(text, integer) RETURNS text LANGUAGE sql AS $$ SELECT 'falso'::text $$`,
           );

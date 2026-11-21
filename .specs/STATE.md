@@ -254,3 +254,4 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 - **Scope**: Feature `resumo-livro`, `servidor/rotas/resumos.ts`; testes de FUN-147 a FUN-150.
 - **Date**: 2026-11-20
 - **Status**: active
+| 2026-11-20 | 3 | resumo-livro | /executar | Sonnet | Opus (escolha do usuário) |
