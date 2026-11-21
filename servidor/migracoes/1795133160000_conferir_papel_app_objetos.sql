@@ -76,7 +76,7 @@ BEGIN
     IF has_table_privilege(papel, 'public.' || tabela, 'TRIGGER') THEN
       RAISE EXCEPTION 'papel % pode TRIGGER em %', papel, tabela;
     END IF;
-    IF has_table_privilege(papel, 'public.' || tabela, 'REFERENCES') THEN
+    IF has_any_column_privilege(papel, 'public.' || tabela, 'REFERENCES') THEN
       RAISE EXCEPTION 'papel % pode REFERENCES em %', papel, tabela;
     END IF;
   END LOOP;

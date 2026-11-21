@@ -341,6 +341,21 @@ describe('AD-023: conferência dos privilégios do papel do app', () => {
     );
   });
 
+  // A-27: `GRANT REFERENCES (coluna)` não aparece em `has_table_privilege`; só `has_any_column_privilege` enxerga.
+  it.each([
+    ['usuarios', 'email'],
+    ['resumos', 'livro'],
+    ['sessoes', 'usuario_id'],
+  ])('AD-023 A-27: papel com REFERENCES em coluna de %s (%s) falha', async (tabela, coluna) => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(`GRANT REFERENCES (${coluna}) ON ${tabela} TO ${papel}`).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(new RegExp(`REFERENCES.* ${tabela}`));
+      },
+    );
+  });
+
   it('AD-023: papel sem nenhum privilégio a mais passa', async () => {
     await comPapelRuim('NOSUPERUSER', nada, async (verificar) => {
       await expect(verificar()).resolves.toMatchObject({ rowCount: 1 });
