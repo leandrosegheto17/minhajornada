@@ -1,10 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from './App';
 import { indice } from './biblia/indice';
 import { criarDubleCaches } from './dados/dubleCache';
 import { CACHE_LIVROS } from './dados/livros';
-import { CHAVES } from './dados/preferencias';
+import { CHAVES, donoNoAparelho, lembrarDono } from './dados/preferencias';
 
 // FUN-119, FUN-122: o build local pode ter 0 correções aplicadas; o App é testado com 2 e a lista de exemplo.
 vi.mock('./biblia/correcoesAplicadas', () => ({
@@ -110,13 +110,25 @@ describe('App', () => {
     expect(titulo1('A Palavra perto de você, onde estiver')).toBeInTheDocument();
   });
 
-  it('FUN-57: a conta da barra abre a tela em breve e "Voltar" volta à tela de onde veio', () => {
+  // Teste trocado na T27 (autorizado em `.specs/STATE.md`, 2026-11-19): a conta da barra deixa de abrir a tela "em
+  // breve" e passa a abrir "Entrar" (FUN-137); o "Voltar" continua levando à tela de origem, com a mesma força.
+  it('FUN-137: a conta da barra abre a tela "Entrar" e "Voltar" volta à tela de onde veio', () => {
     render(<App />);
     lerBiblia();
     fireEvent.click(screen.getByRole('button', { name: 'Entrar ou criar conta' }));
-    expect(titulo1('Conta e plano de estudo: em breve')).toBeInTheDocument();
+    expect(titulo1('Entrar')).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 1, name: 'Conta e plano de estudo: em breve' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Voltar' }));
     expect(titulo1('Escolha o livro')).toBeInTheDocument();
+  });
+
+  it('FUN-137: "Criar conta" da tela "Entrar" abre a tela em breve e o voltar de lá volta a "Entrar"', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: 'Entrar ou criar conta' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Criar conta' }));
+    expect(titulo1('Conta e plano de estudo: em breve')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Voltar' }));
+    expect(titulo1('Entrar')).toBeInTheDocument();
   });
 
   it('FUN-57: "Ler Bíblia" da tela em breve segue como na inicial', () => {
@@ -274,5 +286,258 @@ describe('App', () => {
     expect(screen.getByRole('button', { name: /^Romanos 9\./ })).toBeInTheDocument();
     paraRolagem();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Romanos 9');
+  });
+});
+
+describe('sessão do dono no app (FUN-138, FUN-142, FUN-143, FUN-145)', () => {
+  const json = (status: number, corpo: unknown = {}) =>
+    new Response(JSON.stringify(corpo), { status, headers: { 'Content-Type': 'application/json' } });
+
+  /** API simulada: `/api/sessao` sem sessão, `/api/entrar` conforme `entrar` e `/api/sair` 204. */
+  function simularApi(entrar: Response = json(200, { dono: true })) {
+    const chamadas: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        chamadas.push(url);
+        if (url === '/api/sessao') return json(401);
+        if (url === '/api/entrar') return entrar.clone();
+        if (url === '/api/sair') return new Response(null, { status: 204 });
+        throw new TypeError('sem rede');
+      }),
+    );
+    return chamadas;
+  }
+
+  const botaoConta = (nome: string) => screen.getByRole('button', { name: nome });
+
+  async function entrarComoDono() {
+    fireEvent.click(botaoConta('Entrar ou criar conta'));
+    fireEvent.change(screen.getByLabelText('E-mail'), { target: { value: 'dono@exemplo.com' } });
+    fireEvent.change(screen.getByLabelText('Senha'), { target: { value: 'senha-de-exemplo' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Entrar' }));
+  }
+
+  it('FUN-138 FUN-142: login de dono volta à tela de origem e a barra mostra "Sair" com o mesmo texto no rótulo', async () => {
+    simularApi();
+    render(<App />);
+    lerBiblia();
+    await entrarComoDono();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Escolha o livro' })).toBeInTheDocument();
+    const sair = botaoConta('Sair');
+    expect(sair).toHaveTextContent('Sair');
+    expect(screen.queryByRole('button', { name: 'Entrar ou criar conta' })).toBeNull();
+    expect(donoNoAparelho()).toBe(true);
+  });
+
+  it('FUN-139: senha errada mostra a mensagem, fica na tela "Entrar" e a barra segue com "Entrar / Criar conta"', async () => {
+    simularApi(json(401, { erro: 'credenciais' }));
+    render(<App />);
+    await entrarComoDono();
+    expect(await screen.findByRole('alert')).toHaveTextContent('E-mail ou senha incorretos.');
+    expect(titulo1('Entrar')).toBeInTheDocument();
+    expect(botaoConta('Entrar ou criar conta')).toBeInTheDocument();
+    expect(donoNoAparelho()).toBe(false);
+  });
+
+  it('FUN-143: "Sair" chama POST /api/sair, volta a "Entrar / Criar conta" e não deixa botão "Resumo"', async () => {
+    const chamadas = simularApi();
+    render(<App />);
+    await entrarComoDono();
+    fireEvent.click(await screen.findByRole('button', { name: 'Sair' }));
+    expect(botaoConta('Entrar ou criar conta')).toHaveTextContent('Entrar / Criar conta');
+    await waitFor(() => expect(chamadas).toContain('/api/sair'));
+    expect(screen.queryByRole('button', { name: 'Sair' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Resumo' })).toBeNull();
+    expect(donoNoAparelho()).toBe(false);
+  });
+
+  it('FUN-145: abrir sem rede com a dica mj:dono mantém o estado de dono na barra', async () => {
+    lembrarDono();
+    render(<App />);
+    expect(botaoConta('Sair')).toHaveTextContent('Sair');
+    await act(async () => undefined);
+    expect(botaoConta('Sair')).toBeInTheDocument();
+  });
+
+  it('FUN-145: abrir com a dica mj:dono e 401 da API volta ao estado sem sessão, sem mensagem', async () => {
+    lembrarDono();
+    simularApi();
+    render(<App />);
+    await waitFor(() => expect(botaoConta('Entrar ou criar conta')).toBeInTheDocument());
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(donoNoAparelho()).toBe(false);
+  });
+});
+
+describe('resumo no modo livro (FUN-153, FUN-157, FUN-162)', () => {
+  // Largura controlável: `girar` muda a consulta e avisa quem assinou, como o navegador ao girar a tela.
+  const largura = { larga: true, ouvintes: new Set<() => void>() };
+  const telaLarga = (larga: boolean) => {
+    largura.larga = larga;
+    largura.ouvintes.clear();
+    vi.stubGlobal('matchMedia', (consulta: string) => ({
+      get matches() {
+        return largura.larga;
+      },
+      media: consulta,
+      addEventListener: (_tipo: string, ouvinte: () => void) => largura.ouvintes.add(ouvinte),
+      removeEventListener: (_tipo: string, ouvinte: () => void) => largura.ouvintes.delete(ouvinte),
+    }));
+  };
+  const girar = (larga: boolean) => {
+    largura.larga = larga;
+    act(() => largura.ouvintes.forEach((ouvinte) => ouvinte()));
+  };
+  const botaoResumo = () => screen.getByRole('button', { name: 'Resumo' });
+  const semBotaoResumo = () => expect(screen.queryByRole('button', { name: 'Resumo' })).toBeNull();
+
+  async function abrirRomanos(opcoes: { dono?: boolean; formato?: 'livro' | 'rolagem'; larga?: boolean } = {}) {
+    const { dono = true, formato = 'livro', larga = true } = opcoes;
+    telaLarga(larga);
+    if (dono) lembrarDono();
+    localStorage.setItem(CHAVES.formato, JSON.stringify(formato));
+    gravarRomanos8();
+    await guardarRomanos();
+    render(<App />);
+    lerBiblia();
+    // Na tela larga o par pode começar no capítulo 7 (o nome do livro ocupa a primeira página).
+    if (formato === 'livro') expect(await screen.findByRole('button', { name: /^Romanos [78]\./ })).toBeInTheDocument();
+    else expect(await screen.findByText('Romanos 8:1')).toBeInTheDocument();
+  }
+
+  it('FUN-153: dono no formato livro com um livro aberto vê o botão "Resumo", depois do de formato', async () => {
+    await abrirRomanos();
+    const nomes = screen.getAllByRole('button').map((b) => b.getAttribute('aria-label'));
+    expect(nomes.indexOf('Resumo')).toBe(nomes.indexOf('Ler em rolagem') + 1);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('FUN-153: sem sessão de dono não há botão "Resumo"', async () => {
+    await abrirRomanos({ dono: false });
+    semBotaoResumo();
+  });
+
+  it('FUN-153: sessão de usuário comum (não dono) não tem botão "Resumo"', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === '/api/sessao') {
+          return new Response(JSON.stringify({ dono: false }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+        throw new TypeError('sem rede');
+      }),
+    );
+    await abrirRomanos({ dono: false });
+    // A sessão de usuário já foi confirmada (a barra oferece "Sair"); só então a ausência do botão prova algo.
+    expect(await screen.findByRole('button', { name: 'Sair' })).toBeInTheDocument();
+    semBotaoResumo();
+  });
+
+  it('FUN-153: na rolagem não há botão "Resumo"', async () => {
+    await abrirRomanos({ formato: 'rolagem' });
+    semBotaoResumo();
+  });
+
+  it('FUN-153: na capa não há botão "Resumo"', () => {
+    telaLarga(true);
+    lembrarDono();
+    localStorage.setItem(CHAVES.formato, JSON.stringify('livro'));
+    render(<App />);
+    lerBiblia();
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+    semBotaoResumo();
+  });
+
+  it('FUN-157: na tela larga, ligar mostra o resumo à direita, grava mj:resumo e reabrir volta ligado', async () => {
+    await abrirRomanos();
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('article', { name: 'Resumo de Romanos' })).toBeInTheDocument();
+    expect(screen.getAllByRole('article', { name: /^Página \d+ de Romanos$/ })).toHaveLength(1);
+    expect(localStorage.getItem(CHAVES.resumo)).toBe('true');
+    cleanup();
+    render(<App />);
+    lerBiblia();
+    expect(await screen.findByRole('article', { name: 'Resumo de Romanos' })).toBeInTheDocument();
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('FUN-157: desligar na tela larga grava mj:resumo falso', async () => {
+    await abrirRomanos();
+    fireEvent.click(botaoResumo());
+    fireEvent.click(botaoResumo());
+    expect(localStorage.getItem(CHAVES.resumo)).toBe('false');
+    expect(screen.queryByRole('article', { name: 'Resumo de Romanos' })).toBeNull();
+  });
+
+  it('FUN-162: na tela estreita, "Resumo" alterna e a mesma página da Bíblia volta; nada é gravado', async () => {
+    await abrirRomanos({ larga: false });
+    const pagina = screen.getByRole('article', { name: /^Página \d+ de Romanos$/ }).getAttribute('aria-label');
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('article', { name: 'Resumo de Romanos' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeNull();
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('article', { name: pagina! })).toBeInTheDocument();
+    expect(localStorage.getItem(CHAVES.resumo)).toBeNull();
+  });
+
+  it('A-04 FUN-162: ligado na tela estreita, girar para larga e voltar à estreita deixa o resumo desligado', async () => {
+    await abrirRomanos({ larga: false });
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+    girar(true);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false'); // na larga vale a preferência gravada (desligada)
+    girar(false);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByRole('article', { name: 'Resumo de Romanos' })).toBeNull();
+    expect(screen.getByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeInTheDocument();
+  });
+
+  it('A-13 FUN-162: ligado na tela estreita em um livro, ir a outro e voltar deixa o resumo desligado', async () => {
+    const outro = indice.livros[47]!; // Gálatas: outro livro, com o texto guardado no cache
+    await duble.cache(CACHE_LIVROS).put(
+      outro.arquivo,
+      new Response(
+        JSON.stringify({
+          numero: outro.numero,
+          nome: outro.nome,
+          capitulos: Array.from({ length: outro.capitulos }, (_, c) => [`${outro.nome} ${c + 1}:1`]),
+        }),
+      ),
+    );
+    await abrirRomanos({ larga: false });
+    fireEvent.click(botaoResumo());
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('article', { name: 'Resumo de Romanos' })).toBeInTheDocument();
+
+    // Com o resumo ligado o título do livro continua na tela: é por ele que se escolhe outro livro.
+    const irPara = async (livro: { nome: string; capitulos: number }) => {
+      fireEvent.click(screen.getByRole('button', { name: /\. Escolher outro capítulo$/ }));
+      fireEvent.click(screen.getByRole('button', { name: 'Trocar livro' }));
+      fireEvent.click(screen.getByRole('button', { name: `${livro.nome}, ${livro.capitulos} capítulos` }));
+      fireEvent.click(screen.getByRole('button', { name: 'Capítulo 1' }));
+      expect(await screen.findByRole('button', { name: new RegExp(`^${livro.nome} 1\\.`) })).toBeInTheDocument();
+    };
+    await irPara(outro);
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByRole('article', { name: /^Resumo de / })).toBeNull();
+
+    await irPara({ nome: 'Romanos', capitulos: 16 });
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByRole('article', { name: 'Resumo de Romanos' })).toBeNull();
+    expect(screen.getByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeInTheDocument();
+  });
+
+  it('FUN-162: com o resumo ligado na tela larga, abrir na estreita mostra a Bíblia com o botão não pressionado', async () => {
+    localStorage.setItem(CHAVES.resumo, 'true');
+    await abrirRomanos({ larga: false });
+    expect(screen.getByRole('article', { name: /^Página \d+ de Romanos$/ })).toBeInTheDocument();
+    expect(botaoResumo()).toHaveAttribute('aria-pressed', 'false');
   });
 });

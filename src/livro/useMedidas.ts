@@ -1,6 +1,4 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import type { Bloco } from './paginacao';
-
 /** Medidas que `paginar` usa: a altura de cada bloco, a da página e a da linha (FUN-75). */
 export interface Medidas {
   alturas: number[];
@@ -43,9 +41,9 @@ export function medirNoDom(contenedor: HTMLElement): Medidas {
   };
 }
 
-interface Medicao {
+interface Medicao<B> {
   /** Os blocos que foram medidos: medida de outro livro nunca é entregue. */
-  blocos: Bloco[];
+  blocos: readonly B[];
   medidas: Medidas;
 }
 
@@ -53,17 +51,17 @@ interface Medicao {
  * Mede os blocos de um livro na largura e na letra da página (design: "useMedidas"). Quem usa renderiza os blocos
  * num contêiner invisível (`visibility: hidden`, fora do fluxo, `aria-hidden`), um filho por bloco, e liga o `ref`
  * a ele. Remede quando os blocos ou a `chave` (letra, tema) mudam e quando o `ResizeObserver` avisa outro tamanho
- * (FUN-86). `medidas` é `null` até a primeira medida e enquanto os blocos novos não foram medidos.
+ * (FUN-86). Serve a qualquer lista de blocos (o livro e o resumo, FUN-169). `medidas` é `null` até a primeira medida e enquanto os blocos novos não foram medidos.
  */
-export function useMedidas(
-  blocos: Bloco[],
+export function useMedidas<B>(
+  blocos: readonly B[],
   chave: string | number,
   medir: Medir = medirNoDom,
 ): { ref: (no: HTMLDivElement | null) => void; medidas: Medidas | null } {
   // O contêiner some (capa, plano pago, sem rede) e volta: o ref de função guarda o nó em estado, e o efeito refaz a
   // medida e a observação toda vez que o nó é outro (FUN-86).
   const [contenedor, ref] = useState<HTMLDivElement | null>(null);
-  const [medicao, setMedicao] = useState<Medicao | null>(null);
+  const [medicao, setMedicao] = useState<Medicao<B> | null>(null);
   const medirAtual = useRef(medir);
 
   useEffect(() => {

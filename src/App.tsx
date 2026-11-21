@@ -1,13 +1,18 @@
+import { useEffect, useState } from 'react';
 import { resumoCorrecoes } from './biblia/correcoesAplicadas';
 import { indice } from './biblia/indice';
 import { BarraTitulo } from './componentes/BarraTitulo';
 import { ConviteInstalacao } from './componentes/ConviteInstalacao';
+import { gravarResumoLigado, lerResumoLigado } from './dados/preferencias';
 import { useLeitor } from './estado/useLeitor';
+import { useSessao } from './estado/useSessao';
+import { PaginaResumo } from './livro/PaginaResumo';
 import { useTelaLarga } from './livro/useTelaLarga';
 import { TelaLivro } from './telas/TelaLivro';
 import { TelaCapitulos } from './telas/TelaCapitulos';
 import { TelaCorrecoes } from './telas/TelaCorrecoes';
 import { TelaEmBreve } from './telas/TelaEmBreve';
+import { TelaEntrar } from './telas/TelaEntrar';
 import { TelaInicial } from './telas/TelaInicial';
 import { TelaLeitor } from './telas/TelaLeitor';
 import { TelaLivros } from './telas/TelaLivros';
@@ -20,9 +25,31 @@ import { TelaSobre } from './telas/TelaSobre';
  */
 export function App() {
   const leitor = useLeitor();
+  const sessao = useSessao();
   const larga = useTelaLarga();
   const { estado, carga } = leitor;
   const ref = estado.ref;
+
+  // Resumo no modo livro (FUN-153, FUN-157, FUN-162): na tela larga a escolha é gravada; na estreita fica só na memória
+  // e vale para o livro em que foi ligada (trocar de livro a desliga).
+  const [resumoLarga, setResumoLarga] = useState(lerResumoLigado);
+  const [resumoEstreita, setResumoEstreita] = useState<number | null>(null);
+  const numeroLivro =
+    estado.ancora.tipo === 'texto' ? estado.ancora.ref.livro : estado.ancora.tipo === 'fim' ? estado.ancora.livro : 0;
+  const comBotaoResumo =
+    sessao.sessao === 'dono' && estado.tela === 'leitor' && estado.formato === 'livro' && numeroLivro > 0;
+  // Trocar de livro ou de largura desliga o resumo da tela estreita: voltar ao livro anterior não o religa (A-04).
+  useEffect(() => setResumoEstreita(null), [numeroLivro, larga]);
+  const resumoLigado = larga ? resumoLarga : resumoEstreita === numeroLivro;
+  const modoResumo = !comBotaoResumo || !resumoLigado ? 'desligado' : larga ? 'lado' : 'sozinho';
+  const alternarResumo = () => {
+    if (larga) {
+      gravarResumoLigado(!resumoLarga);
+      setResumoLarga(!resumoLarga);
+    } else {
+      setResumoEstreita(resumoEstreita === numeroLivro ? null : numeroLivro);
+    }
+  };
 
   const voltarALeitura = () => leitor.irPara('leitor');
   const abrirSobre = () => leitor.irPara('sobre');
@@ -33,6 +60,19 @@ export function App() {
     tela = <TelaInicial aoLerBiblia={leitor.lerBiblia} aoCriarConta={leitor.abrirEmBreve} />;
   } else if (estado.tela === 'emBreve') {
     tela = <TelaEmBreve aoVoltar={leitor.voltar} aoLerBiblia={leitor.lerBiblia} />;
+  } else if (estado.tela === 'entrar') {
+    // FUN-137, FUN-138: com a sessão aberta, volta à tela de onde o login foi aberto; "Criar conta" vai à "em breve".
+    tela = (
+      <TelaEntrar
+        aoEntrar={async (email, senha) => {
+          const resultado = await sessao.entrar(email, senha);
+          if (resultado === 'dono' || resultado === 'usuario') leitor.voltar();
+          return resultado;
+        }}
+        aoVoltar={leitor.voltar}
+        aoCriarConta={leitor.abrirEmBreve}
+      />
+    );
   } else if (estado.tela === 'leitor' && estado.formato === 'livro') {
     // FUN-66, FUN-67: no formato livro a tela é a do livro, com a âncora; a capa e o plano pago não têm livro (carga nula).
     tela = (
@@ -45,6 +85,17 @@ export function App() {
         aoTocarTitulo={leitor.tocarTitulo}
         aoEscolherOutroLivro={leitor.trocarLivro}
         aoQueroSaber={leitor.abrirEmBreve}
+        resumo={modoResumo}
+        paginaResumo={
+          modoResumo === 'desligado' ? undefined : (
+            <PaginaResumo
+              numeroLivro={numeroLivro}
+              nome={indice.livros[numeroLivro - 1]?.nome ?? ''}
+              aoPerderSessao={sessao.perder}
+              letra={estado.letra}
+            />
+          )
+        }
       />
     );
   } else if (estado.tela === 'leitor' && ref && carga) {
@@ -93,7 +144,10 @@ export function App() {
         aoIrParaInicial={() => leitor.irPara('inicial')}
         aoTrocarFormato={leitor.trocarFormato}
         aoAbrirSobre={abrirSobre}
-        aoAbrirConta={leitor.abrirEmBreve}
+        aoAbrirConta={leitor.abrirEntrar}
+        comSessao={sessao.sessao !== 'sem'}
+        aoSair={() => void sessao.sair()}
+        resumo={comBotaoResumo ? { ligado: resumoLigado, aoAlternar: alternarResumo } : undefined}
         aoMudarLetra={leitor.mudarLetra}
         aoEscolherTema={leitor.escolherTema}
       />

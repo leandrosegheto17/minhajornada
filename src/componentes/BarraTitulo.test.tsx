@@ -75,6 +75,32 @@ describe('BarraTitulo', () => {
     expect(p.aoAbrirConta).toHaveBeenCalledTimes(1);
   });
 
+  it('FUN-142: com sessão o botão da conta vira "Sair", com o mesmo texto no rótulo acessível e no visível', () => {
+    const p = props();
+    render(<BarraTitulo {...p} comSessao aoSair={vi.fn()} />);
+    const sair = screen.getByRole('button', { name: 'Sair' });
+    expect(sair).toHaveTextContent('Sair');
+    expect(screen.queryByRole('button', { name: 'Entrar ou criar conta' })).toBeNull();
+  });
+
+  it('FUN-143: com sessão o botão chama aoSair e não aoAbrirConta', () => {
+    const p = props();
+    const aoSair = vi.fn();
+    render(<BarraTitulo {...p} comSessao aoSair={aoSair} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Sair' }));
+    expect(aoSair).toHaveBeenCalledTimes(1);
+    expect(p.aoAbrirConta).not.toHaveBeenCalled();
+  });
+
+  it('FUN-142: sem sessão segue "Entrar / Criar conta" e aoSair não é chamado', () => {
+    const p = props();
+    const aoSair = vi.fn();
+    render(<BarraTitulo {...p} comSessao={false} aoSair={aoSair} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Entrar ou criar conta' }));
+    expect(p.aoAbrirConta).toHaveBeenCalledTimes(1);
+    expect(aoSair).not.toHaveBeenCalled();
+  });
+
   it('FUN-44: o Sobre tem rótulo em português e abre o Sobre', () => {
     const p = props();
     render(<BarraTitulo {...p} />);
@@ -86,5 +112,36 @@ describe('BarraTitulo', () => {
     render(<BarraTitulo {...props()} />);
     const barra = screen.getByRole('banner');
     expect(barra.className).toMatch(/barra-titulo/);
+  });
+});
+
+describe('botão "Resumo" (FUN-153, FUN-157, FUN-162)', () => {
+  it('FUN-153: sem a prop `resumo` não há botão "Resumo"', () => {
+    render(<BarraTitulo {...props('livro')} />);
+    expect(screen.queryByRole('button', { name: 'Resumo' })).toBeNull();
+  });
+
+  it('FUN-153: com a prop, a ordem é marca, formato, "Resumo", Aa, Sobre e conta', () => {
+    render(<BarraTitulo {...props('livro')} resumo={{ ligado: false, aoAlternar: vi.fn() }} />);
+    const nomes = screen.getAllByRole('button').map((b) => b.getAttribute('aria-label'));
+    expect(nomes).toEqual([
+      'MinhaJornada, página inicial',
+      'Ler em rolagem',
+      'Resumo',
+      'Aparência: letra e tema',
+      'Sobre o MinhaJornada',
+      'Entrar ou criar conta',
+    ]);
+  });
+
+  it('FUN-162: `aria-pressed` acompanha `ligado` e o clique alterna', () => {
+    const aoAlternar = vi.fn();
+    const { rerender } = render(<BarraTitulo {...props('livro')} resumo={{ ligado: false, aoAlternar }} />);
+    const botao = screen.getByRole('button', { name: 'Resumo' });
+    expect(botao).toHaveAttribute('aria-pressed', 'false');
+    fireEvent.click(botao);
+    expect(aoAlternar).toHaveBeenCalledTimes(1);
+    rerender(<BarraTitulo {...props('livro')} resumo={{ ligado: true, aoAlternar }} />);
+    expect(screen.getByRole('button', { name: 'Resumo' })).toHaveAttribute('aria-pressed', 'true');
   });
 });

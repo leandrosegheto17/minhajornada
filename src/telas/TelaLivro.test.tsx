@@ -473,3 +473,123 @@ describe('tela larga e lugar da âncora (FUN-71, FUN-77, FUN-84, FUN-85, FUN-88;
     expect(gen.aoIrParaAncora).toHaveBeenCalledWith({ tipo: 'capa' });
   });
 });
+
+describe('resumo no modo livro (FUN-154 a FUN-162)', () => {
+  const resumoDe = (nome: string) => <article aria-label={`Resumo de ${nome}`}>Texto do resumo de {nome}</article>;
+  const basePropsResumo = (extra: Partial<Props> = {}): Props => ({
+    ancora: texto(RUTE, 1),
+    carga: pronto(RUTE),
+    larga: true,
+    letra: 3,
+    aoIrParaAncora: vi.fn(),
+    aoTocarTitulo: vi.fn(),
+    aoEscolherOutroLivro: vi.fn(),
+    aoQueroSaber: vi.fn(),
+    medir,
+    resumo: 'lado',
+    paginaResumo: resumoDe('Rute'),
+    ...extra,
+  });
+  const paginasDaBiblia = () => screen.queryAllByRole('article', { name: /^Página \d+ de / });
+
+  it('FUN-154: ligado na tela larga, uma página da Bíblia à esquerda e o resumo à direita', () => {
+    render(<TelaLivro {...basePropsResumo()} />);
+    const biblia = screen.getByRole('article', { name: 'Página 1 de Rute' });
+    const resumo = screen.getByRole('article', { name: 'Resumo de Rute' });
+    expect(paginasDaBiblia()).toHaveLength(1);
+    expect(biblia.compareDocumentPosition(resumo) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByText('Rute, página 1 de 2')).toBeInTheDocument();
+  });
+
+  it('FUN-155: "seguinte" e "anterior" passam uma página da Bíblia por vez e o resumo continua', () => {
+    const p = basePropsResumo();
+    const { rerender } = render(<TelaLivro {...p} />);
+    fireEvent.click(seguinte());
+    expect(p.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE, 4));
+    rerender(<TelaLivro {...p} ancora={texto(RUTE, 4)} />);
+    expect(screen.getByRole('article', { name: 'Página 2 de Rute' })).toBeInTheDocument();
+    expect(screen.getByRole('article', { name: 'Resumo de Rute' })).toBeInTheDocument();
+    fireEvent.click(anterior());
+    expect(p.aoIrParaAncora).toHaveBeenLastCalledWith(texto(RUTE, 1));
+  });
+
+  it('FUN-155: na última página, "seguinte" vai ao livro seguinte e, na primeira de Gênesis, "anterior" vai à capa', () => {
+    const p = basePropsResumo({ ancora: texto(RUTE, 4) });
+    const { unmount } = render(<TelaLivro {...p} />);
+    fireEvent.click(seguinte());
+    expect(p.aoIrParaAncora).toHaveBeenCalledWith(texto(RUTE + 1, 1));
+    unmount();
+    const g = basePropsResumo({ ancora: texto(1, 1), carga: pronto(1) });
+    render(<TelaLivro {...g} />);
+    fireEvent.click(anterior());
+    expect(g.aoIrParaAncora).toHaveBeenCalledWith({ tipo: 'capa' });
+  });
+
+  it('FUN-156: desligar na página 3 mostra o par que contém a página 3', () => {
+    const p = basePropsResumo({ ancora: texto(RUTE, 4) });
+    const { rerender } = render(<TelaLivro {...p} />);
+    expect(paginasDaBiblia()).toHaveLength(1);
+    rerender(<TelaLivro {...p} resumo="desligado" paginaResumo={undefined} />);
+    expect(screen.getByRole('article', { name: 'Página 1 de Rute' })).toBeInTheDocument();
+    expect(screen.getByRole('article', { name: 'Página 2 de Rute' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: 'Resumo de Rute' })).toBeNull();
+  });
+
+  it('FUN-158: trocar de livro mostra à direita o resumo do livro novo', () => {
+    const p = basePropsResumo();
+    const { rerender } = render(<TelaLivro {...p} />);
+    rerender(
+      <TelaLivro {...p} ancora={texto(RUTE + 1, 1)} carga={pronto(RUTE + 1)} paginaResumo={resumoDe('1 Samuel')} />,
+    );
+    expect(screen.getByRole('article', { name: 'Resumo de 1 Samuel' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: 'Resumo de Rute' })).toBeNull();
+  });
+
+  it('FUN-159: na capa e no plano pago com o resumo ligado, o par de hoje, sem resumo; "seguinte" vai a Gênesis', () => {
+    const capa = basePropsResumo({ ancora: { tipo: 'capa' }, carga: null });
+    const { unmount } = render(<TelaLivro {...capa} />);
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+    expect(screen.getByRole('article', { name: 'Plano de estudo' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: 'Resumo de Rute' })).toBeNull();
+    fireEvent.click(seguinte());
+    expect(capa.aoIrParaAncora).toHaveBeenCalledWith(texto(1, 1));
+    unmount();
+    render(<TelaLivro {...basePropsResumo({ ancora: { tipo: 'pago' }, carga: null })} />);
+    expect(screen.queryByRole('article', { name: 'Resumo de Rute' })).toBeNull();
+    expect(screen.getByRole('article', { name: 'Plano de estudo' })).toBeInTheDocument();
+  });
+
+  it('FUN-160: "sozinho" mostra só o resumo, sem os botões da Bíblia e com o título do capítulo', () => {
+    render(<TelaLivro {...basePropsResumo({ larga: false, resumo: 'sozinho' })} />);
+    expect(screen.getByRole('article', { name: 'Resumo de Rute' })).toBeInTheDocument();
+    expect(paginasDaBiblia()).toHaveLength(0);
+    expect(screen.queryByRole('button', { name: 'Página seguinte' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Página anterior' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Rute 1. Escolher outro capítulo' })).toBeInTheDocument();
+  });
+
+  it('FUN-160: "sozinho" não passa página da Bíblia com o deslize', () => {
+    const p = basePropsResumo({ larga: false, resumo: 'sozinho' });
+    render(<TelaLivro {...p} />);
+    const area = screen.getByRole('main');
+    fireEvent.pointerDown(area, { pointerId: 1, pointerType: 'touch', isPrimary: true, clientX: 200, clientY: 300 });
+    fireEvent.pointerUp(area, { pointerId: 1, pointerType: 'touch', isPrimary: true, clientX: 100, clientY: 300 });
+    expect(p.aoIrParaAncora).not.toHaveBeenCalled();
+  });
+
+  it('FUN-161: voltar a "desligado" mostra a mesma página da Bíblia de antes', () => {
+    const p = basePropsResumo({ larga: false, resumo: 'sozinho', ancora: texto(RUTE, 4) });
+    const { rerender } = render(<TelaLivro {...p} />);
+    rerender(<TelaLivro {...p} resumo="desligado" paginaResumo={undefined} />);
+    expect(screen.getByRole('article', { name: 'Página 2 de Rute' })).toBeInTheDocument();
+    expect(p.aoIrParaAncora).not.toHaveBeenCalled();
+  });
+
+  it('FUN-159: "sozinho" na capa também ignora o resumo', () => {
+    render(
+      <TelaLivro {...basePropsResumo({ larga: false, resumo: 'sozinho', ancora: { tipo: 'capa' }, carga: null })} />,
+    );
+    expect(screen.getByRole('article', { name: 'Capa' })).toBeInTheDocument();
+    expect(screen.queryByRole('article', { name: 'Resumo de Rute' })).toBeNull();
+  });
+});

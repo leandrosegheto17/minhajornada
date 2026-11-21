@@ -6,7 +6,7 @@
 - **Item**: `.specs/features/resumo-livro/` (feature 6 do roteiro, AD-019, AD-020, AD-022)
 - **Fases aprovadas**: 1 Pedido (`spec.md`, FUN-137 a FUN-176) em 2026-11-19; 2 Reconhecimento (`reconhecimento.md`, AD-022) em 2026-11-19; 2b Mockup (`mockup/`, artifact https://claude.ai/artifact/MQKVxYCMLeavYaThufGqTA) em 2026-11-20; 3 Plano (`design.md`, `reuso.md`, `tasks.md`, AD-023, AD-024) em 2026-11-20; 4 Rede de proteção planejada (linha de base, sem T0) em 2026-11-20
 - **Próxima fase**: planejamento concluído. Próximo: `/preparar` (nova rodada: Postgres local e `DATABASE_URL_TESTE` no Nível 1, exigidos a partir da T1; Neon, papel `mj_app`, Hyperdrive, `DATABASE_URL_DONO`, `URL_PUBLICA` e id livre do `ratelimits` no Nível 2) e depois `/executar` (Sonnet)
-- **Serviços no ar**: nenhum
+- **Serviços no ar**: container `minhajornada-postgres` (postgres:18, 127.0.0.1:55433, usuário `mj_dono`, banco `minhajornada`); testes com `DATABASE_URL_TESTE=postgresql://mj_dono:senha-so-local@127.0.0.1:55433/minhajornada` (derrubar ao fim da feature)
 - **Progresso**: Produto: Faltam 5 de 10 features: 50% concluído; resumo-livro: faltam 41 de 41 tarefas
 - **Combinado na conversa e não registrado em artefato**: nada; escolhas do dono de 2026-11-20 (papel `mj_app`, propostas na T41) estão na AD-023 e no `tasks.md`
 
@@ -26,6 +26,12 @@
 | 2026-11-19 | 3 | livro-paginas | /executar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-19 | 3 | livro-paginas | /validar | Sonnet | Opus (escolha do usuário) |
 | 2026-11-19 | 12 | convite-coberto-iphone | /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /executar e /validar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /executar | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /validar rodada 2 | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /validar rodada 3 | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /validar rodada 4 | Sonnet | Opus (escolha do usuário) |
+| 2026-11-20 | 3 | resumo-livro | /validar rodada 5 | Sonnet | Opus (escolha do usuário) |
 
 ## Próximas features (pedido de 2026-11-18)
 
@@ -53,6 +59,9 @@ Pedido do usuário, ainda sem planejamento (`/fluxo`, em Opus, depois de integra
 | 2026-11-19 | Feature `livro-paginas`, T5 | `test/arquivos/livro-css.test.ts:45-49` passa a afirmar a fórmula de `--largura-pagina-larga` com o vão (`var(--esp-8)`), mantendo que página e medida leem a mesma variável; o e2e de FUN-96 (`e2e/livro-tela-cheia.spec.ts:171-187`) passa a descontar o vão de 32 px; os de FUN-98 (`:305-320`) e FUN-99 (`:344-351`), só se quebrarem, viram asserções tão fortes quanto antes contra as bordas das páginas. Motivo no commit. Aprovada pelo dono. |
 | 2026-11-19 | Feature `livro-paginas`, T3 | Em `src/telas/TelaLivro.test.tsx`, o teste de FUN-84/FUN-71 (âncora no 2:1, antes numa página que começava no capítulo 1) passa a esperar o título do capítulo 2 na página 2 e ganha o caso da âncora no 1:3 (título do capítulo 1, página 1); o de FUN-77 passa a esperar o 2:1 (antes 2:2) como primeiro versículo da página seguinte ao par. Motivo: FUN-128 proíbe capítulo no meio da página; as asserções ficam tão fortes quanto antes. Aprovada pelo dono na execução. |
 | 2026-11-19 | Feature `resumo-livro` (AD-022) | `test/arquivos/wrangler.test.ts:33-36` ("sem `main`, sem bindings") e `test/arquivos/deploy.test.ts:78-85` (token só em `wrangler deploy\|rollback`) passam a afirmar o desenho novo (Worker com script, Hyperdrive e `ratelimits` por ambiente; segredo do banco só no passo de migração), tão fortes quanto antes; `src/componentes/BarraTitulo.test.tsx:69` e `src/App.test.tsx:105-113` passam a afirmar que a barra abre "Entrar" (FUN-137). Motivo no commit. Aprovada pelo dono. |
+| 2026-11-20 | Feature `resumo-livro`, retrabalho R1 (T45, A-11), `test/arquivos/deploy.test.ts:130-175` | Testes de FUN-147 reescritos para conferir a ordem dos jobs por `needs` (job `migrar` próprio); garantia tão forte quanto antes, motivo no commit 5b6aa54. Aprovada pelo dono no `/validar` rodada 2 (A-16). |
+| 2026-11-20 | Feature `resumo-livro`, retrabalho R2 (T54, A-14), `scripts/resumos/publicar.test.ts:296` | "FUN-174: um recusado inválido não impede a publicação" afirmava código 1 e sem conexão para arquivo só com recusado (o defeito do A-14); passa a afirmar conexão, remoção e código 0, mais forte que antes. Aprovada pelo dono no `/executar`. |
+| 2026-11-20 | Feature `resumo-livro`, retrabalho R4 (T63, T66; A-28) | `test/arquivos/deploy.test.ts` (A-18, A-19) passa a exigir `'mj_app'::name` (mais forte); o helper de `servidor/test/migracoes/conferir-papel.test.ts` chama `public.conferir_papel_app($1::name)`; `conferir-papel`, `inicial` e `papel-app.test.ts` movidos de `servidor/migracoes/` para `servidor/test/migracoes/` só com caminho e import. Nenhuma asserção enfraquecida. Aprovada pelo dono no `/validar` rodada 5. |
 
 ## Decisions
 

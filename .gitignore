@@ -21,3 +21,7 @@ src/biblia/correcoes.gerado.json
 dist-e2e/
 revisao/dados.json
 revisao/dist/
+revisao-resumos/dist/
+
+# Texto real dos resumos exportados pela revisão: nunca vai para o repositório (FUN-152, FUN-176)
+resumos-exportados/

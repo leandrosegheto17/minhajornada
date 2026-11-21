@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Formato, Tema } from '../biblia/tipos';
 import { BotaoIcone } from './base/Botoes';
 import estilo from './BarraTitulo.module.css';
-import { IconeAparencia, IconeConta, IconeLivroAberto, IconeRolagem, IconeSobre } from './icones';
+import { IconeAparencia, IconeConta, IconeLivroAberto, IconeResumo, IconeRolagem, IconeSobre } from './icones';
 import { ID_PAINEL_APARENCIA, PainelAparencia } from './PainelAparencia';
 
 interface Props {
@@ -14,8 +14,14 @@ interface Props {
   /** Botão de formato (FUN-67, FUN-72). */
   aoTrocarFormato: () => void;
   aoAbrirSobre: () => void;
-  /** "Entrar / Criar conta" (FUN-64): abre a tela "em breve". */
+  /** "Entrar / Criar conta" (FUN-64, FUN-137): abre a tela "Entrar". */
   aoAbrirConta: () => void;
+  /** Há sessão aberta: o botão da conta passa a ser "Sair" (FUN-142). */
+  comSessao?: boolean;
+  /** "Sair" (FUN-143); só vale com sessão. */
+  aoSair?: () => void;
+  /** Botão "Resumo" (FUN-153, FUN-157, FUN-162): só existe quando a prop vem; `ligado` vira `aria-pressed`. */
+  resumo?: { ligado: boolean; aoAlternar: () => void };
   aoMudarLetra: (delta: 1 | -1) => void;
   aoEscolherTema: (tema: Tema) => void;
 }
@@ -32,6 +38,9 @@ export function BarraTitulo({
   aoTrocarFormato,
   aoAbrirSobre,
   aoAbrirConta,
+  comSessao = false,
+  aoSair,
+  resumo,
   aoMudarLetra,
   aoEscolherTema,
 }: Props) {
@@ -59,6 +68,18 @@ export function BarraTitulo({
             {paraLivro ? <IconeLivroAberto /> : <IconeRolagem />}
             <span className={estilo['rotulo-formato']}>{paraLivro ? 'Livro' : 'Rolagem'}</span>
           </button>
+          {resumo ? (
+            <button
+              type="button"
+              className={estilo['botao-alternar']}
+              aria-label="Resumo"
+              aria-pressed={resumo.ligado}
+              onClick={resumo.aoAlternar}
+            >
+              <IconeResumo />
+              <span className={estilo['rotulo-alternar']}>Resumo</span>
+            </button>
+          ) : null}
           <div className={estilo['ancora-painel']}>
             <BotaoIcone
               rotulo="Aparência: letra e tema"
@@ -82,11 +103,11 @@ export function BarraTitulo({
           <button
             type="button"
             className={estilo['botao-conta']}
-            aria-label="Entrar ou criar conta"
-            onClick={aoAbrirConta}
+            aria-label={comSessao ? 'Sair' : 'Entrar ou criar conta'}
+            onClick={comSessao ? aoSair : aoAbrirConta}
           >
             <IconeConta />
-            <span className={estilo['rotulo-conta']}>Entrar / Criar conta</span>
+            <span className={estilo['rotulo-conta']}>{comSessao ? 'Sair' : 'Entrar / Criar conta'}</span>
           </button>
         </div>
       </div>

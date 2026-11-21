@@ -356,3 +356,13 @@ describe('carregamento do livro', () => {
     await waitFor(() => expect(result.current.carga?.situacao).toBe('pronto'));
   });
 });
+
+describe('tela "entrar" (FUN-137, FUN-138)', () => {
+  it('FUN-138: abrirEntrar abre a tela e "voltar" retorna à tela de origem', () => {
+    const { result } = renderHook(() => useLeitor());
+    act(() => result.current.abrirEntrar());
+    expect(result.current.estado.tela).toBe('entrar');
+    act(() => result.current.voltar());
+    expect(result.current.estado.tela).toBe('inicial');
+  });
+});

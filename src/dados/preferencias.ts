@@ -13,6 +13,8 @@ export const CHAVES = {
   tema: 'mj:tema',
   formato: 'mj:formato',
   convite: 'mj:convite-ios',
+  dono: 'mj:dono',
+  resumo: 'mj:resumo',
 } as const;
 
 export const LETRA_PADRAO = 3;
@@ -105,6 +107,35 @@ export function lerFormato(): Formato {
 export function gravarFormato(formato: Formato): void {
   if (!FORMATOS.includes(formato)) return;
   gravar(CHAVES.formato, formato);
+}
+
+/**
+ * Dica de que este aparelho teve sessão de dono (FUN-145; design, Tech Decisions): só decide se o botão "Resumo"
+ * aparece sem internet. Não é credencial: o texto do resumo continua exigindo a sessão no servidor.
+ */
+export function donoNoAparelho(): boolean {
+  return ler(CHAVES.dono) === true;
+}
+
+export function lembrarDono(): void {
+  gravar(CHAVES.dono, true);
+}
+
+export function esquecerDono(): void {
+  apagar(CHAVES.dono);
+}
+
+/** Resumo ligado no formato livro (FUN-157): `false` sem escolha; valor que não é verdadeiro nem falso é apagado. */
+export function lerResumoLigado(): boolean {
+  const valor = ler(CHAVES.resumo);
+  if (valor === undefined) return false;
+  if (typeof valor === 'boolean') return valor;
+  apagar(CHAVES.resumo);
+  return false;
+}
+
+export function gravarResumoLigado(ligado: boolean): void {
+  gravar(CHAVES.resumo, ligado === true);
 }
 
 /** Convite de instalação do iPhone e iPad dispensado (FUN-47). */

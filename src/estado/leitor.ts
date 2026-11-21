@@ -6,7 +6,7 @@ import { anterior, refValida, seguinte } from '../navegacao/navegacao';
 export type { Formato };
 
 /** Telas do app, sem rotas de URL (design: "Telas"). */
-export type Tela = 'inicial' | 'livros' | 'capitulos' | 'leitor' | 'sobre' | 'correcoes' | 'emBreve';
+export type Tela = 'inicial' | 'livros' | 'capitulos' | 'leitor' | 'sobre' | 'correcoes' | 'emBreve' | 'entrar';
 
 /**
  * Lugar no formato livro (design: "Estado do lugar no livro"): o primeiro versículo visível, nunca um número de página,
@@ -32,7 +32,7 @@ export interface EstadoLeitor {
   formato: Formato;
   /** Lugar no formato livro; vale quando `formato` é `livro` e a tela é `leitor`. */
   ancora: Ancora;
-  /** Tela de onde se abriu a "em breve", para o "Voltar" dela (FUN-57). */
+  /** Tela de onde se abriu a "em breve" (FUN-57) ou a "entrar" (FUN-138), para o "Voltar" delas. */
   voltarPara: Tela;
 }
 
@@ -41,6 +41,7 @@ export type AcaoLeitor =
   | { tipo: 'lerBiblia' }
   | { tipo: 'trocarFormato' }
   | { tipo: 'abrirEmBreve' }
+  | { tipo: 'abrirEntrar' }
   | { tipo: 'voltar' }
   | { tipo: 'irParaAncora'; ancora: Ancora }
   | { tipo: 'escolherLivro'; livro: number }
@@ -101,6 +102,17 @@ function abrirEmBreve(estado: EstadoLeitor): EstadoLeitor {
   // Já em "em breve": mantém a origem guardada.
   if (estado.tela === 'emBreve') return estado;
   return { ...estado, tela: 'emBreve', voltarPara: estado.tela };
+}
+
+/** FUN-138: guarda a tela de origem em `voltarPara`; já em "entrar", mantém a origem guardada. */
+function abrirEntrar(estado: EstadoLeitor): EstadoLeitor {
+  if (estado.tela === 'entrar') return estado;
+  return { ...estado, tela: 'entrar', voltarPara: estado.tela };
+}
+
+/** Destino do "Voltar" de "entrar" e de "em breve": a origem guardada, ou a inicial se ela apontar para si mesma. */
+function destinoDoVoltar(origem: Tela): Tela {
+  return origem === 'emBreve' || origem === 'entrar' ? 'inicial' : origem;
 }
 
 function comecoDoCapitulo(ref: Ref): Ancora {
@@ -176,8 +188,13 @@ export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: In
     case 'abrirEmBreve':
       return abrirEmBreve(estado);
 
+    case 'abrirEntrar':
+      return abrirEntrar(estado);
+
     case 'voltar':
-      // FUN-57: sem origem guardada (ou fora de "em breve"), a ação não inventa destino.
+      // FUN-57, FUN-138: sem origem guardada (ou fora de "em breve" e de "entrar"), a ação não inventa destino. De "em
+      // breve" aberta por "entrar" o voltar cai em "entrar"; de lá, na inicial.
+      if (estado.tela === 'entrar') return { ...estado, tela: destinoDoVoltar(estado.voltarPara) };
       if (estado.tela !== 'emBreve') return estado;
       return { ...estado, tela: estado.voltarPara === 'emBreve' ? 'inicial' : estado.voltarPara };
 
@@ -230,6 +247,7 @@ export function reduzirLeitor(estado: EstadoLeitor, acao: AcaoLeitor, indice: In
     case 'irPara': {
       if (acao.tela === estado.tela) return estado;
       if (acao.tela === 'emBreve') return abrirEmBreve(estado);
+      if (acao.tela === 'entrar') return abrirEntrar(estado);
       // Leitor sem capítulo e grade sem livro não existem: a ação é ignorada. No formato livro o leitor existe sem
       // capítulo (a capa e o plano pago), e é para onde o Sobre volta.
       if (acao.tela === 'leitor' && !estado.ref && estado.formato !== 'livro') return estado;

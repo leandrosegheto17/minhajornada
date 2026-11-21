@@ -108,3 +108,12 @@ export function IconeConta() {
     </svg>
   );
 }
+
+export function IconeResumo() {
+  return (
+    <svg className="icone" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="4.5" y="3.5" width="15" height="17" rx="2" fill="none" stroke="currentColor" strokeWidth="1.9" />
+      <path d="M8 8h8M8 12h8M8 16h5" {...traco} strokeWidth="1.9" />
+    </svg>
+  );
+}

@@ -5,7 +5,8 @@
 # Disparo: `gh workflow run deploy --ref desenvolvimento` (tst) ou `--ref main` (produção).
 #
 # O job `conferir` (sem segredo) só deixa seguir se o workflow `ci` desse SHA, num push à mesma branch, terminou com
-# sucesso. O `construir` (sem segredo) faz o build e envia o `dist/` como artefato. O `publicar` roda no environment `tst` ou
+# sucesso. O `construir` (sem segredo) faz o build e envia o `dist/` como artefato. O `migrar` aplica as migrações com a URL do
+# banco, sem o token da Cloudflare (A-11). O `publicar` roda no environment `tst` ou
 # `producao` (segredos separados, só nos passos do wrangler), publica o Worker e confere a fumaça (página, `/sw.js` e um
 # livro, com os cabeçalhos de segurança do AD-003). Se a fumaça falha depois de publicar, volta a
 # versão anterior (`wrangler rollback`).
@@ -79,8 +80,38 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  publicar:
+  # A migração roda num job próprio (A-11): o código das dependências de `pnpm migrar` (node-pg-migrate, pg e outros)
+  # nunca divide o job nem o `node_modules` com o token da Cloudflare. A URL do banco (papel dono) vive só neste passo.
+  # As migrações são aditivas: se a fumaça falhar depois, a volta do Worker não precisa desfazer o banco.
+  migrar:
     needs: construir
+    if: ${{ vars.DEPLOY_ATIVO == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'producao' || 'tst' }}
+      url: ${{ github.ref == 'refs/heads/main' && 'https://minhajornada.ljssoftware.com.br' || 'https://minhajornada-tst.ljssoftware.com.br' }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      # A conferência do papel roda a cada deploy: papel alterado depois no Console do Neon para o deploy (A-18). Com schema
+      # e search_path fixos, nenhum schema criado pelo papel conferido sombreia a função (A-19).
+      - name: Migrar o banco e conferir o papel do app antes de publicar
+        env:
+          DATABASE_URL_DONO: ${{ secrets.DATABASE_URL_DONO }}
+        run: |
+          pnpm migrar
+          PGOPTIONS='-c search_path=pg_catalog' psql "$DATABASE_URL_DONO" -v ON_ERROR_STOP=1 -c "SELECT public.conferir_papel_app('mj_app'::name)"
+
+  publicar:
+    needs: [construir, migrar]
     if: ${{ vars.DEPLOY_ATIVO == 'true' }}
     runs-on: ubuntu-latest
     environment:
@@ -130,6 +161,19 @@ jobs:
               fi
             done
           done
+
+      - name: 3. Fumaça da API sem sessão (FUN-147, FUN-151)
+        run: |
+          cabecalhos="$(curl -sS --retry 5 --retry-all-errors --retry-delay 3 -D - -o /dev/null "${URL_PUBLICA}/api/resumos/1")"
+          status="$(head -n 1 <<< "${cabecalhos}" | tr -d '\r' | cut -d ' ' -f 2)"
+          if [ "${status}" != "401" ]; then
+            echo "::error title=Fumaça da API falhou::/api/resumos/1 sem sessão devia responder 401 e respondeu ${status:-nada}."
+            exit 1
+          fi
+          if ! grep -qi -- '^cache-control:.*no-store' <<< "${cabecalhos}"; then
+            echo "::error title=Fumaça da API falhou::/api/resumos/1 não traz cache-control: no-store."
+            exit 1
+          fi
 
       - name: Voltar a versão anterior do Worker
         if: ${{ failure() && steps.publicar.outcome == 'success' }}

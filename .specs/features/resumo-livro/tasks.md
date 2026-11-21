@@ -150,6 +150,48 @@ T38 → T39 → T40
 T41
 ```
 
+### Phase 15: Retrabalho R1 (crítica)
+
+```
+T42 → T43 → T44 → T45 → T46 → T47
+```
+
+### Phase 16: Retrabalho R1 (comum)
+
+```
+T48 → T49 → T50 → T51 → T52 → T53
+```
+
+### Phase 17: Retrabalho R2 (crítica)
+
+```
+T54 → T55 → T56 → T57
+```
+
+### Phase 18: Retrabalho R2 (comum)
+
+```
+T58
+```
+
+### Phase 19: Retrabalho R3 (crítica)
+
+```
+T59 → T60 → T61 → T62
+```
+
+### Phase 20: Retrabalho R4 (crítica)
+
+```
+T63 → T64 → T65 → T66 → T67
+```
+
+### Phase 21: Retrabalho R5 (comum)
+
+```
+T68
+```
+
 ---
 
 ## Task Breakdown
@@ -168,10 +210,10 @@ T41
 
 **Done when**:
 
-- [ ] `pnpm typecheck` roda `tsc -p tsconfig.servidor.json` além dos dois de hoje, com tipos do Workers só nesse alvo
-- [ ] `pnpm test` roda os três projetos (`componentes`, `arquivos`, `servidor`)
-- [ ] `servidor/app.test.ts`: `GET /api/inexistente` e `POST /api/x` respondem 404 com JSON
-- [ ] Gate full verde
+- [x] `pnpm typecheck` roda `tsc -p tsconfig.servidor.json` além dos dois de hoje, com tipos do Workers só nesse alvo
+- [x] `pnpm test` roda os três projetos (`componentes`, `arquivos`, `servidor`)
+- [x] `servidor/app.test.ts`: `GET /api/inexistente` e `POST /api/x` respondem 404 com JSON
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/app.test.ts`
 **Gate**: full
@@ -193,9 +235,9 @@ T41
 
 **Done when**:
 
-- [ ] `wrangler.test.ts` afirma, para o topo e para `env.tst`: `main`, `run_worker_first: ["/api/*"]`, `nodejs_compat`, `vars.URL_PUBLICA` com o domínio do ambiente, um `hyperdrive`, `ratelimits` com `LIMITE_ENTRAR` (5 por 60 s), `workers_dev: false`, `preview_urls: false`, `dev.ip` `127.0.0.1`; nenhuma senha nem URL de banco no arquivo (teste alterado com motivo no commit)
-- [ ] `worker.ts` monta as dependências do `env` (Hyperdrive, binding, `URL_PUBLICA`) e repassa ao app; typecheck verde
-- [ ] Gate quick verde
+- [x] `wrangler.test.ts` afirma, para o topo e para `env.tst`: `main`, `run_worker_first: ["/api/*"]`, `nodejs_compat`, `vars.URL_PUBLICA` com o domínio do ambiente, um `hyperdrive`, `ratelimits` com `LIMITE_ENTRAR` (5 por 60 s), `workers_dev: false`, `preview_urls: false`, `dev.ip` `127.0.0.1`; nenhuma senha nem URL de banco no arquivo (teste alterado com motivo no commit)
+- [x] `worker.ts` monta as dependências do `env` (Hyperdrive, binding, `URL_PUBLICA`) e repassa ao app; typecheck verde
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/wrangler.test.ts`
 **Gate**: quick
@@ -217,15 +259,17 @@ T41
 
 **Done when**:
 
-- [ ] Teste de arquivo afirma o serviço `postgres:18` com `pg_isready`, porta 5432 e `DATABASE_URL_TESTE` apontando para `127.0.0.1`/`localhost` no passo `pnpm test`
-- [ ] Nenhum segredo real: senha de teste fixa só no CI
-- [ ] Gate quick verde
+- [x] Teste de arquivo afirma o serviço `postgres:18` com `pg_isready`, porta 5432 e `DATABASE_URL_TESTE` apontando para `127.0.0.1`/`localhost` no passo `pnpm test`
+- [x] Nenhum segredo real: senha de teste fixa só no CI
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/ci.test.ts`
 **Gate**: quick
 **Commit**: `ci: postgres para os testes do servidor`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquivos --reporter=dot @ 638260873ad62d6e773c8c43e8c206121e60cac8 = verde
 
 ### T4: Guarda de Host e de origem (segurança padrão)
 
@@ -241,9 +285,9 @@ T41
 
 **Done when**:
 
-- [ ] Um teste por ramo: Host igual, diferente, com porta, em caixa alta; `URL_PUBLICA` ausente e ilegível; para cada método de escrita: `Sec-Fetch-Site` `cross-site`, `same-site`, `SAME-ORIGIN`, `none`, ausente; `Origin` igual, diferente, `null`, em caixa alta; GET e HEAD passam sem conferir origem
-- [ ] A rodada vermelha (guarda removida) registrada no commit
-- [ ] Gate full verde
+- [x] Um teste por ramo: Host igual, diferente, com porta, em caixa alta; `URL_PUBLICA` ausente e ilegível; para cada método de escrita: `Sec-Fetch-Site` `cross-site`, `same-site`, `SAME-ORIGIN`, `none`, ausente; `Origin` igual, diferente, `null`, em caixa alta; GET e HEAD passam sem conferir origem
+- [x] A rodada vermelha (guarda removida) registrada no commit
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/middlewares/guarda.test.ts`, nomes com "Host 421" ou "origem 403"
 **Gate**: full
@@ -265,8 +309,8 @@ T41
 
 **Done when**:
 
-- [ ] Os quatro cabeçalhos em 200, 404, 421, 403, 500 (erro provocado numa rota de teste)
-- [ ] Gate full verde
+- [x] Os quatro cabeçalhos em 200, 404, 421, 403, 500 (erro provocado numa rota de teste)
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/middlewares/cabecalhos.test.ts`, nomes com `FUN-151`
 **Gate**: full
@@ -288,15 +332,17 @@ T41
 
 **Done when**:
 
-- [ ] Com um limite falso de 5 por chave: 5 passam, a 6ª dá 429 com `Retry-After: 60`; outro IP passa; sem `CF-Connecting-IP` usa a chave `entrar:sem-ip`
-- [ ] Binding ausente: 503; binding que lança: 503
-- [ ] Gate full verde
+- [x] Com um limite falso de 5 por chave: 5 passam, a 6ª dá 429 com `Retry-After: 60`; outro IP passa; sem `CF-Connecting-IP` usa a chave `entrar:sem-ip`
+- [x] Binding ausente: 503; binding que lança: 503
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/middlewares/limite.test.ts`, nomes com `FUN-140`
 **Gate**: full
 **Commit**: `feat(servidor): limite de tentativas de login`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run --project servidor --project arquivos --reporter=dot @ 7efdd246b2dcc7c31302ca1f47280557869accc5 = verde
 
 ### T7: Banco de teste e migrador
 
@@ -312,10 +358,10 @@ T41
 
 **Done when**:
 
-- [ ] Teste: migrar um banco vazio duas vezes não falha nem repete migração
-- [ ] Teste: falha provocada no meio do teste não deixa `teste_*` no cluster (consulta a `pg_database` depois)
-- [ ] Host fora da lista é recusado antes de conectar
-- [ ] Gate full verde
+- [x] Teste: migrar um banco vazio duas vezes não falha nem repete migração
+- [x] Teste: falha provocada no meio do teste não deixa `teste_*` no cluster (consulta a `pg_database` depois)
+- [x] Host fora da lista é recusado antes de conectar
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/migrar.test.ts`
 **Gate**: full
@@ -337,10 +383,10 @@ T41
 
 **Done when**:
 
-- [ ] `usuario_entrar` devolve o id com a senha certa e `NULL` com senha errada, e-mail inexistente, e-mail vazio e senha vazia (FUN-139)
-- [ ] `senha_hash` começa com `$2` (bcrypt) e nunca é igual à senha (FUN-141); `email` em caixa alta é recusado pelo `CHECK`
-- [ ] `resumos.livro` fora de 1 a 66 é recusado; apagar o usuário apaga as sessões
-- [ ] Gate full verde
+- [x] `usuario_entrar` devolve o id com a senha certa e `NULL` com senha errada, e-mail inexistente, e-mail vazio e senha vazia (FUN-139)
+- [x] `senha_hash` começa com `$2` (bcrypt) e nunca é igual à senha (FUN-141); `email` em caixa alta é recusado pelo `CHECK`
+- [x] `resumos.livro` fora de 1 a 66 é recusado; apagar o usuário apaga as sessões
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/migracoes/inicial.test.ts`, nomes com `FUN-139` ou `FUN-141`
 **Gate**: full
@@ -362,10 +408,10 @@ T41
 
 **Done when**:
 
-- [ ] Matriz como `mj_app`: `usuarios` — SELECT de `id, dono` passa, SELECT de `senha_hash` e `*` falham, INSERT, UPDATE (com e sem WHERE) e DELETE (com e sem WHERE) falham; `resumos` — SELECT passa, INSERT, UPDATE e DELETE (com e sem WHERE) falham; `sessoes` — SELECT, INSERT, UPDATE de `usada_em` e DELETE passam, UPDATE de `usuario_id` falha; `usuario_entrar` executa
-- [ ] Papel sem a concessão (PUBLIC) não executa `usuario_entrar`
-- [ ] Casos limite e estados listados antes de codar no commit
-- [ ] Gate full verde
+- [x] Matriz como `mj_app`: `usuarios` — SELECT de `id, dono` passa, SELECT de `senha_hash` e `*` falham, INSERT, UPDATE (com e sem WHERE) e DELETE (com e sem WHERE) falham; `resumos` — SELECT passa, INSERT, UPDATE e DELETE (com e sem WHERE) falham; `sessoes` — SELECT, INSERT, UPDATE de `usada_em` e DELETE passam, UPDATE de `usuario_id` falha; `usuario_entrar` executa
+- [x] Papel sem a concessão (PUBLIC) não executa `usuario_entrar`
+- [x] Casos limite e estados listados antes de codar no commit
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/migracoes/papel-app.test.ts`, nomes com `AD-023` e o FUN do item
 **Gate**: full
@@ -387,16 +433,18 @@ T41
 
 **Done when**:
 
-- [ ] Erro provocado (`RAISE EXCEPTION`) dentro de `emTransacao` não deixa linha gravada
-- [ ] Requisição que consulta e a que não consulta terminam com a conexão fechada (contagem em `pg_stat_activity` ou dublê)
-- [ ] URL inválida: 500 `{ erro: 'interno' }` sem host nem senha no corpo nem no log
-- [ ] Gate full verde
+- [x] Erro provocado (`RAISE EXCEPTION`) dentro de `emTransacao` não deixa linha gravada
+- [x] Requisição que consulta e a que não consulta terminam com a conexão fechada (contagem em `pg_stat_activity` ou dublê)
+- [x] URL inválida: 500 `{ erro: 'interno' }` sem host nem senha no corpo nem no log
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/db/cliente.test.ts`
 **Gate**: full
 **Commit**: `feat(servidor): cliente do banco por requisição`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 03ea57a14c07b5ba71fd43009fc790fc34171edb = verde
 
 ### T11: Token e cookie da sessão (FUN-138, FUN-141)
 
@@ -412,10 +460,10 @@ T41
 
 **Done when**:
 
-- [ ] Cookie `__Host-sessao` com HttpOnly, Secure, SameSite=Lax, Path=/ e Max-Age de 30 dias; o de expirar tem Max-Age=0 (FUN-138)
-- [ ] Token de 43 caracteres base64url; hash de 32 bytes; dois tokens nunca iguais em 1.000 gerações
-- [ ] Cookie repetido ou fora do formato: `lerToken` devolve `null`
-- [ ] Gate full verde
+- [x] Cookie `__Host-sessao` com HttpOnly, Secure, SameSite=Lax, Path=/ e Max-Age de 30 dias; o de expirar tem Max-Age=0 (FUN-138)
+- [x] Token de 43 caracteres base64url; hash de 32 bytes; dois tokens nunca iguais em 1.000 gerações
+- [x] Cookie repetido ou fora do formato: `lerToken` devolve `null`
+- [x] Gate full verde
 
 **Tests**: unit em `servidor/sessao/*.test.ts`, nomes com `FUN-138` ou `FUN-141`
 **Gate**: full
@@ -437,11 +485,11 @@ T41
 
 **Done when**:
 
-- [ ] Banco guarda só o hash: nenhuma coluna tem o token (FUN-141)
-- [ ] Relógio injetado: 29 dias e 23 h de criação com uso recente vale; 30 dias não vale e a linha some; 6 dias e 23 h sem uso vale; 7 dias não vale e some (FUN-144)
-- [ ] Uso renova `usada_em`; dois usos em menos de 60 s gravam uma vez
-- [ ] Devolve `dono` do usuário
-- [ ] Gate full verde
+- [x] Banco guarda só o hash: nenhuma coluna tem o token (FUN-141)
+- [x] Relógio injetado: 29 dias e 23 h de criação com uso recente vale; 30 dias não vale e a linha some; 6 dias e 23 h sem uso vale; 7 dias não vale e some (FUN-144)
+- [x] Uso renova `usada_em`; dois usos em menos de 60 s gravam uma vez
+- [x] Devolve `dono` do usuário
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/repositorios/sessoes.test.ts`, nomes com `FUN-141` ou `FUN-144`
 **Gate**: full
@@ -463,11 +511,11 @@ T41
 
 **Done when**:
 
-- [ ] Senha certa: 200, `Set-Cookie` com o cookie de FUN-138, uma linha em `sessoes` (FUN-138)
-- [ ] E-mail inexistente, senha errada, e-mail vazio, senha vazia, corpo que não é JSON, campos que não são texto: 401 com corpo idêntico e nenhuma sessão criada (FUN-139)
-- [ ] 6ª tentativa do mesmo IP: 429 sem consultar o banco (FUN-140)
-- [ ] `POST` com origem de fora: 403 (guarda de T4 ligada)
-- [ ] Gate full verde
+- [x] Senha certa: 200, `Set-Cookie` com o cookie de FUN-138, uma linha em `sessoes` (FUN-138)
+- [x] E-mail inexistente, senha errada, e-mail vazio, senha vazia, corpo que não é JSON, campos que não são texto: 401 com corpo idêntico e nenhuma sessão criada (FUN-139)
+- [x] 6ª tentativa do mesmo IP: 429 sem consultar o banco (FUN-140)
+- [x] `POST` com origem de fora: 403 (guarda de T4 ligada)
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/rotas/acesso.test.ts`, nomes com `FUN-138`, `FUN-139` ou `FUN-140`
 **Gate**: full
@@ -489,10 +537,10 @@ T41
 
 **Done when**:
 
-- [ ] Com sessão: 200 `{ dono: true }`; sem cookie, cookie inválido ou vencido: 401 (FUN-142, FUN-144)
-- [ ] `sair` com sessão: linha apagada, cookie com Max-Age=0, e o mesmo cookie depois dá 401 em `/api/sessao` (FUN-143)
-- [ ] `sair` sem sessão: 204
-- [ ] Gate full verde
+- [x] Com sessão: 200 `{ dono: true }`; sem cookie, cookie inválido ou vencido: 401 (FUN-142, FUN-144)
+- [x] `sair` com sessão: linha apagada, cookie com Max-Age=0, e o mesmo cookie depois dá 401 em `/api/sessao` (FUN-143)
+- [x] `sair` sem sessão: 204
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/rotas/acesso.test.ts`, nomes com `FUN-142`, `FUN-143` ou `FUN-144`
 **Gate**: full
@@ -514,15 +562,17 @@ T41
 
 **Done when**:
 
-- [ ] Depois de um login com e-mail e senha de exemplo e de um erro provocado, o log capturado não contém o e-mail, a senha, o token nem o valor do cookie, e tem uma linha por requisição com o status
-- [ ] Erro lançado numa rota: 500 genérico, sem pilha no corpo
-- [ ] Gate full verde
+- [x] Depois de um login com e-mail e senha de exemplo e de um erro provocado, o log capturado não contém o e-mail, a senha, o token nem o valor do cookie, e tem uma linha por requisição com o status
+- [x] Erro lançado numa rota: 500 genérico, sem pilha no corpo
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/app.test.ts`
 **Gate**: full
 **Commit**: `feat(servidor): log da api sem dado sensível`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 2deb7c31840bccefaabe86149b7e67dd651788a3 = verde
 
 ### T16: Formato e validação do resumo (FUN-163, FUN-164, FUN-174)
 
@@ -538,13 +588,13 @@ T41
 
 **Done when**:
 
-- [ ] Contagem pela regra do design: 299 e 451 recusam, 300 e 450 passam; títulos de seção e referências não contam
-- [ ] Cada seção vazia (ou só espaço) recusa, com o nome da seção
-- [ ] Divisão com capítulo 0, além do último ou `de > ate` recusa; versículo-chave "Gênesis 51:1", "Gênesis 1:32" e intervalo invertido recusam; "Gênesis 12:1-3" passa
-- [ ] Cada classe de AD-018 (C0, DEL, C1, U+2028, U+2029, `\p{Cf}`) recusa
-- [ ] Arquivo exportado com campo a mais, estado desconhecido ou livro fora de 1 a 66 é recusado por `lerArquivoExportado`
-- [ ] Casos limite listados antes de codar no commit; testes só com texto de exemplo
-- [ ] Gate quick verde
+- [x] Contagem pela regra do design: 299 e 451 recusam, 300 e 450 passam; títulos de seção e referências não contam
+- [x] Cada seção vazia (ou só espaço) recusa, com o nome da seção
+- [x] Divisão com capítulo 0, além do último ou `de > ate` recusa; versículo-chave "Gênesis 51:1", "Gênesis 1:32" e intervalo invertido recusam; "Gênesis 12:1-3" passa
+- [x] Cada classe de AD-018 (C0, DEL, C1, U+2028, U+2029, `\p{Cf}`) recusa
+- [x] Arquivo exportado com campo a mais, estado desconhecido ou livro fora de 1 a 66 é recusado por `lerArquivoExportado`
+- [x] Casos limite listados antes de codar no commit; testes só com texto de exemplo
+- [x] Gate quick verde
 
 **Tests**: unit em `src/resumos/*.test.ts`, nomes com `FUN-174`, `FUN-163` ou `FUN-164`
 **Gate**: quick
@@ -566,19 +616,21 @@ T41
 
 **Done when**:
 
-- [ ] Sessão de dono e livro publicado: 200 com as quatro seções (FUN-146)
-- [ ] Sem cookie, cookie inválido e sessão vencida: 401 sem nenhum texto do resumo no corpo (FUN-147)
-- [ ] Usuário sem `dono`: 403 sem texto (FUN-148)
-- [ ] Dono, livro sem resumo: 404 (FUN-149)
-- [ ] Dono e `0`, `67`, `1.5`, `abc`, `-1`, `01`: 400 (FUN-150); sem sessão, os mesmos: 401 (AD-024)
-- [ ] Toda resposta com `Cache-Control: no-store` (FUN-151)
-- [ ] Gate full verde
+- [x] Sessão de dono e livro publicado: 200 com as quatro seções (FUN-146)
+- [x] Sem cookie, cookie inválido e sessão vencida: 401 sem nenhum texto do resumo no corpo (FUN-147)
+- [x] Usuário sem `dono`: 403 sem texto (FUN-148)
+- [x] Dono, livro sem resumo: 404 (FUN-149)
+- [x] Dono e `0`, `67`, `1.5`, `abc`, `-1`, `01`: 400 (FUN-150); sem sessão, os mesmos: 401 (AD-024)
+- [x] Toda resposta com `Cache-Control: no-store` (FUN-151)
+- [x] Gate full verde
 
 **Tests**: integration em `servidor/rotas/resumos.test.ts`, nomes com `FUN-146` a `FUN-150`
 **Gate**: full
 **Commit**: `feat(servidor): rota do resumo só para o dono`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 5eea45f96d5ff53b5fe6882cfe60c19339795e4c = verde
 
 ### T18: Script de publicação (FUN-173, FUN-174)
 
@@ -594,12 +646,12 @@ T41
 
 **Done when**:
 
-- [ ] 4 aprovados e 1 recusado: grava 4, imprime "4 livros gravados" e o recusado não entra (FUN-173)
-- [ ] Publicar de novo com texto mudado substitui o livro (uma linha por livro) (FUN-173)
-- [ ] Um aprovado com "Gênesis 51:1": lista `Gênesis: …`, sai com código 1 e não conecta; o banco continua igual (FUN-174)
-- [ ] Falha provocada no 3º livro (gatilho `RAISE EXCEPTION` no teste): nenhum livro gravado (caso limite da spec)
-- [ ] Sem a variável de URL do ambiente: mensagem clara e código 1
-- [ ] Gate full verde
+- [x] 4 aprovados e 1 recusado: grava 4, imprime "4 livros gravados" e o recusado não entra (FUN-173)
+- [x] Publicar de novo com texto mudado substitui o livro (uma linha por livro) (FUN-173)
+- [x] Um aprovado com "Gênesis 51:1": lista `Gênesis: …`, sai com código 1 e não conecta; o banco continua igual (FUN-174)
+- [x] Falha provocada no 3º livro (gatilho `RAISE EXCEPTION` no teste): nenhum livro gravado (caso limite da spec)
+- [x] Sem a variável de URL do ambiente: mensagem clara e código 1
+- [x] Gate full verde
 
 **Tests**: integration em `scripts/resumos/publicar.test.ts`, nomes com `FUN-173` ou `FUN-174`
 **Gate**: full
@@ -621,9 +673,9 @@ T41
 
 **Done when**:
 
-- [ ] Produção com resposta `PRODUÇÃO`: grava; com `sim`, vazio, `produção` ou entrada fechada: não conecta e sai com código 1 (FUN-175)
-- [ ] tst não pergunta
-- [ ] Gate full verde
+- [x] Produção com resposta `PRODUÇÃO`: grava; com `sim`, vazio, `produção` ou entrada fechada: não conecta e sai com código 1 (FUN-175)
+- [x] tst não pergunta
+- [x] Gate full verde
 
 **Tests**: integration em `scripts/resumos/publicar.test.ts`, nomes com `FUN-175`
 **Gate**: full
@@ -645,16 +697,18 @@ T41
 
 **Done when**:
 
-- [ ] Depois do script, `usuario_entrar` com a senha dada devolve o id e o usuário tem `dono = true`; rodar de novo com outra senha troca a senha
-- [ ] E-mail em caixa alta é gravado em caixa baixa; senha vazia recusa
-- [ ] A senha não aparece na saída
-- [ ] Gate full verde
+- [x] Depois do script, `usuario_entrar` com a senha dada devolve o id e o usuário tem `dono = true`; rodar de novo com outra senha troca a senha
+- [x] E-mail em caixa alta é gravado em caixa baixa; senha vazia recusa
+- [x] A senha não aparece na saída
+- [x] Gate full verde
 
 **Tests**: integration em `scripts/criar-dono.test.ts`
 **Gate**: full
 **Commit**: `feat(servidor): script que cria o usuário dono`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ 54ceaeeda23f48aa3f254ad0fcc44e90e6ac709f = verde
 
 ### T21: Pasta da exportação fora do git (FUN-152, FUN-176)
 
@@ -670,9 +724,9 @@ T41
 
 **Done when**:
 
-- [ ] `git check-ignore resumos-exportados/resumos.json` confirma a regra e `git ls-files resumos-exportados` é vazio (FUN-176)
-- [ ] Com exportação local presente, nenhuma frase de 40 caracteres ou mais dela aparece em `dist/` nem nos arquivos do `git ls-files`; sem exportação, o teste diz que pulou essa parte (FUN-152)
-- [ ] Gate quick verde
+- [x] `git check-ignore resumos-exportados/resumos.json` confirma a regra e `git ls-files resumos-exportados` é vazio (FUN-176)
+- [x] Com exportação local presente, nenhuma frase de 40 caracteres ou mais dela aparece em `dist/` nem nos arquivos do `git ls-files`; sem exportação, o teste diz que pulou essa parte (FUN-152)
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/resumos-fora-do-git.test.ts`, nomes com `FUN-152` ou `FUN-176`
 **Gate**: quick
@@ -694,9 +748,9 @@ T41
 
 **Done when**:
 
-- [ ] Teste: o passo de migração vem antes de `wrangler deploy`, roda `pnpm migrar`, tem `DATABASE_URL_DONO` e não tem o token da Cloudflare; nenhum outro passo tem a URL do banco; o token continua só em `wrangler deploy|rollback` (teste alterado com motivo no commit)
-- [ ] Teste: a fumaça exige 401 e `cache-control: no-store` em `/api/resumos/1`, e a falha aciona a volta da versão
-- [ ] Gate quick verde
+- [x] Teste: o passo de migração vem antes de `wrangler deploy`, roda `pnpm migrar`, tem `DATABASE_URL_DONO` e não tem o token da Cloudflare; nenhum outro passo tem a URL do banco; o token continua só em `wrangler deploy|rollback` (teste alterado com motivo no commit)
+- [x] Teste: a fumaça exige 401 e `cache-control: no-store` em `/api/resumos/1`, e a falha aciona a volta da versão
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/deploy.test.ts`
 **Gate**: quick
@@ -718,14 +772,16 @@ T41
 
 **Done when**:
 
-- [ ] Teste: a denylist inclui `/^\/api\//`, e nenhum `registerRoute` do SW casa com `/api/resumos/1` (FUN-151)
-- [ ] Gate quick verde
+- [x] Teste: a denylist inclui `/^\/api\//`, e nenhum `registerRoute` do SW casa com `/api/resumos/1` (FUN-151)
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/sw.test.ts`, nomes com `FUN-151`
 **Gate**: quick
 **Commit**: `fix(pwa): service worker fora das rotas da api`
 
 ---
+
+Gate: pnpm typecheck && pnpm test @ b9a0c3696f389b62fa96fd5a48efbc2f454c3298 = verde
 
 ### T24: Chamadas de sessão no front (FUN-138, FUN-139, FUN-140, FUN-145)
 
@@ -741,10 +797,10 @@ T41
 
 **Done when**:
 
-- [ ] `entrar`: 200 → `dono`/`usuario`; 401 → `incorreto`; 429 → `limite`; rede fora, 5xx e 503 → `rede`; corpo enviado como JSON com `credentials: 'same-origin'`
-- [ ] `lerSessao`: 200 → `dono`/`usuario`; 401 → `sem` (apaga `mj:dono`); rede fora → `rede` (mantém `mj:dono`)
-- [ ] `sair` chama `POST /api/sair` e apaga `mj:dono` mesmo sem rede
-- [ ] Gate quick verde
+- [x] `entrar`: 200 → `dono`/`usuario`; 401 → `incorreto`; 429 → `limite`; rede fora, 5xx e 503 → `rede`; corpo enviado como JSON com `credentials: 'same-origin'`
+- [x] `lerSessao`: 200 → `dono`/`usuario`; 401 → `sem` (apaga `mj:dono`); rede fora → `rede` (mantém `mj:dono`)
+- [x] `sair` chama `POST /api/sair` e apaga `mj:dono` mesmo sem rede
+- [x] Gate quick verde
 
 **Tests**: unit em `src/dados/sessao.test.ts`, nomes com o FUN de cada caso
 **Gate**: quick
@@ -766,10 +822,10 @@ T41
 
 **Done when**:
 
-- [ ] De cada tela (inicial, livros, leitor rolagem, leitor livro, sobre), `abrirEntrar` vai a `entrar` e `voltar` volta à mesma tela com a mesma âncora (FUN-138)
-- [ ] `abrirEntrar` em `entrar` não muda `voltarPara`; de `entrar`, "Criar conta" vai a `emBreve` e o voltar de lá volta a `entrar`
-- [ ] Testes existentes de `emBreve` verdes sem mudança
-- [ ] Gate quick verde
+- [x] De cada tela (inicial, livros, leitor rolagem, leitor livro, sobre), `abrirEntrar` vai a `entrar` e `voltar` volta à mesma tela com a mesma âncora (FUN-138)
+- [x] `abrirEntrar` em `entrar` não muda `voltarPara`; de `entrar`, "Criar conta" vai a `emBreve` e o voltar de lá volta a `entrar`
+- [x] Testes existentes de `emBreve` verdes sem mudança
+- [x] Gate quick verde
 
 **Tests**: unit em `src/estado/leitor.test.ts`, nomes com `FUN-137` ou `FUN-138`
 **Gate**: quick
@@ -791,16 +847,18 @@ T41
 
 **Done when**:
 
-- [ ] Campos com rótulo "E-mail" e "Senha", botão "Entrar" e link "Criar conta" que chama `aoCriarConta` (FUN-137)
-- [ ] `incorreto` mostra "E-mail ou senha incorretos." (FUN-139); `limite` mostra "Muitas tentativas. Tente de novo em 1 minuto." (FUN-140); `rede` mostra a mensagem de rede da tela
-- [ ] Envio com Enter chama `aoEntrar` uma vez, sem envio nativo do formulário; o botão fica desabilitado enquanto envia
-- [ ] Gate quick verde
+- [x] Campos com rótulo "E-mail" e "Senha", botão "Entrar" e link "Criar conta" que chama `aoCriarConta` (FUN-137)
+- [x] `incorreto` mostra "E-mail ou senha incorretos." (FUN-139); `limite` mostra "Muitas tentativas. Tente de novo em 1 minuto." (FUN-140); `rede` mostra a mensagem de rede da tela
+- [x] Envio com Enter chama `aoEntrar` uma vez, sem envio nativo do formulário; o botão fica desabilitado enquanto envia
+- [x] Gate quick verde
 
 **Tests**: unit em `src/telas/TelaEntrar.test.tsx`, nomes com `FUN-137`, `FUN-139` ou `FUN-140`
 **Gate**: quick
 **Commit**: `feat(telas): tela de entrar`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos --reporter=dot @ ea4592b1a024f4a8f970ac6359f1b2ae82e40dd0 = verde
 
 ### T27: Sessão no app e "Sair" na barra (FUN-138, FUN-142, FUN-143, FUN-145)
 
@@ -816,11 +874,11 @@ T41
 
 **Done when**:
 
-- [ ] "Entrar / Criar conta" abre a tela "Entrar" (testes trocados com motivo no commit) (FUN-137)
-- [ ] Login de dono volta à tela de origem e a barra mostra "Sair" com o mesmo texto no rótulo acessível (FUN-138, FUN-142)
-- [ ] "Sair" chama `sair`, mostra "Entrar / Criar conta" e esconde o botão "Resumo" (FUN-143)
-- [ ] `perder()` faz o mesmo sem mensagem (FUN-145); abertura sem rede com `mj:dono` mantém o estado de dono
-- [ ] Gate quick verde
+- [x] "Entrar / Criar conta" abre a tela "Entrar" (testes trocados com motivo no commit) (FUN-137)
+- [x] Login de dono volta à tela de origem e a barra mostra "Sair" com o mesmo texto no rótulo acessível (FUN-138, FUN-142)
+- [x] "Sair" chama `sair`, mostra "Entrar / Criar conta" e esconde o botão "Resumo" (FUN-143)
+- [x] `perder()` faz o mesmo sem mensagem (FUN-145); abertura sem rede com `mj:dono` mantém o estado de dono
+- [x] Gate quick verde
 
 **Tests**: unit em `src/App.test.tsx` e `src/componentes/BarraTitulo.test.tsx`, nomes com o FUN de cada caso
 **Gate**: quick
@@ -842,15 +900,17 @@ T41
 
 **Done when**:
 
-- [ ] Independent Test de "Entrar e sair como dono" em 1280 × 800 e 390 × 844, com a API simulada
-- [ ] A rodada sem a mudança (barra indo ao "em breve") falha o teste de FUN-137
-- [ ] Gate full verde (`e2e/entrar.spec.ts`)
+- [x] Independent Test de "Entrar e sair como dono" em 1280 × 800 e 390 × 844, com a API simulada
+- [x] A rodada sem a mudança (barra indo ao "em breve") falha o teste de FUN-137
+- [x] Gate full verde (`e2e/entrar.spec.ts`)
 
 **Tests**: e2e em `e2e/entrar.spec.ts`, nomes com o FUN de cada passo
 **Gate**: full
 **Commit**: `test(e2e): entrar e sair como dono`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos --reporter=dot @ 615f7f89404a7f0c8f0bcd579af4944259f74a5f = verde
 
 ### T29: Preferência "resumo ligado" (FUN-157)
 
@@ -866,8 +926,8 @@ T41
 
 **Done when**:
 
-- [ ] Grava e lê `true`/`false`; valor inválido ou ausente lê `false` e é apagado; `localStorage` que lança não quebra (FUN-157)
-- [ ] Gate quick verde
+- [x] Grava e lê `true`/`false`; valor inválido ou ausente lê `false` e é apagado; `localStorage` que lança não quebra (FUN-157)
+- [x] Gate quick verde
 
 **Tests**: unit em `src/dados/preferencias.test.ts`, nomes com `FUN-157`
 **Gate**: quick
@@ -889,9 +949,9 @@ T41
 
 **Done when**:
 
-- [ ] 200 com resumo bem formado → `pronto`; 404 → `semResumo` (FUN-168); 401 → `semSessao` (FUN-145); rede fora, 5xx, 400, 403 e JSON fora do formato → `erro` (FUN-167)
-- [ ] Pede `GET /api/resumos/<n>` com `credentials: 'same-origin'` e `cache: 'no-store'`
-- [ ] Gate quick verde
+- [x] 200 com resumo bem formado → `pronto`; 404 → `semResumo` (FUN-168); 401 → `semSessao` (FUN-145); rede fora, 5xx, 400, 403 e JSON fora do formato → `erro` (FUN-167)
+- [x] Pede `GET /api/resumos/<n>` com `credentials: 'same-origin'` e `cache: 'no-store'`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/dados/resumos.test.ts`, nomes com `FUN-145`, `FUN-167` ou `FUN-168`
 **Gate**: quick
@@ -913,11 +973,11 @@ T41
 
 **Done when**:
 
-- [ ] Títulos "Contexto", "Mensagem central", "Divisão do livro", "Versículos-chave" nessa ordem (FUN-163)
-- [ ] Parte da divisão com título e "Capítulos 1 a 11"; parte de um capítulo como "Capítulo 50"; versículo-chave "Gênesis 12:1-3" e "Gênesis 15:6" com a frase (FUN-164)
-- [ ] Texto com `<b>x</b>` aparece literal, sem elemento `b` (FUN-165)
-- [ ] "Carregando o resumo…" (FUN-166); "Não foi possível carregar o resumo. Confira a internet e tente de novo." com "Tentar de novo" que busca de novo (FUN-167); "Este livro ainda não tem resumo." (FUN-168); `semSessao` chama `aoPerderSessao`
-- [ ] Gate quick verde
+- [x] Títulos "Contexto", "Mensagem central", "Divisão do livro", "Versículos-chave" nessa ordem (FUN-163)
+- [x] Parte da divisão com título e "Capítulos 1 a 11"; parte de um capítulo como "Capítulo 50"; versículo-chave "Gênesis 12:1-3" e "Gênesis 15:6" com a frase (FUN-164)
+- [x] Texto com `<b>x</b>` aparece literal, sem elemento `b` (FUN-165)
+- [x] "Carregando o resumo…" (FUN-166); "Não foi possível carregar o resumo. Confira a internet e tente de novo." com "Tentar de novo" que busca de novo (FUN-167); "Este livro ainda não tem resumo." (FUN-168); `semSessao` chama `aoPerderSessao`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/PaginaResumo.test.tsx`, nomes com `FUN-163` a `FUN-168`
 **Gate**: quick
@@ -939,17 +999,19 @@ T41
 
 **Done when**:
 
-- [ ] Medida injetada que não cabe numa página: "1 de 2", "Página anterior do resumo" desabilitado; "seguinte" mostra a 2 e a âncora da Bíblia não muda (FUN-169)
-- [ ] Cabe numa página: sem paginador
-- [ ] Trocar de livro volta à página 1 do resumo
-- [ ] Testes de `useMedidas` e `TelaLivro` existentes verdes sem mudança
-- [ ] Gate quick verde
+- [x] Medida injetada que não cabe numa página: "1 de 2", "Página anterior do resumo" desabilitado; "seguinte" mostra a 2 e a âncora da Bíblia não muda (FUN-169)
+- [x] Cabe numa página: sem paginador
+- [x] Trocar de livro volta à página 1 do resumo
+- [x] Testes de `useMedidas` e `TelaLivro` existentes verdes sem mudança
+- [x] Gate quick verde
 
 **Tests**: unit em `src/livro/PaginaResumo.test.tsx`, nomes com `FUN-169`
 **Gate**: quick
 **Commit**: `feat(livro): páginas próprias do resumo`
 
 ---
+
+Gate: pnpm typecheck && pnpm vitest run --project componentes --project arquivos --reporter=dot @ 042904dd10c9a1a058fb88574fc7432a70df4c7e = verde
 
 ### T33: Resumo à direita na tela larga (FUN-154 a FUN-156, FUN-158, FUN-159)
 
@@ -965,13 +1027,13 @@ T41
 
 **Done when**:
 
-- [ ] Ligado: uma `PaginaLivro` à esquerda e o resumo à direita, posição "Gênesis, página X de Y" (FUN-154)
-- [ ] "Seguinte" e "Anterior" passam uma página por vez, com a quebra de capítulo, e o resumo continua (FUN-155)
-- [ ] Desligar na página 3 mostra o par que contém a página 3 (FUN-156)
-- [ ] Trocar de livro mostra à direita o resumo do livro novo (FUN-158)
-- [ ] Capa e plano pago com o resumo ligado: o par de hoje, sem resumo, e "seguinte" da capa vai a Gênesis (FUN-159)
-- [ ] Estados e transições listados antes de codar no commit; testes de capa e de FUN-73 a FUN-91 verdes
-- [ ] Gate quick verde
+- [x] Ligado: uma `PaginaLivro` à esquerda e o resumo à direita, posição "Gênesis, página X de Y" (FUN-154)
+- [x] "Seguinte" e "Anterior" passam uma página por vez, com a quebra de capítulo, e o resumo continua (FUN-155)
+- [x] Desligar na página 3 mostra o par que contém a página 3 (FUN-156)
+- [x] Trocar de livro mostra à direita o resumo do livro novo (FUN-158)
+- [x] Capa e plano pago com o resumo ligado: o par de hoje, sem resumo, e "seguinte" da capa vai a Gênesis (FUN-159)
+- [x] Estados e transições listados antes de codar no commit; testes de capa e de FUN-73 a FUN-91 verdes
+- [x] Gate quick verde
 
 **Tests**: unit em `src/telas/TelaLivro.test.tsx`, nomes com `FUN-154` a `FUN-159`
 **Gate**: quick
@@ -993,10 +1055,10 @@ T41
 
 **Done when**:
 
-- [ ] `sozinho`: o resumo do livro aberto ocupa a página e não há botões "Página anterior/seguinte" da Bíblia; deslize não passa página (FUN-160)
-- [ ] Voltar a `desligado` mostra a mesma página da Bíblia de antes (FUN-161)
-- [ ] O título do capítulo continua o da Bíblia
-- [ ] Gate quick verde
+- [x] `sozinho`: o resumo do livro aberto ocupa a página e não há botões "Página anterior/seguinte" da Bíblia; deslize não passa página (FUN-160)
+- [x] Voltar a `desligado` mostra a mesma página da Bíblia de antes (FUN-161)
+- [x] O título do capítulo continua o da Bíblia
+- [x] Gate quick verde
 
 **Tests**: unit em `src/telas/TelaLivro.test.tsx`, nomes com `FUN-160` ou `FUN-161`
 **Gate**: quick
@@ -1018,17 +1080,19 @@ T41
 
 **Done when**:
 
-- [ ] Botão só com sessão de dono, formato livro e livro aberto; sem sessão, sessão sem dono, capa, plano pago e rolagem: não existe (FUN-153)
-- [ ] Larga: alterna e grava `mj:resumo`; reabrir o app volta ligado (FUN-157)
-- [ ] Estreita: `aria-pressed="true"` com o resumo na tela (FUN-162); passar de larga ligada a estreita mostra a Bíblia, com o botão não pressionado
-- [ ] Ordem na barra: formato, "Resumo", "Aa"
-- [ ] Gate quick verde
+- [x] Botão só com sessão de dono, formato livro e livro aberto; sem sessão, sessão sem dono, capa, plano pago e rolagem: não existe (FUN-153)
+- [x] Larga: alterna e grava `mj:resumo`; reabrir o app volta ligado (FUN-157)
+- [x] Estreita: `aria-pressed="true"` com o resumo na tela (FUN-162); passar de larga ligada a estreita mostra a Bíblia, com o botão não pressionado
+- [x] Ordem na barra: formato, "Resumo", "Aa"
+- [x] Gate quick verde
 
 **Tests**: unit em `src/App.test.tsx` e `src/componentes/BarraTitulo.test.tsx`, nomes com `FUN-153`, `FUN-157` ou `FUN-162`
 **Gate**: quick
 **Commit**: `feat(app): botão resumo no modo livro`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src --reporter=dot @ 7f574ec4306c4ab9a786d18faab5d79a879b74ca = verde
 
 ### T36: Prova de tela do resumo em tela larga
 
@@ -1044,10 +1108,10 @@ T41
 
 **Done when**:
 
-- [ ] Ligar em Gênesis 1: a página da Bíblia fica à esquerda e o resumo à direita (`boundingBox`), com o vão de 32 px e a linha (FUN-154)
-- [ ] Avançar três vezes: a esquerda passa uma página por vez e a direita continua no resumo de Gênesis (FUN-155); desligar volta às duas páginas (FUN-156)
-- [ ] Recarregar mantém o resumo ligado (FUN-157); capa sem resumo (FUN-159); sem sessão, sem botão (FUN-153)
-- [ ] Gate full verde (`e2e/resumo.spec.ts`)
+- [x] Ligar em Gênesis 1: a página da Bíblia fica à esquerda e o resumo à direita (`boundingBox`), com o vão de 32 px e a linha (FUN-154)
+- [x] Avançar três vezes: a esquerda passa uma página por vez e a direita continua no resumo de Gênesis (FUN-155); desligar volta às duas páginas (FUN-156)
+- [x] Recarregar mantém o resumo ligado (FUN-157); capa sem resumo (FUN-159); sem sessão, sem botão (FUN-153)
+- [x] Gate full verde (`e2e/resumo.spec.ts`)
 
 **Tests**: e2e em `e2e/resumo.spec.ts`, nomes com o FUN de cada passo
 **Gate**: full
@@ -1069,16 +1133,18 @@ T41
 
 **Done when**:
 
-- [ ] Rute 2: "Resumo" mostra o resumo de Rute com `aria-pressed="true"`; de novo, a mesma página de Rute 2 (FUN-160 a FUN-162)
-- [ ] Quatro títulos na ordem (FUN-163); 404 mostra a mensagem de sem resumo (FUN-168); falha mostra a mensagem e "Tentar de novo" (FUN-167); resposta lenta mostra "Carregando o resumo…" (FUN-166)
-- [ ] Resumo longo: "1 de 2" e "seguinte" sem mudar a página da Bíblia (FUN-169)
-- [ ] Gate full verde (`e2e/resumo.spec.ts`)
+- [x] Rute 2: "Resumo" mostra o resumo de Rute com `aria-pressed="true"`; de novo, a mesma página de Rute 2 (FUN-160 a FUN-162)
+- [x] Quatro títulos na ordem (FUN-163); 404 mostra a mensagem de sem resumo (FUN-168); falha mostra a mensagem e "Tentar de novo" (FUN-167); resposta lenta mostra "Carregando o resumo…" (FUN-166)
+- [x] Resumo longo: "1 de 2" e "seguinte" sem mudar a página da Bíblia (FUN-169)
+- [x] Gate full verde (`e2e/resumo.spec.ts`)
 
 **Tests**: e2e em `e2e/resumo.spec.ts`, nomes com o FUN de cada passo
 **Gate**: full
 **Commit**: `test(e2e): resumo na tela estreita e estados`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/livro src/telas src/App.test.tsx --reporter=dot && pnpm exec playwright test e2e/resumo.spec.ts --reporter=dot @ c45dbbcc65fbee5b29ab8c9212f11a00ab43a13f = verde
 
 ### T38: Lógica da revisão dos resumos (FUN-170 a FUN-172)
 
@@ -1094,11 +1160,11 @@ T41
 
 **Done when**:
 
-- [ ] Estados `proposta`, `aprovada`, `recusada` por livro (FUN-170)
-- [ ] Aprovar com texto editado guarda o editado como aprovado (FUN-171)
-- [ ] Recusar com nota vazia ou só espaço falha; recusado sai da exportação de aprovados e leva a nota (FUN-172)
-- [ ] `exportar` gera `{ formato: 'mj-resumos-v1', itens }` aceito por `lerArquivoExportado`
-- [ ] Gate quick verde
+- [x] Estados `proposta`, `aprovada`, `recusada` por livro (FUN-170)
+- [x] Aprovar com texto editado guarda o editado como aprovado (FUN-171)
+- [x] Recusar com nota vazia ou só espaço falha; recusado sai da exportação de aprovados e leva a nota (FUN-172)
+- [x] `exportar` gera `{ formato: 'mj-resumos-v1', itens }` aceito por `lerArquivoExportado`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/revisao-resumos/logica.test.ts`, nomes com `FUN-170` a `FUN-172`
 **Gate**: quick
@@ -1120,11 +1186,11 @@ T41
 
 **Done when**:
 
-- [ ] Com banco dublê: abre a lista, edita "Contexto", aprova e a linha gravada tem o texto editado e `aprovada` (FUN-171)
-- [ ] Recusar sem nota mostra o erro e não grava (FUN-172)
-- [ ] Texto com `<img src=x>` aparece literal (sem elemento `img`)
-- [ ] "Baixar exportação" entrega o JSON de `exportar`
-- [ ] Gate quick verde
+- [x] Com banco dublê: abre a lista, edita "Contexto", aprova e a linha gravada tem o texto editado e `aprovada` (FUN-171)
+- [x] Recusar sem nota mostra o erro e não grava (FUN-172)
+- [x] Texto com `<img src=x>` aparece literal (sem elemento `img`)
+- [x] "Baixar exportação" entrega o JSON de `exportar`
+- [x] Gate quick verde
 
 **Tests**: unit em `src/revisao-resumos/pagina.test.ts`, nomes com `FUN-170` a `FUN-172`
 **Gate**: quick
@@ -1146,9 +1212,9 @@ T41
 
 **Done when**:
 
-- [ ] `pnpm revisao-resumos:montar` gera um HTML único sem nenhum texto de resumo dentro (teste de arquivo procura os nomes das seções só como rótulos)
-- [ ] O LEIA-ME cita os comandos reais e diz que produção pede confirmação escrita
-- [ ] Gate quick verde
+- [x] `pnpm revisao-resumos:montar` gera um HTML único sem nenhum texto de resumo dentro (teste de arquivo procura os nomes das seções só como rótulos)
+- [x] O LEIA-ME cita os comandos reais e diz que produção pede confirmação escrita
+- [x] Gate quick verde
 
 **Tests**: unit em `test/arquivos/revisao-resumos.test.ts`
 **Gate**: quick
@@ -1170,16 +1236,582 @@ T41
 
 **Done when**:
 
-- [ ] As quatro propostas passam em `problemasDoResumo` (lista vazia), rodado na sessão sobre um arquivo em `resumos-exportados/`
-- [ ] Publicar o artifact e gravar no banco dele só com a confirmação do dono (ação externa)
-- [ ] Nada do texto em arquivo versionado: `git status` limpo além de `tasks.md`; o teste de T21 verde com a exportação presente
-- [ ] Gate quick verde
+- [x] As quatro propostas passam em `problemasDoResumo` (lista vazia), rodado na sessão sobre um arquivo em `resumos-exportados/`
+- [x] Publicar o artifact e gravar no banco dele só com a confirmação do dono (ação externa)
+- [x] Nada do texto em arquivo versionado: `git status` limpo além de `tasks.md`; o teste de T21 verde com a exportação presente
+- [x] Gate quick verde
 
 **Tests**: unit (o teste de T21 com a exportação local e a validação de T16)
 **Gate**: quick
 **Commit**: `docs(resumos): propostas do piloto enviadas à revisão`
 
 ---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/revisao-resumos test/arquivos/revisao-resumos.test.ts --reporter=dot @ fbf10314c047a155f98f926775833c95d731d8a1 = verde
+
+### T42: Botão "Resumo" ausente para sessão de usuário comum (A-01)
+
+**What**: Teste em `src/App.test.tsx` com `/api/sessao` devolvendo 200 `{dono:false}` que afirma a ausência do botão "Resumo" (e o e2e equivalente em `e2e/resumo.spec.ts`); corrigir `src/App.tsx:40` se falhar.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `src/App.test.tsx:405` (teste "sem sessão de dono", molde)
+**Requirement**: FUN-153 · Achado: A-01 (validation.md)
+
+**Done when**:
+
+- [x] Sessão `{dono:false}` não mostra o botão "Resumo" (teste de componente e de tela); morre com o mutante `!== 'sem'`
+- [x] Gate verde
+**Tests**: `src/App.test.tsx` › "FUN-153 sessão de usuário comum não mostra o botão Resumo"; morre com `sessao.sessao !== 'sem'` em `App.tsx:40`
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
+
+---
+
+### T43: Migração de conferência dos privilégios do `mj_app` (A-07)
+
+**What**: Migração nova que falha com `RAISE EXCEPTION` se o `mj_app` tiver `rolsuper`, `rolbypassrls`, `rolcreaterole` ou `rolcreatedb`, for membro de `neon_superuser`, `pg_read_all_data` ou `pg_write_all_data`, ou puder ler `usuarios.senha_hash`; e o passo do `/preparar` cria o papel por SQL (`CREATE ROLE mj_app LOGIN NOINHERIT`), registrado em `.specs/preparacao.md` (Nível 2).
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T42
+**Reuses**: `servidor/migracoes/1795132860000_papel_app.sql` (molde); `servidor/migracoes/papel-app.test.ts`
+**Requirement**: AD-023 · Achado: A-07 (validation.md)
+
+**Done when**:
+
+- [x] Migração que falha se o `mj_app` tem `rolsuper`, `rolbypassrls`, `rolcreaterole`, `rolcreatedb`, é membro de `neon_superuser`, `pg_read_all_data` ou `pg_write_all_data`, lê `senha_hash` ou escreve em `resumos`
+- [x] O passo de criar o papel por SQL registrado em `.specs/preparacao.md`
+- [x] Gate verde
+**Tests**: `servidor/migracoes/papel-app.test.ts` › um teste por condição (papel com `BYPASSRLS`, membro de `pg_read_all_data`, `GRANT SELECT (senha_hash)`): a migração falha; papel correto: passa
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot`
+
+---
+
+### T44: Trocar a senha do dono encerra as sessões abertas (A-09)
+
+**What**: `scripts/criar-dono.ts`, no mesmo comando que troca o hash, apaga as linhas de `sessoes` do usuário.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T43
+**Reuses**: `scripts/criar-dono.ts:19-20`
+**Requirement**: FUN-141, FUN-143 · Achado: A-09 (validation.md)
+
+**Done when**:
+
+- [x] Trocar a senha apaga as sessões do usuário e mantém as de outro
+- [x] Gate verde
+**Tests**: `scripts/criar-dono.test.ts` › "trocar a senha apaga as sessões do dono e mantém as de outro usuário"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot`
+
+---
+
+### T45: Senha mínima no `criar-dono` (A-10)
+
+**What**: `scripts/criar-dono.ts` recusa senha com menos de 12 caracteres e avisa acima de 72 bytes (limite do bcrypt).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T44
+**Reuses**: `scripts/criar-dono.ts:35`
+**Requirement**: FUN-141 · Achado: A-10 (validation.md)
+
+**Done when**:
+
+- [x] Senha com menos de 12 caracteres recusa sem gravar; mais de 72 bytes grava com aviso
+- [x] Gate verde
+**Tests**: `scripts/criar-dono.test.ts` › 11 caracteres recusa sem gravar; 12 grava; 73 bytes grava com aviso
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot`
+
+---
+
+### T46: Migração em job próprio no deploy (A-11)
+
+**What**: Em `.github/workflows/deploy.yml`, `pnpm migrar` passa a um job próprio (mesmo environment, `needs` antes do `publicar`), sem o `CLOUDFLARE_API_TOKEN` no job que roda as dependências da migração.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T45
+**Reuses**: `.github/workflows/deploy.yml:106,114-125`; `test/arquivos/deploy.test.ts` (molde)
+**Requirement**: FUN-151 (segredos do deploy, SEC-001) · Achado: A-11 (validation.md)
+
+**Done when**:
+
+- [x] Job `migrar` próprio, sem o token da Cloudflare, e o `publicar` espera por ele
+- [x] Gate verde
+**Tests**: `test/arquivos/deploy.test.ts` › o job da migração não tem `CLOUDFLARE_API_TOKEN` e o `publicar` depende dele
+**Gate**: `pnpm typecheck && pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+---
+
+### T47: Livro recusado sai da publicação (A-12)
+
+**What**: `scripts/resumos/publicar.ts`, na mesma transação, apaga de `resumos` os livros `recusada` da exportação e imprime quantos removeu.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T46
+**Reuses**: `scripts/resumos/publicar.ts:35-36,62`; `emTransacao`
+**Requirement**: FUN-172, FUN-173 · Achado: A-12 (validation.md)
+
+**Done when**:
+
+- [x] Livro recusado e publicado antes é removido na mesma transação, com a contagem impressa; falha desfaz tudo
+- [x] Gate verde
+**Tests**: `scripts/resumos/publicar.test.ts` › "FUN-172 livro publicado e depois recusado é removido"; falha provocada depois da remoção desfaz tudo
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot`
+
+---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx servidor/migracoes scripts test/arquivos/deploy.test.ts --reporter=dot @ fd88c13d23e3977e1071199ceb84cfa83680ebca = verde
+
+### T48: Prova de FUN-152 sobre toda exportação local (A-02)
+
+**What**: `test/arquivos/resumos-fora-do-git.test.ts` varre todos os `*.json` de `resumos-exportados/` (não só `resumos.json`) e inclui os títulos da divisão e as frases dos versículos.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `test/arquivos/resumos-fora-do-git.test.ts:18,84`
+**Requirement**: FUN-152 · Achado: A-02 (validation.md)
+
+**Done when**:
+
+- [x] O teste de FUN-152 varre todo `*.json` de `resumos-exportados/` e deixa de ser pulado
+- [x] Gate verde
+**Tests**: o próprio teste deixa de ser pulado com `propostas.json` presente
+**Gate**: `pnpm exec vitest run test/arquivos/resumos-fora-do-git.test.ts --reporter=dot`
+
+---
+
+### T49: `key` nos blocos da página do resumo (A-03)
+
+**What**: `src/livro/PaginaResumo.tsx:212,223`: cada bloco devolvido no `map` ganha `key` estável.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T48
+**Reuses**: `src/livro/PaginaResumo.tsx`
+**Requirement**: FUN-163 · Achado: A-03 (validation.md)
+
+**Done when**:
+
+- [x] Nenhum aviso de `key` do React na página do resumo
+- [x] Gate verde
+**Tests**: `src/livro/PaginaResumo.test.tsx` › sem aviso de `key` no `console.error`
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/livro --reporter=dot`
+
+---
+
+### T50: Resumo da tela estreita desligado ao trocar de livro (A-04)
+
+**What**: `src/App.tsx:36-48`: ao mudar de livro (ou de largura), o resumo da tela estreita volta a desligado; voltar ao livro anterior não o religa.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T49
+**Reuses**: `src/App.test.tsx:447,460` (molde)
+**Requirement**: FUN-162 · Achado: A-04 (validation.md)
+
+**Done when**:
+
+- [x] Resumo da tela estreita desligado ao trocar de livro ou de largura
+- [x] Gate verde
+**Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
+
+---
+
+### T51: Recusar guarda o texto editado (A-05)
+
+**What**: `recusar(item, nota, editado?)` em `src/revisao-resumos/logica.ts` e a página passa `editado()` ao recusar, como já faz ao aprovar.
+**Estimativa**: 1h
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T50
+**Reuses**: `aprovar` em `src/revisao-resumos/logica.ts:11`; `src/revisao-resumos/pagina.ts:149`
+**Requirement**: FUN-171, FUN-172 · Achado: A-05 (validation.md)
+
+**Done when**:
+
+- [x] Recusar com texto editado guarda o editado e a nota
+- [x] Gate verde
+**Tests**: `logica.test.ts` e `pagina.test.ts` › "FUN-172 recusar com edição guarda o texto editado e a nota"
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
+
+---
+
+### T52: Edição preservada quando a recusa ou a gravação falha (A-06)
+
+**What**: `src/revisao-resumos/pagina.ts:190`: erro de recusa sem nota ou de `banco.gravar` mostra o aviso sem redesenhar as textareas (o texto digitado continua).
+**Estimativa**: 1h30
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T51
+**Reuses**: `src/revisao-resumos/pagina.ts` (`desenhar`, `guardar`)
+**Requirement**: FUN-171, FUN-172 · Achado: A-06 (validation.md)
+
+**Done when**:
+
+- [x] Erro ao recusar ou gravar mostra o aviso e preserva o texto digitado
+- [x] Gate verde
+**Tests**: `pagina.test.ts` › editar, recusar sem nota: o texto editado continua; banco dublê que lança: o texto continua e o aviso aparece
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/revisao-resumos --reporter=dot`
+
+---
+
+### T53: Hyperdrive sem cache de consultas (A-08)
+
+**What**: Registrar no Nível 2 do `.specs/preparacao.md` que os Hyperdrive de tst e produção são criados com `--caching-disabled`, e no `wrangler.jsonc` um comentário com a decisão; teste de arquivo confere o registro.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: T52
+**Reuses**: `test/arquivos/wrangler.test.ts` (molde)
+**Requirement**: FUN-143, FUN-144 · Achado: A-08 (validation.md)
+
+**Done when**:
+
+- [x] Registro do `--caching-disabled` do Hyperdrive no Nível 2 e no `wrangler.jsonc`, com teste
+- [x] Gate verde
+**Tests**: `test/arquivos/wrangler.test.ts` › o `preparacao.md` pede `--caching-disabled` para os dois Hyperdrive
+**Gate**: `pnpm exec vitest run test/arquivos/wrangler.test.ts --reporter=dot`
+
+---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revisao-resumos test/arquivos --reporter=dot @ 11a505cca3412cf07745e31d82f8a32c6309302c = verde
+
+### T54: Arquivo só com recusados tira os livros do ar (A-14)
+
+**What**: `scripts/resumos/publicar.ts:65-69`: "Nada a publicar" só quando não há aprovados nem recusados; com recusados e sem aprovados, a transação apaga os recusados e imprime `0 livros gravados` e a contagem removida (a confirmação de produção diz quantos serão removidos).
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `scripts/resumos/publicar.ts:71,98-102` (remoção na transação); `scripts/resumos/publicar.test.ts:141-236` (molde)
+**Requirement**: FUN-172, FUN-173 · Achado: A-14 (validation.md, rodada 2)
+
+**Done when**:
+
+- [x] Arquivo só com recusados (e propostas) apaga os recusados publicados, com código 0
+- [x] Arquivo sem aprovados nem recusados continua em "Nada a publicar", código 1
+- [x] Gate verde
+**Tests**: `scripts/resumos/publicar.test.ts` › "FUN-172 arquivo só com recusados remove o livro publicado"; "FUN-173 sem aprovados nem recusados: nada a publicar"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T55: Conferência do papel com membresia NOINHERIT (A-15)
+
+**What**: Em `servidor/migracoes/conferir-papel.test.ts`, variante dos testes de `neon_superuser`, `pg_read_all_data` e `pg_write_all_data` com o papel criado `NOINHERIT` e o `GRANT` do grupo: a conferência recusa. Só teste; o código (`'MEMBER'`) já está certo.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T54
+**Reuses**: `servidor/migracoes/conferir-papel.test.ts:74-104` (molde; banco e papéis `teste_*` apagados no `finally`)
+**Requirement**: AD-023 · Achado: A-15 (validation.md, rodada 2)
+
+**Done when**:
+
+- [x] Três testes NOINHERIT, cada um falha com `pg_has_role(..., 'USAGE')` no lugar de `'MEMBER'`
+- [x] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 papel NOINHERIT membro de <grupo> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes/conferir-papel.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T56: Conferência recusa membresia e TRUNCATE e escrita em usuarios (A-17)
+
+**What**: Nova migração que substitui `conferir_papel_app` (`CREATE OR REPLACE`): recusa o papel membro de qualquer outro papel; recusa TRUNCATE em `resumos`, `usuarios` e `sessoes`; recusa INSERT, UPDATE (qualquer coluna) e DELETE em `usuarios`. Não editar a migração já aplicada.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T55
+**Reuses**: `servidor/migracoes/1795132920000_conferir_papel_app.sql:7-44` (molde da função); `conferir-papel.test.ts` (um teste por condição)
+**Requirement**: AD-023 · Achado: A-17 (validation.md, rodada 2)
+
+**Done when**:
+
+- [x] Um teste por ramo novo (membresia em grupo comum NOINHERIT, TRUNCATE em cada tabela, INSERT, UPDATE de coluna e DELETE em `usuarios`), cada um falha sem a guarda
+- [x] Papel `mj_app` correto (o da migração de papel) continua passando
+- [x] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 papel com <privilégio> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T57: Conferência do papel a cada deploy (A-18)
+
+**What**: No job `migrar` de `.github/workflows/deploy.yml`, depois de `pnpm migrar`, um passo que roda `SELECT conferir_papel_app('mj_app')` com a `DATABASE_URL_DONO` (sem token da Cloudflare); falha para o deploy antes do `publicar`.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T56
+**Reuses**: `.github/workflows/deploy.yml:86-107` (job `migrar`); `test/arquivos/deploy.test.ts:176-200` (molde)
+**Requirement**: AD-023, FUN-147 · Achado: A-18 (validation.md, rodada 2)
+
+**Done when**:
+
+- [x] Passo de conferência no job `migrar`, depois da migração, só com a URL do dono
+- [x] Teste de arquivo: o passo existe, vem depois do `pnpm migrar` e não recebe segredo da Cloudflare
+- [x] Gate verde
+**Tests**: `test/arquivos/deploy.test.ts` › "FUN-147 o job migrar confere o papel do app a cada deploy"
+**Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot` (pelo Git Bash)
+
+---
+
+Gate: pnpm typecheck && pnpm exec vitest run scripts/resumos servidor/migracoes test/arquivos src/App.test.tsx --reporter=dot @ f2eedb2256e1176a9a6cb47c2ef4d7bb0a8eb60a = verde
+
+### T58: Teste da troca de livro no resumo da tela estreita (A-13)
+
+**What**: Teste em `src/App.test.tsx` do caso que a T50 prometia: tela estreita, ligar o resumo em Gênesis, ir a Êxodo e voltar a Gênesis: resumo desligado.
+**Estimativa**: 30 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `src/App.test.tsx:490` (molde)
+**Requirement**: FUN-162 · Achado: A-13 (validation.md, rodada 2)
+
+**Done when**:
+
+- [x] Teste falha com o efeito de `src/App.tsx:42` dependendo só de `[larga]`
+- [x] Gate verde
+**Tests**: `src/App.test.tsx` › "FUN-162 ligar em Gênesis, ir a Êxodo e voltar: resumo desligado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot`
+
+---
+
+Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ fdcfad26074f8206995ca06a3a1abd44ec48215a = verde
+
+### T59: Conferência do papel no deploy com schema e search_path fixos (A-19)
+
+**What**: No passo do job `migrar` de `.github/workflows/deploy.yml`, chamar `SELECT public.conferir_papel_app('mj_app')` com `PGOPTIONS='-c search_path=pg_catalog'`, para um schema com o nome do dono não sombrear a função.
+**Estimativa**: 1h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `.github/workflows/deploy.yml:104-110`; `test/arquivos/deploy.test.ts:206-229` (molde)
+**Requirement**: AD-023, FUN-147 · Achado: A-19 (validation.md, rodada 3)
+
+**Done when**:
+
+- [x] A chamada usa `public.conferir_papel_app` e o `search_path` fixo
+- [x] Teste de arquivo falha sem o `public.` e sem o `search_path`
+- [x] Gate verde
+**Tests**: `test/arquivos/deploy.test.ts` › "A-19 FUN-147 a conferência chama public.conferir_papel_app com search_path fixo"
+**Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot` (pelo Git Bash)
+
+---
+
+### T60: Conferência recusa dono do banco, CREATE e dono de schema (A-20)
+
+**What**: Nova migração que substitui `conferir_papel_app` (`CREATE OR REPLACE`, sem editar as aplicadas): recusa o papel membro de `pg_database_owner` (ou `datdba` do banco atual), com `CREATE` no banco atual, com `CREATE` em qualquer schema que não seja de sistema nem temporário, e dono de qualquer schema.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T59
+**Reuses**: `servidor/migracoes/1795132980000_conferir_papel_app_completa.sql` (molde da função); `servidor/migracoes/conferir-papel.test.ts` (`comPapelRuim`, um teste por condição)
+**Requirement**: AD-023 · Achado: A-20 (validation.md, rodada 3)
+
+**Done when**:
+
+- [x] Um teste por ramo novo (dono do banco, CREATE no banco, CREATE em `public`, CREATE em outro schema, dono de schema), cada um falha sem a guarda
+- [x] O `mj_app` da migração de papel continua passando
+- [x] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-20 papel <condição> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T61: Conferência recusa REPLICATION, TRIGGER, REFERENCES e leitura de colunas de usuarios (A-21)
+
+**What**: Na função da T60: recusar `rolreplication`; recusar `TRIGGER` e `REFERENCES` em `resumos`, `usuarios` e `sessoes`; trocar a checagem só de `senha_hash` por uma volta pelas colunas de `usuarios` que recusa SELECT em qualquer coluna fora de `id` e `dono`.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T60
+**Reuses**: migração da T60; `conferir-papel.test.ts` (molde)
+**Requirement**: AD-023 · Achado: A-21 (validation.md, rodada 3)
+
+**Done when**:
+
+- [x] Um teste por ramo (REPLICATION, TRIGGER e REFERENCES em cada tabela, SELECT em `usuarios.email`), cada um falha sem a guarda; o de `senha_hash` continua
+- [x] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-21 papel <condição> é recusado"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor/migracoes --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T62: search_path fixo na conexão do publicar e da migração (A-22)
+
+**What**: A conexão do `scripts/resumos/publicar.ts` (e do `criar-dono.ts`, se usa o mesmo cliente) fixa `search_path=public` (opção `options: '-c search_path=public'` no cliente ou `SET search_path` no início da transação); o script `migrar` do `package.json` passa o mesmo `search_path` ao `node-pg-migrate` (`PGOPTIONS`).
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T61
+**Reuses**: `scripts/resumos/publicar.ts:35-39`; `scripts/resumos/publicar.test.ts` (molde); `package.json:13`
+**Requirement**: FUN-173 · Achado: A-22 (validation.md, rodada 3)
+
+**Done when**:
+
+- [x] Com um schema `<papel dono>` contendo uma tabela `resumos`, publicar grava em `public.resumos` (teste com banco real, schema apagado no `finally`)
+- [x] Teste de arquivo: o script `migrar` fixa o `search_path`
+- [x] Gate verde
+**Tests**: `publicar.test.ts` › "A-22 FUN-173 publicar grava em public.resumos mesmo com schema sombra"; `test/arquivos/` › "A-22 migrar fixa o search_path"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/resumos test/arquivos --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --reporter=dot @ 3a8f9afd7efe4570716ac94bf7205db9a3f91723 = verde
+
+### T63: `pnpm migrar` só lê as migrações `.sql` (A-25)
+
+**What**: Tirar os testes de `servidor/migracoes/` (mover `conferir-papel.test.ts`, `inicial.test.ts` e `papel-app.test.ts` para `servidor/test/migracoes/`, só os imports mudam) para o CLI do `node-pg-migrate` ler só os `.sql`; teste que roda o script `migrar` do `package.json` num banco descartável e confere as migrações aplicadas.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: —
+**Reuses**: `servidor/migrar.test.ts` (molde do banco descartável); `package.json:13`
+**Requirement**: FUN-147 · Achado: A-25 (validation.md, rodada 4)
+
+**Done when**:
+
+- [x] Os testes movidos passam iguais (só caminho e import mudam; nenhuma asserção muda)
+- [x] `pnpm migrar` num banco descartável sai com 0 e aplica todas as migrações (teste que falha com um `.test.ts` na pasta)
+- [x] Gate verde
+**Tests**: `servidor/migrar.test.ts` › "A-25 FUN-147 o script migrar do package.json aplica as migrações num banco descartável"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T64: Teste do `public.` no DELETE do publicar (A-23)
+
+**What**: Reforçar o teste do schema sombra de `scripts/resumos/publicar.test.ts`: semear 1 e 3 em `public.resumos` antes, publicar com 1 aprovado e 3 recusado, esperar `public.resumos` só com [1] e a sombra vazia. Só teste (o código já tem `public.`).
+**Estimativa**: 30 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T63
+**Reuses**: `scripts/resumos/publicar.test.ts:227-253`
+**Requirement**: FUN-172, FUN-173 · Achado: A-23 (validation.md, rodada 4)
+
+**Done when**:
+
+- [x] O teste falha com o `DELETE` de `publicar.ts:40` sem `public.`
+- [x] Gate verde
+**Tests**: `publicar.test.ts` › "A-22 FUN-173: com um schema sombra com o nome do dono, publicar grava em public.resumos" (reforçado; teste desta feature, de T62)
+**Gate**: `pnpm exec vitest run scripts/resumos/publicar.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T65: criar-dono com schema fixo nas tabelas e nas funções (A-24)
+
+**What**: `scripts/criar-dono.ts`: `public.crypt(..., public.gen_salt('bf', 12))`; teste com schema sombra do nome do dono (cópias de `usuarios` e `sessoes` e uma `crypt` falsa): usuário gravado e sessão apagada em `public`, a sombra intocada e o hash é bcrypt de verdade.
+**Estimativa**: 1h30
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T64
+**Reuses**: `scripts/criar-dono.test.ts:131-178` (molde); teste do schema sombra de `publicar.test.ts`
+**Requirement**: FUN-141, FUN-143 · Achado: A-24 (validation.md, rodada 4)
+
+**Done when**:
+
+- [x] O teste falha sem o `public.` em cada tabela e em `crypt`/`gen_salt`
+- [x] Gate verde
+**Tests**: `criar-dono.test.ts` › "A-24 FUN-141 com schema sombra, criar-dono grava e encerra sessões em public com bcrypt real"
+**Gate**: `pnpm typecheck && pnpm exec vitest run scripts/criar-dono.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T66: Conferência imune a sobrecarga e a objetos do papel (A-26)
+
+**What**: Nova migração (substitui a função, sem editar as aplicadas): recusa papel dono de qualquer função, tabela/visão/sequência ou tipo (`pg_proc.proowner`, `pg_class.relowner`, `pg_type.typowner`) e chama `public.conferir_papel_app('mj_app'::name)`; o passo do `deploy.yml` passa a usar `'mj_app'::name`.
+**Estimativa**: 2h
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T65
+**Reuses**: `servidor/migracoes/1795133100000_conferir_papel_app_atributos.sql` (molde); `comPapelRuim` de `conferir-papel.test.ts`; `test/arquivos/deploy.test.ts` (A-19)
+**Requirement**: AD-023, FUN-147 · Achado: A-26 (validation.md, rodada 4)
+
+**Done when**:
+
+- [x] Um teste por ramo (dono de função, de tabela, de tipo), cada um falha sem a guarda
+- [x] Teste com a sobrecarga `(text)` falsa em `public`: a chamada com `::name` ainda recusa um papel SUPERUSER
+- [x] Teste de arquivo: o deploy chama com `::name`
+- [x] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-26 …"; `deploy.test.ts` › "A-26 FUN-147 a conferência chama com 'mj_app'::name"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor test/arquivos/deploy.test.ts --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+### T67: REFERENCES por coluna recusado (A-27)
+
+**What**: Na função da T66: `has_any_column_privilege(papel, tabela, 'REFERENCES')` no lugar da checagem da tabela inteira, nas três tabelas.
+**Estimativa**: 45 min
+**Risco**: alto
+**Domínio**: não
+**Criticidade**: crítica
+**Depends on**: T66
+**Reuses**: migração da T66; testes de REFERENCES de `conferir-papel.test.ts`
+**Requirement**: AD-023 · Achado: A-27 (validation.md, rodada 4)
+
+**Done when**:
+
+- [x] Teste com `GRANT REFERENCES (email) ON usuarios` (e uma coluna de cada outra tabela) recusa, e falha sem a mudança
+- [x] Gate verde
+**Tests**: `conferir-papel.test.ts` › "AD-023 A-27 papel com REFERENCES em coluna de <tabela> falha"
+**Gate**: `pnpm typecheck && pnpm exec vitest run servidor --reporter=dot` (com `DATABASE_URL_TESTE`)
+
+---
+
+Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --reporter=dot @ 3632a075f3cba935b6d1a5f217652bc197270c2b = verde
+
+### T68: Conferência do papel rastreada como AD-023, não FUN-144 (A-30)
+
+**What**: Trocar `FUN-144` por `AD-023` onde ele nomeia a conferência do papel do app: o `describe` de `test/arquivos/deploy.test.ts:206` e o campo **Requirement** das tarefas T55, T56, T57, T59, T60, T61, T66 e T67 deste `tasks.md`; os testes de sessão (expiração, `sessoes`) continuam com FUN-144. Só nome e rastreio, nenhuma asserção muda.
+**Estimativa**: 20 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `spec.md:77` (FUN-144 = expiração de sessão); AD-023 em `.specs/STATE.md`
+**Requirement**: AD-023 · Achado: A-30 (validation.md, rodada 5)
+
+**Done when**:
+
+- [x] `git grep -n "FUN-144"` só aponta sessão e expiração (nenhum teste ou tarefa da conferência do papel)
+- [x] Gate verde
+**Tests**: `deploy.test.ts` › "deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, AD-023, FUN-147)"
+**Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+---
+
+Gate: pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot @ 04e9a720db684f666941ed860f1356c4346a9e20 = verde
 
 ## Depois da feature (fora do `/executar`)
 

@@ -38,6 +38,8 @@ export interface Leitor {
   /** Botão de formato da barra (FUN-67). */
   trocarFormato(): void;
   abrirEmBreve(): void;
+  /** "Entrar / Criar conta" da barra (FUN-137). */
+  abrirEntrar(): void;
   voltar(): void;
   /** Passar página no formato livro: o lugar novo (FUN-77, FUN-85). */
   irParaAncora(ancora: Ancora): void;
@@ -170,6 +172,7 @@ export function useLeitor(): Leitor {
       lerBiblia: () => despachar({ tipo: 'lerBiblia' }),
       trocarFormato: () => despachar({ tipo: 'trocarFormato' }),
       abrirEmBreve: () => despachar({ tipo: 'abrirEmBreve' }),
+      abrirEntrar: () => despachar({ tipo: 'abrirEntrar' }),
       voltar: () => despachar({ tipo: 'voltar' }),
       irParaAncora: (ancora: Ancora) => despachar({ tipo: 'irParaAncora', ancora }),
     }),

@@ -2,16 +2,29 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-interface Wrangler {
-  main?: string;
-  assets?: { directory?: string };
+interface Ambiente {
+  routes?: { pattern: string; custom_domain?: boolean }[];
+  vars?: { URL_PUBLICA?: string };
+  hyperdrive?: { binding: string; id: string; localConnectionString?: string }[];
+  ratelimits?: { name: string; namespace_id: string; simple: { limit: number; period: number } }[];
   observability?: { enabled?: boolean };
-  env?: { tst?: { observability?: { enabled?: boolean } } };
 }
+
+interface Wrangler extends Ambiente {
+  main?: string;
+  compatibility_flags?: string[];
+  workers_dev?: boolean;
+  preview_urls?: boolean;
+  assets?: { directory?: string; run_worker_first?: string[] };
+  dev?: { ip?: string };
+  env?: { tst?: Ambiente };
+}
+
+const CAMINHO = join(process.cwd(), 'wrangler.jsonc');
 
 /** `wrangler.jsonc` sem os comentários de linha e sem as vírgulas finais, para o JSON.parse. */
 function lerWrangler(): Wrangler {
-  const texto = readFileSync(join(process.cwd(), 'wrangler.jsonc'), 'utf8')
+  const texto = readFileSync(CAMINHO, 'utf8')
     .split('\n')
     .filter((linha) => !linha.trimStart().startsWith('//'))
     .join('\n')
@@ -29,9 +42,77 @@ describe('wrangler.jsonc: observabilidade do Worker (item Observabilidade do /pr
   it('staging (env.tst) liga os logs do Workers, sem herdar do topo', () => {
     expect(wrangler.env?.tst?.observability?.enabled).toBe(true);
   });
+});
 
-  it('o Worker continua só de assets: sem `main`, sem bindings de dados', () => {
-    expect(wrangler.main).toBeUndefined();
+describe('wrangler.jsonc: Worker com script em /api/* (AD-022, FUN-140, FUN-151)', () => {
+  const wrangler = lerWrangler();
+  const ambientes: [string, Ambiente][] = [
+    ['produção (topo)', wrangler],
+    ['staging (env.tst)', wrangler.env?.tst ?? {}],
+  ];
+
+  it('o Worker tem script (`main`) e os assets saem de dist, com só /api/* passando pelo Worker primeiro', () => {
+    expect(wrangler.main).toBe('servidor/entrada/worker.ts');
     expect(wrangler.assets?.directory).toBe('dist');
+    expect(wrangler.assets?.run_worker_first).toEqual(['/api/*']);
+  });
+
+  it('liga nodejs_compat (o `pg` precisa) e fecha *.workers.dev e as URLs de prévia', () => {
+    expect(wrangler.compatibility_flags).toContain('nodejs_compat');
+    expect(wrangler.workers_dev).toBe(false);
+    expect(wrangler.preview_urls).toBe(false);
+  });
+
+  it('escuta local só em 127.0.0.1 no `wrangler dev`', () => {
+    expect(wrangler.dev?.ip).toBe('127.0.0.1');
+  });
+
+  it.each(ambientes)('%s: a URL pública é a do domínio do ambiente (base do Host 421 e da origem 403)', (_n, amb) => {
+    const dominio = amb.routes?.[0]?.pattern;
+    expect(dominio).toMatch(/^minhajornada(-tst)?\.ljssoftware\.com\.br$/);
+    expect(amb.vars?.URL_PUBLICA).toBe(`https://${dominio}`);
+  });
+
+  it.each(ambientes)('%s: um Hyperdrive HYPERDRIVE, sem URL de banco no arquivo', (_n, amb) => {
+    expect(amb.hyperdrive).toHaveLength(1);
+    expect(amb.hyperdrive?.[0]?.binding).toBe('HYPERDRIVE');
+    expect(amb.hyperdrive?.[0]?.localConnectionString).toBeUndefined();
+  });
+
+  it.each(ambientes)('%s: o limite de login LIMITE_ENTRAR é de 5 por 60 s (FUN-140)', (_n, amb) => {
+    expect(amb.ratelimits).toHaveLength(1);
+    const limite = amb.ratelimits?.[0];
+    expect(limite?.name).toBe('LIMITE_ENTRAR');
+    expect(limite?.simple).toEqual({ limit: 5, period: 60 });
+  });
+
+  it('produção e staging usam namespaces de limite diferentes', () => {
+    expect(wrangler.ratelimits?.[0]?.namespace_id).not.toBe(wrangler.env?.tst?.ratelimits?.[0]?.namespace_id);
+  });
+
+  it('nenhuma senha nem URL de conexão com banco no arquivo', () => {
+    const texto = readFileSync(CAMINHO, 'utf8');
+    expect(texto).not.toMatch(/postgres(ql)?:\/\//i);
+    expect(texto).not.toMatch(/password|senha\s*[:=]/i);
+  });
+});
+
+describe('A-08 FUN-143 FUN-144: o Hyperdrive não guarda consultas em cache', () => {
+  const preparacao = readFileSync(join(process.cwd(), '.specs', 'preparacao.md'), 'utf8');
+  const bruto = readFileSync(CAMINHO, 'utf8');
+
+  it('A-08: o Nível 2 do /preparar manda criar os Hyperdrive de tst e de produção com --caching-disabled', () => {
+    const item = preparacao.split('\n').find((l) => /Hyperdrive/.test(l) && /--caching-disabled/.test(l)) ?? '';
+    expect(item).not.toBe('');
+    expect(item).toMatch(/tst/);
+    expect(item).toMatch(/produção/);
+    expect(item).toMatch(/\[ \]|\[x\]/); // é um item da lista de verificação
+  });
+
+  it('A-08: o wrangler.jsonc registra a decisão ao lado dos dois Hyperdrive (sessão encerrada não pode valer)', () => {
+    const comentario = bruto.split('\n').filter((l) => l.trimStart().startsWith('//') && /--caching-disabled/.test(l));
+    expect(comentario.length).toBeGreaterThanOrEqual(1);
+    expect(lerWrangler().hyperdrive).toHaveLength(1);
+    expect(lerWrangler().env?.tst?.hyperdrive).toHaveLength(1);
   });
 });
