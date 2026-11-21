@@ -50,7 +50,17 @@
 
 ## API
 
-Não há: site estático, sem servidor de aplicação.
+Worker Hono (resumo-livro, 2026-11-20; AD-022 a AD-024): `servidor/entrada/worker.ts` (Worker com assets), `servidor/app.ts` (montagem, limite de login `:24`).
+
+| Peça | Caminho | O que faz |
+|---|---|---|
+| Acesso | `servidor/rotas/acesso.ts` (`/api/entrar` `:29`, `/api/sessao` `:40`, `/api/sair` `:47`) | Login do dono com bcrypt no banco, sessão opaca por cookie, saída (FUN-138 a FUN-144) |
+| Resumos | `servidor/rotas/resumos.ts:18` (`/api/resumos/:n`) | Resumo do livro só para sessão de dono (FUN-145 a FUN-150) |
+| Guardas e cabeçalhos | `servidor/middlewares/` (`guarda.ts` origem e Host, `cabecalhos.ts` CSP/nosniff/Referrer, `limite.ts` 5/60 s, `log.ts`) | Segurança padrão de app web |
+| Sessão | `servidor/sessao/` (`token.ts`, `cookie.ts`), `servidor/repositorios/` (`sessoes.ts`, `usuarios.ts`, `resumos.ts`) | Token opaco (SHA-256 no banco), cookie, consultas |
+| Migrações | `servidor/migrar.ts`, `servidor/migracoes/*.sql` (só `.sql`; testes em `servidor/test/migracoes/`), `pnpm migrar` | Esquema, papel `mj_app` e conferência `public.conferir_papel_app('mj_app'::name)` |
+| Scripts do dono | `scripts/criar-dono.ts`, `scripts/resumos/publicar.ts` | Cria ou troca a senha do dono; publica os resumos aprovados no tst ou produção |
+| Apoio de teste | `servidor/test/apoio/banco.ts` (`bancoDeTeste`, `comCliente`, `garantirPapelApp`) | Banco `teste_*` descartável no Postgres local (`DATABASE_URL_TESTE`) |
 
 ## Dados
 
@@ -59,6 +69,7 @@ Não há: site estático, sem servidor de aplicação.
 | Preferências | `src/dados/preferencias.ts:10-16` | `mj:leitura`, `mj:letra`, `mj:tema`, `mj:formato`, `mj:convite-ios` no localStorage, validadas; `LETRA_MIN`/`LETRA_MAX` `:19-20`, `TEMAS` `:21` |
 | Livros | `src/dados/livros.ts:53` | `carregarLivro` (cache `mj-livros`, depois rede), `baixarFaltantes` `:102`, `limparAntigos` `:138` |
 | Arquivos de livro | `public/livros/NN.<hash>.json` | Gerados (fora do git), fora do pré-cache |
+| Resumos (front) | `src/resumos/` (`formato.ts`, `validar.ts`), `src/revisao-resumos/` (página de revisão do dono) | Formato e validação do resumo; revisão no artifact |
 
 ## Utilitários
 

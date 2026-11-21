@@ -9,7 +9,7 @@ Roteiro aprovado em 2026-11-18 (decisão AD-009 em `.specs/STATE.md`; feature 3 
 | 3 | `livro-tela-cheia` | Concluída | P | 2 | FUN-95 a FUN-102 | No PC, o modo livro ocupa a tela toda: páginas de borda a borda, botões nos cantos e barra de título larga |
 | 4 | `texto-atualizado` | Concluída | M | 3 | a definir (FUN-103 em diante) | Texto bíblico com ajustes pontuais vindos só de versões livres ou em domínio público, com o aviso de alteração no Sobre |
 | 5 | `livro-paginas` | Concluída | P | 4 | FUN-128 a FUN-136 | No modo livro, as duas páginas aparecem separadas e cada capítulo começa numa página nova |
-| 6 | `resumo-livro` | Em andamento | G | 5 | FUN-137 a FUN-176 | Com um livro aberto, a Bíblia fica na página da esquerda e o resumo do livro (escrito com IA e revisado pelo dono) na da direita; recurso do plano pago, por enquanto visível só ao dono |
+| 6 | `resumo-livro` | Concluída | G | 5 | FUN-137 a FUN-176 | Com um livro aberto, a Bíblia fica na página da esquerda e o resumo do livro (escrito com IA e revisado pelo dono) na da direita; recurso do plano pago, por enquanto visível só ao dono |
 | 7 | `estudo-livro` | Não começada | G | 6 | a definir | Na mesma página da direita, o estudo bíblico original do livro, escrito com IA a partir de comentários em domínio público e revisado pelo dono; recurso do plano pago |
 | 8 | `conta` | Não começada | G | 4 | a definir | Criar conta, entrar e sair, com a sessão guardada no aparelho; a leitura continua livre e sem conta |
 | 9 | `assinatura` | Não começada | G | 7, 8 | a definir | Assinar o plano pago pelo Asaas e passar a ver resumo e estudo, também sem internet depois de entrar |
