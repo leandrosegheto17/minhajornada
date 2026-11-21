@@ -186,6 +186,12 @@ T59 → T60 → T61 → T62
 T63 → T64 → T65 → T66 → T67
 ```
 
+### Phase 21: Retrabalho R5 (comum)
+
+```
+T68
+```
+
 ---
 
 ## Task Breakdown
@@ -1784,6 +1790,26 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 ---
 
 Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --reporter=dot @ 3632a075f3cba935b6d1a5f217652bc197270c2b = verde
+
+### T68: Conferência do papel rastreada como AD-023, não FUN-144 (A-30)
+
+**What**: Trocar `FUN-144` por `AD-023` onde ele nomeia a conferência do papel do app: o `describe` de `test/arquivos/deploy.test.ts:206` e o campo **Requirement** das tarefas T55, T56, T57, T59, T60, T61, T66 e T67 deste `tasks.md`; os testes de sessão (expiração, `sessoes`) continuam com FUN-144. Só nome e rastreio, nenhuma asserção muda.
+**Estimativa**: 20 min
+**Risco**: baixo
+**Domínio**: não
+**Criticidade**: comum
+**Depends on**: —
+**Reuses**: `spec.md:77` (FUN-144 = expiração de sessão); AD-023 em `.specs/STATE.md`
+**Requirement**: AD-023 · Achado: A-30 (validation.md, rodada 5)
+
+**Done when**:
+
+- [ ] `git grep -n "FUN-144"` só aponta sessão e expiração (nenhum teste ou tarefa da conferência do papel)
+- [ ] Gate verde
+**Tests**: `deploy.test.ts` › "deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, AD-023, FUN-147)"
+**Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot`
+
+---
 
 ## Depois da feature (fora do `/executar`)
 
