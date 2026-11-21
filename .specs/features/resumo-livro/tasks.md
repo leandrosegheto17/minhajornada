@@ -1804,12 +1804,14 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 
 **Done when**:
 
-- [ ] `git grep -n "FUN-144"` só aponta sessão e expiração (nenhum teste ou tarefa da conferência do papel)
-- [ ] Gate verde
+- [x] `git grep -n "FUN-144"` só aponta sessão e expiração (nenhum teste ou tarefa da conferência do papel)
+- [x] Gate verde
 **Tests**: `deploy.test.ts` › "deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, AD-023, FUN-147)"
 **Gate**: `pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot`
 
 ---
+
+Gate: pnpm exec vitest run test/arquivos/deploy.test.ts --reporter=dot @ 04e9a720db684f666941ed860f1356c4346a9e20 = verde
 
 ## Depois da feature (fora do `/executar`)
 
