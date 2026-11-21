@@ -1,4 +1,18 @@
-# Validação: resumo-livro — FAIL ❌ (rodada 5)
+# Validação: resumo-livro — PASS ✅ (rodada 6)
+
+**Result**: PASS
+
+- **Data**: 2026-11-20 · **Branch**: feature/resumo-livro @ 04b592c · **Árvore**: 0a631cb7cf1bed9095fea0d877c8390e2b56cfe1 · Rodada 5 (FAIL) abaixo; anteriores em `git show 62c1bef:`, `f8f1466:`, `3cb4188:`, `4a4ac02:`
+- **Escopo**: retrabalho R5 (T68, A-30) + regressão · **Critérios**: A-30 fechado (`git grep FUN-144` só aponta sessão e expiração; `deploy.test.ts:206` cita AD-023); nenhuma asserção mudou
+- **Gate**: `pnpm typecheck && pnpm test` = 1653 passaram, 0 falharam (92 arquivos); `pnpm lint` verde; sem banco ou papel `teste_*` órfão
+- **Sensor**: 0 mutações (diff só de nome e rastreio)
+- **Revisão de código**: diff de 1 linha de teste e rastreio no `tasks.md`; sem achado · **Segurança**: sem mudança de superfície; N-08 (risco aceito) e N-09, N-10 (dívida) seguem como na rodada 5
+
+Nenhum achado.
+
+---
+
+## Rodada 5 — FAIL ❌
 
 - **Data**: 2026-11-20 · **Branch**: feature/resumo-livro @ ae4104d · **Árvore**: d55be6c7ed909117248a7db9d68a04c8403562cf · Rodadas anteriores: `git show 62c1bef:` (rodada 4), `f8f1466:`, `3cb4188:` e `4a4ac02:` deste arquivo
 - **Critérios**: A-23 a A-27 fechados, cada um com asserção e mutante morto; regressão FUN-137 a FUN-176 pela suíte inteira
@@ -25,7 +39,7 @@
 |---|---|---|---|---|---|
 | A-28 | `test/arquivos/deploy.test.ts:211,215,223`; `servidor/test/migracoes/*.test.ts` | Testes existentes alterados no R4 sem aprovação registrada (nenhum enfraquecido) | Registrar a aprovação | comum | fechado (aprovada pelo dono, `STATE.md` `## Autorizações`) |
 | A-29 | `.specs/STATE.md:257` | Linha duplicada de `## Modelo` solta nas decisões; rodada 5 sem registro | Apagar a linha e registrar a rodada | comum | fechado (corrigido no registro desta rodada) |
-| A-30 | `test/arquivos/deploy.test.ts:206`; `tasks.md:1521,1541,1562,1607,1628,1649,1753,1775` | A conferência do papel é rastreada como FUN-144, que na spec (`spec.md:77`) é expiração de sessão | Trocar o ID para AD-023 no teste e nas tarefas | comum | aberto |
+| A-30 | `test/arquivos/deploy.test.ts:206`; `tasks.md:1521,1541,1562,1607,1628,1649,1753,1775` | A conferência do papel é rastreada como FUN-144, que na spec (`spec.md:77`) é expiração de sessão | Trocar o ID para AD-023 no teste e nas tarefas | comum | fechado (T68, rodada 6) |
 
 ## Lacunas e o que não foi validado
 
