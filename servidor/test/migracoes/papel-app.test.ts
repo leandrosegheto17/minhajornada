@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { bancoDeTeste, comCliente, PAPEL_APP, SENHA_PAPEL_APP, urlComoPapel } from '../test/apoio/banco.ts';
+import { bancoDeTeste, comCliente, PAPEL_APP, SENHA_PAPEL_APP, urlComoPapel } from '../apoio/banco.ts';
 
 /** Sem permissão: o Postgres responde 42501 (insufficient_privilege). */
 const SEM_PERMISSAO = { code: '42501' };

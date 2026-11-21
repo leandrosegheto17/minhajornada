@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bancoDeTeste, comCliente } from '../test/apoio/banco.ts';
+import { bancoDeTeste, comCliente } from '../apoio/banco.ts';
 
 const SENHA = 'senha-do-teste-123';
 

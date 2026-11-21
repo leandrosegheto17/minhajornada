@@ -52,7 +52,7 @@ async function comAdmin<T>(urlBase: string, fn: (c: pg.Client) => Promise<T>): P
   }
 }
 
-async function garantirPapelApp(c: pg.Client): Promise<void> {
+export async function garantirPapelApp(c: pg.Client): Promise<void> {
   await c.query(`DO $$ BEGIN
     IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${PAPEL_APP}') THEN
       CREATE ROLE ${PAPEL_APP} LOGIN NOSUPERUSER NOBYPASSRLS;

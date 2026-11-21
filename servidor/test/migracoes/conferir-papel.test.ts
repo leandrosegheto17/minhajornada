@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import type pg from 'pg';
 import { describe, expect, it } from 'vitest';
-import { bancoDeTeste, comCliente, PAPEL_APP } from '../test/apoio/banco.ts';
+import { bancoDeTeste, comCliente, PAPEL_APP } from '../apoio/banco.ts';
 
 // A.7 / AD-023: a migração de conferência falha se o papel do app tem mais poder do que a AD-023 permite. No Neon o papel
 // criado pelo Console entra em `neon_superuser`; o teste local prova cada condição com um papel descartável, sem mexer no

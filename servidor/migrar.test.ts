@@ -1,9 +1,10 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { migrar } from './migrar.ts';
-import { bancoDeTeste, comCliente, exigirHostPermitido } from './test/apoio/banco.ts';
+import { migrar, PASTA_MIGRACOES } from './migrar.ts';
+import { bancoDeTeste, comCliente, exigirHostPermitido, garantirPapelApp } from './test/apoio/banco.ts';
 
 const pastas: string[] = [];
 afterEach(() => {
@@ -50,6 +51,25 @@ describe('migrar e banco de teste (T7, base de FUN-141 a FUN-149)', () => {
       expect(rows[0]).toEqual({ tabela: true, controle: true });
     });
   });
+
+  // A-25: o CLI do node-pg-migrate lê tudo o que está em servidor/migracoes; um `.test.ts` ali quebra o `pnpm migrar`.
+  it('A-25 FUN-147 o script migrar do package.json aplica as migrações num banco descartável', async () => {
+    const sqls = readdirSync(PASTA_MIGRACOES).filter((n) => n.endsWith('.sql'));
+    expect(readdirSync(PASTA_MIGRACOES).filter((n) => !n.endsWith('.sql'))).toEqual([]);
+    await bancoDeTeste(async (url) => {
+      await comCliente(url, (c) => garantirPapelApp(c));
+      const r = spawnSync('pnpm', ['migrar'], {
+        shell: true,
+        encoding: 'utf8',
+        cwd: join(import.meta.dirname, '..'),
+        env: { ...process.env, DATABASE_URL_DONO: url },
+      });
+      expect(r.status, `${r.stdout}
+${r.stderr}`).toBe(0);
+      const { rows } = await comCliente(url, (c) => c.query('SELECT count(*)::int AS n FROM pgmigrations'));
+      expect(rows[0].n).toBe(sqls.length);
+    });
+  }, 60_000);
 
   it('falha provocada no meio do teste não deixa banco teste_* no cluster', async () => {
     let nome = '';
