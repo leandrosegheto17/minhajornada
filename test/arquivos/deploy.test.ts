@@ -208,9 +208,9 @@ describe('deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, F
   const passo = passos(migrar).find((p) => /pnpm migrar/.test(p)) ?? '';
   const comandos = passo.split(/\r?\n/);
   const iMigrar = comandos.findIndex((c) => /pnpm migrar/.test(c));
-  const iConferir = comandos.findIndex((c) => /conferir_papel_app\('mj_app'\)/.test(c));
+  const iConferir = comandos.findIndex((c) => /conferir_papel_app\('mj_app'::name\)/.test(c));
 
-  it("A-18: o passo roda `SELECT conferir_papel_app('mj_app')` com psql na URL do dono, depois de `pnpm migrar`", () => {
+  it("A-18: o passo roda `SELECT conferir_papel_app('mj_app'::name)` com psql na URL do dono, depois de `pnpm migrar`", () => {
     expect(iMigrar).toBeGreaterThanOrEqual(0);
     expect(iConferir).toBeGreaterThan(iMigrar);
     expect(comandos[iConferir]).toMatch(/psql\b.*\$DATABASE_URL_DONO/);
@@ -220,8 +220,14 @@ describe('deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, F
   // A-19: sem schema e com o `search_path` do banco, um papel com CREATE criaria um schema com o nome do dono e uma função
   // falsa que a conferência chamaria no lugar da verdadeira.
   it('A-19 FUN-147: a conferência chama `public.conferir_papel_app` com o search_path fixo em pg_catalog', () => {
-    expect(comandos[iConferir]).toMatch(/SELECT public\.conferir_papel_app\('mj_app'\)/);
+    expect(comandos[iConferir]).toMatch(/SELECT public\.conferir_papel_app\('mj_app'::name\)/);
     expect(comandos[iConferir]).toMatch(/PGOPTIONS='-c search_path=pg_catalog'\s+psql\b/);
+  });
+
+  // A-26: uma sobrecarga `(text)` em public ganha de um literal sem tipo; `::name` escolhe a função verdadeira.
+  it("A-26 FUN-147: a conferência chama com 'mj_app'::name, nunca com o literal sem tipo", () => {
+    expect(comandos[iConferir]).toMatch(/conferir_papel_app\('mj_app'::name\)/);
+    expect(passo).not.toMatch(/conferir_papel_app\('mj_app'\)/);
   });
 
   it('A-18: o passo sem token da Cloudflare, e a falha da conferência pára o job (sem `|| true` nem continue-on-error)', () => {

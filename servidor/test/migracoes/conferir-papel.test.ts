@@ -21,7 +21,7 @@ async function comPapelRuim(
         await c.query(`CREATE ROLE ${papel} LOGIN ${atributos}`);
         try {
           await preparar(c, papel);
-          await fn(() => c.query('SELECT conferir_papel_app($1)', [papel]));
+          await fn(() => c.query('SELECT public.conferir_papel_app($1::name)', [papel]));
         } finally {
           await c.query(`DROP OWNED BY ${papel}`);
           await c.query(`DROP ROLE ${papel}`);
@@ -305,6 +305,38 @@ describe('AD-023: conferência dos privilégios do papel do app', () => {
       (c, papel) => c.query(`GRANT ${comando} ON resumos TO ${papel}`).then(() => undefined),
       async (verificar) => {
         await expect(verificar()).rejects.toThrow(/resumos/);
+      },
+    );
+  });
+
+  // A-26: dono de função, de tabela/visão/sequência ou de tipo roda código ou muda objeto como dono desse objeto
+  // (ex.: função própria no search_path do dono); a conferência recusa cada um.
+  it.each([
+    ['função', (papel: string) => `CREATE FUNCTION public.f_${papel}() RETURNS int LANGUAGE sql AS 'SELECT 1'; ALTER FUNCTION public.f_${papel}() OWNER TO ${papel}`, /dono de função/],
+    ['tabela', (papel: string) => `CREATE TABLE public.t_${papel} (id int); ALTER TABLE public.t_${papel} OWNER TO ${papel}`, /dono de tabela, visão ou sequência/],
+    ['visão', (papel: string) => `CREATE VIEW public.v_${papel} AS SELECT 1 AS n; ALTER VIEW public.v_${papel} OWNER TO ${papel}`, /dono de tabela, visão ou sequência/],
+    ['sequência', (papel: string) => `CREATE SEQUENCE public.s_${papel}; ALTER SEQUENCE public.s_${papel} OWNER TO ${papel}`, /dono de tabela, visão ou sequência/],
+    ['tipo', (papel: string) => `CREATE TYPE public.ty_${papel} AS ENUM ('a'); ALTER TYPE public.ty_${papel} OWNER TO ${papel}`, /dono de tipo/],
+  ])('AD-023 A-26: papel dono de %s falha', async (_nome, sql, mensagem) => {
+    await comPapelRuim(
+      'NOSUPERUSER',
+      (c, papel) => c.query(sql(papel)).then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(mensagem);
+      },
+    );
+  });
+
+  // A-26: uma sobrecarga `(text)` falsa em `public` ganharia de um literal sem tipo; chamada com `::name` não.
+  it('AD-023 A-26: com a sobrecarga (text) falsa em public, a chamada com ::name ainda recusa um papel SUPERUSER', async () => {
+    await comPapelRuim(
+      'SUPERUSER',
+      (c) =>
+        c
+          .query('CREATE FUNCTION public.conferir_papel_app(text) RETURNS void LANGUAGE sql AS $$ SELECT $$')
+          .then(() => undefined),
+      async (verificar) => {
+        await expect(verificar()).rejects.toThrow(/rolsuper/);
       },
     );
   });

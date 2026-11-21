@@ -108,7 +108,7 @@ jobs:
           DATABASE_URL_DONO: ${{ secrets.DATABASE_URL_DONO }}
         run: |
           pnpm migrar
-          PGOPTIONS='-c search_path=pg_catalog' psql "$DATABASE_URL_DONO" -v ON_ERROR_STOP=1 -c "SELECT public.conferir_papel_app('mj_app')"
+          PGOPTIONS='-c search_path=pg_catalog' psql "$DATABASE_URL_DONO" -v ON_ERROR_STOP=1 -c "SELECT public.conferir_papel_app('mj_app'::name)"
 
   publicar:
     needs: [construir, migrar]
