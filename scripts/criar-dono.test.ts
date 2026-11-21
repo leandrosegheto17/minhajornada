@@ -182,6 +182,51 @@ describe('A-09 FUN-141 FUN-143: trocar a senha encerra as sessões abertas', () 
   });
 });
 
+describe('A-24 FUN-141 FUN-143: schema com o nome do dono não sombreia tabelas nem funções', () => {
+  // `"$user"` vem antes de `public` no search_path: cópias de usuarios e sessoes e uma crypt/gen_salt falsas nesse schema
+  // recebem a gravação se o SQL não qualificar cada nome com `public.`.
+  it('A-24 FUN-141: com schema sombra, criar-dono grava e encerra sessões em public com bcrypt real', async () => {
+    await bancoDeTeste(
+      async (url) => {
+        const sombra = await comCliente(url, async (c) => {
+          const { rows } = await c.query('SELECT current_user AS usuario');
+          const u = rows[0].usuario as string;
+          await c.query(`CREATE SCHEMA "${u}"`);
+          await c.query(`CREATE TABLE "${u}".usuarios (LIKE public.usuarios INCLUDING ALL)`);
+          await c.query(`CREATE TABLE "${u}".sessoes (LIKE public.sessoes INCLUDING ALL)`);
+          await c.query(`CREATE FUNCTION "${u}".crypt(text, text) RETURNS text LANGUAGE sql AS $$ SELECT 'falso'::text $$`);
+          await c.query(
+            `CREATE FUNCTION "${u}".gen_salt(text, integer) RETURNS text LANGUAGE sql AS $$ SELECT 'falso'::text $$`,
+          );
+          return u;
+        });
+        // dono já existente em public, com uma sessão aberta: a troca de senha tem de apagá-la em public.
+        expect((await rodar(url, 'dono@exemplo.com', SENHA)).codigo).toBe(0);
+        await comCliente(url, (c) =>
+          c.query(
+            "INSERT INTO public.sessoes (token_hash, usuario_id) SELECT '\x0a', id FROM public.usuarios WHERE email = 'dono@exemplo.com'",
+          ),
+        );
+        const r = await rodar(url, 'dono@exemplo.com', 'senha-nova-456');
+        expect(r.codigo).toBe(0);
+        const publico = await comCliente(url, async (c) => ({
+          usuarios: (await c.query('SELECT id, senha_hash FROM public.usuarios')).rows,
+          sessoes: (await c.query('SELECT 1 FROM public.sessoes')).rows,
+          sombraUsuarios: (await c.query(`SELECT 1 FROM "${sombra}".usuarios`)).rows,
+          sombraSessoes: (await c.query(`SELECT 1 FROM "${sombra}".sessoes`)).rows,
+        }));
+        expect(publico.usuarios).toHaveLength(1);
+        expect(publico.usuarios[0]?.senha_hash).toMatch(/^\$2[aby]\$12\$/);
+        expect(publico.sessoes).toHaveLength(0);
+        expect(publico.sombraUsuarios).toEqual([]);
+        expect(publico.sombraSessoes).toEqual([]);
+        expect(await entrar(url, 'dono@exemplo.com', 'senha-nova-456')).toBe(publico.usuarios[0]?.id);
+      },
+      { migrado: true },
+    );
+  });
+});
+
 describe('A-10 FUN-141: senha mínima do dono', () => {
   const nUsuarios = (url: string) =>
     comCliente(url, async (c) => (await c.query('SELECT count(*)::int AS n FROM usuarios')).rows[0]?.n as number);
