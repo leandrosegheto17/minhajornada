@@ -203,7 +203,7 @@ describe('deploy.yml: a migração tem job próprio, sem o token da Cloudflare (
  * A-18: a conferência do papel do app roda a cada deploy, depois da migração e antes do publicar; um papel alterado
  * depois no Console do Neon para o deploy. Fica no mesmo passo de `pnpm migrar`: a URL do banco continua em um só passo.
  */
-describe('deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, FUN-144, FUN-147)', () => {
+describe('deploy.yml: o job migrar confere o papel do app a cada deploy (A-18, AD-023, FUN-147)', () => {
   const migrar = job('migrar');
   const passo = passos(migrar).find((p) => /pnpm migrar/.test(p)) ?? '';
   const comandos = passo.split(/\r?\n/);

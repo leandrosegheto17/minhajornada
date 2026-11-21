@@ -1524,7 +1524,7 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 **Criticidade**: crítica
 **Depends on**: T54
 **Reuses**: `servidor/migracoes/conferir-papel.test.ts:74-104` (molde; banco e papéis `teste_*` apagados no `finally`)
-**Requirement**: FUN-144 (AD-023) · Achado: A-15 (validation.md, rodada 2)
+**Requirement**: AD-023 · Achado: A-15 (validation.md, rodada 2)
 
 **Done when**:
 
@@ -1544,7 +1544,7 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 **Criticidade**: crítica
 **Depends on**: T55
 **Reuses**: `servidor/migracoes/1795132920000_conferir_papel_app.sql:7-44` (molde da função); `conferir-papel.test.ts` (um teste por condição)
-**Requirement**: FUN-144 (AD-023) · Achado: A-17 (validation.md, rodada 2)
+**Requirement**: AD-023 · Achado: A-17 (validation.md, rodada 2)
 
 **Done when**:
 
@@ -1565,7 +1565,7 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx src/livro src/revi
 **Criticidade**: crítica
 **Depends on**: T56
 **Reuses**: `.github/workflows/deploy.yml:86-107` (job `migrar`); `test/arquivos/deploy.test.ts:176-200` (molde)
-**Requirement**: FUN-144, FUN-147 · Achado: A-18 (validation.md, rodada 2)
+**Requirement**: AD-023, FUN-147 · Achado: A-18 (validation.md, rodada 2)
 
 **Done when**:
 
@@ -1610,7 +1610,7 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 **Criticidade**: crítica
 **Depends on**: —
 **Reuses**: `.github/workflows/deploy.yml:104-110`; `test/arquivos/deploy.test.ts:206-229` (molde)
-**Requirement**: FUN-144, FUN-147 · Achado: A-19 (validation.md, rodada 3)
+**Requirement**: AD-023, FUN-147 · Achado: A-19 (validation.md, rodada 3)
 
 **Done when**:
 
@@ -1631,7 +1631,7 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 **Criticidade**: crítica
 **Depends on**: T59
 **Reuses**: `servidor/migracoes/1795132980000_conferir_papel_app_completa.sql` (molde da função); `servidor/migracoes/conferir-papel.test.ts` (`comPapelRuim`, um teste por condição)
-**Requirement**: FUN-144 (AD-023) · Achado: A-20 (validation.md, rodada 3)
+**Requirement**: AD-023 · Achado: A-20 (validation.md, rodada 3)
 
 **Done when**:
 
@@ -1652,7 +1652,7 @@ Gate: pnpm typecheck && pnpm exec vitest run src/App.test.tsx --reporter=dot @ f
 **Criticidade**: crítica
 **Depends on**: T60
 **Reuses**: migração da T60; `conferir-papel.test.ts` (molde)
-**Requirement**: FUN-144 (AD-023) · Achado: A-21 (validation.md, rodada 3)
+**Requirement**: AD-023 · Achado: A-21 (validation.md, rodada 3)
 
 **Done when**:
 
@@ -1756,7 +1756,7 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 **Criticidade**: crítica
 **Depends on**: T65
 **Reuses**: `servidor/migracoes/1795133100000_conferir_papel_app_atributos.sql` (molde); `comPapelRuim` de `conferir-papel.test.ts`; `test/arquivos/deploy.test.ts` (A-19)
-**Requirement**: FUN-144 (AD-023), FUN-147 · Achado: A-26 (validation.md, rodada 4)
+**Requirement**: AD-023, FUN-147 · Achado: A-26 (validation.md, rodada 4)
 
 **Done when**:
 
@@ -1778,7 +1778,7 @@ Gate: pnpm typecheck && pnpm exec vitest run servidor scripts test/arquivos --re
 **Criticidade**: crítica
 **Depends on**: T66
 **Reuses**: migração da T66; testes de REFERENCES de `conferir-papel.test.ts`
-**Requirement**: FUN-144 (AD-023) · Achado: A-27 (validation.md, rodada 4)
+**Requirement**: AD-023 · Achado: A-27 (validation.md, rodada 4)
 
 **Done when**:
 
