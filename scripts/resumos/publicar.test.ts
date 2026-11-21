@@ -233,6 +233,9 @@ describe('A-12 FUN-172 FUN-173: livro recusado sai da publicação', () => {
           const usuario = rows[0].usuario as string;
           await c.query(`CREATE SCHEMA "${usuario}"`);
           await c.query(`CREATE TABLE "${usuario}".resumos (LIKE public.resumos INCLUDING ALL)`);
+          await c.query(
+            "INSERT INTO public.resumos (livro, conteudo, publicado_em) VALUES (1, '{}'::jsonb, now()), (3, '{}'::jsonb, now())",
+          );
           return usuario;
         });
         const s = await rodar(
